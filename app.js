@@ -38,4 +38,6 @@ app.use(function(err, req, res) {
   res.render('error');
 });
 
+console.log("예솔쓰~");
+
 module.exports = app;
