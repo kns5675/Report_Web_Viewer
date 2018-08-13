@@ -7,8 +7,7 @@ var xml = fs.readFileSync('Testsample.xml', 'utf-8');
 var inspect = require('util').inspect;
 var json = convert.xml2json(xml, {compact : true});
 
-/* GET home page. */
-router.get('/', function(req, res) {
+router.get('/', function(req, res){
     res.render('index', {
         layout: false,
         data : json
@@ -16,3 +15,4 @@ router.get('/', function(req, res) {
 });
 
 module.exports = router;
+
