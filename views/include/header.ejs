@@ -4,6 +4,23 @@
     <meta charset="utf-8">
 
     <style type="text/css">
+      ul#menu li a{
+        text-decoration:none;
+        color:black;
+        visited:none;
+      }
+      ul.submenu {
+        list-style:none;
+        text-decoration: none;
+      }
+      ul.submenu li a{
+        text-decoration:none;
+        list-decoration:none;
+      }
+      ul.submenu li a:hover{
+        color:pink;
+      }
+
     .menubar li ul {
       background: rgb(109,109,109);
       display:none;  /* 평상시에는 서브메뉴가 안보이게 하기 */
@@ -29,9 +46,9 @@
   </head>
   <body>
 <div class="menubar">
-  <ul>
+  <ul id="menu">
     <li style="display:inline;"><a href="#">파일</a>
-      <ul>
+      <ul class="submenu">
         <li><a href="#" onclick="test()">디자이너 실행</a></li>
         <li><a href="#">열기</a></li>
         <li><a href="#">저장</a></li>
@@ -42,7 +59,7 @@
     </li>
 
     <li style="display:inline;"><a href="#">서식</a>
-        <ul>
+        <ul class="submenu">
           <li><a href="#">엑셀 내보내기</a></li>
           <li><a href="#">이미지 내보내기</a></li>
           <li><a href="#">PDF 내보내기</a></li>
@@ -53,7 +70,7 @@
     </li>
 
     <li style="display:inline;"><a href="#">페이지</a>
-        <ul>
+        <ul class="submenu">
           <li><a href="#">이전 페이지</a></li>
           <li><a href="#">다음 페이지</a></li>
           <li><a href="#">첫 페이지</a></li>
@@ -62,7 +79,7 @@
     </li>
 
     <li style="display:inline;"><a href="#">보기</a>
-        <ul>
+        <ul class="submenu">
           <li><a href="#">한 페이지</a></li>
           <li><a href="#">여러 페이지</a></li>
           <li><a href="#">확대/축소</a></li>
@@ -85,7 +102,7 @@
   <li><input type="button" value="마지막 페이지"></li>
   <li><input type="button" value="한 페이지만 보기"></li>
   <li><input type="button" value="여러 페이지 보기"></li>
-  <li>
+  <!--<li>
     <select>
       <option value="200%">200%</option>
       <option value="200%">150%</option>
@@ -93,9 +110,10 @@
       <option value="200%">80%</option>
       <option value="200%">50%</option>
     </select>
-  </li>
-  <li><input type="button" value="+"></li>
-  <li><input type="button" value="-"></li>
+  </li>-->
+  <li><input type="text" id="txtZoom"value="1"/></li>
+  <li><input type="button" id="btnZoomIn" value="+" onclick="zoomIn();"></li>
+  <li><input type="button" id="btnZoomOut "value="-" onclick="zoomOut();"></li>
   <li><input type="button" value="PDF"></li>
   <li><input type="button" value="엑셀"></li>
   <li><input type="button" value="셀"></li>

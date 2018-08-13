@@ -2,9 +2,36 @@
 <html>
 <head>
     <!--<link rel='stylesheet' href='/stylesheets/style.css' />-->
-    <meta charset="UTF-8">
+    <meta name="generator" content="editplus">
+    <meta name="author" content="angeleyes">
+    <meta name="keywords" content="angeleyes, testhtml, testjavascript">
+    <meta name="description" content="test document">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>Document</title>
-    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <!--<script src="http://code.jquery.com/jquery-latest.min.js"></script>-->
+    <style type="text/css">
+        @media print {
+            #header {
+                display: none;
+            }
+            div.page {
+                page-break-after: always;
+            }
+            body{
+                -webkit-transform:scale(1.50);
+                -webkit-transform-origin:0 0;
+                -moz-transform:scale(1.50);
+                -moz-transform-origin:0 0;
+                -o-transform:scale(1.50);
+                -o-transform-origin:0 0;
+            }
+        }
+
+        /*    div#report1 {
+                background-color: lightblue;
+            }*/
+    </style>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
 <script>
     $(document).ready(function(){
         $("#header").load("/include/header.ejs");
@@ -50,24 +77,82 @@
 
         console.log(DesignLayer);
     });
-</script>
-<style>
-    @media print {
-        #header {
-            display: none;
+
+    function test(){
+        try {
+            var flexiblecontent = document.getElementById("content");
+            var size = $("#txtZoom").val();
+
+            if (jQuery.browser.msie) {
+                flexiblecontent.style.zoom = size;
+            }
+            else {
+                $('#content').css('-webkit-transform','scale(' + (size) + ')');
+                $('#content').css('-webkit-transform-origin','0 0');
+                $('#content').css('-moz-transform','scale(' + (size) + ')');
+                $('#content').css('-moz-transform-origin','0 0');
+                $('#content').css('-o-transform','scale(' + (size) + ')');
+                $('#content').ss('-o-transform-origin','0 0');
+            }
         }
-        div.page {
-            page-break-after: always;
+        catch(e) {
+            alert("test ==> " + e.message);
         }
     }
 
-    div#report1 {
-        background-color: lightblue;
+    function zoomIn(){
+        try {
+            var size = $("#txtZoom").val();
+
+            //if(size > 2.00) $("#txtZoom").val("1");
+            //else
+            $("#txtZoom").val((Number(size) + 0.05).toFixed(2));
+
+            test();
+        }
+        catch(e) {
+            alert("test ==> " + e.message);
+        }
     }
-</style>
+    function zoomOut(){
+        try {
+            var size = $("#txtZoom").val();
+
+            //if(size > 2.00) $("#txtZoom").val("1");
+            //else
+            $("#txtZoom").val((Number(size) - 0.05).toFixed(2));
+
+            test();
+        }
+        catch(e) {
+            console.log(e.message);
+        }
+    }
+</script>
 </head>
 <body>
 <div id="header"></div>
+<div id="content">
+
+
+    <table border="1" style="width:450px;">
+        <colgroup style="background-color:red;">
+            <col style="width:50%;" />
+            <col style="width:50%;" />
+        </colgroup>
+        <tbody>
+        <tr>
+            <td>#1</td>
+            <td>#2</td>
+        </tr>
+        <tr>
+            <td>#3</td>
+            <td>#4</td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
 <div id="report"></div>
 </body>
 </html>
