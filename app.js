@@ -10,11 +10,8 @@ var usersRouter = require('./routes/users');
 
 var app = express();
 
-<<<<<<< Updated upstream
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-=======
 var fs = require('fs');
 var xml = fs.readFileSync('Testsample.xml', 'utf-8');
 var inspect = require('util').inspect;
@@ -22,7 +19,6 @@ var json = convert.xml2json(xml, {compact : true});
 
 app.set('views', __dirname + '/views');
 app.use(express.static(__dirname + '/views'));
->>>>>>> Stashed changes
 app.set('view engine', 'ejs');
 app.engine('html', require('ejs').renderFile);
 
@@ -57,16 +53,4 @@ app.use(function(err, req, res, next) {
     res.render('error');
 });
 
-<<<<<<< Updated upstream
-console.log("예솔쓰~");
-console.log("지연쓰~");
-
-console.log("학준쓰~");
-console.log("지연쓰~2");
-console.log("진짜 지연쓰 ");
-console.log("영준쓰~");
-
 module.exports = app;
-=======
-module.exports = app;
->>>>>>> Stashed changes
