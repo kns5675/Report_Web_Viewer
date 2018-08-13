@@ -1,0 +1,999 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ReportTemplate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Id>404cd518-7405-4163-9c14-64d539569626</Id>
+  <Rectangle /> <!-- Rectangle -->
+  <Name>TestSample.DRF</Name> <!-- 이름 -->
+  <PrintOder>true</PrintOder> <!-- 디자인 - 리포트or별지 우선? -->
+  <SavedLocation>D:\더존\비트컴퓨터\TestSample.DRF</SavedLocation>
+  <MesureUnit>cm</MesureUnit> <!-- 외관 - 사용 단위계 -->
+  <IsUsePrinterHardMargin>true</IsUsePrinterHardMargin> <!-- 프린터 기본 여백 사용 -->
+  <GridGap>
+    <Width>7.6</Width>
+    <Height>7.6</Height>
+  </GridGap> <!-- 그리드 간격 -->
+  <DrawGrid>true</DrawGrid> <!-- 그리드 라인 표시 -->
+  <SnapToGrid>false</SnapToGrid> <!-- 그리드 눈금에 따른 이동 -->
+  <IsVirtureToLocalPrint>false</IsVirtureToLocalPrint>
+  <ImageListVirtual />
+
+
+  <ReportList>
+    <anyType xsi:type="Report">
+      <ParentID>404cd518-7405-4163-9c14-64d539569626</ParentID>
+      <Id>70020ab7-0e80-428b-8c9b-9a5556ffa06f</Id>
+      <Rectangle>
+        <Width>722</Width>
+        <Height>1052.6</Height>
+      </Rectangle>
+      <Name>Report1</Name> <!-- 이름 -->
+      <Lock>true</Lock> <!-- 잠김 -->
+      <IsIgnore>false</IsIgnore>
+      <ForceNewPage>true</ForceNewPage> <!-- 페이지 넘기기 -->
+      <ForceNextReport>false</ForceNextReport> <!-- 리포트 넘기기 -->
+      <MultyFormCount>1</MultyFormCount> <!-- 다단 전표 수 -->
+      <AnnexPaper>false</AnnexPaper> <!-- 별지(서브리포트) -->
+      <NoPrintIfNoData>false</NoPrintIfNoData> <!-- 데이터 테이블에 따른 인쇄 유무 -->
+      <Layers>
+        <anyType xsi:type="Layer"> <!-- 백그라운드 레이어 -->
+          <Name>BackGroundLayer</Name>
+          <IsActive>false</IsActive>
+          <IsVisible>true</IsVisible>
+          <Bands>
+            <anyType xsi:type="BandBackGround"> <!-- 백그라운드 밴드 -->
+              <ParentID>70020ab7-0e80-428b-8c9b-9a5556ffa06f</ParentID>
+              <Id>f3ce4ae2-f16b-4b2b-813d-2f4ebc268e20</Id>
+              <Rectangle>
+                <Width>722</Width>
+                <Height>1052.6</Height>
+              </Rectangle>
+              <Name>BackgroundBand1</Name>
+              <ChildBands />
+              <ChildHeaderBands />
+              <ChildFooterBands />
+              <BandYOrder>3</BandYOrder>
+              <ControlList />
+            </anyType> <!-- 백그라운드 밴드 끝 -->
+          </Bands>
+        </anyType> <!-- 백그라운드 레이어 끝-->
+        <anyType xsi:type="Layer"> <!-- 디자인 레이어 -->
+          <Name>DesignLayer</Name>
+          <IsActive>true</IsActive>
+          <IsVisible>true</IsVisible>
+          <Bands>
+            <anyType xsi:type="BandPageHeader"> <!-- 페이지 헤더 밴드 -->
+              <ParentID>70020ab7-0e80-428b-8c9b-9a5556ffa06f</ParentID>
+              <Id>2e1d536a-3aa9-436f-99e3-12b82627acb7</Id>
+              <Rectangle>
+                <Width>722</Width>
+                <Height>23</Height>
+              </Rectangle> <!-- 크기 -->
+              <Name>BandPageHeader1</Name> <!-- 이름 -->
+              <ChildBands />
+              <ChildHeaderBands />
+              <ChildFooterBands />
+              <BandYOrder>1</BandYOrder>
+              <ControlList>
+                <anyType xsi:type="ControlLabel">
+                  <ParentID>2e1d536a-3aa9-436f-99e3-12b82627acb7</ParentID>
+                  <Id>29d1153c-efee-4709-864a-145a9b66bc28</Id>
+                  <Rectangle>
+                    <X>542.5</X>
+                    <Width>173</Width>
+                    <Height>23</Height>
+                  </Rectangle>
+                  <Name>ControlLabel3</Name>
+                  <DataType>SystemLabel</DataType>
+                  <ImageTransparent />
+                  <BorderThickness />
+                  <EnableBorder>
+                    <boolean>true</boolean>
+                    <boolean>true</boolean>
+                    <boolean>true</boolean>
+                    <boolean>true</boolean>
+                  </EnableBorder>
+                  <BorderDottedLines />
+                  <Font>굴림, 10pt</Font>
+                  <IndentLB />
+                  <InterMargin />
+                  <GradientLB>
+                    <LbRec>
+                      <X>274.5</X>
+                      <Y>6.988</Y>
+                      <Width>173</Width>
+                      <Height>23</Height>
+                    </LbRec>
+                  </GradientLB>
+                  <IndexUnderLine />
+                  <Text />
+                  <DziName />
+                  <DataTableName />
+                  <Base64ImageFromViewer />
+                </anyType>
+              </ControlList>
+              <PageOutputSkip>false</PageOutputSkip> <!-- 첫 페이지 출력 생략 -->
+              <IsApprovalBase>false</IsApprovalBase> <!-- 결재란 기준 밴드 -->
+            </anyType>
+            <anyType xsi:type="BandData"> <!-- 데이터 밴드 -->
+              <ParentID>70020ab7-0e80-428b-8c9b-9a5556ffa06f</ParentID>
+              <Id>da8a7209-ce09-40d8-9ef6-0317b09a4eae</Id>
+              <Rectangle> <!-- 레이아웃? 위치+크기 -->
+                <Y>116</Y>
+                <Width>722</Width>
+                <Height>50.008</Height>
+              </Rectangle>
+              <Name>BandData1</Name> <!-- 이름 -->
+              <ChildBands />
+              <ChildHeaderBands>
+                <anyType xsi:type="BandGroupHeader"> <!-- 그룹 헤더 밴드 -->
+                  <ParentID>da8a7209-ce09-40d8-9ef6-0317b09a4eae</ParentID>
+                  <Id>ac3497e7-04f3-4643-a634-e4ee2ccc1dd7</Id>
+                  <Rectangle>
+                    <Y>23</Y>
+                    <Width>722</Width>
+                    <Height>93</Height>
+                  </Rectangle>
+                  <Name>BandGroupHeader1</Name> <!-- 이름 -->
+                  <StartBindScript>var sum=0;</StartBindScript>
+                  <ChildBands />
+                  <ChildHeaderBands />
+                  <ChildFooterBands />
+                  <BandYOrder>1</BandYOrder>
+                  <ControlList>
+                    <anyType xsi:type="ControlFixedTable">
+                      <ParentID>ac3497e7-04f3-4643-a634-e4ee2ccc1dd7</ParentID>
+                      <Id>4b0aec6f-8402-432d-8a31-67cb6b5aefce</Id>
+                      <Rectangle>
+                        <Y>56.988</Y>
+                        <Width>174</Width>
+                        <Height>23</Height>
+                      </Rectangle>
+                      <Name>ControlFixedTable1</Name>
+                      <ZOrder>8</ZOrder>
+                      <IsRepeatToPageBottom>false</IsRepeatToPageBottom>
+                      <IsShowAtColumnSelect>true</IsShowAtColumnSelect>
+                      <ColumnCount>0</ColumnCount>
+                      <RowCount>0</RowCount>
+                      <Labels>
+                        <TableLabel xsi:type="FixedTableLabel">
+                          <ParentID>4b0aec6f-8402-432d-8a31-67cb6b5aefce</ParentID>
+                          <Id>666499da-af8f-4ffd-9cfa-9d813319f779</Id>
+                          <Rectangle>
+                            <Width>41</Width>
+                            <Height>23</Height>
+                          </Rectangle>
+                          <Name>TableLabel1</Name>
+                          <LeftBorderColor>Transparent</LeftBorderColor>
+                          <TopBorderColor>Transparent</TopBorderColor>
+                          <RightBorderColor>Transparent</RightBorderColor>
+                          <BottomBorderColor>Transparent</BottomBorderColor>
+                          <ImageTransparent />
+                          <BorderThickness />
+                          <EnableBorder>
+                            <boolean>true</boolean>
+                            <boolean>true</boolean>
+                            <boolean>true</boolean>
+                            <boolean>true</boolean>
+                          </EnableBorder>
+                          <BorderDottedLines />
+                          <Font>굴림, 10pt</Font>
+                          <IndentLB />
+                          <InterMargin />
+                          <GradientLB>
+                            <LbRec />
+                          </GradientLB>
+                          <IndexUnderLine />
+                          <Text>이름 : </Text>
+                          <DziName>ds</DziName>
+                          <DataTableName>dt</DataTableName>
+                          <Base64ImageFromViewer />
+                          <Selected>false</Selected>
+                        </TableLabel>
+                        <TableLabel xsi:type="FixedTableLabel">
+                          <ParentID>4b0aec6f-8402-432d-8a31-67cb6b5aefce</ParentID>
+                          <Id>eadbe4d6-edee-4551-b40c-a310789abb26</Id>
+                          <Rectangle>
+                            <X>41</X>
+                            <Width>133</Width>
+                            <Height>23</Height>
+                          </Rectangle>
+                          <Name>TableLabel2</Name>
+                          <DataType>DataLabel</DataType>
+                          <LeftBorderColor>Transparent</LeftBorderColor>
+                          <TopBorderColor>Transparent</TopBorderColor>
+                          <RightBorderColor>Transparent</RightBorderColor>
+                          <BottomBorderColor>Transparent</BottomBorderColor>
+                          <ImageTransparent />
+                          <BorderThickness />
+                          <EnableBorder>
+                            <boolean>true</boolean>
+                            <boolean>true</boolean>
+                            <boolean>true</boolean>
+                            <boolean>true</boolean>
+                          </EnableBorder>
+                          <BorderDottedLines />
+                          <Font>굴림, 10pt</Font>
+                          <HorizontalTextAlignment>Left</HorizontalTextAlignment>
+                          <IndentLB />
+                          <InterMargin />
+                          <GradientLB>
+                            <LbRec />
+                          </GradientLB>
+                          <IndexUnderLine />
+                          <Text />
+                          <DziName>ds</DziName>
+                          <DataTableName>dt</DataTableName>
+                          <FieldName>이름</FieldName>
+                          <Base64ImageFromViewer />
+                          <Selected>false</Selected>
+                        </TableLabel>
+                      </Labels>
+                      <RelateTableList />
+                      <IsApprovalBox>false</IsApprovalBox>
+                      <IsFirstPagePrint>true</IsFirstPagePrint>
+                      <IsDynamicBinding>true</IsDynamicBinding>
+                    </anyType>
+                    <anyType xsi:type="ControlLabel">
+                      <ParentID>ac3497e7-04f3-4643-a634-e4ee2ccc1dd7</ParentID>
+                      <Id>0921e2f1-3384-469b-8763-9621b1b261f6</Id>
+                      <Rectangle>
+                        <X>128.5</X>
+                        <Width>465</Width>
+                        <Height>42</Height>
+                      </Rectangle>
+                      <Name>ControlLabel1</Name>
+                      <ZOrder>4</ZOrder>
+                      <ImageTransparent />
+                      <BorderThickness />
+                      <EnableBorder>
+                        <boolean>true</boolean>
+                        <boolean>true</boolean>
+                        <boolean>true</boolean>
+                        <boolean>true</boolean>
+                      </EnableBorder>
+                      <BorderDottedLines />
+                      <Font>굴림, 24pt, style=Bold</Font>
+                      <IndentLB />
+                      <InterMargin />
+                      <GradientLB>
+                        <LbRec>
+                          <X>128.5</X>
+                          <Width>465</Width>
+                          <Height>42</Height>
+                        </LbRec>
+                      </GradientLB>
+                      <IndexUnderLine>
+                        <IsUse>true</IsUse>
+                        <FirstLineThickness>2</FirstLineThickness>
+                        <SecondLineThickness>4</SecondLineThickness>
+                      </IndexUnderLine>
+                      <Text>타이틀</Text>
+                      <DziName>ds</DziName>
+                      <DataTableName>dt</DataTableName>
+                      <Base64ImageFromViewer />
+                    </anyType>
+                  </ControlList>
+                  <ShowGroupLink>false</ShowGroupLink> <!-- 그룹 연결 보기 -->
+                  <SubBand>0</SubBand> <!-- 서브 밴드 -->
+                  <ForceNewPage>false</ForceNewPage> <!-- 페이지 넘기기 -->
+                  <FixPriorGroupHeader>false</FixPriorGroupHeader> <!-- 상위 그룹 헤더 고정 -->
+                  <Invisible>false</Invisible> <!-- 감추기 -->
+                  <GroupingFieldSortOption>0</GroupingFieldSortOption> <!-- 기준 필드 정렬 -->
+                  <GroupingFieldSort>None</GroupingFieldSort> <!-- 기준 필드 정렬 순서 -->
+                  <AutoSize>false</AutoSize> <!-- 자동 높이 조정 -->
+                  <DziName>ds</DziName> <!-- 데이터 셋 이름 -->
+                  <DataTableName>dt</DataTableName> <!-- 테이블 이름 -->
+                  <GroupFiledName>이름</GroupFiledName> <!-- 그룹 기준 필드?? -->
+                  <IsApprovalBase>false</IsApprovalBase> <!-- 결재란 기준 밴드 -->
+                </anyType>
+              </ChildHeaderBands>
+              <ChildFooterBands>
+                <anyType xsi:type="BandGroupFooter">
+                  <ParentID>da8a7209-ce09-40d8-9ef6-0317b09a4eae</ParentID>
+                  <Id>f3cd729c-d9ca-47d6-a287-86e43d28d513</Id>
+                  <Rectangle>
+                    <Y>166.008</Y>
+                    <Width>722</Width>
+                    <Height>25.004</Height>
+                  </Rectangle> <!-- 위치, 크기? -->
+                  <Name>BandGroupFooter1</Name>
+                  <ChildBands />
+                  <ChildHeaderBands />
+                  <ChildFooterBands />
+                  <BandYOrder>6</BandYOrder>
+                  <ControlList>
+                    <anyType xsi:type="ControlFixedTable">
+                      <ParentID>f3cd729c-d9ca-47d6-a287-86e43d28d513</ParentID>
+                      <Id>529a67fe-24ef-4da0-8e70-ca86a149417e</Id>
+                      <Rectangle>
+                        <Width>722.001</Width>
+                        <Height>25.004</Height>
+                      </Rectangle>
+                      <Name>ControlFixedTable2</Name>
+                      <IsRepeatToPageBottom>false</IsRepeatToPageBottom>
+                      <IsShowAtColumnSelect>true</IsShowAtColumnSelect>
+                      <ColumnCount>0</ColumnCount>
+                      <RowCount>0</RowCount>
+                      <Labels>
+                        <TableLabel xsi:type="FixedTableLabel">
+                          <ParentID>529a67fe-24ef-4da0-8e70-ca86a149417e</ParentID>
+                          <Id>f04cd991-aa9b-4b09-99d8-62bfb69624ec</Id>
+                          <Rectangle>
+                            <Width>433.2</Width>
+                            <Height>25.004</Height>
+                          </Rectangle>
+                          <Name>TableLabel2</Name>
+                          <ImageTransparent />
+                          <BorderThickness>
+                            <Left>1</Left>
+                            <Top>1</Top>
+                            <Right>1</Right>
+                            <Bottom>1</Bottom>
+                          </BorderThickness>
+                          <EnableBorder>
+                            <boolean>true</boolean>
+                            <boolean>true</boolean>
+                            <boolean>true</boolean>
+                            <boolean>true</boolean>
+                          </EnableBorder>
+                          <BorderDottedLines />
+                          <Font>굴림, 10pt</Font>
+                          <HorizontalTextAlignment>Right</HorizontalTextAlignment>
+                          <IndentLB />
+                          <InterMargin />
+                          <GradientLB>
+                            <LbRec />
+                          </GradientLB>
+                          <IndexUnderLine />
+                          <Text>합계</Text>
+                          <DziName>ds</DziName>
+                          <DataTableName>dt</DataTableName>
+                          <Base64ImageFromViewer />
+                          <Selected>false</Selected>
+                        </TableLabel>
+                        <TableLabel xsi:type="FixedTableLabel">
+                          <ParentID>529a67fe-24ef-4da0-8e70-ca86a149417e</ParentID>
+                          <Id>50964917-6c11-4c01-b9f0-ec02254b4cc4</Id>
+                          <Rectangle>
+                            <X>433.2</X>
+                            <Width>144.401</Width>
+                            <Height>25.004</Height>
+                          </Rectangle>
+                          <Name>TableLabel5</Name>
+                          <_formatFieldNone>#,###</_formatFieldNone>
+                          <DataType>SummaryLabel</DataType>
+                          <ImageTransparent />
+                          <BorderThickness>
+                            <Left>1</Left>
+                            <Top>1</Top>
+                            <Right>1</Right>
+                            <Bottom>1</Bottom>
+                          </BorderThickness>
+                          <EnableBorder>
+                            <boolean>true</boolean>
+                            <boolean>true</boolean>
+                            <boolean>true</boolean>
+                            <boolean>true</boolean>
+                          </EnableBorder>
+                          <BorderDottedLines />
+                          <Font>굴림, 10pt</Font>
+                          <HorizontalTextAlignment>Right</HorizontalTextAlignment>
+                          <IndentLB />
+                          <InterMargin />
+                          <GradientLB>
+                            <LbRec />
+                          </GradientLB>
+                          <IndexUnderLine />
+                          <Text />
+                          <DziName>ds</DziName>
+                          <DataTableName>dt</DataTableName>
+                          <FieldName>수량</FieldName>
+                          <LabelTextType>Number</LabelTextType>
+                          <Format>#,###</Format>
+                          <Base64ImageFromViewer />
+                          <Selected>false</Selected>
+                        </TableLabel>
+                        <TableLabel xsi:type="FixedTableLabel">
+                          <ParentID>529a67fe-24ef-4da0-8e70-ca86a149417e</ParentID>
+                          <Id>844956c2-3345-4394-8aff-6a38ceee1293</Id>
+                          <Rectangle>
+                            <X>577.601</X>
+                            <Width>144.4</Width>
+                            <Height>25.004</Height>
+                          </Rectangle>
+                          <Name>TableLabel11</Name>
+                          <StartBindScript>This.Text=sum;</StartBindScript>
+                          <_formatFieldNone>#,###</_formatFieldNone>
+                          <ReVectorValue>0</ReVectorValue>
+                          <ImageTransparent />
+                          <BorderThickness>
+                            <Left>1</Left>
+                            <Top>1</Top>
+                            <Right>1</Right>
+                            <Bottom>1</Bottom>
+                          </BorderThickness>
+                          <EnableBorder>
+                            <boolean>true</boolean>
+                            <boolean>true</boolean>
+                            <boolean>true</boolean>
+                            <boolean>true</boolean>
+                          </EnableBorder>
+                          <BorderDottedLines />
+                          <Font>굴림, 10pt</Font>
+                          <HorizontalTextAlignment>Right</HorizontalTextAlignment>
+                          <IndentLB />
+                          <InterMargin />
+                          <GradientLB>
+                            <LbRec />
+                          </GradientLB>
+                          <IndexUnderLine />
+                          <Text />
+                          <DziName>ds</DziName>
+                          <DataTableName>dt</DataTableName>
+                          <LabelTextType>Number</LabelTextType>
+                          <Format>#,###</Format>
+                          <Base64ImageFromViewer />
+                          <Selected>false</Selected>
+                        </TableLabel>
+                      </Labels>
+                      <RelateTableList />
+                      <IsApprovalBox>false</IsApprovalBox>
+                      <IsFirstPagePrint>true</IsFirstPagePrint>
+                      <IsDynamicBinding>true</IsDynamicBinding>
+                    </anyType>
+                  </ControlList>
+                  <ShowGroupLink>false</ShowGroupLink> <!-- 그룹 연결 보기 -->
+                  <SubBand>0</SubBand> <!-- 서브 밴드 -->
+                  <ForceNextReport>false</ForceNextReport> <!--리포트 넘기기 -->
+                  <ForceNewPage>true</ForceNewPage> <!-- 페이지 넘기기 -->
+                  <RepeatNumber>0</RepeatNumber> <!-- 반복 횟수 -->
+                  <Invisible>false</Invisible> <!-- 감추기 -->
+                  <AutoSize>false</AutoSize> <!-- 자동 높이 조정 -->
+                  <DziName>ds</DziName> <!-- 데이터 셋 이름 -->
+                  <DataTableName>dt</DataTableName> <!-- 테이블 이름 -->
+                  <GroupFiledName>이름</GroupFiledName> <!-- 그룹 기준 필드  -->
+                </anyType>
+              </ChildFooterBands>
+              <BandYOrder>3</BandYOrder>
+              <ControlList>
+                <anyType xsi:type="ControlDynamicTable">
+                  <ParentID>da8a7209-ce09-40d8-9ef6-0317b09a4eae</ParentID>
+                  <Id>913eb17d-3157-4008-8dcd-65da6650e40c</Id>
+                  <Rectangle>
+                    <Width>722</Width>
+                    <Height>50.008</Height>
+                  </Rectangle>
+                  <Name>ControlDynamicTable1</Name>
+                  <IsRepeatToPageBottom>false</IsRepeatToPageBottom>
+                  <IsShowAtColumnSelect>true</IsShowAtColumnSelect>
+                  <ColumnCount>0</ColumnCount>
+                  <RowCount>2</RowCount>
+                  <Labels>
+                    <TableLabel xsi:type="DynamicTableTitleLabel">
+                      <ParentID>913eb17d-3157-4008-8dcd-65da6650e40c</ParentID>
+                      <Id>9b04daa1-5f44-4e85-9c3a-b8b84b313d39</Id>
+                      <Rectangle>
+                        <Width>144.401</Width>
+                        <Height>25.004</Height>
+                      </Rectangle>
+                      <Name>TableLabel2</Name>
+                      <ImageTransparent />
+                      <BorderThickness>
+                        <Left>1</Left>
+                        <Top>1</Top>
+                        <Right>1</Right>
+                        <Bottom>1</Bottom>
+                      </BorderThickness>
+                      <EnableBorder>
+                        <boolean>true</boolean>
+                        <boolean>true</boolean>
+                        <boolean>true</boolean>
+                        <boolean>true</boolean>
+                      </EnableBorder>
+                      <BorderDottedLines />
+                      <Font>굴림, 10pt</Font>
+                      <IndentLB />
+                      <InterMargin />
+                      <GradientLB>
+                        <LbRec />
+                      </GradientLB>
+                      <IndexUnderLine />
+                      <Text>날짜</Text>
+                      <DziName>ds</DziName>
+                      <DataTableName>dt</DataTableName>
+                      <Base64ImageFromViewer />
+                      <Selected>false</Selected>
+                    </TableLabel>
+                    <TableLabel xsi:type="DynamicTableTitleLabel">
+                      <ParentID>913eb17d-3157-4008-8dcd-65da6650e40c</ParentID>
+                      <Id>67be5b42-16e7-426c-89b9-bb916afdce00</Id>
+                      <Rectangle>
+                        <X>144.401</X>
+                        <Width>144.399</Width>
+                        <Height>25.004</Height>
+                      </Rectangle>
+                      <Name>TableLabel3</Name>
+                      <ImageTransparent />
+                      <BorderThickness>
+                        <Left>1</Left>
+                        <Top>1</Top>
+                        <Right>1</Right>
+                        <Bottom>1</Bottom>
+                      </BorderThickness>
+                      <EnableBorder>
+                        <boolean>true</boolean>
+                        <boolean>true</boolean>
+                        <boolean>true</boolean>
+                        <boolean>true</boolean>
+                      </EnableBorder>
+                      <BorderDottedLines />
+                      <Font>굴림, 10pt</Font>
+                      <IndentLB />
+                      <InterMargin />
+                      <GradientLB>
+                        <LbRec />
+                      </GradientLB>
+                      <IndexUnderLine />
+                      <Text>품명</Text>
+                      <DziName>ds</DziName>
+                      <DataTableName>dt</DataTableName>
+                      <Base64ImageFromViewer />
+                      <Selected>false</Selected>
+                    </TableLabel>
+                    <TableLabel xsi:type="DynamicTableTitleLabel">
+                      <ParentID>913eb17d-3157-4008-8dcd-65da6650e40c</ParentID>
+                      <Id>35eb9e52-c476-4c0d-a9d0-366b0a13228c</Id>
+                      <Rectangle>
+                        <X>288.8</X>
+                        <Width>144.4</Width>
+                        <Height>25.004</Height>
+                      </Rectangle>
+                      <Name>TableLabel4</Name>
+                      <ImageTransparent />
+                      <BorderThickness>
+                        <Left>1</Left>
+                        <Top>1</Top>
+                        <Right>1</Right>
+                        <Bottom>1</Bottom>
+                      </BorderThickness>
+                      <EnableBorder>
+                        <boolean>true</boolean>
+                        <boolean>true</boolean>
+                        <boolean>true</boolean>
+                        <boolean>true</boolean>
+                      </EnableBorder>
+                      <BorderDottedLines />
+                      <Font>굴림, 10pt</Font>
+                      <IndentLB />
+                      <InterMargin />
+                      <GradientLB>
+                        <LbRec />
+                      </GradientLB>
+                      <IndexUnderLine />
+                      <Text>단가</Text>
+                      <DziName>ds</DziName>
+                      <DataTableName>dt</DataTableName>
+                      <Base64ImageFromViewer />
+                      <Selected>false</Selected>
+                    </TableLabel>
+                    <TableLabel xsi:type="DynamicTableTitleLabel">
+                      <ParentID>913eb17d-3157-4008-8dcd-65da6650e40c</ParentID>
+                      <Id>b336214b-941f-4b12-b899-8c71e263eb71</Id>
+                      <Rectangle>
+                        <X>433.2</X>
+                        <Width>144.401</Width>
+                        <Height>25.004</Height>
+                      </Rectangle>
+                      <Name>TableLabel5</Name>
+                      <ImageTransparent />
+                      <BorderThickness>
+                        <Left>1</Left>
+                        <Top>1</Top>
+                        <Right>1</Right>
+                        <Bottom>1</Bottom>
+                      </BorderThickness>
+                      <EnableBorder>
+                        <boolean>true</boolean>
+                        <boolean>true</boolean>
+                        <boolean>true</boolean>
+                        <boolean>true</boolean>
+                      </EnableBorder>
+                      <BorderDottedLines />
+                      <Font>굴림, 10pt</Font>
+                      <IndentLB />
+                      <InterMargin />
+                      <GradientLB>
+                        <LbRec />
+                      </GradientLB>
+                      <IndexUnderLine />
+                      <Text>수량</Text>
+                      <DziName>ds</DziName>
+                      <DataTableName>dt</DataTableName>
+                      <Base64ImageFromViewer />
+                      <Selected>false</Selected>
+                    </TableLabel>
+                    <TableLabel xsi:type="DynamicTableTitleLabel">
+                      <ParentID>913eb17d-3157-4008-8dcd-65da6650e40c</ParentID>
+                      <Id>a7963714-bd72-4aaa-8428-6272010fefff</Id>
+                      <Rectangle>
+                        <X>577.601</X>
+                        <Width>144.4</Width>
+                        <Height>25.004</Height>
+                      </Rectangle>
+                      <Name>TableLabel11</Name>
+                      <ImageTransparent />
+                      <BorderThickness>
+                        <Left>1</Left>
+                        <Top>1</Top>
+                        <Right>1</Right>
+                        <Bottom>1</Bottom>
+                      </BorderThickness>
+                      <EnableBorder>
+                        <boolean>true</boolean>
+                        <boolean>true</boolean>
+                        <boolean>true</boolean>
+                        <boolean>true</boolean>
+                      </EnableBorder>
+                      <BorderDottedLines />
+                      <Font>굴림, 10pt</Font>
+                      <IndentLB />
+                      <InterMargin />
+                      <GradientLB>
+                        <LbRec />
+                      </GradientLB>
+                      <IndexUnderLine />
+                      <Text>금액</Text>
+                      <DziName>ds</DziName>
+                      <DataTableName>dt</DataTableName>
+                      <Base64ImageFromViewer />
+                      <Selected>false</Selected>
+                    </TableLabel>
+                    <TableLabel xsi:type="DynamicTableValueLabel">
+                      <ParentID>913eb17d-3157-4008-8dcd-65da6650e40c</ParentID>
+                      <Id>fc9a2b08-ee69-46d0-a299-1d56fb1e06e2</Id>
+                      <Rectangle>
+                        <Y>25.004</Y>
+                        <Width>144.401</Width>
+                        <Height>25.004</Height>
+                      </Rectangle>
+                      <Name>TableLabel7</Name>
+                      <_formatFieldNone>yyyy년MM월dd일</_formatFieldNone>
+                      <DataType>DataLabel</DataType>
+                      <ImageTransparent />
+                      <BorderThickness>
+                        <Left>1</Left>
+                        <Top>1</Top>
+                        <Right>1</Right>
+                        <Bottom>1</Bottom>
+                      </BorderThickness>
+                      <EnableBorder>
+                        <boolean>true</boolean>
+                        <boolean>true</boolean>
+                        <boolean>true</boolean>
+                        <boolean>true</boolean>
+                      </EnableBorder>
+                      <BorderDottedLines />
+                      <Font>굴림, 10pt</Font>
+                      <IndentLB />
+                      <InterMargin />
+                      <GradientLB>
+                        <LbRec />
+                      </GradientLB>
+                      <IndexUnderLine />
+                      <Text />
+                      <DziName>ds</DziName>
+                      <DataTableName>dt</DataTableName>
+                      <FieldName>날짜</FieldName>
+                      <LabelTextType>Datetime</LabelTextType>
+                      <Format>yyyy년MM월dd일</Format>
+                      <Base64ImageFromViewer />
+                      <Selected>false</Selected>
+                    </TableLabel>
+                    <TableLabel xsi:type="DynamicTableValueLabel">
+                      <ParentID>913eb17d-3157-4008-8dcd-65da6650e40c</ParentID>
+                      <Id>fb445f6d-e4e9-45d1-b898-51d70f40afb9</Id>
+                      <Rectangle>
+                        <X>144.401</X>
+                        <Y>25.004</Y>
+                        <Width>144.399</Width>
+                        <Height>25.004</Height>
+                      </Rectangle>
+                      <Name>TableLabel8</Name>
+                      <DataType>DataLabel</DataType>
+                      <ImageTransparent />
+                      <BorderThickness>
+                        <Left>1</Left>
+                        <Top>1</Top>
+                        <Right>1</Right>
+                        <Bottom>1</Bottom>
+                      </BorderThickness>
+                      <EnableBorder>
+                        <boolean>true</boolean>
+                        <boolean>true</boolean>
+                        <boolean>true</boolean>
+                        <boolean>true</boolean>
+                      </EnableBorder>
+                      <BorderDottedLines />
+                      <Font>굴림, 10pt</Font>
+                      <IndentLB />
+                      <InterMargin />
+                      <GradientLB>
+                        <LbRec />
+                      </GradientLB>
+                      <IndexUnderLine />
+                      <Text />
+                      <DziName>ds</DziName>
+                      <DataTableName>dt</DataTableName>
+                      <FieldName>품명</FieldName>
+                      <Base64ImageFromViewer />
+                      <Selected>false</Selected>
+                    </TableLabel>
+                    <TableLabel xsi:type="DynamicTableValueLabel">
+                      <ParentID>913eb17d-3157-4008-8dcd-65da6650e40c</ParentID>
+                      <Id>19aa8208-d1de-4cf4-9a1d-19d77ea9a542</Id>
+                      <Rectangle>
+                        <X>288.8</X>
+                        <Y>25.004</Y>
+                        <Width>144.4</Width>
+                        <Height>25.004</Height>
+                      </Rectangle>
+                      <Name>TableLabel9</Name>
+                      <_formatFieldNone>#,###</_formatFieldNone>
+                      <DataType>DataLabel</DataType>
+                      <ImageTransparent />
+                      <BorderThickness>
+                        <Left>1</Left>
+                        <Top>1</Top>
+                        <Right>1</Right>
+                        <Bottom>1</Bottom>
+                      </BorderThickness>
+                      <EnableBorder>
+                        <boolean>true</boolean>
+                        <boolean>true</boolean>
+                        <boolean>true</boolean>
+                        <boolean>true</boolean>
+                      </EnableBorder>
+                      <BorderDottedLines />
+                      <Font>굴림, 10pt</Font>
+                      <HorizontalTextAlignment>Right</HorizontalTextAlignment>
+                      <IndentLB />
+                      <InterMargin />
+                      <GradientLB>
+                        <LbRec />
+                      </GradientLB>
+                      <IndexUnderLine />
+                      <Text />
+                      <DziName>ds</DziName>
+                      <DataTableName>dt</DataTableName>
+                      <FieldName>단가</FieldName>
+                      <LabelTextType>Number</LabelTextType>
+                      <Format>#,###</Format>
+                      <Base64ImageFromViewer />
+                      <Selected>false</Selected>
+                    </TableLabel>
+                    <TableLabel xsi:type="DynamicTableValueLabel">
+                      <ParentID>913eb17d-3157-4008-8dcd-65da6650e40c</ParentID>
+                      <Id>2014faf8-417d-4102-9756-52a48c6757b0</Id>
+                      <Rectangle>
+                        <X>433.2</X>
+                        <Y>25.004</Y>
+                        <Width>144.401</Width>
+                        <Height>25.004</Height>
+                      </Rectangle>
+                      <Name>TableLabel10</Name>
+                      <_formatFieldNone>#,###</_formatFieldNone>
+                      <DataType>DataLabel</DataType> <!-- 데이터 형태 -->
+                      <ImageTransparent />
+                      <BorderThickness>
+                        <Left>1</Left>
+                        <Top>1</Top>
+                        <Right>1</Right>
+                        <Bottom>1</Bottom>
+                      </BorderThickness>
+                      <EnableBorder>
+                        <boolean>true</boolean>
+                        <boolean>true</boolean>
+                        <boolean>true</boolean>
+                        <boolean>true</boolean>
+                      </EnableBorder>
+                      <BorderDottedLines />
+                      <Font>굴림, 10pt</Font>
+                      <HorizontalTextAlignment>Right</HorizontalTextAlignment>
+                      <IndentLB />
+                      <InterMargin />
+                      <GradientLB>
+                        <LbRec />
+                      </GradientLB>
+                      <IndexUnderLine />
+                      <Text />
+                      <DziName>ds</DziName>
+                      <DataTableName>dt</DataTableName>
+                      <FieldName>수량</FieldName>
+                      <LabelTextType>Number</LabelTextType>
+                      <Format>#,###</Format>
+                      <Base64ImageFromViewer />
+                      <Selected>false</Selected>
+                    </TableLabel>
+                    <TableLabel xsi:type="DynamicTableValueLabel">
+                      <ParentID>913eb17d-3157-4008-8dcd-65da6650e40c</ParentID>
+                      <Id>c0148fb3-330b-4328-b7cb-721eb6fd41c6</Id>
+                      <Rectangle>
+                        <X>577.601</X>
+                        <Y>25.004</Y>
+                        <Width>144.4</Width>
+                        <Height>25.004</Height>
+                      </Rectangle>
+                      <Name>TableLabel12</Name> <!-- 이름 -->
+                      <StartBindScript> <!-- 스크립트 -->
+                        if (DataSource.GetDataRow()["단가"]!="" &amp;&amp; DataSource.GetDataRow()["수량"]!="")
+                        {
+                            This.Text=DataSource.GetDataRow()["단가"]*DataSource.GetDataRow()["수량"];
+                            sum+=This.Text;
+                        }
+                      </StartBindScript>
+                      <_formatFieldNone>#,###</_formatFieldNone>
+                      <ReVectorValue>0</ReVectorValue> <!-- ReVectorValue -->
+                      <ImageTransparent />
+                      <BorderThickness> <!-- 테두리 두께(ptx) -->
+                        <Left>1</Left>
+                        <Top>1</Top>
+                        <Right>1</Right>
+                        <Bottom>1</Bottom>
+                      </BorderThickness>
+                      <EnableBorder> <!-- 테두리 점선 -->
+                        <boolean>true</boolean>
+                        <boolean>true</boolean>
+                        <boolean>true</boolean>
+                        <boolean>true</boolean>
+                      </EnableBorder>
+                      <BorderDottedLines />
+                      <Font>굴림, 10pt</Font>
+                      <HorizontalTextAlignment>Right</HorizontalTextAlignment> <!-- 텍스트 수평 정렬 -->
+                      <IndentLB />
+                      <InterMargin />
+                      <GradientLB>
+                        <LbRec />
+                      </GradientLB>
+                      <IndexUnderLine />
+                      <Text />
+                      <DziName>ds</DziName> <!-- 데이터 셋 이름 -->
+                      <DataTableName>dt</DataTableName> <!-- 테이블 이름 -->
+                      <FieldName>수량</FieldName> <!-- 필드 이름 -->
+                      <LabelTextType>Number</LabelTextType>
+                      <Format>#,###</Format>
+                      <Base64ImageFromViewer />
+                      <Selected>false</Selected>
+                    </TableLabel>
+                  </Labels>
+                  <RelateTableList />
+                  <ForceAnnex>false</ForceAnnex>
+                  <MinimumRowCount>1</MinimumRowCount>
+                  <FixRowCount>0</FixRowCount>
+                  <IsForceOverRow>false</IsForceOverRow>
+                  <isAnnexMark>false</isAnnexMark>
+                </anyType>
+              </ControlList>
+              <HasHeader>false</HasHeader> <!-- 헤더밴드 소유 -->
+              <HasFooter>false</HasFooter> <!-- 풋터밴드 소유 -->
+              <ShowGroupLink>false</ShowGroupLink> <!-- 그룹 연결 보기 -->
+              <DummyHeaderCount>0</DummyHeaderCount> <!-- 더미(헤더) -->
+              <DummyFooterCount>0</DummyFooterCount> <!-- 더미(풋터) -->
+              <SubBandCount>0</SubBandCount> <!-- 서브 밴드 -->
+              <FixTitle>false</FixTitle> <!-- 데이터 헤더 밴드 고정 -->
+              <FixMaster>false</FixMaster> <!-- 마스터 고정 -->
+              <ForceNewPage>false</ForceNewPage> <!-- 페이지 넘기기 -->
+              <Invisible>false</Invisible> <!-- 감추기 -->
+              <FixPriorGroupHeader>false</FixPriorGroupHeader> <!-- 상위 그룹 헤더 고정 -->
+              <FixPriorGroupFooter>false</FixPriorGroupFooter> <!-- 상위 그룹 풋터 고정 -->
+              <AutoSize>false</AutoSize> <!-- 자동 높이 조정 -->
+              <RepeatNumber>0</RepeatNumber> <!-- 반복 횟수 -->
+              <DziName>ds</DziName> <!-- 데이터 셋 이름 -->
+              <DataTableName>dt</DataTableName> <!-- 테이블 이름 -->
+              <IsContainTypeDynamicTable>false</IsContainTypeDynamicTable>
+              <IsContainTypeChart>false</IsContainTypeChart>
+              <IsContainTypeCrossTable>false</IsContainTypeCrossTable>
+              <IsContainTypeRegion>false</IsContainTypeRegion>
+            </anyType>
+            <anyType xsi:type="BandPageFooter">
+              <ParentID>70020ab7-0e80-428b-8c9b-9a5556ffa06f</ParentID>
+              <Id>75c48dd6-45b8-4821-98c5-ae13eda5d8cc</Id>
+              <Rectangle>
+                <Y>191.012</Y>
+                <Width>722</Width>
+                <Height>35</Height>
+              </Rectangle> <!-- 크기+위치? -->
+              <Name>BandPageFooter1</Name> <!-- 이름 -->
+              <ChildBands />
+              <ChildHeaderBands />
+              <ChildFooterBands />
+              <BandYOrder>6</BandYOrder>
+              <ControlList>
+                <anyType xsi:type="ControlLabel">
+                  <ParentID>75c48dd6-45b8-4821-98c5-ae13eda5d8cc</ParentID>
+                  <Id>5ae8b6fd-c68d-42af-96b7-d3c8e5de3ba3</Id>
+                  <Rectangle>
+                    <X>274.5</X>
+                    <Y>6.988</Y>
+                    <Width>173</Width>
+                    <Height>23</Height>
+                  </Rectangle>
+                  <Name>ControlLabel2</Name>
+                  <DataType>SystemLabel</DataType>
+                  <SystemFieldName>PageNumber / TotalPage</SystemFieldName>
+                  <ImageTransparent />
+                  <BorderThickness />
+                  <EnableBorder>
+                    <boolean>true</boolean>
+                    <boolean>true</boolean>
+                    <boolean>true</boolean>
+                    <boolean>true</boolean>
+                  </EnableBorder>
+                  <BorderDottedLines />
+                  <Font>굴림, 10pt</Font>
+                  <IndentLB />
+                  <InterMargin />
+                  <GradientLB>
+                    <LbRec>
+                      <X>274.5</X>
+                      <Y>6.988</Y>
+                      <Width>173</Width>
+                      <Height>23</Height>
+                    </LbRec>
+                  </GradientLB>
+                  <IndexUnderLine />
+                  <Text />
+                  <DziName />
+                  <DataTableName />
+                  <Base64ImageFromViewer />
+                </anyType>
+              </ControlList>
+              <PageOutputSkip>false</PageOutputSkip>
+            </anyType>
+          </Bands>
+        </anyType>
+        <anyType xsi:type="Layer">
+          <Name>ForeGroundLayer</Name>
+          <IsActive>false</IsActive>
+          <IsVisible>true</IsVisible>
+          <Bands>
+            <anyType xsi:type="BandForeGround">
+              <ParentID>70020ab7-0e80-428b-8c9b-9a5556ffa06f</ParentID>
+              <Id>ab00e536-13db-49b1-b381-34b4b3f97553</Id>
+              <Rectangle>
+                <Width>722</Width>
+                <Height>1052.6</Height>
+              </Rectangle>
+              <Name>ForegroundBand1</Name>
+              <ChildBands />
+              <ChildHeaderBands />
+              <ChildFooterBands />
+              <BandYOrder>3</BandYOrder>
+              <ControlList />
+            </anyType>
+          </Bands>
+        </anyType>
+      </Layers>
+      <Margin>
+        <X>38</X>
+        <Y>38</Y>
+        <Width>38</Width>
+        <Height>38</Height>
+      </Margin> <!-- 여백 -->
+      <PaperDirection>true</PaperDirection> <!-- 용지 방향(세로, 가로) -->
+      <Gutter>0</Gutter> <!-- 제본용 여백 -->
+      <GutterPosition>false</GutterPosition> <!-- 제본용 여백 위치 -->
+      <MorrirMargins>false</MorrirMargins> <!-- 페이지 마주보기? -->
+      <PaperType>A4</PaperType> <!-- 용지 타입 -->
+      <PaperSize> <!-- 페이지 크기 -->
+        <Width>798</Width>
+        <Height>1128.6</Height>
+      </PaperSize>
+      <ShowPageBorder>false</ShowPageBorder>
+      <HideVirtualArea>false</HideVirtualArea> <!-- 가상 영역 숨김 -->
+      <StandardMarginPixel>2</StandardMarginPixel> <!-- 라벨 기본 여백값(Px) -->
+    </anyType>
+  </ReportList>
+
+  <IsLinkedReport>false</IsLinkedReport> <!-- 리포트 연결 인쇄 -->
+  <PasteMode>Auto</PasteMode> <!-- 확대축소 붙이기 모드 -->
+  <IsUseExportPerGroup>false</IsUseExportPerGroup> <!-- 그룹별 엑셀 내보내기 사용 -->
+</ReportTemplate>

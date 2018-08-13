@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <style type="text/css">
+    .menubar li ul {
+      background: rgb(109,109,109);
+      display:none;  /* 평상시에는 서브메뉴가 안보이게 하기 */
+      height:auto;
+      padding:0px;
+      margin:0px;
+      border:0px;
+      position:absolute;
+      width:200px;
+      z-index:200;
+    }
+
+    .menubar ul li:hover ul {
+      display:block;   /* 마우스 커서 올리면 서브메뉴 보이게 하기 */
+    }
+
+    .topMenu ul li{
+      display:inline;
+      padding:0 3px;
+    }
+    </style>
+    <title></title>
+  </head>
+  <body>
+<div class="menubar">
+  <ul>
+    <li style="display:inline;"><a href="#">파일</a>
+      <ul>
+        <li><a href="#">디자이너 실행</a></li>
+        <li><a href="#">열기</a></li>
+        <li><a href="#">저장</a></li>
+        <li><a href="#">인쇄</a></li>
+        <li><a href="#">고급인쇄 설정</a></li>
+        <li><a href="#">닫기</a></li>
+      </ul>
+    </li>
+
+    <li style="display:inline;"><a href="#">서식</a>
+        <ul>
+          <li><a href="#">엑셀 내보내기</a></li>
+          <li><a href="#">이미지 내보내기</a></li>
+          <li><a href="#">PDF 내보내기</a></li>
+          <li><a href="#">HTML 내보내기</a></li>
+          <li><a href="#">이미지 추가</a></li>
+          <li><a href="#">항목 선택</a></li>
+      </ul>
+    </li>
+
+    <li style="display:inline;"><a href="#">페이지</a>
+        <ul>
+          <li><a href="#">이전 페이지</a></li>
+          <li><a href="#">다음 페이지</a></li>
+          <li><a href="#">첫 페이지</a></li>
+          <li><a href="#">마지막 페이지</a></li>
+      </ul>
+    </li>
+
+    <li style="display:inline;"><a href="#">보기</a>
+        <ul>
+          <li><a href="#">한 페이지</a></li>
+          <li><a href="#">여러 페이지</a></li>
+          <li><a href="#">확대/축소</a></li>
+      </ul>
+    </li>
+
+  </ul>
+</div>
+<div class="topMenu">
+<ul>
+  <li><input type="button" value="저장"></li>
+<li><input type="button" value="불러오기"></li>
+<li><input type="button" value="인쇄" onclick="pagePrint()"></li>
+<li><input type="button" value="DRD"></li>
+<li><input type="button" value="첫 페이지"></li>
+<li><input type="button" value="이전 페이지"></li>
+<li><input type="text" value="1"> /</li>
+<li><label>totalPage</label></li>
+<li><input type="button" value="다음 페이지"></li>
+<li><input type="button" value="마지막 페이지"></li>
+<li><input type="button" value="한 페이지만 보기"></li>
+<li><input type="button" value="여러 페이지 보기"></li>
+<li>
+<select>
+  <option value="200%">200%</option>
+  <option value="200%">150%</option>
+  <option value="200%">100%</option>
+  <option value="200%">80%</option>
+  <option value="200%">50%</option>
+
+</select>
+</li>
+<li><input type="button" value="+"></li>
+<li><input type="button" value="-"></li>
+<li><input type="button" value="PDF"></li>
+<li><input type="button" value="엑셀"></li>
+<li><input type="button" value="셀"></li>
+<li><input type="button" value="HWP"></li>
+<li><input type="button" value="이미지"></li>
+<li><input type="button" value="HTML"></li>
+<li><input type="button" value="이미지 추가"></li>
+<li><input type="button" value="항목 선택"></li>
+</nav>
+
+
+  </body>
+</html>

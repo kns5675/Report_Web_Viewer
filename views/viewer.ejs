@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $("#header").load("/include/header.ejs");
+            var data = <%- data %>;
+            console.log(data);
+            console.log(data.ReportTemplate.ReportList.anyType.Rectangle.Width._text);
+            console.log(data.ReportTemplate.ReportList.anyType.Rectangle.Height._text);
+
+            var Report = data.ReportTemplate.ReportList.anyType;
+            // Report 개수만큼 div 생성
+            for(var i = 0; i < Report.length; i++){
+                var pageNo = GetRecentPage();
+                appendReport(pageNo, Report);
+            }
+
+            var Layer = Report.Layers.anyType;
+
+            // BackGroundLayer를 사용하지 않을 때
+            if(Layer[0].IsActive._text == 'false'){
+            } else {
+                var BackGroundLayer = Layer[0].Bands.anyType;
+            }
+
+            // DesignLayer를 사용하지 않을 때
+            if(Layer[1].IsActive._text == 'false'){
+            } else {
+                var DesignLayer = Layer[1].Bands.anyType;
+            }
+
+            console.log(DesignLayer[0]._attributes["xsi:type"]);
+
+            // anyType 을 div id 로 지정
+            for(var i = 0; i < DesignLayer.length; i++){
+                appendDiv(DesignLayer[i]._attributes["xsi:type"], 'report1');
+                setArea(DesignLayer[i]._attributes["xsi:type"], DesignLayer[i]);
+            }
+
+            // ForeGroundLayer를 사용하지 않을 때
+            if(Layer[2].IsActive._text == 'false'){
+            } else {
+                var ForeGroundLayer = Layer[2].Bands.anyType;
+            }
+
+            console.log(DesignLayer);
+
+        });
+
+        function appendReport(pageNo, parent) {
+            var report = 'report' + pageNo;
+            $('#report').append('<div id=' + report + ' class="page"></div>');
+            setArea(report, parent);
+        }
+        // div 추가
+        function appendDiv(divId, parent) {
+            $('#' + parent).append('<div id=' + divId + '></div>');
+            //setArea(divId, parent);
+        }
+
+        function setArea(divId, parent) {
+            $('#' + divId).css({
+                'width': parent.Rectangle.Width._text,
+                'height': parent.Rectangle.Height._text-4
+            })
+        }
+
+        function GetRecentPage() {
+            var elm = {}
+            var elms = document.getElementById("report").getElementsByTagName("div");
+            return ++elms.length;
+        }
+
+        function pagePrint() {
+            window.print();
+            window.close();
+        }
+
+    </script>
+    <style>
+        @media print {
+            #header {
+                display: none;
+            }
+            div.page {
+                page-break-after: always;
+            }
+        }
+
+        div#report1 {
+            background-color: lightblue;
+        }
+    </style>
+</head>
+<body>
+<div id="header"></div>
+<div id="report"></div>
+</body>
+</html>
