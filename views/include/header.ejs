@@ -102,18 +102,19 @@
   <li><input type="button" value="마지막 페이지"></li>
   <li><input type="button" value="한 페이지만 보기"></li>
   <li><input type="button" value="여러 페이지 보기"></li>
-  <!--<li>
-    <select>
-      <option value="200%">200%</option>
-      <option value="200%">150%</option>
-      <option value="200%">100%</option>
-      <option value="200%">80%</option>
-      <option value="200%">50%</option>
+  <li>
+    <select id="txtZoom">
+      <!--<option value="2.0">200%</option>-->
+      <option value="1.5">150%</option>
+      <option selected value="1.0">100%</option>
+      <option value="0.8">80%</option>
+      <option value="0.5">50%</option>
+      <option id="option1" style="display:none;">test</option>
     </select>
-  </li>-->
-  <li><input type="text" id="txtZoom"value="1"/></li>
-  <li><input type="button" id="btnZoomIn" value="+" onclick="zoomIn();"></li>
-  <li><input type="button" id="btnZoomOut "value="-" onclick="zoomOut();"></li>
+  </li>
+  <!--<li><input type="text" id="txtZoom"value="1"/></li>-->
+  <li><input type="button" id="btnZoomIn" onclick="zoomIn()" value="+"></li>
+  <li><input type="button" id="btnZoomOut"onclick="zoomOut()" value="-"></li>
   <li><input type="button" value="PDF"></li>
   <li><input type="button" value="엑셀"></li>
   <li><input type="button" value="셀"></li>

@@ -8,7 +8,7 @@
     <meta name="description" content="test document">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>Document</title>
-    <!--<script src="http://code.jquery.com/jquery-latest.min.js"></script>-->
+   <!--<script src="http://code.jquery.com/jquery-latest.min.js"></script>-->
     <style type="text/css">
         @media print {
             #header {
@@ -31,10 +31,13 @@
                 background-color: lightblue;
             }*/
     </style>
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
 <script>
     $(document).ready(function(){
         $("#header").load("/include/header.ejs");
+
+        sizechanged();
+
         var data = <%- data %>;
         console.log(data);
         console.log(data.ReportTemplate.ReportList.anyType.Rectangle.Width._text);
@@ -61,13 +64,13 @@
             var DesignLayer = Layer[1].Bands.anyType;
         }
 
-        console.log(DesignLayer[0]._attributes["xsi:type"]);
+        // console.log(DesignLayer[0]._attributes["xsi:type"]);
 
         // anyType 을 div id 로 지정
-        for(var i = 0; i < DesignLayer.length; i++){
-            appendDiv(DesignLayer[i]._attributes["xsi:type"], 'report1');
-            setArea(DesignLayer[i]._attributes["xsi:type"], DesignLayer[i]);
-        }
+        // for(var i = 0; i < DesignLayer.length; i++){
+        //     appendDiv(DesignLayer[i]._attributes["xsi:type"], 'report1');
+        //     setArea(DesignLayer[i]._attributes["xsi:type"], DesignLayer[i]);
+        // }
 
         // ForeGroundLayer를 사용하지 않을 때
         if(Layer[2].IsActive._text == 'false'){
@@ -75,24 +78,37 @@
             var ForeGroundLayer = Layer[2].Bands.anyType;
         }
 
-        console.log(DesignLayer);
+        // console.log(DesignLayer);
     });
 
+    function sizechanged(){
+        $("#txtZoom").live("change", function(){//live로 한 이유 : on은 jquery버전상 안맞아서 live써야함 지연피셜
+            //alert($(this).val());
+            test();
+        });
+
+    }
+
     function test(){
+        //alert("test들왔음 ㅎ");
         try {
+            //alert("test try들옴")
             var flexiblecontent = document.getElementById("content");
             var size = $("#txtZoom").val();
+            //alert("size : " + size);
 
             if (jQuery.browser.msie) {
+                //alert("test if 들옴");
                 flexiblecontent.style.zoom = size;
             }
             else {
+                //alert("test else들옴");
                 $('#content').css('-webkit-transform','scale(' + (size) + ')');
                 $('#content').css('-webkit-transform-origin','0 0');
                 $('#content').css('-moz-transform','scale(' + (size) + ')');
                 $('#content').css('-moz-transform-origin','0 0');
                 $('#content').css('-o-transform','scale(' + (size) + ')');
-                $('#content').ss('-o-transform-origin','0 0');
+                $('#content').css('-o-transform-origin','0 0');
             }
         }
         catch(e) {
@@ -100,13 +116,36 @@
         }
     }
 
+
     function zoomIn(){
+        //alert("zoom in  들왔음");
         try {
             var size = $("#txtZoom").val();
+            // alert("zoom in 누르기 전 size : " + size );
 
             //if(size > 2.00) $("#txtZoom").val("1");
             //else
-            $("#txtZoom").val((Number(size) + 0.05).toFixed(2));
+            var size = parseFloat(size);
+            //string 형 size를 parseFloat이용해서 number형으로 변환시켰음.
+
+            // alert("type of size : " + typeof size);
+            // alert("size : " + size);
+            size = (size + 0.05).toFixed(2);
+            // alert("calculated asize : " + size);
+            $("#txtZoom").val();
+            $("#option1").val(size);
+            //alert("option1의 밸류값은 : " + $("#option1").val());
+            var changedoption1 = ((($("#option1").val())*100)+"%");
+            $("#option1").text(changedoption1);
+            $("#txtZoom option:last").attr("selected","selected");
+
+            //$("#option1").hide();
+            // alert($("#txtZoom").val());
+            //var newsize = $("#txtZoom").val((size + 0.05).toFixed(2));
+            //$("#txtZoom").text(size*100 + "%");
+
+
+            //alert("txtZoom 의 밸류 값은 : " + $("#txtZoom").html());
 
             test();
         }
@@ -118,16 +157,27 @@
         try {
             var size = $("#txtZoom").val();
 
-            //if(size > 2.00) $("#txtZoom").val("1");
-            //else
-            $("#txtZoom").val((Number(size) - 0.05).toFixed(2));
+            var size = parseFloat(size);
+            //string 형 size를 parseFloat이용해서 number형으로 변환시켰음.
+
+            size = (size - 0.05).toFixed(2);
+            // alert("calculated asize : " + size);
+            $("#txtZoom").val();
+            $("#option1").val(size);
+            //alert("option1의 밸류값은 : " + $("#option1").val());
+            var changedoption1 = ((($("#option1").val())*100)+"%");
+            $("#option1").text(changedoption1);
+            $("#txtZoom option:last").attr("selected","selected");
+            //alert("txtZoom 의 밸류 값은 : " + $("#txtZoom").html());
 
             test();
         }
         catch(e) {
-            console.log(e.message);
+            alert("test ==> " + e.message);
         }
     }
+
+
 </script>
 </head>
 <body>
