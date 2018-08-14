@@ -1,5 +1,5 @@
 function copyoptions(){
-    $("#copyOptions").live("change",function(){
+    $("#copyOptions").on("change",function(){
         //copytest();
         try{
             alert("copytest들어왔음");
@@ -37,7 +37,7 @@ function copyoptions(){
     }
 }*/
 function sizechanged(){
-    $("#txtZoom").live("change", function(){//live로 한 이유 : on은 jquery버전상 안맞아서 live써야함 지연피셜
+    $("#txtZoom").on("change", function(){//live로 한 이유 : on은 jquery버전상 안맞아서 live써야함 지연피셜
         //alert($(this).val());
         test();
     });
@@ -112,3 +112,13 @@ function zoomOut(){
 function close_pop(flag) {
     $('#myModal').hide();
 };
+
+jQuery.browser = {}; //jQuery.browser.msie 사용 위함.
+(function () {
+    jQuery.browser.msie = false;
+    jQuery.browser.version = 0;
+    if (navigator.userAgent.match(/MSIE ([0-9]+)\./)) {
+        jQuery.browser.msie = true;
+        jQuery.browser.version = RegExp.$1;
+    }
+})();
