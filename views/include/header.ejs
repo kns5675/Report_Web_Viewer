@@ -109,12 +109,12 @@
 
   </li>
   <li><input type="button" value="DRD"></li>
-  <li><input type="button" value="첫 페이지"></li>
-  <li><input type="button" value="이전 페이지"></li>
-  <li><input type="text" value="1"> /</li>
-  <li><label>totalPage</label></li>
-  <li><input type="button" value="다음 페이지"></li>
-  <li><input type="button" value="마지막 페이지"></li>
+  <li><input type="button" value="첫 페이지" id="FirstPage"></li>
+  <li><input type="button" value="이전 페이지" id="PreviousPage"></li>
+  <li><input type="text" value="1" id="NowPage"> /</li>
+  <li><a id="TotalPage">10</a></li>
+  <li><input type="button" value="다음 페이지" id="NextPage"></li>
+  <li><input type="button" value="마지막 페이지" id="LastPage"></li>
   <li><input type="button" value="한 페이지만 보기"></li>
   <li><input type="button" value="여러 페이지 보기"></li>
   <li>
@@ -142,4 +142,69 @@
 
 </div>
   </body>
+<script>
+    var pageNum = $("#NowPage").val();
+    var heighttext = $("#page1")[0].style.height;
+    var heightcustom = heighttext.substring(0,heighttext.lastIndexOf("p"));
+    var headerheight = $("#header")[0].offsetHeight+10;
+    var pagecount = $(".page").length;
+    var totalpage = $("#TotalPage").text(pagecount+"(TotalPage)");
+    $(document).ready(function () {
+    });
+
+    $("#FirstPage").on("click",function () {
+        console.log("click test");
+        console.log(pageNum);
+        $(window).scrollTop(0);
+    });
+    //$('#contact').offset().top
+    $("#NowPage").on("keyup",function () {
+        $(this).val($(this).val().replace(/[^0-9]/g,""));
+
+        var inputpage = "page"+$(this).val();
+        var pagevalue = $('#'+inputpage).offset().top;
+        console.log("입력값 : ", inputpage);
+        $(window).scrollTop(pagevalue);
+    });
+
+    $("#PreviousPage").on("click",function () {
+        console.log("$(window).scrollTop() : ",$(window).scrollTop());
+        console.log("heightcustom : ",heightcustom);
+        var Previous = $(window).scrollTop()-heightcustom;
+        console.log("scrollTop : ",Previous);
+        var lastpage = $("#page"+pagecount).offset().top;
+        console.log("pagecount : ",pagecount);
+        console.log("dwadwadwad",lastpage);
+        if($(window).scrollTop() >= lastpage){
+            console.log("in");
+            $(window).scrollTop(Previous+750);
+        }else{
+            $(window).scrollTop(Previous);
+        }
+
+
+    });
+
+    $("#NextPage").on("click",function () {
+        var Next = $(window).scrollTop()+heightcustom*1;
+        console.log("Next : ",Next);
+        console.log("headerheight : ",headerheight);
+        if($(window).scrollTop() == 0){
+            $(window).scrollTop(Next-headerheight);
+        }else{
+            $(window).scrollTop(Next);
+        }
+    });
+
+    $("#LastPage").on("click",function () {
+        console.log("pagecount : ",$(".page").length);
+
+        console.log("widthcustom : ",heightcustom);
+
+        var Last = $(window).scrollTop()+heightcustom*pagecount;
+        $(window).scrollTop(Last);
+        console.log("scrollTop : ",Last);
+    });
+
+</script>
 </html>

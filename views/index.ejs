@@ -12,6 +12,43 @@
 
     <link rel="stylesheet" href="css/index.css"/>
     <link rel="stylesheet" href="css/print.css"/>
+    <style type="text/css">
+        @media print {
+            #header {
+                display: none;
+            }
+            div.page {
+                page-break-after: always;
+            }
+            body{
+                -webkit-transform:scale(1.50);
+                -webkit-transform-origin:0 0;
+                -moz-transform:scale(1.50);
+                -moz-transform-origin:0 0;
+                -o-transform:scale(1.50);
+                -o-transform-origin:0 0;
+            }
+        }
+        #header {
+            background-color: #00B7FF;
+        }
+
+        div#report1 {
+            background-color: lightblue;
+        }
+        .TopMenuFixed {
+            position: fixed;
+            top: 0px;
+        }
+
+        .jbFixed {
+            position: fixed;
+            top: 0px;
+        }
+
+        .show-on-scroll { visibility: hidden; }
+        .show-on-scroll.shown { visibility: visible; }
+
 
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="js/report.js"></script>
@@ -19,18 +56,42 @@
     <script src="js/band.js"></script>
     <script src="js/print.js"></script>
 
+        /*    div#report1 {
+                background-color: lightblue;
+            }*/
+    </style>
+   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="js/viewer.js"></script>
 <script>
 
     $(function(){
+    <script src="js/index.js"></script>
+    <script>
+    $(document).ready(function(){
         $("#header").load("/include/header.ejs");
 
         // alert("1");
-        // sizechanged();
+        sizechanged();
         // alert("2");
-        // copyoptions();
+        copyoptions();
         // alert("3");
 
         var data = <%-data%>;
+        var jbOffset = $( '#header' ).offset();
+        console.log("jbOffset : ",jbOffset);
+        $( window ).scroll( function() {
+            if ( $( document ).scrollTop() > jbOffset.top ) {
+                $( '#header' ).addClass( 'jbFixed' );
+            }
+            else {
+                $( '#header' ).removeClass( 'jbFixed' );
+            }
+        });
+
+        var data = <%- data %>;
+        console.log(data);
+        console.log(data.ReportTemplate.ReportList.anyType.Rectangle.Width._text);
+        console.log(data.ReportTemplate.ReportList.anyType.Rectangle.Height._text);
 
         makeReportTemplate(data);
 
@@ -190,10 +251,24 @@
     //         alert("test ==> " + e.message);
     //     }
     // }
+
+
 </script>
 </head>
 <body>
 <div id="header"></div>
+<div id="enhancedcopymodal" style="display:none; background-color:salmon">
+    <h1>User Login</h1>
+    <form id="loginform" name="loginform" method="post" action="index.html">
+        <label for="username">Username:</label>
+        <input type="text" name="username" id="username" class="txtfield" tabindex="1">
+
+        <label for="password">Password:</label>
+        <input type="password" name="password" id="password" class="txtfield" tabindex="2">
+
+        <div class="center"><input type="submit" name="loginbtn" id="loginbtn" class="flatbtn-blu hidemodal" value="Log In" tabindex="3"></div>
+    </form>
+</div>
 <div id="content">
 
 
@@ -216,5 +291,22 @@
 
 </div>
 <div id="reportTemplate"></div>
+<div id="report">
+    <div id="page1" class="page show-on-scroll shown" style="width: 798px; height: 1128.6px;">
+        test
+    </div>
+    <div id="page2" class="page show-on-scroll shown" style="width: 798px; height: 1128.6px;">
+        test2
+    </div>
+    <div id="page3" class="page show-on-scroll shown" style="width: 798px; height: 1128.6px;">
+        test3
+    </div>
+    <div id="page4" class="page show-on-scroll shown" style="width: 798px; height: 1128.6px;">
+        test4
+    </div>
+    <div id="page5" class="page show-on-scroll shown" style="width: 798px; height: 1128.6px;">
+        test5
+    </div>
+</div>
 </body>
 </html>
