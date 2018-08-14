@@ -19,5 +19,18 @@
     "util": "^0.11.0",
     "xml-js": "^1.6.7",
     "xml-parser": "^1.2.1"
-  }
+  },
+  "description": "\"# testproject\"",
+  "main": "app.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kns5675/Report_Web_Viewer.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kns5675/Report_Web_Viewer/issues"
+  },
+  "homepage": "https://github.com/kns5675/Report_Web_Viewer#readme"
 }
