@@ -1,0 +1,780 @@
+<?xml version="1.0"?>
+<DataTree xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <DZIList>
+    <DZI>
+      <_qDataSet />
+      <DZITableList>
+        <DZITable>
+          <DZIFieldList>
+            <DZIField>
+              <_hideProperties>
+                <string>Data</string>
+              </_hideProperties>
+              <Name>no</Name>
+              <FieldSync>true</FieldSync>
+            </DZIField>
+            <DZIField>
+              <_hideProperties>
+                <string>Data</string>
+              </_hideProperties>
+              <Name>title</Name>
+              <FieldSync>true</FieldSync>
+            </DZIField>
+            <DZIField>
+              <_hideProperties>
+                <string>Data</string>
+              </_hideProperties>
+              <Name>content</Name>
+              <FieldSync>true</FieldSync>
+            </DZIField>
+            <DZIField>
+              <_hideProperties>
+                <string>Data</string>
+              </_hideProperties>
+              <Name>reg_date</Name>
+              <FieldSync>true</FieldSync>
+            </DZIField>
+            <DZIField>
+              <_hideProperties>
+                <string>Data</string>
+              </_hideProperties>
+              <Name>category_no</Name>
+              <FieldSync>true</FieldSync>
+            </DZIField>
+            <DZIField>
+              <_hideProperties>
+                <string>Data</string>
+              </_hideProperties>
+              <Name>user_id</Name>
+              <FieldSync>true</FieldSync>
+            </DZIField>
+          </DZIFieldList>
+          <Name>post</Name>
+          <Query>select * from post;</Query>
+        </DZITable>
+        <DZITable>
+          <DZIFieldList>
+            <DZIField>
+              <_hideProperties>
+                <string>Data</string>
+              </_hideProperties>
+              <Name>id</Name>
+              <FieldSync>true</FieldSync>
+            </DZIField>
+            <DZIField>
+              <_hideProperties>
+                <string>Data</string>
+              </_hideProperties>
+              <Name>name</Name>
+              <FieldSync>true</FieldSync>
+            </DZIField>
+            <DZIField>
+              <_hideProperties>
+                <string>Data</string>
+              </_hideProperties>
+              <Name>password</Name>
+              <FieldSync>true</FieldSync>
+            </DZIField>
+            <DZIField>
+              <_hideProperties>
+                <string>Data</string>
+              </_hideProperties>
+              <Name>reg_date</Name>
+              <FieldSync>true</FieldSync>
+            </DZIField>
+          </DZIFieldList>
+          <Name>user</Name>
+          <Query>select * from user;</Query>
+        </DZITable>
+      </DZITableList>
+      <Name>jblog</Name>
+      <dBAdapter xsi:type="Mysql">
+        <ConnectionInfo>
+          <DataType>DataBase</DataType>
+          <VenDorName>MYSQL</VenDorName>
+          <ConnectionTitle>Test</ConnectionTitle>
+          <Description />
+          <IPAddress>127.0.0.1</IPAddress>
+          <Port>3306</Port>
+          <DBName>jblog</DBName>
+          <UserID>jblog</UserID>
+          <Password>jblog</Password>
+        </ConnectionInfo>
+        <VenDorName>MYSQL</VenDorName>
+      </dBAdapter>
+    </DZI>
+    <DZI>
+      <_qDataSet />
+      <DZITableList>
+        <DZITable>
+          <DZIFieldList>
+            <DZIField>
+              <_hideProperties>
+                <string>Data</string>
+              </_hideProperties>
+              <Name>이름</Name>
+              <Type>이름</Type>
+              <Comment />
+              <FieldSync>true</FieldSync>
+            </DZIField>
+            <DZIField>
+              <_hideProperties>
+                <string>Data</string>
+              </_hideProperties>
+              <Name>수량</Name>
+              <Type>수량</Type>
+              <Comment />
+              <FieldSync>true</FieldSync>
+            </DZIField>
+            <DZIField>
+              <_hideProperties>
+                <string>Data</string>
+              </_hideProperties>
+              <Name>품명</Name>
+              <Type>품명</Type>
+              <Comment />
+              <FieldSync>true</FieldSync>
+            </DZIField>
+            <DZIField>
+              <_hideProperties>
+                <string>Data</string>
+              </_hideProperties>
+              <Name>단가</Name>
+              <Type>단가</Type>
+              <Comment />
+              <FieldSync>true</FieldSync>
+            </DZIField>
+          </DZIFieldList>
+          <Name>dt</Name>
+          <Query>select * from dt</Query>
+          <Data>
+            <xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+              <xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:MainDataTable="dt" msdata:UseCurrentLocale="true">
+                <xs:complexType>
+                  <xs:choice minOccurs="0" maxOccurs="unbounded">
+                    <xs:element name="dt">
+                      <xs:complexType>
+                        <xs:sequence>
+                          <xs:element name="이름" type="xs:string" minOccurs="0" />
+                          <xs:element name="수량" type="xs:string" minOccurs="0" />
+                          <xs:element name="품명" type="xs:string" minOccurs="0" />
+                          <xs:element name="단가" type="xs:string" minOccurs="0" />
+                        </xs:sequence>
+                      </xs:complexType>
+                    </xs:element>
+                  </xs:choice>
+                </xs:complexType>
+              </xs:element>
+            </xs:schema>
+            <diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1">
+              <DocumentElement>
+                <dt diffgr:id="dt1" msdata:rowOrder="0" diffgr:hasChanges="inserted">
+                  <이름>가길동</이름>
+                  <수량>15</수량>
+                  <품명>아이플러스</품명>
+                  <단가>9684</단가>
+                </dt>
+                <dt diffgr:id="dt2" msdata:rowOrder="1" diffgr:hasChanges="inserted">
+                  <이름>김길동</이름>
+                  <수량>21</수량>
+                  <품명>식품</품명>
+                  <단가>5681</단가>
+                </dt>
+                <dt diffgr:id="dt3" msdata:rowOrder="2" diffgr:hasChanges="inserted">
+                  <이름>가길동</이름>
+                  <수량>86</수량>
+                  <품명>ERP-U</품명>
+                  <단가>2276</단가>
+                </dt>
+                <dt diffgr:id="dt4" msdata:rowOrder="3" diffgr:hasChanges="inserted">
+                  <이름>차철수</이름>
+                  <수량>82</수량>
+                  <품명>공산품</품명>
+                  <단가>9510</단가>
+                </dt>
+                <dt diffgr:id="dt5" msdata:rowOrder="4" diffgr:hasChanges="inserted">
+                  <이름>라갑순</이름>
+                  <수량>50</수량>
+                  <품명>책상</품명>
+                  <단가>4287</단가>
+                </dt>
+                <dt diffgr:id="dt6" msdata:rowOrder="5" diffgr:hasChanges="inserted">
+                  <이름>다길동</이름>
+                  <수량>64</수량>
+                  <품명>공산품</품명>
+                  <단가>8993</단가>
+                </dt>
+                <dt diffgr:id="dt7" msdata:rowOrder="6" diffgr:hasChanges="inserted">
+                  <이름>나영희</이름>
+                  <수량>13</수량>
+                  <품명>농산물</품명>
+                  <단가>4198</단가>
+                </dt>
+                <dt diffgr:id="dt8" msdata:rowOrder="7" diffgr:hasChanges="inserted">
+                  <이름>유길동</이름>
+                  <수량>50</수량>
+                  <품명>농산물</품명>
+                  <단가>1111</단가>
+                </dt>
+                <dt diffgr:id="dt9" msdata:rowOrder="8" diffgr:hasChanges="inserted">
+                  <이름>홍길동</이름>
+                  <수량>80</수량>
+                  <품명>ICUBE</품명>
+                  <단가>1191</단가>
+                </dt>
+                <dt diffgr:id="dt10" msdata:rowOrder="9" diffgr:hasChanges="inserted">
+                  <이름>박갑돌</이름>
+                  <수량>76</수량>
+                  <품명>청소도구</품명>
+                  <단가>8328</단가>
+                </dt>
+                <dt diffgr:id="dt11" msdata:rowOrder="10" diffgr:hasChanges="inserted">
+                  <이름>김길동</이름>
+                  <수량>37</수량>
+                  <품명>스마트플러스</품명>
+                  <단가>2878</단가>
+                </dt>
+                <dt diffgr:id="dt12" msdata:rowOrder="11" diffgr:hasChanges="inserted">
+                  <이름>차철수</이름>
+                  <수량>22</수량>
+                  <품명>ERP-U</품명>
+                  <단가>1633</단가>
+                </dt>
+                <dt diffgr:id="dt13" msdata:rowOrder="12" diffgr:hasChanges="inserted">
+                  <이름>마동탁</이름>
+                  <수량>36</수량>
+                  <품명>ICUBE</품명>
+                  <단가>9140</단가>
+                </dt>
+                <dt diffgr:id="dt14" msdata:rowOrder="13" diffgr:hasChanges="inserted">
+                  <이름>차철수</이름>
+                  <수량>96</수량>
+                  <품명>전자제품</품명>
+                  <단가>8295</단가>
+                </dt>
+                <dt diffgr:id="dt15" msdata:rowOrder="14" diffgr:hasChanges="inserted">
+                  <이름>이철수</이름>
+                  <수량>93</수량>
+                  <품명>의류</품명>
+                  <단가>9469</단가>
+                </dt>
+                <dt diffgr:id="dt16" msdata:rowOrder="15" diffgr:hasChanges="inserted">
+                  <이름>이철수</이름>
+                  <수량>17</수량>
+                  <품명>식품</품명>
+                  <단가>9494</단가>
+                </dt>
+                <dt diffgr:id="dt17" msdata:rowOrder="16" diffgr:hasChanges="inserted">
+                  <이름>마동탁</이름>
+                  <수량>86</수량>
+                  <품명>아이플러스</품명>
+                  <단가>1158</단가>
+                </dt>
+                <dt diffgr:id="dt18" msdata:rowOrder="17" diffgr:hasChanges="inserted">
+                  <이름>차철수</이름>
+                  <수량>4</수량>
+                  <품명>스마트플러스</품명>
+                  <단가>9175</단가>
+                </dt>
+                <dt diffgr:id="dt19" msdata:rowOrder="18" diffgr:hasChanges="inserted">
+                  <이름>유길동</이름>
+                  <수량>58</수량>
+                  <품명>컴퓨터</품명>
+                  <단가>2976</단가>
+                </dt>
+                <dt diffgr:id="dt20" msdata:rowOrder="19" diffgr:hasChanges="inserted">
+                  <이름>유길동</이름>
+                  <수량>83</수량>
+                  <품명>ICUBE</품명>
+                  <단가>3657</단가>
+                </dt>
+                <dt diffgr:id="dt21" msdata:rowOrder="20" diffgr:hasChanges="inserted">
+                  <이름>박갑돌</이름>
+                  <수량>5</수량>
+                  <품명>식품</품명>
+                  <단가>6260</단가>
+                </dt>
+                <dt diffgr:id="dt22" msdata:rowOrder="21" diffgr:hasChanges="inserted">
+                  <이름>나영희</이름>
+                  <수량>20</수량>
+                  <품명>농산물</품명>
+                  <단가>4467</단가>
+                </dt>
+                <dt diffgr:id="dt23" msdata:rowOrder="22" diffgr:hasChanges="inserted">
+                  <이름>다길동</이름>
+                  <수량>17</수량>
+                  <품명>ICUBE</품명>
+                  <단가>4019</단가>
+                </dt>
+                <dt diffgr:id="dt24" msdata:rowOrder="23" diffgr:hasChanges="inserted">
+                  <이름>홍길동</이름>
+                  <수량>65</수량>
+                  <품명>스마트플러스</품명>
+                  <단가>9199</단가>
+                </dt>
+                <dt diffgr:id="dt25" msdata:rowOrder="24" diffgr:hasChanges="inserted">
+                  <이름>마동탁</이름>
+                  <수량>75</수량>
+                  <품명>의류</품명>
+                  <단가>1396</단가>
+                </dt>
+                <dt diffgr:id="dt26" msdata:rowOrder="25" diffgr:hasChanges="inserted">
+                  <이름>가길동</이름>
+                  <수량>86</수량>
+                  <품명>전자제품</품명>
+                  <단가>7937</단가>
+                </dt>
+                <dt diffgr:id="dt27" msdata:rowOrder="26" diffgr:hasChanges="inserted">
+                  <이름>라갑순</이름>
+                  <수량>8</수량>
+                  <품명>ICUBE</품명>
+                  <단가>3879</단가>
+                </dt>
+                <dt diffgr:id="dt28" msdata:rowOrder="27" diffgr:hasChanges="inserted">
+                  <이름>라갑순</이름>
+                  <수량>97</수량>
+                  <품명>ERP-U</품명>
+                  <단가>3399</단가>
+                </dt>
+                <dt diffgr:id="dt29" msdata:rowOrder="28" diffgr:hasChanges="inserted">
+                  <이름>유길동</이름>
+                  <수량>16</수량>
+                  <품명>스마트플러스</품명>
+                  <단가>1450</단가>
+                </dt>
+                <dt diffgr:id="dt30" msdata:rowOrder="29" diffgr:hasChanges="inserted">
+                  <이름>다길동</이름>
+                  <수량>99</수량>
+                  <품명>의류</품명>
+                  <단가>6068</단가>
+                </dt>
+                <dt diffgr:id="dt31" msdata:rowOrder="30" diffgr:hasChanges="inserted">
+                  <이름>마동탁</이름>
+                  <수량>41</수량>
+                  <품명>책상</품명>
+                  <단가>7069</단가>
+                </dt>
+                <dt diffgr:id="dt32" msdata:rowOrder="31" diffgr:hasChanges="inserted">
+                  <이름>이철수</이름>
+                  <수량>34</수량>
+                  <품명>청소도구</품명>
+                  <단가>3348</단가>
+                </dt>
+                <dt diffgr:id="dt33" msdata:rowOrder="32" diffgr:hasChanges="inserted">
+                  <이름>차철수</이름>
+                  <수량>38</수량>
+                  <품명>의류</품명>
+                  <단가>2616</단가>
+                </dt>
+                <dt diffgr:id="dt34" msdata:rowOrder="33" diffgr:hasChanges="inserted">
+                  <이름>가길동</이름>
+                  <수량>93</수량>
+                  <품명>ERP-U</품명>
+                  <단가>4363</단가>
+                </dt>
+                <dt diffgr:id="dt35" msdata:rowOrder="34" diffgr:hasChanges="inserted">
+                  <이름>마동탁</이름>
+                  <수량>77</수량>
+                  <품명>ERP-U</품명>
+                  <단가>4857</단가>
+                </dt>
+                <dt diffgr:id="dt36" msdata:rowOrder="35" diffgr:hasChanges="inserted">
+                  <이름>박갑돌</이름>
+                  <수량>79</수량>
+                  <품명>스마트플러스</품명>
+                  <단가>6757</단가>
+                </dt>
+                <dt diffgr:id="dt37" msdata:rowOrder="36" diffgr:hasChanges="inserted">
+                  <이름>홍길동</이름>
+                  <수량>65</수량>
+                  <품명>책상</품명>
+                  <단가>2372</단가>
+                </dt>
+                <dt diffgr:id="dt38" msdata:rowOrder="37" diffgr:hasChanges="inserted">
+                  <이름>유길동</이름>
+                  <수량>67</수량>
+                  <품명>컴퓨터</품명>
+                  <단가>8104</단가>
+                </dt>
+                <dt diffgr:id="dt39" msdata:rowOrder="38" diffgr:hasChanges="inserted">
+                  <이름>홍길동</이름>
+                  <수량>88</수량>
+                  <품명>컴퓨터</품명>
+                  <단가>1150</단가>
+                </dt>
+                <dt diffgr:id="dt40" msdata:rowOrder="39" diffgr:hasChanges="inserted">
+                  <이름>나영희</이름>
+                  <수량>55</수량>
+                  <품명>청소도구</품명>
+                  <단가>4069</단가>
+                </dt>
+                <dt diffgr:id="dt41" msdata:rowOrder="40" diffgr:hasChanges="inserted">
+                  <이름>나영희</이름>
+                  <수량>73</수량>
+                  <품명>의류</품명>
+                  <단가>3659</단가>
+                </dt>
+                <dt diffgr:id="dt42" msdata:rowOrder="41" diffgr:hasChanges="inserted">
+                  <이름>나영희</이름>
+                  <수량>69</수량>
+                  <품명>ERP-U</품명>
+                  <단가>1124</단가>
+                </dt>
+                <dt diffgr:id="dt43" msdata:rowOrder="42" diffgr:hasChanges="inserted">
+                  <이름>홍길동</이름>
+                  <수량>33</수량>
+                  <품명>전자제품</품명>
+                  <단가>8592</단가>
+                </dt>
+                <dt diffgr:id="dt44" msdata:rowOrder="43" diffgr:hasChanges="inserted">
+                  <이름>이철수</이름>
+                  <수량>1</수량>
+                  <품명>책상</품명>
+                  <단가>9650</단가>
+                </dt>
+                <dt diffgr:id="dt45" msdata:rowOrder="44" diffgr:hasChanges="inserted">
+                  <이름>라갑순</이름>
+                  <수량>76</수량>
+                  <품명>책상</품명>
+                  <단가>5182</단가>
+                </dt>
+                <dt diffgr:id="dt46" msdata:rowOrder="45" diffgr:hasChanges="inserted">
+                  <이름>유길동</이름>
+                  <수량>45</수량>
+                  <품명>컴퓨터</품명>
+                  <단가>2685</단가>
+                </dt>
+                <dt diffgr:id="dt47" msdata:rowOrder="46" diffgr:hasChanges="inserted">
+                  <이름>김길동</이름>
+                  <수량>64</수량>
+                  <품명>ERP-U</품명>
+                  <단가>5551</단가>
+                </dt>
+                <dt diffgr:id="dt48" msdata:rowOrder="47" diffgr:hasChanges="inserted">
+                  <이름>라갑순</이름>
+                  <수량>85</수량>
+                  <품명>ERP-U</품명>
+                  <단가>3324</단가>
+                </dt>
+                <dt diffgr:id="dt49" msdata:rowOrder="48" diffgr:hasChanges="inserted">
+                  <이름>이철수</이름>
+                  <수량>56</수량>
+                  <품명>ICUBE</품명>
+                  <단가>5283</단가>
+                </dt>
+                <dt diffgr:id="dt50" msdata:rowOrder="49" diffgr:hasChanges="inserted">
+                  <이름>홍길동</이름>
+                  <수량>42</수량>
+                  <품명>농산물</품명>
+                  <단가>6395</단가>
+                </dt>
+                <dt diffgr:id="dt51" msdata:rowOrder="50" diffgr:hasChanges="inserted">
+                  <이름>마동탁</이름>
+                  <수량>37</수량>
+                  <품명>ERP-U</품명>
+                  <단가>6625</단가>
+                </dt>
+                <dt diffgr:id="dt52" msdata:rowOrder="51" diffgr:hasChanges="inserted">
+                  <이름>가길동</이름>
+                  <수량>45</수량>
+                  <품명>스마트플러스</품명>
+                  <단가>3834</단가>
+                </dt>
+                <dt diffgr:id="dt53" msdata:rowOrder="52" diffgr:hasChanges="inserted">
+                  <이름>나영희</이름>
+                  <수량>33</수량>
+                  <품명>컴퓨터</품명>
+                  <단가>7265</단가>
+                </dt>
+                <dt diffgr:id="dt54" msdata:rowOrder="53" diffgr:hasChanges="inserted">
+                  <이름>이철수</이름>
+                  <수량>19</수량>
+                  <품명>책상</품명>
+                  <단가>1319</단가>
+                </dt>
+                <dt diffgr:id="dt55" msdata:rowOrder="54" diffgr:hasChanges="inserted">
+                  <이름>가길동</이름>
+                  <수량>28</수량>
+                  <품명>전자제품</품명>
+                  <단가>9022</단가>
+                </dt>
+                <dt diffgr:id="dt56" msdata:rowOrder="55" diffgr:hasChanges="inserted">
+                  <이름>차철수</이름>
+                  <수량>37</수량>
+                  <품명>책상</품명>
+                  <단가>4888</단가>
+                </dt>
+                <dt diffgr:id="dt57" msdata:rowOrder="56" diffgr:hasChanges="inserted">
+                  <이름>가길동</이름>
+                  <수량>97</수량>
+                  <품명>스마트플러스</품명>
+                  <단가>5757</단가>
+                </dt>
+                <dt diffgr:id="dt58" msdata:rowOrder="57" diffgr:hasChanges="inserted">
+                  <이름>김길동</이름>
+                  <수량>88</수량>
+                  <품명>청소도구</품명>
+                  <단가>3526</단가>
+                </dt>
+                <dt diffgr:id="dt59" msdata:rowOrder="58" diffgr:hasChanges="inserted">
+                  <이름>라갑순</이름>
+                  <수량>78</수량>
+                  <품명>스마트플러스</품명>
+                  <단가>6283</단가>
+                </dt>
+                <dt diffgr:id="dt60" msdata:rowOrder="59" diffgr:hasChanges="inserted">
+                  <이름>다길동</이름>
+                  <수량>68</수량>
+                  <품명>아이플러스</품명>
+                  <단가>6735</단가>
+                </dt>
+                <dt diffgr:id="dt61" msdata:rowOrder="60" diffgr:hasChanges="inserted">
+                  <이름>유길동</이름>
+                  <수량>54</수량>
+                  <품명>ICUBE</품명>
+                  <단가>3829</단가>
+                </dt>
+                <dt diffgr:id="dt62" msdata:rowOrder="61" diffgr:hasChanges="inserted">
+                  <이름>나영희</이름>
+                  <수량>22</수량>
+                  <품명>농산물</품명>
+                  <단가>9411</단가>
+                </dt>
+                <dt diffgr:id="dt63" msdata:rowOrder="62" diffgr:hasChanges="inserted">
+                  <이름>이철수</이름>
+                  <수량>91</수량>
+                  <품명>공산품</품명>
+                  <단가>1512</단가>
+                </dt>
+                <dt diffgr:id="dt64" msdata:rowOrder="63" diffgr:hasChanges="inserted">
+                  <이름>박갑돌</이름>
+                  <수량>21</수량>
+                  <품명>아이플러스</품명>
+                  <단가>4626</단가>
+                </dt>
+                <dt diffgr:id="dt65" msdata:rowOrder="64" diffgr:hasChanges="inserted">
+                  <이름>김길동</이름>
+                  <수량>43</수량>
+                  <품명>전자제품</품명>
+                  <단가>5103</단가>
+                </dt>
+                <dt diffgr:id="dt66" msdata:rowOrder="65" diffgr:hasChanges="inserted">
+                  <이름>마동탁</이름>
+                  <수량>17</수량>
+                  <품명>컴퓨터</품명>
+                  <단가>6822</단가>
+                </dt>
+                <dt diffgr:id="dt67" msdata:rowOrder="66" diffgr:hasChanges="inserted">
+                  <이름>라갑순</이름>
+                  <수량>4</수량>
+                  <품명>공산품</품명>
+                  <단가>4527</단가>
+                </dt>
+                <dt diffgr:id="dt68" msdata:rowOrder="67" diffgr:hasChanges="inserted">
+                  <이름>나영희</이름>
+                  <수량>79</수량>
+                  <품명>의류</품명>
+                  <단가>7631</단가>
+                </dt>
+                <dt diffgr:id="dt69" msdata:rowOrder="68" diffgr:hasChanges="inserted">
+                  <이름>나영희</이름>
+                  <수량>57</수량>
+                  <품명>ICUBE</품명>
+                  <단가>3638</단가>
+                </dt>
+                <dt diffgr:id="dt70" msdata:rowOrder="69" diffgr:hasChanges="inserted">
+                  <이름>가길동</이름>
+                  <수량>6</수량>
+                  <품명>ERP-U</품명>
+                  <단가>2786</단가>
+                </dt>
+                <dt diffgr:id="dt71" msdata:rowOrder="70" diffgr:hasChanges="inserted">
+                  <이름>차철수</이름>
+                  <수량>78</수량>
+                  <품명>책상</품명>
+                  <단가>2329</단가>
+                </dt>
+                <dt diffgr:id="dt72" msdata:rowOrder="71" diffgr:hasChanges="inserted">
+                  <이름>차철수</이름>
+                  <수량>57</수량>
+                  <품명>공산품</품명>
+                  <단가>5067</단가>
+                </dt>
+                <dt diffgr:id="dt73" msdata:rowOrder="72" diffgr:hasChanges="inserted">
+                  <이름>김길동</이름>
+                  <수량>29</수량>
+                  <품명>청소도구</품명>
+                  <단가>2311</단가>
+                </dt>
+                <dt diffgr:id="dt74" msdata:rowOrder="73" diffgr:hasChanges="inserted">
+                  <이름>나영희</이름>
+                  <수량>30</수량>
+                  <품명>ERP-U</품명>
+                  <단가>8002</단가>
+                </dt>
+                <dt diffgr:id="dt75" msdata:rowOrder="74" diffgr:hasChanges="inserted">
+                  <이름>홍길동</이름>
+                  <수량>33</수량>
+                  <품명>청소도구</품명>
+                  <단가>5449</단가>
+                </dt>
+                <dt diffgr:id="dt76" msdata:rowOrder="75" diffgr:hasChanges="inserted">
+                  <이름>박갑돌</이름>
+                  <수량>69</수량>
+                  <품명>의류</품명>
+                  <단가>4424</단가>
+                </dt>
+                <dt diffgr:id="dt77" msdata:rowOrder="76" diffgr:hasChanges="inserted">
+                  <이름>나영희</이름>
+                  <수량>32</수량>
+                  <품명>식품</품명>
+                  <단가>6708</단가>
+                </dt>
+                <dt diffgr:id="dt78" msdata:rowOrder="77" diffgr:hasChanges="inserted">
+                  <이름>박갑돌</이름>
+                  <수량>47</수량>
+                  <품명>공산품</품명>
+                  <단가>9528</단가>
+                </dt>
+                <dt diffgr:id="dt79" msdata:rowOrder="78" diffgr:hasChanges="inserted">
+                  <이름>나영희</이름>
+                  <수량>2</수량>
+                  <품명>식품</품명>
+                  <단가>9471</단가>
+                </dt>
+                <dt diffgr:id="dt80" msdata:rowOrder="79" diffgr:hasChanges="inserted">
+                  <이름>차철수</이름>
+                  <수량>11</수량>
+                  <품명>아이플러스</품명>
+                  <단가>2131</단가>
+                </dt>
+                <dt diffgr:id="dt81" msdata:rowOrder="80" diffgr:hasChanges="inserted">
+                  <이름>유길동</이름>
+                  <수량>58</수량>
+                  <품명>책상</품명>
+                  <단가>2909</단가>
+                </dt>
+                <dt diffgr:id="dt82" msdata:rowOrder="81" diffgr:hasChanges="inserted">
+                  <이름>박갑돌</이름>
+                  <수량>31</수량>
+                  <품명>컴퓨터</품명>
+                  <단가>3020</단가>
+                </dt>
+                <dt diffgr:id="dt83" msdata:rowOrder="82" diffgr:hasChanges="inserted">
+                  <이름>라갑순</이름>
+                  <수량>17</수량>
+                  <품명>공산품</품명>
+                  <단가>1556</단가>
+                </dt>
+                <dt diffgr:id="dt84" msdata:rowOrder="83" diffgr:hasChanges="inserted">
+                  <이름>가길동</이름>
+                  <수량>40</수량>
+                  <품명>공산품</품명>
+                  <단가>2813</단가>
+                </dt>
+                <dt diffgr:id="dt85" msdata:rowOrder="84" diffgr:hasChanges="inserted">
+                  <이름>홍길동</이름>
+                  <수량>97</수량>
+                  <품명>스마트플러스</품명>
+                  <단가>5570</단가>
+                </dt>
+                <dt diffgr:id="dt86" msdata:rowOrder="85" diffgr:hasChanges="inserted">
+                  <이름>김길동</이름>
+                  <수량>44</수량>
+                  <품명>전자제품</품명>
+                  <단가>5931</단가>
+                </dt>
+                <dt diffgr:id="dt87" msdata:rowOrder="86" diffgr:hasChanges="inserted">
+                  <이름>홍길동</이름>
+                  <수량>64</수량>
+                  <품명>청소도구</품명>
+                  <단가>5155</단가>
+                </dt>
+                <dt diffgr:id="dt88" msdata:rowOrder="87" diffgr:hasChanges="inserted">
+                  <이름>마동탁</이름>
+                  <수량>96</수량>
+                  <품명>ICUBE</품명>
+                  <단가>2619</단가>
+                </dt>
+                <dt diffgr:id="dt89" msdata:rowOrder="88" diffgr:hasChanges="inserted">
+                  <이름>나영희</이름>
+                  <수량>49</수량>
+                  <품명>식품</품명>
+                  <단가>6415</단가>
+                </dt>
+                <dt diffgr:id="dt90" msdata:rowOrder="89" diffgr:hasChanges="inserted">
+                  <이름>홍길동</이름>
+                  <수량>23</수량>
+                  <품명>전자제품</품명>
+                  <단가>2315</단가>
+                </dt>
+                <dt diffgr:id="dt91" msdata:rowOrder="90" diffgr:hasChanges="inserted">
+                  <이름>김길동</이름>
+                  <수량>31</수량>
+                  <품명>ICUBE</품명>
+                  <단가>1916</단가>
+                </dt>
+                <dt diffgr:id="dt92" msdata:rowOrder="91" diffgr:hasChanges="inserted">
+                  <이름>나영희</이름>
+                  <수량>94</수량>
+                  <품명>식품</품명>
+                  <단가>2192</단가>
+                </dt>
+                <dt diffgr:id="dt93" msdata:rowOrder="92" diffgr:hasChanges="inserted">
+                  <이름>유길동</이름>
+                  <수량>36</수량>
+                  <품명>청소도구</품명>
+                  <단가>8640</단가>
+                </dt>
+                <dt diffgr:id="dt94" msdata:rowOrder="93" diffgr:hasChanges="inserted">
+                  <이름>가길동</이름>
+                  <수량>32</수량>
+                  <품명>농산물</품명>
+                  <단가>5725</단가>
+                </dt>
+                <dt diffgr:id="dt95" msdata:rowOrder="94" diffgr:hasChanges="inserted">
+                  <이름>가길동</이름>
+                  <수량>82</수량>
+                  <품명>ICUBE</품명>
+                  <단가>6164</단가>
+                </dt>
+                <dt diffgr:id="dt96" msdata:rowOrder="95" diffgr:hasChanges="inserted">
+                  <이름>라갑순</이름>
+                  <수량>80</수량>
+                  <품명>의류</품명>
+                  <단가>7248</단가>
+                </dt>
+                <dt diffgr:id="dt97" msdata:rowOrder="96" diffgr:hasChanges="inserted">
+                  <이름>박갑돌</이름>
+                  <수량>82</수량>
+                  <품명>식품</품명>
+                  <단가>9558</단가>
+                </dt>
+                <dt diffgr:id="dt98" msdata:rowOrder="97" diffgr:hasChanges="inserted">
+                  <이름>차철수</이름>
+                  <수량>41</수량>
+                  <품명>ERP-U</품명>
+                  <단가>2137</단가>
+                </dt>
+                <dt diffgr:id="dt99" msdata:rowOrder="98" diffgr:hasChanges="inserted">
+                  <이름>마동탁</이름>
+                  <수량>54</수량>
+                  <품명>의류</품명>
+                  <단가>7538</단가>
+                </dt>
+                <dt diffgr:id="dt100" msdata:rowOrder="99" diffgr:hasChanges="inserted">
+                  <이름>나영희</이름>
+                  <수량>9</수량>
+                  <품명>공산품</품명>
+                  <단가>3968</단가>
+                </dt>
+              </DocumentElement>
+            </diffgr:diffgram>
+          </Data>
+        </DZITable>
+      </DZITableList>
+      <Name>ds</Name>
+    </DZI>
+  </DZIList>
+  <ParameterList />
+</DataTree>
