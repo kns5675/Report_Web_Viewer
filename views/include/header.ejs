@@ -92,7 +92,15 @@
 <ul>
   <li><input type="button" value="저장"></li>
   <li><input type="button" value="불러오기"></li>
-  <li><input type="button" value="인쇄" onclick="pagePrint()"></li>
+  <li>
+    <select id="copyOptions">
+      <option id="num1"selected disabled hidden>인쇄설정하기</option>
+      <option id="num2" value="copy">인쇄</option>
+      <option id="enhancedcopy" value="ecopy">고급인쇄설정</option>
+    </select>
+    <input type="button" value="인쇄" onclick="pagePrint()">
+
+  </li>
   <li><input type="button" value="DRD"></li>
   <li><input type="button" value="첫 페이지"></li>
   <li><input type="button" value="이전 페이지"></li>
@@ -104,7 +112,7 @@
   <li><input type="button" value="여러 페이지 보기"></li>
   <li>
     <select id="txtZoom">
-      <!--<option value="2.0">200%</option>-->
+      <option value="2.0">200%</option>
       <option value="1.5">150%</option>
       <option selected value="1.0">100%</option>
       <option value="0.8">80%</option>

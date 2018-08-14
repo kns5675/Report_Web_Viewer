@@ -36,7 +36,11 @@
     $(document).ready(function(){
         $("#header").load("/include/header.ejs");
 
+        alert("1");
         sizechanged();
+        alert("2");
+        copyoptions();
+        alert("3");
 
         var data = <%- data %>;
         console.log(data);
@@ -80,17 +84,36 @@
 
         // console.log(DesignLayer);
     });
+    function copyoptions(){
+        $("#copyOptions").live("change",function(){
+            copytest();
+        });
+    }
+    function copytest(){
+        try{
+            //var firstoption = $("#copyOptions option:first").val();
+            //var secondoption = $("#copyOptions option:last").val();
+            var copyoptions = $("#copyOptions").val();
 
+            if($("#copyOptions:selected option:eq(0)"))
+            {
+                alert("1번째 선택 : " + firstoption);
+            }else if($("#copyOptions:selected option:eq(1)")){
+                alert("2번째 선택 : " + secondoption);
+            }else{
+                alert("1,2 말고 딴거 선택함.")
+            }
+        }catch(e){
+            console.log(e.message);
+        }
+    }
     function sizechanged(){
         $("#txtZoom").live("change", function(){//live로 한 이유 : on은 jquery버전상 안맞아서 live써야함 지연피셜
             //alert($(this).val());
             test();
         });
-
     }
-
     function test(){
-        //alert("test들왔음 ㅎ");
         try {
             //alert("test try들옴")
             var flexiblecontent = document.getElementById("content");
@@ -135,7 +158,7 @@
             $("#txtZoom").val();
             $("#option1").val(size);
             //alert("option1의 밸류값은 : " + $("#option1").val());
-            var changedoption1 = ((($("#option1").val())*100)+"%");
+            var changedoption1 = ((($("#option1").val())*100).toFixed(0)+"%");
             $("#option1").text(changedoption1);
             $("#txtZoom option:last").attr("selected","selected");
 
@@ -165,7 +188,7 @@
             $("#txtZoom").val();
             $("#option1").val(size);
             //alert("option1의 밸류값은 : " + $("#option1").val());
-            var changedoption1 = ((($("#option1").val())*100)+"%");
+            var changedoption1 = ((($("#option1").val())*100).toFixed(0)+"%");
             $("#option1").text(changedoption1);
             $("#txtZoom option:last").attr("selected","selected");
             //alert("txtZoom 의 밸류 값은 : " + $("#txtZoom").html());
