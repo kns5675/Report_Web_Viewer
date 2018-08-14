@@ -4,35 +4,38 @@ function copyoptions(){
         try{
             alert("copytest들어왔음");
 
-            $("#copyOptions").change(function() {
-                if (this.value == 'enhancedcopy')
-                {
-                    $('#enhancedcopymodal').css('display','block');
-                }else{
-                    $('#enhancedcopymodal').css('display','none');
-                }
-            });
+            if ($("#copyOptions").val() == 'enhancedcopy')
+            {   alert("고급인쇄들어왔음");
+                //$('#myModal').css('display','block');
+                $('#myModal').show();
+            }else if($("#copyOptions").val() == 'copy'){
+                alert("그냥인쇄왔음");
+                $('#myModal').css('display','none');
+            }else{
+                alert("인식못했음");
+            }
         }catch(e){
             console.log(e.message);
         }
     });
 }
-function copytest(){
+/*function copytest(){
     try{
         alert("copytest들어왔음");
 
-        $("#copyOptions").change(function() {
-            if (this.value == 'enhancedcopy')
-            {
+            if ($("#copyOptions").val() == 'enhancedcopy')
+            {   alert("고급인쇄들어왔음");
                 $('#enhancedcopymodal').css('display','block');
-            }else{
+            }else if($("#copyOptions").val() == 'copy'){
+                alert("그냥인쇄왔음");
                 $('#enhancedcopymodal').css('display','none');
+            }else{
+                alert("인식못했음");
             }
-        });
     }catch(e){
         console.log(e.message);
     }
-}
+}*/
 function sizechanged(){
     $("#txtZoom").live("change", function(){//live로 한 이유 : on은 jquery버전상 안맞아서 live써야함 지연피셜
         //alert($(this).val());
@@ -105,3 +108,7 @@ function zoomOut(){
         alert("test ==> " + e.message);
     }
 }
+//팝업 Close 기능
+function close_pop(flag) {
+    $('#myModal').hide();
+};
