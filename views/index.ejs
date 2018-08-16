@@ -1,15 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <!--<link rel='stylesheet' href='/stylesheets/style.css' />-->
+
     <meta name="generator" content="editplus">
     <meta name="author" content="angeleyes">
     <meta name="keywords" content="angeleyes, testhtml, testjavascript">
     <meta name="description" content="test document">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>Document</title>
-   <!--<script src="http://code.jquery.com/jquery-latest.min.js"></script>-->
-
+    <link rel="stylesheet" href="css/main.css"/>
     <link rel="stylesheet" href="css/index.css"/>
     <link rel="stylesheet" href="css/print.css"/>
     <style type="text/css">
@@ -41,32 +40,22 @@
         .show-on-scroll { visibility: hidden; }
         .show-on-scroll.shown { visibility: visible; }
 
-
+    </style>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="js/report.js"></script>
     <script src="js/report_layer.js"></script>
     <script src="js/band.js"></script>
     <script src="js/print.js"></script>
-
-        /*    div#report1 {
-                background-color: lightblue;
-            }*/
-    </style>
-   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="js/viewer.js"></script>
 <script>
-
     $(function(){
     <script src="js/index.js"></script>
     <script>
     $(document).ready(function(){
         $("#header").load("/include/header.ejs");
 
-        // alert("1");
         sizechanged();
-        // alert("2");
         copyoptions();
-        // alert("3");
 
         var data = <%-data%>;
         var jbOffset = $( '#header' ).offset();
@@ -249,21 +238,163 @@
 </head>
 <body>
 <div id="header"></div>
-<div id="enhancedcopymodal" style="display:none; background-color:salmon">
-    <h1>User Login</h1>
-    <form id="loginform" name="loginform" method="post" action="index.html">
-        <label for="username">Username:</label>
-        <input type="text" name="username" id="username" class="txtfield" tabindex="1">
 
-        <label for="password">Password:</label>
-        <input type="password" name="password" id="password" class="txtfield" tabindex="2">
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <div class="upperbar" style="width:100%;">
+            <span style="width:50%; text-align:left; float:left;margin-left:10px;">고급인쇄설정</span>
+            <span class="pop_bt" style="cursor:pointer;float:right;margin-right:10px;" onclick="close_pop()">X</span>
+        </div>
+        <div class="downpart">
+            <div class="leftpart">
 
-        <div class="center"><input type="submit" name="loginbtn" id="loginbtn" class="flatbtn-blu hidemodal" value="Log In" tabindex="3"></div>
-    </form>
+                <span class="subject">인쇄설정</span>
+                <div class="partstyle">
+                    <span>인쇄 배율</span>
+                </div>
+
+                <span class="subject">결제란 설정</span>
+                <div class="partstyle">
+                    <div class="partstyle2" style="height:50px;">
+                        <div class="div1">
+                            <span>인쇄여부</span>
+                        </div>
+                        <div class="div2" style="background-color:blue;">
+                            <label class="container">
+                                <input type="radio">인쇄함
+                                <span class="checkmark"></span>
+                            </label>
+                            <br/>
+                            <label class="container">
+                                <input type="radio" checked="checked">인쇄안함
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                        <div class="div3">
+                            <label class="container">
+                                <input type="button" value="결재란 등록">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="partstyle2" style="height:50px;">
+                        <div class="div1">
+                            <span>인쇄 위치</span>
+                        </div>
+                        <div class="div2" style="background-color:blue;">
+                            <label class="container">
+                                <input type="radio" checked="checked">타이틀 상단
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                        <div class="div3">
+                            <label class="container">
+                                <input type="radio">타이틀 하단
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                    </div>
+
+
+                    <!--<span>인쇄 위치</span><span>타이틀 상단</span><span>타이틀 하단</span>-->
+                </div>
+                <span class="subject">폰트설정</span>
+                <div class="partstyle">
+                    <div class="partstyle2" >
+                        <span>폰트서식</span>
+
+                        <label class="container">
+                            <input type="radio" checked="checked">굴림체
+                            <span class="checkmark"></span>
+                        </label>
+
+                        <label class="container">
+                            <input type="radio">바탕체
+                            <span class="checkmark"></span>
+                        </label>
+
+                        <label class="container">
+                            <input type="radio">돋움체
+                            <span class="checkmark"></span>
+                        </label>
+
+                        <br/>
+
+                        <span>폰트내용</span>
+
+                        <label class="container">
+                            <input type="radio" checked="checked">굴림체
+                            <span class="checkmark"></span>
+                        </label>
+
+                        <label class="container">
+                            <input type="radio" >바탕체
+                            <span class="checkmark"></span>
+                        </label>
+
+                        <label class="container">
+                            <input type="radio" >돋움체
+                            <span class="checkmark"></span>
+                        </label>
+
+                        <br/>
+                    </div>
+
+                    <div class="partstyle2" >
+                        <label class="container">
+                            <input type="checkbox" checked="checked">폰트자동조정
+                            <span class="checkmark"></span>
+                        </label>
+                        <br/>
+                        <label class="container">
+                            <input type="checkbox" checked="checked">금액 기울임꼴 표시
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+            <div class="rightpart">
+
+                <span class="subject">용지설정</span>
+                <div class="partstyle">
+                    <span>용지선택</span>
+                    <span>용지방향</span>
+                </div>
+
+                <span class="subject">출력설정</span>
+                <div class="partstyle">
+                    <span>출력일 인쇄</span>
+                    <span>매수 인쇄</span>
+                    <span>머리글</span>
+                    <span>꼬리글</span>
+                </div>
+
+
+
+            </div>
+
+
+            <!--<form id="loginform" name="loginform" method="post" action="index.html">
+                <label for="username">Username:</label>
+                <input type="text" name="username" id="username" class="txtfield" tabindex="1">
+
+                <label for="password">Password:</label>
+                <input type="password" name="password" id="password" class="txtfield" tabindex="2">
+        -->
+            <div class="close">
+                <input type="submit" name="close" id="closebtn" value="close" tabindex="3">
+            </div>
+        </div>
+        <!--</form>-->
+
+    </div>
 </div>
+
+
+
 <div id="content">
-
-
     <table border="1" style="width:450px;">
         <colgroup style="background-color:red;">
             <col style="width:50%;" />
