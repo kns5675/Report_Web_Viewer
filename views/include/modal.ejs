@@ -4,9 +4,18 @@
     <meta charset="utf-8">
     <script>
        $(document).ready(function(){
-         $("#mymodal2").click(function(){
-             $("#here").show();
+           $("#mymodal2").click(function(){
+              $("#modalcase").css("display","block");
+           });
+         $("#closebtn").click(function(){
+            close_pop();
          });
+           $("#closebtn2").click(function(){
+               close_pop();
+           });
+           $("#closebtn3").click(function(){
+               close_pop();
+           });
        });
     </script>
 </head>
@@ -14,7 +23,7 @@
 <div class="modal-content">
     <div class="upperbar" style="width:100%;">
         <span style="width:50%; text-align:left; float:left;margin-left:10px;">고급인쇄설정</span>
-        <span class="pop_bt" style="cursor:pointer;float:right;margin-right:10px;" onclick="close_pop()">X</span>
+        <span id="closebtn"class="pop_bt" style="cursor:pointer;float:right;margin-right:10px;">X</span>
     </div>
     <div class="downpart">
         <div class="leftpart">
@@ -46,7 +55,7 @@
                     </div>
                     <div class="div3">
                         <label class="container">
-                            <input type="button" id="mymodal2" value="결재란 등록">
+                            <input type="button" id="mymodal2" value="결재란 등록" style="cursor:pointer;">
                         </label>
                     </div>
                 </div>
@@ -69,8 +78,6 @@
                     </div>
                 </div>
 
-
-                <!--<span>인쇄 위치</span><span>타이틀 상단</span><span>타이틀 하단</span>-->
             </div>
             <span class="subject">폰트설정</span>
             <div class="partstyle">
@@ -240,20 +247,66 @@
                 </div>
                 </div>
                 </div>
-
-
-
-
-
-
             </div>
         <div class="close" style="float:right; margin-right:38px; margin-top:-10px;">
-            <input type="submit" name="close" id="closebtn" value="닫기" tabindex="3" style="width:70px;height:25px;">
+            <input type="submit" name="close" id="closebtn2" value="닫기" tabindex="3" style="cursor:pointer;width:70px;height:25px;">
         </div>
+    </div>
+</div>
+<div id="modalcase" class="modal" style="display:none;">
+<div id="modal2">
+    <div class="modal-content2">
+        <div class="upperbar" style="width:100%;">
+            <span style="width:50%; text-align:left; float:left;margin-left:10px;">결재란 등록</span>
+            <span id="closebtn3"class="pop_bt" style="cursor:pointer;float:right;margin-right:10px;">X</span>
         </div>
+        <div class="downpart2" style="width:100%;">
+            <div class="partstyle3" style="background-color:red;">
+                <div class="leftside">
+                    <span>결재란 칸수 지정</span> <input type="number" min="0" max="8"/>
+                </div>
+                <div class="rightside">
+                    <label class="container">
+                        <input type="checkbox">전결 범위 지정
+                        <input class="num" type="number"/> &nbsp;~&nbsp; <input class="num" type="number"/>
+                        <!--<span class="checkmark"></span>-->
+                    </label>
+                </div>
+                <div class="downside">
+                    <span style="margin-bottom:5px;">결재라인을 입력해 주세요. (최대 8개)</span>
+                    <table id="table">
+                        <tr style="height:30%;">
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
 
+                        <tr style="height:70%;">
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+
+                    </table>
+                    <input type="submit" value="취소" tabindex="3" style="cursor:pointer;width:70px;height:25px;float:right;margin-top:5px;margin-right:32px;">
+                    <input type="submit" value="확인" tabindex="3" style="cursor:pointer;width:70px;height:25px;float:right;margin-top:5px;margin-right:10px;">
+                </div>
+
+            </div>
+        </div>
 
     </div>
+</div>
 </div>
 </body>
 </html>

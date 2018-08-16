@@ -35,6 +35,14 @@
     float:left;
     background-color:white;
 }
+.downpart2{
+    width:100%;
+    height:217px;
+    margin:0px;
+    padding:0px;
+    float:left;
+    background-color:#D7DFE7;
+}
 .leftpart{
     float:left;
     width:40%;
@@ -55,6 +63,14 @@
     width:100%;
     margin:3px 3px;
     font-size:12px;
+}
+.partstyle3{
+    margin: 10px 10px;
+    padding:5px 5px;
+    font-size:12px;
+    overflow: hidden;
+    width: 660px;
+    height: 187px;
 }
 .div1{
     width:25%;
@@ -92,10 +108,60 @@ span.subject{
 .modal-content {
     overflow:hidden;
     background-color: #fefefe;
-    margin: 0px auto; /* 15% from the top and centered */
-    border: 1px solid #888;
-    width: 667px; /* Could be more or less, depending on screen size */
+    margin: 0px auto;
+    width: 667px;
     height: 516px;
     margin-top:150px;
     border:2px solid #313e52;
 }
+.modal-content2{
+    /*position:absolute; top:0px; left:0px;*/
+    overflow:hidden;
+    background-color: #fefefe;
+    margin: 0px auto;
+    width: 690px;
+    height: 247px;
+    margin-top:150px;
+    border:2px solid #313e52;
+}
+.leftside{
+    float:left;
+    width:50%;
+    height:20%;
+    background-color:lightblue;
+    margin:0px auto;
+}
+.rightside{
+    float:left;
+    width:50%;
+    height:20%;
+    background-color:lightyellow;
+    margin:0px auto;
+}
+.downside{
+    float:left;
+    width:100%;
+    height:80%;
+    background-color:lightgreen;
+    margin:0px auto;
+}
+.num{
+    width:50px;
+}
+#table{
+    border:solid 1px #6495ED;
+    border-collapse: collapse;
+    width:90%;
+    height:60%;
+    margin: 5px auto;
+}
+#table tr{
+    border:solid 1px #6495ED;
+    border-collapse: collapse;
+}
+#table td{
+    width:12.5%;
+    border:solid 1px #6495ED;
+    border-collapse: collapse;
+}
+
