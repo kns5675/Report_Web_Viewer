@@ -2,50 +2,23 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-
-    <style type="text/css">
-      ul#menu li a{
-        text-decoration:none;
-        color:black;
-        visited:none;
-      }
-      ul.submenu {
-        list-style:none;
-        text-decoration: none;
-      }
-      ul.submenu li a{
-        text-decoration:none;
-        list-decoration:none;
-      }
-      ul.submenu li a:hover{
-        color:pink;
-      }
-
-    .menubar li ul {
-      background: rgb(109,109,109);
-      display:none;  /* 평상시에는 서브메뉴가 안보이게 하기 */
-      height:auto;
-      padding:0px;
-      margin:0px;
-      border:0px;
-      position:absolute;
-      width:200px;
-      z-index:200;
-    }
-
-    .menubar ul li:hover ul {
-      display:block;   /* 마우스 커서 올리면 서브메뉴 보이게 하기 */
-    }
-
-    .topMenu ul li{
-      display:inline;
-      padding:0 3px;
-    }
-    </style>
+    <link rel="stylesheet" href="css/header.css"/>
     <script>
         $(function(){
             $('#print').click(function(){
-                pagePrint()
+                pagePrint();
+            });
+            $('#txtZoom').on("change",function(){
+                test();
+            });
+            $("#copyOptions").on("change",function(){
+                copyoptions();
+            });
+            $("#btnZoomIn").click(function(){
+               zoomIn();
+            });
+            $("#btnZoomOut").click(function(){
+                zoomOut();
             });
         });
     </script>
@@ -98,14 +71,13 @@
 <div class="topMenu">
 <ul>
   <li><input type="button" value="저장"></li>
-  <li><input type="button" value="불러오기"></li>
+  <li><input type="button" value="파일열기"></li>
   <li>
     <select id="copyOptions">
-      <option id="num1"selected disabled hidden>인쇄설정하기</option>
-      <option id="num2" value="copy">인쇄</option>
+      <option selected disabled hidden>--인쇄--</option>
+      <option id="print" value="copy">인쇄</option>
       <option id="enhancedcopy" value="ecopy">고급인쇄설정</option>
     </select>
-    <input type="button" id="print" value="인쇄">
 
   </li>
   <li><input type="button" value="DRD"></li>
@@ -127,9 +99,8 @@
       <option id="option1" style="display:none;">test</option>
     </select>
   </li>
-  <!--<li><input type="text" id="txtZoom"value="1"/></li>-->
-  <li><input type="button" id="btnZoomIn" onclick="zoomIn()" value="+"></li>
-  <li><input type="button" id="btnZoomOut"onclick="zoomOut()" value="-"></li>
+  <li><input type="button" id="btnZoomIn" value="+"></li>
+  <li><input type="button" id="btnZoomOut" value="-"></li>
   <li><input type="button" value="PDF"></li>
   <li><input type="button" value="엑셀"></li>
   <li><input type="button" value="셀"></li>

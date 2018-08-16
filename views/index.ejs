@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-
     <meta name="generator" content="editplus">
     <meta name="author" content="angeleyes">
     <meta name="keywords" content="angeleyes, testhtml, testjavascript">
@@ -37,9 +36,6 @@
 <script>
     $(document).ready(function(){
         $("#header").load("/include/header.ejs");
-
-        sizechanged();
-        copyoptions();
 
         var data = <%-data%>;
         var jbOffset = $( '#header' ).offset();
