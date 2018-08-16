@@ -1,9 +1,15 @@
 // 작성자 : 전형준
+// ReportTemplate 객체와 Report, Layer 객체를 생성하는 File.
+// Layer 객체는 createBand.js File의 CreateBandArray 메소드를 실행
+
+
 // ========================== ReportTemplate 객체 ========================== //
 function ReportTemplate(data){
-    this.attributes = data.ReportTemplate._attributes;
+
     // reportTemplate.attributes["xmlns:xsd"];
     // reportTemplate.attributes["xmlns:xsi"]; // 이런식으로 접근할 것
+    this.attributes = data.ReportTemplate._attributes;
+
     this.id = data.ReportTemplate.Id._text; // ID
     this.rectangle = data.ReportTemplate.Rectangle._text; // ReportTemplate에게 의미 없는 속성
     this.name = data.ReportTemplate.Name._text; // 이름
@@ -25,16 +31,16 @@ function ReportTemplate(data){
     // 웹버전은 가상화 버전과 관련이 없으므로 해당 속성에 대해서는 무시하여도 무관 //
 
     this.reportList = (function(data){ // ReportList 배열 생성(Report가 한개든 이상이든)
-        this.list = new Array();
-
+        var list = new Array();
+        var report = null;
         // anyType이 배열인지 체크 (List에 Report가 1개만 존재)
         if(!Array.isArray(data.anyType)){
-            this.report = new Report(data.anyType);
-            this.list.push(this.report);
+            report = new Report(data.anyType);
+            list.push(report);
         } else{ // List에 Report가 2개 이상 존재
             data.anyType.forEach(function(report){
-                this.report = new Report(report);
-                this.list.push(this.report);
+                report = new Report(report);
+                list.push(report);
             });
         }
         return list;
