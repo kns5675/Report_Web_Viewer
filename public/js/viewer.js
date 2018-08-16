@@ -21,19 +21,19 @@ function sizechanged(){
 }
 function test(){
     try {
-        var flexiblecontent = document.getElementById("content");
+        var flexiblecontent = document.getElementById("reportTemplate");
         var size = $("#txtZoom").val();
 
         if (jQuery.browser.msie) {
             flexiblecontent.style.zoom = size;
         }
         else {
-            $('#content').css('-webkit-transform','scale(' + (size) + ')');
-            $('#content').css('-webkit-transform-origin','0 0');
-            $('#content').css('-moz-transform','scale(' + (size) + ')');
-            $('#content').css('-moz-transform-origin','0 0');
-            $('#content').css('-o-transform','scale(' + (size) + ')');
-            $('#content').css('-o-transform-origin','0 0');
+            $(flexiblecontent).css('-webkit-transform','scale(' + (size) + ')');
+            $(flexiblecontent).css('-webkit-transform-origin','0 0');
+            $(flexiblecontent).css('-moz-transform','scale(' + (size) + ')');
+            $(flexiblecontent).css('-moz-transform-origin','0 0');
+            $(flexiblecontent).css('-o-transform','scale(' + (size) + ')');
+            $(flexiblecontent).css('-o-transform-origin','0 0');
         }
     }
     catch(e) {

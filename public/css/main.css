@@ -40,6 +40,7 @@
     width:40%;
     background-color:lightblue;
     margin:5% 5%;
+    height:380px;
 }
 .partstyle{
     border:1px solid gray;
@@ -70,11 +71,17 @@
     float:left;
     background-color:green;
 }
+.div4{
+    width:75%;
+    float:left;
+    background-color:mediumpurple;
+}
 .rightpart{
     float:left;
     width:40%;
     background-color:lightyellow;
     margin:5% 5%;
+    height:380px;
 }
 span.subject{
     font-weight: bold;

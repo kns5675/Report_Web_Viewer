@@ -2,6 +2,13 @@
 <html lang="en" dir="ltr">
 <head>
     <meta charset="utf-8">
+    <script>
+       $(document).ready(function(){
+         $("#mymodal2").click(function(){
+             $("#here").show();
+         });
+       });
+    </script>
 </head>
 <body>
 <div class="modal-content">
@@ -14,7 +21,10 @@
 
             <span class="subject">인쇄설정</span>
             <div class="partstyle">
+                <div class="partstyle2" style="height:50px;">
                 <span>인쇄 배율</span>
+                <input type="number"value="" max="100" min="0">&nbsp;%
+                </div>
             </div>
 
             <span class="subject">결제란 설정</span>
@@ -36,8 +46,7 @@
                     </div>
                     <div class="div3">
                         <label class="container">
-                            <input type="button" value="결재란 등록">
-                            <span class="checkmark"></span>
+                            <input type="button" id="mymodal2" value="결재란 등록">
                         </label>
                     </div>
                 </div>
@@ -123,25 +132,127 @@
 
             <span class="subject">용지설정</span>
             <div class="partstyle">
-                <span>용지선택</span>
-                <span>용지방향</span>
+
+                <div class="partstyle2" style="height:20px;" >
+                    <div class="div1">
+                        <span>용지선택</span>
+                    </div>
+
+                    <div class="div4">
+                        <select>
+                            <option>Letter</option>
+                            <option>Tabloid</option>
+                            <option>Legal</option>
+                            <option>Statement</option>
+                            <option>Executive</option>
+                            <option>A3</option>
+                            <option selected>A4</option>
+                            <option>A5</option>
+                            <option>B4 (JIS)</option>
+                            <option>B5 (JIS)</option>
+                        </select>
+                    </div>
+                </div>
+                <br/>
+                <div class="partstyle2" style="height:60px;">
+                    <div class="div1">
+                        <span>용지방향</span>
+                    </div>
+                    <div class="div4">
+                        <label class="container">
+                            <input type="radio" checked="checked">세로
+                            <span class="checkmark"></span>
+                        </label>
+                        <label class="container">
+                            <input type="radio">가로
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                </div>
             </div>
 
             <span class="subject">출력설정</span>
             <div class="partstyle">
-                <span>출력일 인쇄</span>
-                <span>매수 인쇄</span>
-                <span>머리글</span>
-                <span>꼬리글</span>
+
+                <div class="partstyle2" style="height:40px;" >
+                    <div class="div1">
+                        <span>출력일인쇄</span>
+                    </div>
+                    <div class="div4">
+                        <label class="container">
+                            <input type="radio">인쇄함
+                            <span class="checkmark"></span>
+                        </label>
+                        <label class="container">
+                            <input type="radio" checked="checked">인쇄안함
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+
+                    <div class="div1">
+                        <span>매수 인쇄</span>
+                    </div>
+                    <div class="div4">
+                        <label class="container">
+                            <input type="radio">인쇄함
+                            <span class="checkmark"></span>
+                        </label>
+                        <label class="container">
+                            <input type="radio" checked="checked">인쇄안함
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                    </div>
+                <br/>
+                <div class="partstyle2" style="height:50px;" >
+                <div class="div1">
+                    <label class="container">
+                        <input type="checkbox">머리글
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+                <div class="div4">
+                    <select>
+                        <option>상단좌측</option>
+                        <option>상단중앙</option>
+                        <option>상단우측</option>
+                    </select>
+                    <br/>
+                    <input type="text"/>
+                </div>
+                </div>
+                <br/>
+                <div class="partstyle2" style="height:50px;" >
+                <div class="div1">
+                    <label class="container">
+                        <input type="checkbox">꼬리글
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+                <div class="div4">
+                    <select>
+                        <option>하단좌측</option>
+                        <option>하단중앙</option>
+                        <option>하단우측</option>
+                    </select>
+                    <br/>
+                    <input type="text"/>
+                </div>
+                </div>
+                </div>
+
+
+
+
+
+
             </div>
-
-
-
+        <div class="close" style="float:right; margin-right:38px; margin-top:-10px;">
+            <input type="submit" name="close" id="closebtn" value="닫기" tabindex="3" style="width:70px;height:25px;">
+        </div>
         </div>
 
-        <div class="close">
-            <input type="submit" name="close" id="closebtn" value="close" tabindex="3">
-        </div>
+
     </div>
 </div>
 </body>

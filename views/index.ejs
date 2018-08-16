@@ -37,6 +37,7 @@
     $(document).ready(function(){
         $("#header").load("/include/header.ejs");
         $("#myModal").load("/include/modal.ejs");
+        $("#myModal2").load("/include/modal2.ejs");
 
 
         var data = <%-data%>;
@@ -70,25 +71,8 @@
 </head>
 <body>
 <div id="header"></div>
-<div id="myModal" class="modal"></div>
-<div id="content">
-
-    <table border="1" style="width:450px;">
-        <colgroup style="background-color:red;">
-            <col style="width:50%;" />
-            <col style="width:50%;" />
-        </colgroup>
-        <tbody>
-        <tr>
-            <td>#1</td>
-            <td>#2</td>
-        </tr>
-        <tr>
-            <td>#3</td>
-            <td>#4</td>
-        </tr>
-        </tbody>
-    </table>
+<div id="myModal" class="modal">
+    <div id="myModal2" class="modal"></div>
 </div>
 
 <div id="reportTemplate"></div>
