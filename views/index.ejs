@@ -36,6 +36,8 @@
 <script>
     $(document).ready(function(){
         $("#header").load("/include/header.ejs");
+        $("#myModal").load("/include/modal.ejs");
+
 
         var data = <%-data%>;
         var jbOffset = $( '#header' ).offset();
@@ -68,152 +70,7 @@
 </head>
 <body>
 <div id="header"></div>
-
-<div id="myModal" class="modal">
-    <div class="modal-content">
-        <div class="upperbar" style="width:100%;">
-            <span style="width:50%; text-align:left; float:left;margin-left:10px;">고급인쇄설정</span>
-            <span class="pop_bt" style="cursor:pointer;float:right;margin-right:10px;" onclick="close_pop()">X</span>
-        </div>
-        <div class="downpart">
-            <div class="leftpart">
-
-                <span class="subject">인쇄설정</span>
-                <div class="partstyle">
-                    <span>인쇄 배율</span>
-                </div>
-
-                <span class="subject">결제란 설정</span>
-                <div class="partstyle">
-                    <div class="partstyle2" style="height:50px;">
-                        <div class="div1">
-                            <span>인쇄여부</span>
-                        </div>
-                        <div class="div2" style="background-color:blue;">
-                            <label class="container">
-                                <input type="radio">인쇄함
-                                <span class="checkmark"></span>
-                            </label>
-                            <br/>
-                            <label class="container">
-                                <input type="radio" checked="checked">인쇄안함
-                                <span class="checkmark"></span>
-                            </label>
-                        </div>
-                        <div class="div3">
-                            <label class="container">
-                                <input type="button" value="결재란 등록">
-                                <span class="checkmark"></span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="partstyle2" style="height:50px;">
-                        <div class="div1">
-                            <span>인쇄 위치</span>
-                        </div>
-                        <div class="div2" style="background-color:blue;">
-                            <label class="container">
-                                <input type="radio" checked="checked">타이틀 상단
-                                <span class="checkmark"></span>
-                            </label>
-                        </div>
-                        <div class="div3">
-                            <label class="container">
-                                <input type="radio">타이틀 하단
-                                <span class="checkmark"></span>
-                            </label>
-                        </div>
-                    </div>
-
-
-                    <!--<span>인쇄 위치</span><span>타이틀 상단</span><span>타이틀 하단</span>-->
-                </div>
-                <span class="subject">폰트설정</span>
-                <div class="partstyle">
-                    <div class="partstyle2" >
-                        <span>폰트서식</span>
-
-                        <label class="container">
-                            <input type="radio" checked="checked">굴림체
-                            <span class="checkmark"></span>
-                        </label>
-
-                        <label class="container">
-                            <input type="radio">바탕체
-                            <span class="checkmark"></span>
-                        </label>
-
-                        <label class="container">
-                            <input type="radio">돋움체
-                            <span class="checkmark"></span>
-                        </label>
-
-                        <br/>
-
-                        <span>폰트내용</span>
-
-                        <label class="container">
-                            <input type="radio" checked="checked">굴림체
-                            <span class="checkmark"></span>
-                        </label>
-
-                        <label class="container">
-                            <input type="radio" >바탕체
-                            <span class="checkmark"></span>
-                        </label>
-
-                        <label class="container">
-                            <input type="radio" >돋움체
-                            <span class="checkmark"></span>
-                        </label>
-
-                        <br/>
-                    </div>
-
-                    <div class="partstyle2" >
-                        <label class="container">
-                            <input type="checkbox" checked="checked">폰트자동조정
-                            <span class="checkmark"></span>
-                        </label>
-                        <br/>
-                        <label class="container">
-                            <input type="checkbox" checked="checked">금액 기울임꼴 표시
-                            <span class="checkmark"></span>
-                        </label>
-                    </div>
-                </div>
-
-            </div>
-            <div class="rightpart">
-
-                <span class="subject">용지설정</span>
-                <div class="partstyle">
-                    <span>용지선택</span>
-                    <span>용지방향</span>
-                </div>
-
-                <span class="subject">출력설정</span>
-                <div class="partstyle">
-                    <span>출력일 인쇄</span>
-                    <span>매수 인쇄</span>
-                    <span>머리글</span>
-                    <span>꼬리글</span>
-                </div>
-
-
-
-            </div>
-
-            <div class="close">
-                <input type="submit" name="close" id="closebtn" value="close" tabindex="3">
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
+<div id="myModal" class="modal"></div>
 <div id="content">
 
     <table border="1" style="width:450px;">
@@ -232,8 +89,8 @@
         </tr>
         </tbody>
     </table>
-
 </div>
+
 <div id="reportTemplate"></div>
 <div id="report">
     <div id="page1" class="page show-on-scroll shown" style="width: 798px; height: 1128.6px;">
