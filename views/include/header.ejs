@@ -114,67 +114,16 @@
 </div>
   </body>
 <script>
-    var pageNum = $("#NowPage").val();
-    var heighttext = $("#page1")[0].style.height;
-    var heightcustom = heighttext.substring(0,heighttext.lastIndexOf("p"));
-    var headerheight = $("#header")[0].offsetHeight+10;
     var pagecount = $(".page").length;
-    var totalpage = $("#TotalPage").text(pagecount+"(TotalPage)");
+    $("#TotalPage").text(pagecount+"(TotalPage)"); //totalpage
+
     $(document).ready(function () {
-    });
-
-    $("#FirstPage").on("click",function () {
-        console.log("click test");
-        console.log(pageNum);
-        $(window).scrollTop(0);
-    });
-    //$('#contact').offset().top
-    $("#NowPage").on("keyup",function () {
-        $(this).val($(this).val().replace(/[^0-9]/g,""));
-
-        var inputpage = "page"+$(this).val();
-        var pagevalue = $('#'+inputpage).offset().top;
-        console.log("입력값 : ", inputpage);
-        $(window).scrollTop(pagevalue);
-    });
-
-    $("#PreviousPage").on("click",function () {
-        console.log("$(window).scrollTop() : ",$(window).scrollTop());
-        console.log("heightcustom : ",heightcustom);
-        var Previous = $(window).scrollTop()-heightcustom;
-        console.log("scrollTop : ",Previous);
-        var lastpage = $("#page"+pagecount).offset().top;
-        console.log("pagecount : ",pagecount);
-        console.log("dwadwadwad",lastpage);
-        if($(window).scrollTop() >= lastpage){
-            console.log("in");
-            $(window).scrollTop(Previous+750);
-        }else{
-            $(window).scrollTop(Previous);
-        }
-
-
-    });
-
-    $("#NextPage").on("click",function () {
-        var Next = $(window).scrollTop()+heightcustom*1;
-        console.log("Next : ",Next);
-        console.log("headerheight : ",headerheight);
-        if($(window).scrollTop() == 0){
-            $(window).scrollTop(Next-headerheight);
-        }else{
-            $(window).scrollTop(Next);
-        }
-    });
-
-    $("#LastPage").on("click",function () {
-        console.log("pagecount : ",$(".page").length);
-
-        console.log("widthcustom : ",heightcustom);
-
-        var Last = $(window).scrollTop()+heightcustom*pagecount;
-        $(window).scrollTop(Last);
-        console.log("scrollTop : ",Last);
+        FirstPage();
+        NowPage();
+        PreviousPage();
+        NextPage();
+        LastPage(pagecount);
+        HeaderFixAndPageScroll(pagecount);
     });
 
 </script>

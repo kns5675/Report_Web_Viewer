@@ -3,6 +3,7 @@ var createError = require('http-errors');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var jquery = require('jquery');
 
 // npm install --save xml-js
 var indexRouter = require('./routes/index');
