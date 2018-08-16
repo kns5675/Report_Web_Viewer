@@ -1,0 +1,8 @@
+@media print {
+    #header {
+        display: none;
+    }
+    div.page {
+        page-break-after: always;
+    }
+}

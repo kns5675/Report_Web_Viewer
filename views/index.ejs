@@ -9,6 +9,9 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>Document</title>
    <!--<script src="http://code.jquery.com/jquery-latest.min.js"></script>-->
+
+    <link rel="stylesheet" href="css/index.css"/>
+    <link rel="stylesheet" href="css/print.css"/>
     <style type="text/css">
         @media print {
             #header {
@@ -47,6 +50,12 @@
         .show-on-scroll.shown { visibility: visible; }
 
 
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="js/report.js"></script>
+    <script src="js/report_layer.js"></script>
+    <script src="js/band.js"></script>
+    <script src="js/print.js"></script>
+
         /*    div#report1 {
                 background-color: lightblue;
             }*/
@@ -54,6 +63,8 @@
    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="js/viewer.js"></script>
 <script>
+
+    $(function(){
     <script src="js/index.js"></script>
     <script>
     $(document).ready(function(){
@@ -65,6 +76,7 @@
         copyoptions();
         // alert("3");
 
+        var data = <%-data%>;
         var jbOffset = $( '#header' ).offset();
         console.log("jbOffset : ",jbOffset);
         $( window ).scroll( function() {
@@ -81,26 +93,31 @@
         console.log(data.ReportTemplate.ReportList.anyType.Rectangle.Width._text);
         console.log(data.ReportTemplate.ReportList.anyType.Rectangle.Height._text);
 
-        var Report = data.ReportTemplate.ReportList.anyType;
-        // Report 개수만큼 div 생성
-        for(var i = 0; i < Report.length; i++){
-            var pageNo = GetRecentPage();
-            appendReport(pageNo, Report);
-        }
+        makeReportTemplate(data);
 
-        var Layer = Report.Layers.anyType;
+        // console.log(data);
+        // console.log(data.ReportTemplate.ReportList.anyType.Rectangle.Width._text);
+        // console.log(data.ReportTemplate.ReportList.anyType.Rectangle.Height._text);
+        // var Report = data.ReportTemplate.ReportList.anyType;
+        // // Report 개수만큼 div 생성
+        // for(var i = 0; i < Report.length; i++){
+        //     var pageNo = GetRecentPage();
+        //     appendReport(pageNo, Report);
+        // }
+
+        // var Layer = Report.Layers.anyType;
 
         // BackGroundLayer를 사용하지 않을 때
-        if(Layer[0].IsActive._text == 'false'){
-        } else {
-            var BackGroundLayer = Layer[0].Bands.anyType;
-        }
+        // if(Layer[0].IsActive._text == 'false'){
+        // } else {
+        //     var BackGroundLayer = Layer[0].Bands.anyType;
+        // }
 
         // DesignLayer를 사용하지 않을 때
-        if(Layer[1].IsActive._text == 'false'){
-        } else {
-            var DesignLayer = Layer[1].Bands.anyType;
-        }
+        // if(Layer[1].IsActive._text == 'false'){
+        // } else {
+        //     var DesignLayer = Layer[1].Bands.anyType;
+        // }
 
         // console.log(DesignLayer[0]._attributes["xsi:type"]);
 
@@ -111,14 +128,129 @@
         // }
 
         // ForeGroundLayer를 사용하지 않을 때
-        if(Layer[2].IsActive._text == 'false'){
-        } else {
-            var ForeGroundLayer = Layer[2].Bands.anyType;
-        }
+        // if(Layer[2].IsActive._text == 'false'){
+        // } else {
+        //     var ForeGroundLayer = Layer[2].Bands.anyType;
+        // }
 
         // console.log(DesignLayer);
     });
 
+    // function copyoptions(){
+    //     $("#copyOptions").live("change",function(){
+    //         copytest();
+    //     });
+    // }
+    // function copytest(){
+    //     try{
+    //         //var firstoption = $("#copyOptions option:first").val();
+    //         //var secondoption = $("#copyOptions option:last").val();
+    //         var copyoptions = $("#copyOptions").val();
+    //
+    //         if($("#copyOptions:selected option:eq(0)"))
+    //         {
+    //             alert("1번째 선택 : " + firstoption);
+    //         }else if($("#copyOptions:selected option:eq(1)")){
+    //             alert("2번째 선택 : " + secondoption);
+    //         }else{
+    //             alert("1,2 말고 딴거 선택함.")
+    //         }
+    //     }catch(e){
+    //         console.log(e.message);
+    //     }
+    // }
+    // function sizechanged(){
+    //     $("#txtZoom").live("change", function(){//live로 한 이유 : on은 jquery버전상 안맞아서 live써야함 지연피셜
+    //         //alert($(this).val());
+    //         test();
+    //     });
+    // }
+    // function test(){
+    //     try {
+    //         //alert("test try들옴")
+    //         var flexiblecontent = document.getElementById("content");
+    //         var size = $("#txtZoom").val();
+    //         //alert("size : " + size);
+    //
+    //         if (jQuery.browser.msie) {
+    //             //alert("test if 들옴");
+    //             flexiblecontent.style.zoom = size;
+    //         }
+    //         else {
+    //             //alert("test else들옴");
+    //             $('#content').css('-webkit-transform','scale(' + (size) + ')');
+    //             $('#content').css('-webkit-transform-origin','0 0');
+    //             $('#content').css('-moz-transform','scale(' + (size) + ')');
+    //             $('#content').css('-moz-transform-origin','0 0');
+    //             $('#content').css('-o-transform','scale(' + (size) + ')');
+    //             $('#content').css('-o-transform-origin','0 0');
+    //         }
+    //     }
+    //     catch(e) {
+    //       console.log(e.message);
+    //     }
+    // }
+    //
+    //
+    // function zoomIn(){
+    //     //alert("zoom in  들왔음");
+    //     try {
+    //         var size = $("#txtZoom").val();
+    //         // alert("zoom in 누르기 전 size : " + size );
+    //
+    //         //if(size > 2.00) $("#txtZoom").val("1");
+    //         //else
+    //         var size = parseFloat(size);
+    //         //string 형 size를 parseFloat이용해서 number형으로 변환시켰음.
+    //
+    //         // alert("type of size : " + typeof size);
+    //         // alert("size : " + size);
+    //         size = (size + 0.05).toFixed(2);
+    //         // alert("calculated asize : " + size);
+    //         $("#txtZoom").val();
+    //         $("#option1").val(size);
+    //         //alert("option1의 밸류값은 : " + $("#option1").val());
+    //         var changedoption1 = ((($("#option1").val())*100).toFixed(0)+"%");
+    //         $("#option1").text(changedoption1);
+    //         $("#txtZoom option:last").attr("selected","selected");
+    //
+    //         //$("#option1").hide();
+    //         // alert($("#txtZoom").val());
+    //         //var newsize = $("#txtZoom").val((size + 0.05).toFixed(2));
+    //         //$("#txtZoom").text(size*100 + "%");
+    //
+    //
+    //         //alert("txtZoom 의 밸류 값은 : " + $("#txtZoom").html());
+    //
+    //         test();
+    //     }
+    //     catch(e) {
+    //         alert("test ==> " + e.message);
+    //     }
+    // }
+    // function zoomOut(){
+    //     try {
+    //         var size = $("#txtZoom").val();
+    //
+    //         var size = parseFloat(size);
+    //         //string 형 size를 parseFloat이용해서 number형으로 변환시켰음.
+    //
+    //         size = (size - 0.05).toFixed(2);
+    //         // alert("calculated asize : " + size);
+    //         $("#txtZoom").val();
+    //         $("#option1").val(size);
+    //         //alert("option1의 밸류값은 : " + $("#option1").val());
+    //         var changedoption1 = ((($("#option1").val())*100).toFixed(0)+"%");
+    //         $("#option1").text(changedoption1);
+    //         $("#txtZoom option:last").attr("selected","selected");
+    //         //alert("txtZoom 의 밸류 값은 : " + $("#txtZoom").html());
+    //
+    //         test();
+    //     }
+    //     catch(e) {
+    //         alert("test ==> " + e.message);
+    //     }
+    // }
 
 
 </script>
@@ -140,24 +272,25 @@
 <div id="content">
 
 
-    <table border="1" style="width:450px;">
-        <colgroup style="background-color:red;">
-            <col style="width:50%;" />
-            <col style="width:50%;" />
-        </colgroup>
-        <tbody>
-        <tr>
-            <td>#1</td>
-            <td>#2</td>
-        </tr>
-        <tr>
-            <td>#3</td>
-            <td>#4</td>
-        </tr>
-        </tbody>
-    </table>
+    <!--<table border="1" style="width:450px;">-->
+        <!--<colgroup style="background-color:red;">-->
+            <!--<col style="width:50%;" />-->
+            <!--<col style="width:50%;" />-->
+        <!--</colgroup>-->
+        <!--<tbody>-->
+        <!--<tr>-->
+            <!--<td>#1</td>-->
+            <!--<td>#2</td>-->
+        <!--</tr>-->
+        <!--<tr>-->
+            <!--<td>#3</td>-->
+            <!--<td>#4</td>-->
+        <!--</tr>-->
+        <!--</tbody>-->
+    <!--</table>-->
 
 </div>
+<div id="reportTemplate"></div>
 <div id="report">
     <div id="page1" class="page show-on-scroll shown" style="width: 798px; height: 1128.6px;">
         test
