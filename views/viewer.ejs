@@ -8,13 +8,126 @@
     <script src="/JS/band.js" language="JavaScript" type="text/javascript"></script>
   </head>
 
-  <body>
-  </body>
+<body>
+    <div id="header"></div>
+    <div id="report"></div>
+</body>
 
   <script>
+
+    $(document).ready(function(){
+        $("#header").load("/include/header.ejs");
+
+    });
+    // ================= ReportTemplate 객체 ================= //
+    function ReportTemplate(data){
+      this.attributes = data.ReportTemplate._attributes;
+      // reportTemplate.attributes["xmlns:xsd"];
+      // reportTemplate.attributes["xmlns:xsi"]; // 이런식으로 접근할 것
+      this.id = data.ReportTemplate.Id._text;
+      this.rectangle = data.ReportTemplate.Rectangle._text;
+      this.name = data.ReportTemplate.Name._text;
+      this.printOder = data.ReportTemplate.PrintOder._text === "true" ? true : false;
+      this.savedLocation = data.ReportTemplate.SavedLocation._text;
+      this.mesureUnit = data.ReportTemplate.MesureUnit._text;
+      this.isUsePrinterHardMargin = data.ReportTemplate.IsUsePrinterHardMargin._text === "true" ? true : false;
+      this.gridGap = {
+        width : data.ReportTemplate.GridGap.Width._text,
+        height : data.ReportTemplate.GridGap.Height._text
+      }
+
+      this.drawGrid = data.ReportTemplate.DrawGrid._text === "true" ? true : false;
+      this.snapToGrid = data.ReportTemplate.SnapToGrid._text === "true" ? true : false;
+
+      // 웹버전은 가상화 버전과 관련이 없으므로 해당 속성에 대해서는 무시하여도 무관 //
+      this.isVirtureToLocalPrint = data.ReportTemplate.IsVirtureToLocalPrint._text === "true" ? true : false;
+      this.imageListVirtual = data.ReportTemplate.ImageListVirtual._text;
+      // 웹버전은 가상화 버전과 관련이 없으므로 해당 속성에 대해서는 무시하여도 무관 //
+
+      // ReportList는 우선 이 안에 객체화하지 않고 따로 객체화 하기로 함!
+
+      this.isLinkedReport = data.ReportTemplate.IsLinkedReport._text === "true" ? true : false;
+      this.pasteMode = data.ReportTemplate.PasteMode._text;
+      this.isUseExportPerGroup = data.ReportTemplate.IsUseExportPerGroup._text === "true" ? true : false;
+    }
+
+    // =============== Report 객체 =============== //
+    function Report(data){
+      // 왜인지 모르겠지만 Sample01.DRF의 3번째 Report에서 ParentID가 존재하지 않음
+      // this.parentId = data.ParentID._text;
+      this.id = data.Id._text;
+      this.rectangle = {
+        width : data.Rectangle.Width._text,
+        height : data.Rectangle.Height._text
+      }
+      this.name = data.Name._text;
+      this.lock = data.Lock._text === "true" ? true : false;
+
+      // 인쇄 무시하기란 다중의 리포트가 있는 경우 특정 리포트에 IsIgnore값을
+      // true로 하게 되면 데이터 유무와 관계없이 해당 리포트는 인쇄 미리보기에서 제외함
+      this.isIgnore = data.IsIgnore._text === "true" ? true : false;
+      this.forceNewPage = data.ForceNewPage._text === "true" ? true : false;
+      this.forceNextReport = data.ForceNextReport._text === "true" ? true : false;
+      this.multyFormCount = data.MultyFormCount._text;
+      this.annexPaper = data.AnnexPaper._text === "true" ? true : false;
+      this.noPrintIfNoData = data.NoPrintIfNoData._text === "true" ? true : false;
+
+      // Layer
+
+      this.margin = {
+        x : data.Margin.X._text,
+        y : data.Margin.Y._text,
+        width : data.Margin.Width._text,
+        height : data.Margin.Height._text
+      }
+      this.paperDirection = data.PaperDirection._text === "true" ? true : false;
+      this.gutter = data.Gutter._text;
+      this.gutterPosition = data.GutterPosition._text === "true" ? true : false;
+      this.morrirMargins = data.MorrirMargins._text === "true" ? true : false;
+      this.paperType = data.PaperType._text;
+      this.paperSize = {
+        width : data.PaperSize.Width._text,
+        height : data.PaperSize.Height._text
+      }
+      this.showPageBorder = data.ShowPageBorder === "true" ? true : false;
+      this.hideVirtualArea = data.HideVirtualArea === "true" ? true : false;
+      this.standardMarginPixel = data.StandardMarginPixel === "true" ? true : false;
+    }
+
+    var data = <%-data%>; // data에 Designer 파일 받아옴
+    var reportTemplate = new ReportTemplate(data); // ReportTemplate 객체 생성
+    var reportList = (function(data){ // ReportList 생성
+      this.reportList = new Array();
       var data = <%-data%>; // data에 Designer 파일 받아옴
       var reportTemplate = new ReportTemplate(data); // ReportTemplate 객체 생성
 
-      console.log(reportTemplate.reportList[0].layers.designLayer.bands);
-  </script>
+      // anyType이 배열인지 체크 (List에 Report가 1개만 존재)
+      if(!Array.isArray(data.anyType)){
+        this.report = new Report(data.anyType);
+        this.reportList.push(this.report);
+      } else{ // List에 Report가 2개 이상 존재
+        data.anyType.forEach(function(report){
+          this.report = new Report(report);
+          this.reportList.push(this.report);
+        });
+      }
+      return reportList;
+    })(data.ReportTemplate.ReportList);
+
+    // console.log(data.ReportTemplate.ReportList.anyType.Layers.anyType); // Layer 총 3개 anyType[1]이면 DesignLayer
+    // console.log(data.ReportTemplate.ReportList.anyType.Layers.anyType[1].Bands.anyType[0]); // DesignLayer에 anyType이 BandPageHeader인 애
+    // console.log(data.ReportTemplate.ReportList.anyType.Layers.anyType[1].Bands.anyType[1]); // DesignLayer에 anyType이 BandData인 애
+    // console.log(data.ReportTemplate.ReportList.anyType.Layers.anyType[1].Bands.anyType[1].ControlList.anyType); // anyType이 ControlDynamicTable인 애
+    // console.log(data.ReportTemplate.ReportList.anyType.Layers.anyType[1].Bands.anyType); // 3개
+    var Layers = data.ReportTemplate.ReportList.anyType.Layers.anyType;
+    var BandBackGround;
+    var BandPageHeader;
+    var BandData;
+    var BandPageFooter;
+    var BandForeGround;
+    judgementBand(Layers);
+
+    console.log(reportTemplate.reportList[0].layers.designLayer.bands);
+</script>
+
 </html>

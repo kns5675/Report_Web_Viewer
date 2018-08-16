@@ -12,24 +12,9 @@
     <link rel="stylesheet" href="css/index.css"/>
     <link rel="stylesheet" href="css/print.css"/>
     <style type="text/css">
-        @media print {
-            #header {
-                display: none;
-            }
-            div.page {
-                page-break-after: always;
-            }
-        }
+
         #header {
             background-color: #00B7FF;
-        }
-
-        div#report1 {
-            background-color: lightblue;
-        }
-        .TopMenuFixed {
-            position: fixed;
-            top: 0px;
         }
 
         .jbFixed {
@@ -42,12 +27,20 @@
 
     </style>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="js/viewer.js"></script>
     <script src="js/report.js"></script>
     <script src="js/report_layer.js"></script>
     <script src="js/band.js"></script>
     <script src="js/print.js"></script>
+
+        /*    div#report1 {
+                background-color: lightblue;
+            }*/
+    </style>
+   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="js/viewer.js"></script>
 <script>
+
     $(function(){
     <script src="js/index.js"></script>
     <script>
@@ -71,48 +64,17 @@
 
         var data = <%- data %>;
         console.log(data);
-        console.log(data.ReportTemplate.ReportList.anyType.Rectangle.Width._text);
-        console.log(data.ReportTemplate.ReportList.anyType.Rectangle.Height._text);
 
-        makeReportTemplate(data);
-
-        // console.log(data);
-        // console.log(data.ReportTemplate.ReportList.anyType.Rectangle.Width._text);
-        // console.log(data.ReportTemplate.ReportList.anyType.Rectangle.Height._text);
-        // var Report = data.ReportTemplate.ReportList.anyType;
-        // // Report 개수만큼 div 생성
-        // for(var i = 0; i < Report.length; i++){
-        //     var pageNo = GetRecentPage();
-        //     appendReport(pageNo, Report);
-        // }
-
-        // var Layer = Report.Layers.anyType;
-
-        // BackGroundLayer를 사용하지 않을 때
-        // if(Layer[0].IsActive._text == 'false'){
-        // } else {
-        //     var BackGroundLayer = Layer[0].Bands.anyType;
-        // }
-
-        // DesignLayer를 사용하지 않을 때
-        // if(Layer[1].IsActive._text == 'false'){
-        // } else {
-        //     var DesignLayer = Layer[1].Bands.anyType;
-        // }
-
-        // console.log(DesignLayer[0]._attributes["xsi:type"]);
-
-        // anyType 을 div id 로 지정
-        // for(var i = 0; i < DesignLayer.length; i++){
-        //     appendDiv(DesignLayer[i]._attributes["xsi:type"], 'report1');
-        //     setArea(DesignLayer[i]._attributes["xsi:type"], DesignLayer[i]);
-        // }
-
-        // ForeGroundLayer를 사용하지 않을 때
-        // if(Layer[2].IsActive._text == 'false'){
-        // } else {
-        //     var ForeGroundLayer = Layer[2].Bands.anyType;
-        // }
+        var jbOffset = $( '#header' ).offset();
+        console.log("jbOffset : ",jbOffset);
+        $( window ).scroll( function() {
+            if ( $( document ).scrollTop() > jbOffset.top ) {
+                $( '#header' ).addClass( 'jbFixed' );
+            }
+            else {
+                $( '#header' ).removeClass( 'jbFixed' );
+            }
+        });
 
         // console.log(DesignLayer);
     });
@@ -395,6 +357,7 @@
 
 
 <div id="content">
+
     <table border="1" style="width:450px;">
         <colgroup style="background-color:red;">
             <col style="width:50%;" />
