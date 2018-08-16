@@ -4,5 +4,13 @@
     }
     div.page {
         page-break-after: always;
+        margin : 0;
+        width : initial;
+        height : initial;
+    }
+
+    html, body{
+        width : 210mm;
+        height : 297mm;
     }
 }
