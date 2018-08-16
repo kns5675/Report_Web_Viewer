@@ -3,7 +3,7 @@
   <Id>404cd518-7405-4163-9c14-64d539569626</Id>
   <Rectangle /> <!-- Rectangle -->
   <Name>TestSample.DRF</Name> <!-- 이름 -->
-  <PrintOder>true</PrintOder> <!-- 디자인 - 리포트or별지 우선? -->
+  <PrintOder>true</PrintOder> <!-- 디자인 - 리포트or별지 우선? 인쇄 순서-->
   <SavedLocation>D:\더존\비트컴퓨터\TestSample.DRF</SavedLocation>
   <MesureUnit>cm</MesureUnit> <!-- 외관 - 사용 단위계 -->
   <IsUsePrinterHardMargin>true</IsUsePrinterHardMargin> <!-- 프린터 기본 여백 사용 -->

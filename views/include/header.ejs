@@ -42,6 +42,13 @@
       padding:0 3px;
     }
     </style>
+    <script>
+        $(function(){
+            $('#print').click(function(){
+                pagePrint()
+            });
+        });
+    </script>
     <title></title>
   </head>
   <body>
@@ -79,7 +86,7 @@
     </li>
 
     <li style="display:inline;"><a href="#">보기</a>
-        <ul  class="submenu">
+        <ul class="submenu">
           <li><a href="#">한 페이지</a></li>
           <li><a href="#">여러 페이지</a></li>
           <li><a href="#">확대/축소</a></li>
@@ -94,11 +101,11 @@
   <li><input type="button" value="불러오기"></li>
   <li>
     <select id="copyOptions">
-      <option selected disabled hidden>인쇄설정하기</option>
-      <option value="copy">인쇄</option>
-      <option value="enhancedcopy">고급인쇄설정</option>
+      <option id="num1"selected disabled hidden>인쇄설정하기</option>
+      <option id="num2" value="copy">인쇄</option>
+      <option id="enhancedcopy" value="ecopy">고급인쇄설정</option>
     </select>
-    <!--<input type="button" value="인쇄" onclick="pagePrint()">-->
+    <input type="button" id="print" value="인쇄">
 
   </li>
   <li><input type="button" value="DRD"></li>
