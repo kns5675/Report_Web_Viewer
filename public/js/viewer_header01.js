@@ -108,3 +108,40 @@ function PageValue() {
         }
     });
 }
+
+
+/******************************************************************
+ 기능 : image upload를 위한 함수.
+ 만든이 : hagdung-i
+ ******************************************************************/
+function image_upload() {
+
+    var modalLayer = $("#modalLayer");
+    var modalCont = $(".modalContent");
+    var marginLeft = modalCont.outerWidth()/2;
+    var marginTop = modalCont.outerHeight()/2;
+
+    $(".image_upload_button").on("click" ,function () { //이미지 추가 버튼 클릭.
+
+        modalLayer.fadeIn("slow");
+        modalCont.css({"margin-top" : -marginTop, "margin-left" : -marginLeft});
+        $(this).blur();
+        return false;
+    });
+    $(".modelform > #upload_button").click(function () { //이미지 추가 모달의 확인 버튼 클릭.
+        var nowpagenum = $("#NowPage").val();
+        var nowpage = $("#page"+nowpagenum).offset().top;
+
+        var image = $("#image_insert_id").val();
+        console.log("image : ",image);
+        $("#page"+nowpagenum).prepend("<img id= 'theImg' src= 'theImg.png' />");
+        modalLayer.fadeOut("slow");
+
+        if($(document).scrollTop() <= nowpage){       //현재 보이는 페이지에 이미지 삽입
+            console.log("해당 페이지에 이미지 추가");
+        }
+    });
+    $(".modalContent > .modelform > button").click(function(){ //이미지 추가 모달의 취소 버튼 클릭.
+        modalLayer.fadeOut("slow");
+    });
+}
