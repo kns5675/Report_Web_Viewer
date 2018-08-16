@@ -98,6 +98,8 @@
     var reportTemplate = new ReportTemplate(data); // ReportTemplate 객체 생성
     var reportList = (function(data){ // ReportList 생성
       this.reportList = new Array();
+      var data = <%-data%>; // data에 Designer 파일 받아옴
+      var reportTemplate = new ReportTemplate(data); // ReportTemplate 객체 생성
 
       // anyType이 배열인지 체크 (List에 Report가 1개만 존재)
       if(!Array.isArray(data.anyType)){
@@ -125,5 +127,7 @@
     var BandForeGround;
     judgementBand(Layers);
 
+    console.log(reportTemplate.reportList[0].layers.designLayer.bands);
 </script>
+
 </html>
