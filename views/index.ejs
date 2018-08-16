@@ -2,72 +2,112 @@
 <html>
 <head>
     <!--<link rel='stylesheet' href='/stylesheets/style.css' />-->
-    <meta charset="UTF-8">
+    <meta name="generator" content="editplus">
+    <meta name="author" content="angeleyes">
+    <meta name="keywords" content="angeleyes, testhtml, testjavascript">
+    <meta name="description" content="test document">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>Document</title>
-    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-<script>
+   <!--<script src="http://code.jquery.com/jquery-latest.min.js"></script>-->
+
+    <link rel="stylesheet" href="css/index.css"/>
+    <link rel="stylesheet" href="css/print.css"/>
+    <style type="text/css">
+
+        #header {
+            background-color: #00B7FF;
+        }
+
+        .jbFixed {
+            position: fixed;
+            top: 0px;
+        }
+
+        .show-on-scroll { visibility: hidden; }
+        .show-on-scroll.shown { visibility: visible; }
+
+
+    </style>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="js/viewer.js"></script>
+    <script src="js/report.js"></script>
+    <script src="js/report_layer.js"></script>
+    <script src="js/band.js"></script>
+    <script src="js/print.js"></script>
+    <!--<script src="js/index.js"></script>-->
+
+    <script>
     $(document).ready(function(){
         $("#header").load("/include/header.ejs");
+
+        sizechanged();
+        copyoptions();
+
+        var jbOffset = $( '#header' ).offset();
+        console.log("jbOffset : ",jbOffset);
+        $( window ).scroll( function() {
+            if ( $( document ).scrollTop() > jbOffset.top ) {
+                $( '#header' ).addClass( 'jbFixed' );
+            }
+            else {
+                $( '#header' ).removeClass( 'jbFixed' );
+            }
+        });
+
         var data = <%- data %>;
         console.log(data);
-        console.log(data.ReportTemplate.ReportList.anyType.Rectangle.Width._text);
-        console.log(data.ReportTemplate.ReportList.anyType.Rectangle.Height._text);
 
-        var Report = data.ReportTemplate.ReportList.anyType;
-        // Report 개수만큼 div 생성
-        for(var i = 0; i < Report.length; i++){
-            var pageNo = GetRecentPage();
-            appendReport(pageNo, Report);
-        }
+        var jbOffset = $( '#header' ).offset();
+        console.log("jbOffset : ",jbOffset);
+        $( window ).scroll( function() {
+            if ( $( document ).scrollTop() > jbOffset.top ) {
+                $( '#header' ).addClass( 'jbFixed' );
+            }
+            else {
+                $( '#header' ).removeClass( 'jbFixed' );
+            }
+        });
 
-        var Layer = Report.Layers.anyType;
-
-        // BackGroundLayer를 사용하지 않을 때
-        if(Layer[0].IsActive._text == 'false'){
-        } else {
-            var BackGroundLayer = Layer[0].Bands.anyType;
-        }
-
-        // DesignLayer를 사용하지 않을 때
-        if(Layer[1].IsActive._text == 'false'){
-        } else {
-            var DesignLayer = Layer[1].Bands.anyType;
-        }
-
-        console.log(DesignLayer[0]._attributes["xsi:type"]);
-
-        // anyType 을 div id 로 지정
-        for(var i = 0; i < DesignLayer.length; i++){
-            appendDiv(DesignLayer[i]._attributes["xsi:type"], 'report1');
-            setArea(DesignLayer[i]._attributes["xsi:type"], DesignLayer[i]);
-        }
-
-        // ForeGroundLayer를 사용하지 않을 때
-        if(Layer[2].IsActive._text == 'false'){
-        } else {
-            var ForeGroundLayer = Layer[2].Bands.anyType;
-        }
-
-        console.log(DesignLayer);
     });
-</script>
-<style>
-    @media print {
-        #header {
-            display: none;
-        }
-        div.page {
-            page-break-after: always;
-        }
-    }
 
-    div#report1 {
-        background-color: lightblue;
-    }
-</style>
+
+
+</script>
 </head>
 <body>
 <div id="header"></div>
-<div id="report"></div>
+<div id="enhancedcopymodal" style="display:none; background-color:salmon">
+    <h1>User Login</h1>
+    <form id="loginform" name="loginform" method="post" action="index.html">
+        <label for="username">Username:</label>
+        <input type="text" name="username" id="username" class="txtfield" tabindex="1">
+
+        <label for="password">Password:</label>
+        <input type="password" name="password" id="password" class="txtfield" tabindex="2">
+
+        <div class="center"><input type="submit" name="loginbtn" id="loginbtn" class="flatbtn-blu hidemodal" value="Log In" tabindex="3"></div>
+    </form>
+</div>
+<div id="content">
+
+</div>
+<div id="reportTemplate"></div>
+<div id="report">
+    <div id="page1" class="page show-on-scroll shown" style="width: 798px; height: 1128.6px;">
+        test
+    </div>
+    <div id="page2" class="page show-on-scroll shown" style="width: 798px; height: 1128.6px;">
+        test2
+    </div>
+    <div id="page3" class="page show-on-scroll shown" style="width: 798px; height: 1128.6px;">
+        test3
+    </div>
+    <div id="page4" class="page show-on-scroll shown" style="width: 798px; height: 1128.6px;">
+        test4
+    </div>
+    <div id="page5" class="page show-on-scroll shown" style="width: 798px; height: 1128.6px;">
+        test5
+    </div>
+</div>
 </body>
 </html>

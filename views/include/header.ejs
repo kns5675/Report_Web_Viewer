@@ -4,6 +4,23 @@
     <meta charset="utf-8">
 
     <style type="text/css">
+      ul#menu li a{
+        text-decoration:none;
+        color:black;
+        visited:none;
+      }
+      ul.submenu {
+        list-style:none;
+        text-decoration: none;
+      }
+      ul.submenu li a{
+        text-decoration:none;
+        list-decoration:none;
+      }
+      ul.submenu li a:hover{
+        color:pink;
+      }
+
     .menubar li ul {
       background: rgb(109,109,109);
       display:none;  /* 평상시에는 서브메뉴가 안보이게 하기 */
@@ -25,13 +42,20 @@
       padding:0 3px;
     }
     </style>
+    <script>
+        $(function(){
+            $('#print').click(function(){
+                pagePrint()
+            });
+        });
+    </script>
     <title></title>
   </head>
   <body>
 <div class="menubar">
-  <ul>
+  <ul id="menu">
     <li style="display:inline;"><a href="#">파일</a>
-      <ul>
+      <ul class="submenu">
         <li><a href="#" onclick="test()">디자이너 실행</a></li>
         <li><a href="#">열기</a></li>
         <li><a href="#">저장</a></li>
@@ -42,7 +66,7 @@
     </li>
 
     <li style="display:inline;"><a href="#">서식</a>
-        <ul>
+        <ul class="submenu">
           <li><a href="#">엑셀 내보내기</a></li>
           <li><a href="#">이미지 내보내기</a></li>
           <li><a href="#">PDF 내보내기</a></li>
@@ -53,7 +77,7 @@
     </li>
 
     <li style="display:inline;"><a href="#">페이지</a>
-        <ul>
+        <ul class="submenu">
           <li><a href="#">이전 페이지</a></li>
           <li><a href="#">다음 페이지</a></li>
           <li><a href="#">첫 페이지</a></li>
@@ -62,7 +86,7 @@
     </li>
 
     <li style="display:inline;"><a href="#">보기</a>
-        <ul>
+        <ul class="submenu">
           <li><a href="#">한 페이지</a></li>
           <li><a href="#">여러 페이지</a></li>
           <li><a href="#">확대/축소</a></li>
@@ -74,40 +98,113 @@
 <div class="topMenu">
 <ul>
   <li><input type="button" value="저장"></li>
-<li><input type="button" value="불러오기"></li>
-<li><input type="button" value="인쇄" onclick="pagePrint()"></li>
-<li><input type="button" value="DRD"></li>
-<li><input type="button" value="첫 페이지"></li>
-<li><input type="button" value="이전 페이지"></li>
-<li><input type="text" value="1"> /</li>
-<li><label>totalPage</label></li>
-<li><input type="button" value="다음 페이지"></li>
-<li><input type="button" value="마지막 페이지"></li>
-<li><input type="button" value="한 페이지만 보기"></li>
-<li><input type="button" value="여러 페이지 보기"></li>
-<li>
+  <li><input type="button" value="불러오기"></li>
+  <li>
+    <select id="copyOptions">
+      <option id="num1"selected disabled hidden>인쇄설정하기</option>
+      <option id="num2" value="copy">인쇄</option>
+      <option id="enhancedcopy" value="ecopy">고급인쇄설정</option>
+    </select>
+    <input type="button" id="print" value="인쇄">
 
-<select>
-  <option value="200%">200%</option>
-  <option value="200%">150%</option>
-  <option value="200%">100%</option>
-  <option value="200%">80%</option>
-  <option value="200%">50%</option>
-
-</select>
-</li>
-<li><input type="button" value="+"></li>
-<li><input type="button" value="-"></li>
-<li><input type="button" value="PDF"></li>
-<li><input type="button" value="엑셀"></li>
-<li><input type="button" value="셀"></li>
-<li><input type="button" value="HWP"></li>
-<li><input type="button" value="이미지"></li>
-<li><input type="button" value="HTML"></li>
-<li><input type="button" value="이미지 추가"></li>
-<li><input type="button" value="항목 선택"></li>
-</nav>
+  </li>
+  <li><input type="button" value="DRD"></li>
+  <li><input type="button" value="첫 페이지" id="FirstPage"></li>
+  <li><input type="button" value="이전 페이지" id="PreviousPage"></li>
+  <li><input type="text" value="1" id="NowPage"> /</li>
+  <li><a id="TotalPage">10</a></li>
+  <li><input type="button" value="다음 페이지" id="NextPage"></li>
+  <li><input type="button" value="마지막 페이지" id="LastPage"></li>
+  <li><input type="button" value="한 페이지만 보기"></li>
+  <li><input type="button" value="여러 페이지 보기"></li>
+  <li>
+    <select id="txtZoom">
+      <option value="2.0">200%</option>
+      <option value="1.5">150%</option>
+      <option selected value="1.0">100%</option>
+      <option value="0.8">80%</option>
+      <option value="0.5">50%</option>
+      <option id="option1" style="display:none;">test</option>
+    </select>
+  </li>
+  <!--<li><input type="text" id="txtZoom"value="1"/></li>-->
+  <li><input type="button" id="btnZoomIn" onclick="zoomIn()" value="+"></li>
+  <li><input type="button" id="btnZoomOut"onclick="zoomOut()" value="-"></li>
+  <li><input type="button" value="PDF"></li>
+  <li><input type="button" value="엑셀"></li>
+  <li><input type="button" value="셀"></li>
+  <li><input type="button" value="HWP"></li>
+  <li><input type="button" value="이미지"></li>
+  <li><input type="button" value="HTML"></li>
+  <li><input type="button" value="이미지 추가"></li>
+  <li><input type="button" value="항목 선택"></li>
+</ul>
 
 </div>
   </body>
+<script>
+    var pageNum = $("#NowPage").val();
+    var heighttext = $("#page1")[0].style.height;
+    var heightcustom = heighttext.substring(0,heighttext.lastIndexOf("p"));
+    var headerheight = $("#header")[0].offsetHeight+10;
+    var pagecount = $(".page").length;
+    var totalpage = $("#TotalPage").text(pagecount+"(TotalPage)");
+    $(document).ready(function () {
+    });
+
+    $("#FirstPage").on("click",function () {
+        console.log("click test");
+        console.log(pageNum);
+        $(window).scrollTop(0);
+    });
+    //$('#contact').offset().top
+    $("#NowPage").on("keyup",function () {
+        $(this).val($(this).val().replace(/[^0-9]/g,""));
+
+        var inputpage = "page"+$(this).val();
+        var pagevalue = $('#'+inputpage).offset().top;
+        console.log("입력값 : ", inputpage);
+        $(window).scrollTop(pagevalue);
+    });
+
+    $("#PreviousPage").on("click",function () {
+        console.log("$(window).scrollTop() : ",$(window).scrollTop());
+        console.log("heightcustom : ",heightcustom);
+        var Previous = $(window).scrollTop()-heightcustom;
+        console.log("scrollTop : ",Previous);
+        var lastpage = $("#page"+pagecount).offset().top;
+        console.log("pagecount : ",pagecount);
+        console.log("dwadwadwad",lastpage);
+        if($(window).scrollTop() >= lastpage){
+            console.log("in");
+            $(window).scrollTop(Previous+750);
+        }else{
+            $(window).scrollTop(Previous);
+        }
+
+
+    });
+
+    $("#NextPage").on("click",function () {
+        var Next = $(window).scrollTop()+heightcustom*1;
+        console.log("Next : ",Next);
+        console.log("headerheight : ",headerheight);
+        if($(window).scrollTop() == 0){
+            $(window).scrollTop(Next-headerheight);
+        }else{
+            $(window).scrollTop(Next);
+        }
+    });
+
+    $("#LastPage").on("click",function () {
+        console.log("pagecount : ",$(".page").length);
+
+        console.log("widthcustom : ",heightcustom);
+
+        var Last = $(window).scrollTop()+heightcustom*pagecount;
+        $(window).scrollTop(Last);
+        console.log("scrollTop : ",Last);
+    });
+
+</script>
 </html>

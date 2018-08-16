@@ -4,13 +4,21 @@
     <meta charset="utf-8">
     <title></title>
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="/JS/report_layer.js" language="JavaScript" type="text/javascript"></script>
+    <script src="/JS/band.js" language="JavaScript" type="text/javascript"></script>
   </head>
 
-  <body>
-  </body>
+<body>
+    <div id="header"></div>
+    <div id="report"></div>
+</body>
 
   <script>
 
+    $(document).ready(function(){
+        $("#header").load("/include/header.ejs");
+
+    });
     // ================= ReportTemplate 객체 ================= //
     function ReportTemplate(data){
       this.attributes = data.ReportTemplate._attributes;
@@ -104,5 +112,18 @@
       return reportList;
     })(data.ReportTemplate.ReportList);
 
-  </script>
+    // console.log(data.ReportTemplate.ReportList.anyType.Layers.anyType); // Layer 총 3개 anyType[1]이면 DesignLayer
+    // console.log(data.ReportTemplate.ReportList.anyType.Layers.anyType[1].Bands.anyType[0]); // DesignLayer에 anyType이 BandPageHeader인 애
+    // console.log(data.ReportTemplate.ReportList.anyType.Layers.anyType[1].Bands.anyType[1]); // DesignLayer에 anyType이 BandData인 애
+    // console.log(data.ReportTemplate.ReportList.anyType.Layers.anyType[1].Bands.anyType[1].ControlList.anyType); // anyType이 ControlDynamicTable인 애
+    // console.log(data.ReportTemplate.ReportList.anyType.Layers.anyType[1].Bands.anyType); // 3개
+    var Layers = data.ReportTemplate.ReportList.anyType.Layers.anyType;
+    var BandBackGround;
+    var BandPageHeader;
+    var BandData;
+    var BandPageFooter;
+    var BandForeGround;
+    judgementBand(Layers);
+
+</script>
 </html>
