@@ -16,7 +16,7 @@ function CreateBandArray(data){
             band_list.push(band);
         });
     } else{ // Layer의 Band 또는 ChildBands 배열이 아닐 때
-        this.band = CreateBand(data.anyType);
+        band = CreateBand(data.anyType);
         band_list.push(band);
     }
     return band_list;
