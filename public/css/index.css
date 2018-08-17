@@ -2,10 +2,109 @@ div.page{
     margin: auto;
 }
 
+body{
+    margin : 0;
+}
+
+#header {
+    background-color: #00B7FF;
+}
+
+.jbFixed {
+    position: fixed;
+    top: 0px;
+}
+
+.show-on-scroll { visibility: hidden; }
+.show-on-scroll.shown { visibility: visible; }
+
 #reportTemplate{
-    background-color: #888888;
+    z-index: -3;
+    background-color: transparent;
 }
 
 #modalLayer{display:none; position:relative;}
 #modalLayer .modalContent{width:440px; height:200px; padding:20px; border:1px solid #ccc; position:fixed; left:50%; top:50%; z-index:11; background:#fff;}
 #modalLayer .modalContent button{right:0; top:0; cursor:pointer;}
+
+th .DRDSEQ{
+    display: none;
+    background-color: #888888;
+    width : 100px;
+}
+
+.backGroundLayer{
+    position: absolute;
+    margin: 38px 38px 38px 38px;
+    z-index: 1;
+    background-color: lightgreen;
+}
+
+.foreGroundLayer{
+    margin: 38px 38px 38px 38px;
+    z-index: 3;
+    background-color: lightcoral;
+    position: absolute;
+
+}
+
+.report{
+    position: absolute;
+    z-index:2;
+    margin: 38px 38px 38px 38px;
+    background-color: lightblue;
+
+}
+
+.page{
+    z-index: -2;
+    background-color: transparent;
+}
+
+
+#resizable { width: 150px; height: 150px; padding: 0.5em; }
+#resizable img { text-align: center; margin: 0; }
+
+.ui-widget-content {
+    background: #cedc98;
+    border: 1px solid #DDDDDD;
+    color: #333333;
+}
+
+.box {
+    margin: 40px;
+    box-shadow: 5px 5px 10px #535353;
+    border: 1px silver;
+    border-radius: 4px;
+    position: relative;
+    width: 500px;
+    height: 400px;
+    overflow: hidden;
+    /* limit size with min/max-width/height*/
+    min-height: 100px;
+    min-width: 200px;
+    max-width: 999px;
+    max-height: 800px;
+}
+
+.boxheader {
+    background: #535353;
+    color: white;
+    padding: 5px;
+}
+
+.boxbody {
+    font-size: 24pt;
+    padding: 20px;
+}
+
+.win-size-grip {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    padding: 4px;
+    bottom: 0;
+    right: 0;
+    cursor: nwse-resize;
+    background: url(https://raw.githubusercontent.com/RickStrahl/jquery-resizable/master/assets/wingrip.png) no-repeat;
+}

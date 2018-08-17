@@ -2,15 +2,67 @@
     #header {
         display: none;
     }
-    div.page {
-        page-break-after: always;
-        margin : 0;
-        width : initial;
-        height : initial;
+    @page A4{
+        size : B4 portrait;
+        margin : 120px;
     }
 
-    html, body{
-        width : 210mm;
-        height : 297mm;
+    @page B4{
+        size : B4 portrait;
+        margin : 120px;
     }
+    div.page.paperType-A4{
+        page-break-after: always;
+        page: A4;
+    }
+    div.page.paperType-B4{
+        page-break-after: always;
+        page: B4;
+    }
+    /*div.page {*/
+        /*page-break-after: always;*/
+        /*margin: 0 auto;*/
+        /*padding: 0 auto;*/
+        /*width: initial;*/
+        /*height: initial;*/
+    /*}*/
+
+    /*body{*/
+        /*margin : 0;*/
+        /*padding : 0;*/
+    /*}*/
+
+    /*div.paperType-B4{*/
+        /*page-break-after: always;*/
+        /*!*width : 976px;*!*/
+        /*!*height : 1383px;*!*/
+        /*width : 30px;*/
+        /*height : 30px;*/
+        /*margin : 0;*/
+    /*}*/
+
+    /*div.paperType-A4{*/
+        /*page-break-after: always;*/
+        /*!*width : 798px;*!*/
+        /*!*height : 1128px;*!*/
+        /*width : 10px;*/
+        /*height : 10px;*/
+        /*margin : 0;*/
+    /*}*/
 }
+
+/*@page paperType-A4{*/
+    /*size : 21cm 29.7cm;*/
+    /*width : 10px;*/
+    /*height : 10px;*/
+    /*background-color: #00B7FF;*/
+/*}*/
+
+/*div.paperType-B4{*/
+    /*page :left;*/
+/*}*/
+
+
+/*div.paperType-A4{*/
+    /*page : paperType-A4;*/
+/*}*/
