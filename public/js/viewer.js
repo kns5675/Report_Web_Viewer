@@ -36,6 +36,7 @@ function test(){
     try {
         var flexiblecontent = document.getElementById("reportTemplate");
         var size = $("#txtZoom").val();
+        $("#txtZoom").val(size);
 
         if (jQuery.browser.msie) {
             flexiblecontent.style.zoom = size;
@@ -63,15 +64,31 @@ function zoomIn(){
         var size = $("#txtZoom").val();
         size = parseFloat(size);
         size = (size + 0.05).toFixed(2);
-
-        $("#txtZoom").val();
-        $("#option1").val(size);
+        $("#option1").val(size);//option1에 사이즈 집어넣고.
         var optionsize  = $("#option1").val();
-
         var changedoption1 = ((($("#option1").val())*100).toFixed(0)+"%");
+
         $("#option1").text(changedoption1);
         $("#txtZoom option:last").attr("selected","selected");
-        test();
+
+        try {
+            var flexiblecontent = document.getElementById("reportTemplate");
+            $("#txtZoom").val(size);
+            if (jQuery.browser.msie) {
+                flexiblecontent.style.zoom = size;
+            }
+            else {
+                $(flexiblecontent).css('-webkit-transform','scale(' + (size) + ')');
+                $(flexiblecontent).css('-webkit-transform-origin','0 0');
+                $(flexiblecontent).css('-moz-transform','scale(' + (size) + ')');
+                $(flexiblecontent).css('-moz-transform-origin','0 0');
+                $(flexiblecontent).css('-o-transform','scale(' + (size) + ')');
+                $(flexiblecontent).css('-o-transform-origin','0 0');
+            }
+        }
+        catch(e) {
+            console.log(e.message);
+        }
     }
     catch(e) {
         alert("test ==> " + e.message);
@@ -87,7 +104,6 @@ function zoomOut(){
         var size = $("#txtZoom").val();
 
         var size = parseFloat(size);
-        //string 형 size를 parseFloat이용해서 number형으로 변환시켰음.
 
         size = (size - 0.05).toFixed(2);
         $("#txtZoom").val();
@@ -97,7 +113,25 @@ function zoomOut(){
         $("#option1").text(changedoption1);
         $("#txtZoom option:last").attr("selected","selected");
 
-        test();
+        /*test();*/
+        try {
+            var flexiblecontent = document.getElementById("reportTemplate");
+            $("#txtZoom").val(size);
+            if (jQuery.browser.msie) {
+                flexiblecontent.style.zoom = size;
+            }
+            else {
+                $(flexiblecontent).css('-webkit-transform','scale(' + (size) + ')');
+                $(flexiblecontent).css('-webkit-transform-origin','0 0');
+                $(flexiblecontent).css('-moz-transform','scale(' + (size) + ')');
+                $(flexiblecontent).css('-moz-transform-origin','0 0');
+                $(flexiblecontent).css('-o-transform','scale(' + (size) + ')');
+                $(flexiblecontent).css('-o-transform-origin','0 0');
+            }
+        }
+        catch(e) {
+            console.log(e.message);
+        }
     }
     catch(e) {
         alert(e.message);
