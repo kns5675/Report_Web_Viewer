@@ -6,3 +6,6 @@ div.page{
     background-color: #888888;
 }
 
+#modalLayer{display:none; position:relative;}
+#modalLayer .modalContent{width:440px; height:200px; padding:20px; border:1px solid #ccc; position:fixed; left:50%; top:50%; z-index:11; background:#fff;}
+#modalLayer .modalContent button{right:0; top:0; cursor:pointer;}

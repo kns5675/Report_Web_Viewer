@@ -7,7 +7,9 @@
     <meta name="description" content="test document">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>Document</title>
-
+    <link rel="stylesheet" href="css/main.css"/>
+    <link rel="stylesheet" href="css/index.css"/>
+    <link rel="stylesheet" href="css/print.css"/>
     <style type="text/css">
 
         #header {
@@ -28,73 +30,39 @@
     <script src="js/report.js"></script>
     <script src="js/report_layer.js"></script>
     <script src="js/band.js"></script>
-    <script src="js/print.js"></script>
-    <script src="js/viewer.js"></script>
-    <script src="js/index.js"></script>
     <script src="js/createBand.js"></script>
-    <link rel="stylesheet" href="css/main.css"/>
-    <link rel="stylesheet" href="css/index.css"/>
-    <link rel="stylesheet" href="css/print.css"/>
+    <script src="js/print.js"></script>
+    <script src="js/viewer_header01.js"></script>
+    <script src="js/viewer.js"></script>
+    <script src="js/drawingBand.js"></script>
     <script>
         var data = <%-data%>;  //xml json 데이터
         var dataTable = <%- dataTable %> //임시 데이터 dataTable
-    $(document).ready(function(){
-        $("#header").load("/include/header.ejs");
-        $("#myModal").load("/include/modal.ejs");
+            $(document).ready(function () {
+                $("#header").load("/include/header.ejs");
+                $("#myModal").load("/include/modal.ejs");
+                $("#myModal2").load("/include/modal2.ejs");
 
-        var jbOffset = $( '#header' ).offset();
-        console.log("jbOffset : ",jbOffset);
-        $( window ).scroll( function() {
-            if ( $( document ).scrollTop() > jbOffset.top ) {
-                $( '#header' ).addClass( 'jbFixed' );
-            }
-            else {
-                $( '#header' ).removeClass( 'jbFixed' );
-            }
-        });
-
-        var jbOffset = $( '#header' ).offset();
-        console.log("jbOffset : ",jbOffset);
-        $( window ).scroll( function() {
-            if ( $( document ).scrollTop() > jbOffset.top ) {
-                $( '#header' ).addClass( 'jbFixed' );
-            }
-            else {
-                $( '#header' ).removeClass( 'jbFixed' );
-            }
-        });
-
-        makeReportTemplate(data);
-
-    });
+                makeReportTemplate(data);
+            });
     </script>
-
 </head>
 <body>
 <div id="header"></div>
 <div id="myModal" class="modal"></div>
 
-<div id="test">
+<div id="Image_Modal">
+    <div id="modalLayer">
+        <div class="modalContent">
+            <form class="modelform" action="header.ejs" method="post">
+                <input name="image_insert" type="file" multiple accept="image/*"><br/>
+                <input id="upload_button" type="button" value="확인">
+                <button type="button">취소</button>
+            </form>
 
+        </div>
+    </div>
 </div>
-
 <div id="reportTemplate"></div>
-<div id="report">
-    <div id="page1" class="page show-on-scroll shown" style="width: 798px; height: 1128.6px;">
-        test
-    </div>
-    <div id="page2" class="page show-on-scroll shown" style="width: 798px; height: 1128.6px;">
-        test2
-    </div>
-    <div id="page3" class="page show-on-scroll shown" style="width: 798px; height: 1128.6px;">
-        test3
-    </div>
-    <div id="page4" class="page show-on-scroll shown" style="width: 798px; height: 1128.6px;">
-        test4
-    </div>
-    <div id="page5" class="page show-on-scroll shown" style="width: 798px; height: 1128.6px;">
-        test5
-    </div>
-</div>
 </body>
 </html>

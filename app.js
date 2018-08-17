@@ -3,6 +3,7 @@ var createError = require('http-errors');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var jquery = require('jquery');
 
 // npm install --save xml-js
 var indexRouter = require('./routes/index');
@@ -28,7 +29,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // app.use('/users', usersRouter);
 app.use('/', indexRouter);
-app.use('/jeon', jeon);
+// app.use('/jeon', jeon);
 
 
 // catch 404 and forward to error handler

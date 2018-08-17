@@ -25,7 +25,7 @@ function makeReportTemplate(data) {
     setPage(report);
     setReport(report);
 
-    pageNum++
+    pageNum++;
 }
 
 /******************************************************************
@@ -45,6 +45,8 @@ function setReport(report){
     $('#report' + reportNum).css('margin-right', 38 + 'px');
 
     makeTableByData();
+
+    drawBand(report); // 추가 - 전형준
 
     reportNum++;
 }

@@ -44,7 +44,7 @@
           <li><a href="#">이미지 내보내기</a></li>
           <li><a href="#">PDF 내보내기</a></li>
           <li><a href="#">HTML 내보내기</a></li>
-          <li><a href="#">이미지 추가</a></li>
+          <li><a href="#" class="image_upload_button">이미지 추가</a></li>
           <li><a href="#">항목 선택</a></li>
       </ul>
     </li>
@@ -107,74 +107,26 @@
   <li><input type="button" value="HWP"></li>
   <li><input type="button" value="이미지"></li>
   <li><input type="button" value="HTML"></li>
-  <li><input type="button" value="이미지 추가"></li>
+  <li><input type="button" value="이미지 추가" class="image_upload_button"></li>
   <li><input type="button" value="항목 선택"></li>
 </ul>
-
 </div>
   </body>
 <script>
-    var pageNum = $("#NowPage").val();
-    var heighttext = $("#page1")[0].style.height;
-    var heightcustom = heighttext.substring(0,heighttext.lastIndexOf("p"));
-    var headerheight = $("#header")[0].offsetHeight+10;
     var pagecount = $(".page").length;
-    var totalpage = $("#TotalPage").text(pagecount+"(TotalPage)");
+    var image_src = "<%= request.getParameter('image_insert')%>";
+    console.log("imagesrc : ",image_src);
+    $("#TotalPage").text(pagecount+"(TotalPage)"); //totalpage
+
     $(document).ready(function () {
-    });
-
-    $("#FirstPage").on("click",function () {
-        console.log("click test");
-        console.log(pageNum);
-        $(window).scrollTop(0);
-    });
-    //$('#contact').offset().top
-    $("#NowPage").on("keyup",function () {
-        $(this).val($(this).val().replace(/[^0-9]/g,""));
-
-        var inputpage = "page"+$(this).val();
-        var pagevalue = $('#'+inputpage).offset().top;
-        console.log("입력값 : ", inputpage);
-        $(window).scrollTop(pagevalue);
-    });
-
-    $("#PreviousPage").on("click",function () {
-        console.log("$(window).scrollTop() : ",$(window).scrollTop());
-        console.log("heightcustom : ",heightcustom);
-        var Previous = $(window).scrollTop()-heightcustom;
-        console.log("scrollTop : ",Previous);
-        var lastpage = $("#page"+pagecount).offset().top;
-        console.log("pagecount : ",pagecount);
-        console.log("dwadwadwad",lastpage);
-        if($(window).scrollTop() >= lastpage){
-            console.log("in");
-            $(window).scrollTop(Previous+750);
-        }else{
-            $(window).scrollTop(Previous);
-        }
-
-
-    });
-
-    $("#NextPage").on("click",function () {
-        var Next = $(window).scrollTop()+heightcustom*1;
-        console.log("Next : ",Next);
-        console.log("headerheight : ",headerheight);
-        if($(window).scrollTop() == 0){
-            $(window).scrollTop(Next-headerheight);
-        }else{
-            $(window).scrollTop(Next);
-        }
-    });
-
-    $("#LastPage").on("click",function () {
-        console.log("pagecount : ",$(".page").length);
-
-        console.log("widthcustom : ",heightcustom);
-
-        var Last = $(window).scrollTop()+heightcustom*pagecount;
-        $(window).scrollTop(Last);
-        console.log("scrollTop : ",Last);
+        FirstPage();
+        NowPage();
+        PreviousPage();
+        NextPage();
+        LastPage(pagecount);
+        HeaderFixAndPageScroll(pagecount);
+        console.log("test");
+        image_upload();
     });
 
 </script>
