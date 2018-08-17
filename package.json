@@ -15,6 +15,7 @@
     "http": "0.0.0",
     "http-errors": "~1.6.2",
     "jquery": "^3.3.1",
+    "jquery-resizable-dom": "^0.32.0",
     "morgan": "~1.9.0",
     "pug": "2.0.0-beta11",
     "util": "^0.11.0",

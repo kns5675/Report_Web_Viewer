@@ -114,8 +114,6 @@
   </body>
 <script>
     var pagecount = $(".page").length;
-    var image_src = "<%= request.getParameter('image_insert')%>";
-    console.log("imagesrc : ",image_src);
     $("#TotalPage").text(pagecount+"(TotalPage)"); //totalpage
 
     $(document).ready(function () {
@@ -125,7 +123,6 @@
         NextPage();
         LastPage(pagecount);
         HeaderFixAndPageScroll(pagecount);
-        console.log("test");
         image_upload();
     });
 
