@@ -6,7 +6,8 @@
     <script>
         $(function(){
             $('#print').click(function(){
-                pagePrint();
+                var ratio =1;
+                pagePrint(ratio);
             });
             $('#txtZoom').on("change",function(){
                 test();
