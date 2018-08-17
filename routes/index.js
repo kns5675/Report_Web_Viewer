@@ -9,10 +9,11 @@ var json = convert.xml2json(xml, {compact : true});
 
 const tempData = fs.readFileSync('xml/TempData.xml', 'utf-8');
 const tempData_json = JSON.parse(convert.xml2json(tempData, {compact : true}));
+const data_json = convert.xml2json(tempData, {compact : true});
 
 /* GET home page. */
 router.get('/', function(req, res) {
-    res.render('index', {
+    res.render('yesol', {
         layout: false,
         data : json
     });
@@ -20,11 +21,12 @@ router.get('/', function(req, res) {
 
 router.get('/data', function(req, res) {
 
-    res.render('index', {
+    res.render('yesol', {
         layout: false,
         data : json,
         // dataTableName : dataTableName,
-        dt: tempData_json.DataSetName.dt
+        dt: tempData_json.DataSetName.dt,
+        dt2: data_json
     });
 });
 
