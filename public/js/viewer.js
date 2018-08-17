@@ -83,6 +83,9 @@ function zoomOut(){
 function close_pop() {
     $('#myModal').hide();
 };
+function close_pop2(){
+    $('#modalcase').hide();
+}
 
 jQuery.browser = {}; //jQuery.browser.msie 사용 위함.
 (function () {

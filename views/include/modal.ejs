@@ -3,20 +3,49 @@
 <head>
     <meta charset="utf-8">
     <script>
-       $(document).ready(function(){
-           $("#mymodal2").click(function(){
-              $("#modalcase").css("display","block");
-           });
-         $("#closebtn").click(function(){
-            close_pop();
-         });
-           $("#closebtn2").click(function(){
-               close_pop();
-           });
-           $("#closebtn3").click(function(){
-               close_pop();
-           });
-       });
+        $(document).ready(function(){
+            $("#mymodal2").click(function(){
+                $("#modalcase").css("display","block");
+            });
+            $("#closebtn").click(function(){
+                close_pop();
+            });
+            $("#closebtn2").click(function(){
+                close_pop();
+            });
+            $("#closebtn3").click(function(){
+                close_pop2();
+            });
+            $("#closebtn4").click(function(){
+                close_pop2();
+            });
+            $("#sign").on('keyup',function(){
+                try{
+                    var tds = this.value;
+                    if(tds>0 && tds<=8){
+                        changeColor(tds);
+                    }else{
+                        alert("결재란 칸 수는 1 이상 8 이하여야 합니다.");
+                        this.value="";
+                    }
+                }catch(e){
+                    console.log(e.message);
+                }
+            });
+        });
+        function changeColor(tds){
+            tds = parseInt(tds);
+            tds = tds-1;
+            for(var i = 0; i<=tds; i++){
+                $("table#modaltable tr:eq(0) td:eq("+i+")").css("background-color","white");
+                $("table#modaltable tr:eq(1) td:eq("+i+")").css("background-color","#E6E6FA");
+                /*이거 예외처리를 더 해야함.... .. ... .................지연*/
+                for(var x=7-tds;x<7 && x>i;x--){
+                    $("table#modaltable tr:eq(0) td:eq("+x+")").css("background-color","#E3E3E3");
+                    $("table#modaltable tr:eq(1) td:eq("+x+")").css("background-color","#E3E3E3");
+                }
+            }
+        };
     </script>
 </head>
 <body>
@@ -31,8 +60,8 @@
             <span class="subject">인쇄설정</span>
             <div class="partstyle">
                 <div class="partstyle2" style="height:50px;">
-                <span>인쇄 배율</span>
-                <input type="number"value="" max="100" min="0">&nbsp;%
+                    <span>인쇄 배율</span>
+                    <input type="number"value="" max="100" min="0">&nbsp;%
                 </div>
             </div>
 
@@ -43,15 +72,9 @@
                         <span>인쇄여부</span>
                     </div>
                     <div class="div2" style="background-color:blue;">
-                        <label class="container">
-                            <input type="radio">인쇄함
-                            <span class="checkmark"></span>
-                        </label>
+                        <label><input type="radio" name="copydate"/>인쇄함</label>
                         <br/>
-                        <label class="container">
-                            <input type="radio" checked="checked">인쇄안함
-                            <span class="checkmark"></span>
-                        </label>
+                        <label><input type="radio" name="copydate" checked="checked"/>인쇄안함</label>
                     </div>
                     <div class="div3">
                         <label class="container">
@@ -65,16 +88,10 @@
                         <span>인쇄 위치</span>
                     </div>
                     <div class="div2" style="background-color:blue;">
-                        <label class="container">
-                            <input type="radio" checked="checked">타이틀 상단
-                            <span class="checkmark"></span>
-                        </label>
+                        <label><input type="radio" name="titleposition" checked="checked"/>타이틀상단</label>
                     </div>
                     <div class="div3">
-                        <label class="container">
-                            <input type="radio">타이틀 하단
-                            <span class="checkmark"></span>
-                        </label>
+                        <label><input type="radio" name="titleposition"/>타이틀하단</label>
                     </div>
                 </div>
 
@@ -84,59 +101,30 @@
                 <div class="partstyle2" >
                     <span>폰트서식</span>
 
-                    <label class="container">
-                        <input type="radio" checked="checked">굴림체
-                        <span class="checkmark"></span>
-                    </label>
-
-                    <label class="container">
-                        <input type="radio">바탕체
-                        <span class="checkmark"></span>
-                    </label>
-
-                    <label class="container">
-                        <input type="radio">돋움체
-                        <span class="checkmark"></span>
-                    </label>
+                    <label><input type="radio" name="fontform" checked="checked"/>굴림체</label>
+                    <label><input type="radio" name="fontform" />바탕체</label>
+                    <label><input type="radio" name="fontform" />돋움체</label>
 
                     <br/>
 
                     <span>폰트내용</span>
 
-                    <label class="container">
-                        <input type="radio" checked="checked">굴림체
-                        <span class="checkmark"></span>
-                    </label>
-
-                    <label class="container">
-                        <input type="radio" >바탕체
-                        <span class="checkmark"></span>
-                    </label>
-
-                    <label class="container">
-                        <input type="radio" >돋움체
-                        <span class="checkmark"></span>
-                    </label>
+                    <label><input type="radio" name="fontcontent" checked="checked"/>굴림체</label>
+                    <label><input type="radio" name="fontcontent" />바탕체</label>
+                    <label><input type="radio" name="fontcontent" />돋움체</label>
 
                     <br/>
                 </div>
 
                 <div class="partstyle2" >
-                    <label class="container">
-                        <input type="checkbox" checked="checked">폰트자동조정
-                        <span class="checkmark"></span>
-                    </label>
+                    <label><input type="checkbox">폰트자동조정</label>
                     <br/>
-                    <label class="container">
-                        <input type="checkbox" checked="checked">금액 기울임꼴 표시
-                        <span class="checkmark"></span>
-                    </label>
+                    <label><input type="checkbox">금액 기울임꼴 표시</label>
                 </div>
             </div>
 
         </div>
         <div class="rightpart">
-
             <span class="subject">용지설정</span>
             <div class="partstyle">
 
@@ -166,14 +154,8 @@
                         <span>용지방향</span>
                     </div>
                     <div class="div4">
-                        <label class="container">
-                            <input type="radio" checked="checked">세로
-                            <span class="checkmark"></span>
-                        </label>
-                        <label class="container">
-                            <input type="radio">가로
-                            <span class="checkmark"></span>
-                        </label>
+                        <label><input type="radio" name="direction"checked="checked">세로</label>
+                        <label><input type="radio" name="direction">가로</label>
                     </div>
                 </div>
             </div>
@@ -186,14 +168,8 @@
                         <span>출력일인쇄</span>
                     </div>
                     <div class="div4">
-                        <label class="container">
-                            <input type="radio">인쇄함
-                            <span class="checkmark"></span>
-                        </label>
-                        <label class="container">
-                            <input type="radio" checked="checked">인쇄안함
-                            <span class="checkmark"></span>
-                        </label>
+                            <label><input type="radio" name="mycopy"/>인쇄함</label>
+                            <label><input type="radio" name="mycopy" checked="checked"/>인쇄안함</label>
                     </div>
 
                     <div class="div1">
@@ -209,104 +185,104 @@
                             <span class="checkmark"></span>
                         </label>
                     </div>
+                </div>
+                <br/>
+                <div class="partstyle2" style="height:50px;" >
+                    <div class="div1">
+                        <label class="container">
+                            <input type="checkbox">머리글
+                            <span class="checkmark"></span>
+                        </label>
                     </div>
-                <br/>
-                <div class="partstyle2" style="height:50px;" >
-                <div class="div1">
-                    <label class="container">
-                        <input type="checkbox">머리글
-                        <span class="checkmark"></span>
-                    </label>
-                </div>
-                <div class="div4">
-                    <select>
-                        <option>상단좌측</option>
-                        <option>상단중앙</option>
-                        <option>상단우측</option>
-                    </select>
-                    <br/>
-                    <input type="text"/>
-                </div>
+                    <div class="div4">
+                        <select>
+                            <option>상단좌측</option>
+                            <option>상단중앙</option>
+                            <option>상단우측</option>
+                        </select>
+                        <br/>
+                        <input type="text"/>
+                    </div>
                 </div>
                 <br/>
                 <div class="partstyle2" style="height:50px;" >
-                <div class="div1">
-                    <label class="container">
-                        <input type="checkbox">꼬리글
-                        <span class="checkmark"></span>
-                    </label>
-                </div>
-                <div class="div4">
-                    <select>
-                        <option>하단좌측</option>
-                        <option>하단중앙</option>
-                        <option>하단우측</option>
-                    </select>
-                    <br/>
-                    <input type="text"/>
-                </div>
-                </div>
+                    <div class="div1">
+                        <label class="container">
+                            <input type="checkbox">꼬리글
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                    <div class="div4">
+                        <select>
+                            <option>하단좌측</option>
+                            <option>하단중앙</option>
+                            <option>하단우측</option>
+                        </select>
+                        <br/>
+                        <input type="text"/>
+                    </div>
                 </div>
             </div>
+        </div>
         <div class="close" style="float:right; margin-right:38px; margin-top:-10px;">
             <input type="submit" name="close" id="closebtn2" value="닫기" tabindex="3" style="cursor:pointer;width:70px;height:25px;">
         </div>
     </div>
 </div>
 <div id="modalcase" class="modal" style="display:none;">
-<div id="modal2">
-    <div class="modal-content2">
-        <div class="upperbar" style="width:100%;">
-            <span style="width:50%; text-align:left; float:left;margin-left:10px;">결재란 등록</span>
-            <span id="closebtn3"class="pop_bt" style="cursor:pointer;float:right;margin-right:10px;">X</span>
-        </div>
-        <div class="downpart2" style="width:100%;">
-            <div class="partstyle3" style="background-color:red;">
-                <div class="leftside">
-                    <span>결재란 칸수 지정</span> <input type="number" min="0" max="8"/>
-                </div>
-                <div class="rightside">
-                    <label class="container">
-                        <input type="checkbox">전결 범위 지정
-                        <input class="num" type="number"/> &nbsp;~&nbsp; <input class="num" type="number"/>
-                        <!--<span class="checkmark"></span>-->
-                    </label>
-                </div>
-                <div class="downside">
-                    <span style="margin-bottom:5px;">결재라인을 입력해 주세요. (최대 8개)</span>
-                    <table id="table">
-                        <tr style="height:30%;">
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-
-                        <tr style="height:70%;">
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-
-                    </table>
-                    <input type="submit" value="취소" tabindex="3" style="cursor:pointer;width:70px;height:25px;float:right;margin-top:5px;margin-right:32px;">
-                    <input type="submit" value="확인" tabindex="3" style="cursor:pointer;width:70px;height:25px;float:right;margin-top:5px;margin-right:10px;">
-                </div>
-
+    <div id="modal2">
+        <div class="modal-content2">
+            <div class="upperbar" style="width:100%;">
+                <span style="width:50%; text-align:left; float:left;margin-left:10px;">결재란 등록</span>
+                <span id="closebtn3"class="pop_bt" style="cursor:pointer;float:right;margin-right:10px;">X</span>
             </div>
-        </div>
+            <div class="downpart2" style="width:100%;">
+                <div class="partstyle3" style="background-color:red;">
+                    <div class="leftside">
+                        <span>결재란 칸수 지정</span> <input id="sign" type="number" min="0" max="8"/>
+                    </div>
+                    <div class="rightside">
+                        <label class="container">
+                            <input type="checkbox">전결 범위 지정
+                            <input class="num" type="number"/> &nbsp;~&nbsp; <input class="num" type="number"/>
+                            <!--<span class="checkmark"></span>-->
+                        </label>
+                    </div>
+                    <div class="downside">
+                        <span style="margin-bottom:5px;">결재라인을 입력해 주세요. (최대 8개)</span>
+                        <table id="modaltable">
+                            <tr id="row1" style="height:30%;">
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
 
+                            <tr id="row2" style="height:70%;">
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+
+                        </table>
+                        <input id="closebtn4" type="submit" value="취소" tabindex="3" style="cursor:pointer;width:70px;height:25px;float:right;margin-top:5px;margin-right:32px;">
+                        <input type="submit" value="확인" tabindex="3" style="cursor:pointer;width:70px;height:25px;float:right;margin-top:5px;margin-right:10px;">
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
     </div>
-</div>
 </div>
 </body>
 </html>
