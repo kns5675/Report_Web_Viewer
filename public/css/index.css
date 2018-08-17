@@ -8,6 +8,7 @@ body{
 
 #header {
     background-color: #00B7FF;
+    z-index: 999;
 }
 
 .jbFixed {
