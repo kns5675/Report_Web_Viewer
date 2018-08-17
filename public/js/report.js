@@ -22,8 +22,6 @@ function makeReportTemplate(data) {
 
  function makeReport(report) {
 
-    console.log(report);
-
     setPage(report);
     setReport(report);
 
@@ -41,12 +39,46 @@ function setReport(report){
     setReportDirection(report);
     $('#report' + reportNum).css('background-color', 'blue');
     $('#report' + reportNum).css('border', 'black');
-    $('#report' + reportNum).css('margin-top', report.margin.x+'px');
-    $('#report' + reportNum).css('margin-bottom', report.margin.y+'px');
-    $('#report' + reportNum).css('margin-left', report.margin.height+'px');
-    $('#report' + reportNum).css('margin-right', report.margin.width+'px');
+    $('#report' + reportNum).css('margin-top', 38 + 'px');
+    $('#report' + reportNum).css('margin-bottom', 38 + 'px');
+    $('#report' + reportNum).css('margin-left', 38 + 'px');
+    $('#report' + reportNum).css('margin-right', 38 + 'px');
+
+    makeTableByData();
 
     reportNum++;
+}
+/******************************************************************
+ 기능 : 테이블안에 데이터를 바인딩함
+ author : powerku
+ ******************************************************************/
+function makeTableByData() {
+
+    let html = '<table><thead>';
+    var fieldLength = Object.keys(dt2.DataSetName.dt[0]).length;
+
+    Object.keys(dt2.DataSetName.dt[0]).forEach(function(field){ //Header
+        if(field == 'DRDSEQ'){
+            html += '<th clsss = "DRDSEQ">' + field + '</th>';
+        }else{
+            html += '<th>' + field + '</th>';
+        }
+
+    });
+    html  +='</thead><tbody>';
+    dt2.DataSetName.dt.forEach(function (data, i) { //Body
+        html += '<tr>';
+        for(key in data){
+            html+='<td>' + data[key]._text + '</td>';
+        }
+
+        + '</tr>';
+    });
+
+    html +='</tbody></table>';
+
+    $('#test').html(html);
+    $('td:nth-child(' + fieldLength + '),th:nth-child('+fieldLength+')').hide(); //DRDSEQ 컬럼 숨기기
 }
 
 /******************************************************************
@@ -56,11 +88,11 @@ function setReport(report){
 function setReportDirection(report){
 
     if(report.paperDirection){
-        $('#report' + reportNum).css('width', report.rectangle.width);
-        $('#report' + reportNum).css('height', report.rectangle.height);
+        $('#report' + reportNum).css('width', 722+'px');
+        $('#report' + reportNum).css('height', 1052.6 + 'px');
     }else{
-        $('#report' + reportNum).css('height', report.rectangle.width);
-        $('#report' + reportNum).css('width', report.rectangle.height);
+        $('#report' + reportNum).css('width', 1052.6 + 'px');
+        $('#report' + reportNum).css('height', 722+'px');
 
     }
 
@@ -71,13 +103,14 @@ function setReportDirection(report){
  author : powerku
  ******************************************************************/
 function setPage(report) {
-    $('#reportTemplate').append('<div id="page' + pageNum + '" class="page"></div>');
+
+    var paperType = report.paperType;
+
+    $('#reportTemplate').append('<div id="page' + pageNum + '" class="page paperType-' + paperType + '"></div>');
 
     setPageDirection(report);
     $('#page' + pageNum).css('background-color', 'yellow');
     $('#page' + pageNum).css('border', 'solid blue');
-
-
 
 }
 
@@ -87,11 +120,11 @@ function setPage(report) {
  ******************************************************************/
 function setPageDirection(report){
     if(report.paperDirection){
-        $('#page' + pageNum).css('width', report.paperSize.width);
-        $('#page' + pageNum).css('height', report.paperSize.height);
+        $('#page' + pageNum).css('width', 798 + 'px');
+        $('#page' + pageNum).css('height', 1128.6 + 'px');
     }else{
-        $('#page' + pageNum).css('height', report.paperSize.width);
-        $('#page' + pageNum).css('width', report.paperSize.height);
+        $('#page' + pageNum).css('width', 1128.6 + 'px');
+        $('#page' + pageNum).css('height', 798 + 'px');
     }
 }
 
