@@ -44,7 +44,7 @@
           <li><a href="#">이미지 내보내기</a></li>
           <li><a href="#">PDF 내보내기</a></li>
           <li><a href="#">HTML 내보내기</a></li>
-          <li><a href="#">이미지 추가</a></li>
+          <li><a href="#" class="image_upload_button">이미지 추가</a></li>
           <li><a href="#">항목 선택</a></li>
       </ul>
     </li>
@@ -107,14 +107,15 @@
   <li><input type="button" value="HWP"></li>
   <li><input type="button" value="이미지"></li>
   <li><input type="button" value="HTML"></li>
-  <li><input type="button" value="이미지 추가"></li>
+  <li><input type="button" value="이미지 추가" class="image_upload_button"></li>
   <li><input type="button" value="항목 선택"></li>
 </ul>
-
 </div>
   </body>
 <script>
     var pagecount = $(".page").length;
+    var image_src = "<%= request.getParameter('image_insert')%>";
+    console.log("imagesrc : ",image_src);
     $("#TotalPage").text(pagecount+"(TotalPage)"); //totalpage
 
     $(document).ready(function () {
@@ -124,6 +125,8 @@
         NextPage();
         LastPage(pagecount);
         HeaderFixAndPageScroll(pagecount);
+        console.log("test");
+        image_upload();
     });
 
 </script>

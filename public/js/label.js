@@ -6,6 +6,11 @@
 // DetailWhere, ParameterName, SummaryType, QRCodeEncodingType, BarcodeType, PriorLabel, GroupingRule, ImageSizeType
 
 // console.log(data.ReportTemplate.ReportList.anyType.Layers.anyType[1].Bands.anyType[0].ControlList.anyType);
+
+/******************************************************************
+ 기능 : Label에 대한 공통 속성을 빼내서 객체를 만든다.
+ 만든이 : 안예솔
+ ******************************************************************/
 function Label(data){
     this.parentId = data.ParentID._text;
     this.id = data.Id._text;
@@ -74,65 +79,120 @@ function Label(data){
 }
 
 
-
+/******************************************************************
+ 기능 : DynamicTable(동적 테이블)과 FixedTable(고정 테이블)의 공통 속성을 빼내서 객체를 만든다.
+ 만든이 : 안예솔
+ ******************************************************************/
 function Table(data){ // ControlList 밑에 anyType이 ControlFixedTable, ControlDynamicTable인 애들
     this.parentId = data.ParentID._text;
     this.id = data.Id._text;
-    // x : (data.Rectangle.X === undefined ? 0 : data.Rectangle.X._text)
     this.rectangle = {
         x : (data.Rectangle.X === undefined ? 0 : data.Rectangle.X._text),
         y : (data.Rectangle.Y === undefined ? 0 : data.Rectangle.Y._text),
         width : data.Rectangle.Width._text,
         height : data.Rectangle.Height._text
     };
-
     this.name = data.Name._text;
+
     this.isShowAtColumnSelect = data.IsShowAtColumnSelect._text;
     this.isRepeatToPageBottom = data.IsRepeatToPageBottom._text;
     this.columnCount = data.ColumnCount._text;
     this.rowCount = data.RowCount._text;
-    this.relateTableList = data.RelateTableList._text;
-    this.forceAnnex = data.ForceAnnex._text;
-    this.minimumRowCount = data.MinimumRowCount._text;
-    this.fixRowCount = data.FixRowCount._text;
-    this.isAnnexMark = data.isAnnexMark._text;
+    this.relateTableList = data.RelateTableList === undefined ? 0 : data.RelateTableList._text;
+    this.forceAnnex = data.ForceAnnex === undefined ? 0 : data.ForceAnnex._text;
+    this.minimumRowCount = data.MinimumRowCount === undefined ? 0 : data.MinimumRowCount._text;
+    this.fixRowCount = data.FixRowCount === undefined ? 0 : data.FixRowCount._text;
+    this.isAnnexMark = data.isAnnexMark === undefined ? 0 : data.isAnnexMark._text;
 }
 
 
 
-// console.log(data.ReportTemplate.ReportList.anyType.Layers.anyType[1].Bands.anyType[0].ControlList.anyType.Labels.TableLabel);
-function FixedTableLabel(data){
-    Label.apply(this, arguments);
+/******************************************************************
+ 기능 : Table 객체를 상속 받는 FixedTable(고정 테이블)의 Label에 대한 객체를 만든다.
+ 만든이 : 안예솔
+ ******************************************************************/
+function FixedTableLabel(data, i){
+    Table.apply(this, arguments);
 
-    this.horizontalTextAlignment = tableLabelData.HorizontalTextAlignment._text; // 텍스트 수평 정렬
-    this.selected = tableLabelData.Selected._text; // 테이블 라벨에만 있는 것 같음
-    this.leftBorderColor = tableLabelData.LeftBorderColor._text; // 고정 테이블에만 있는 것 같음
-    this.rightBorderColor = tableLabelData.RightBorderColor._text; // 고정 테이블에만 있는 것 같음
-    this.topBorderColor = tableLabelData.TopBorderColor._text; // 고정 테이블에만 있는 것 같음
-    this.bottomBorderColor = tableLabelData.BottomBorderColor._text; // 고정 테이블에만 있는 것 같음
-    this.horizontalTextAlignment = tableLabelData.HorizontalTextAlignment._text;
+    var tableLabelData = data.Labels.TableLabel;
+
+    this._attributes = tableLabelData[i]._attributes["xsi:type"];
+    this.horizontalTextAlignment = tableLabelData[i].HorizontalTextAlignment._text; // 텍스트 수평 정렬
+    this.selected = tableLabelData[i].Selected._text; // 테이블 라벨에만 있는 것 같음
+    this.leftBorderColor = tableLabelData[i].LeftBorderColor._text; // 고정 테이블에만 있는 것 같음
+    this.rightBorderColor = tableLabelData[i].RightBorderColor._text; // 고정 테이블에만 있는 것 같음
+    this.topBorderColor = tableLabelData[i].TopBorderColor._text; // 고정 테이블에만 있는 것 같음
+    this.bottomBorderColor = tableLabelData[i].BottomBorderColor._text; // 고정 테이블에만 있는 것 같음
+    this.horizontalTextAlignment = tableLabelData[i].HorizontalTextAlignment._text;
 }
 
 
-// 헷갈린당 다시 보기!!!
-function DynamicTableLabel(data){
-    Label.apply(this, arguments);
+/******************************************************************
+ 기능 : Table 객체를 상속 받는 DynamicTable(동적 테이블)의 Label에 대한 객체를 만든다.
+ 만든이 : 안예솔
+ ******************************************************************/
+function DynamicTableLabel(data, i){
+    Table.apply(this, arguments);
 
-    this.selected = data.Selected._text; // 테이블 라벨에만 있는 것 같음
-    this.fieldName = data.FieldName === undefined ? 0 : data.FieldName._text; // 동적 테이블 밸류 라벨에만 있는 것 같음
+    var tableLabelData = data.Labels.TableLabel;
+    this._attributes = tableLabelData[i]._attributes["xsi:type"];
+    this.selected = tableLabelData[i].Selected._text; // 테이블 라벨에만 있는 것 같음
+    this.fieldName = tableLabelData[i].FieldName === undefined ? 0 : tableLabelData[i].FieldName._text; // 동적 테이블 밸류 라벨에만 있는 것 같음
 }
 
-
+/******************************************************************
+ 기능 : Label 객체를 상속 받는 SystemLabel(시스템 라벨)의 객체를 만든다.
+ 만든이 : 안예솔
+ ******************************************************************/
 function SystemLabel(data){
     Label.apply(this, arguments);
-
-    this.systemFieldName = data.SystemFieldName._text; // 시스템 필드 이름
+    this.systemFieldName = data.SystemFieldName === undefined ? 0 : data.SystemFieldName._text; // 시스템 필드 이름
 }
 
+/******************************************************************
+ 기능 : Label 객체를 상속 받는 SummaryLabel(요약 라벨)의 객체를 만든다.
+ 만든이 : 안예솔
+ ******************************************************************/
 function SummaryLabel(data){
     Label.apply(this, arguments);
 }
 
+/******************************************************************
+ 기능 : Label 객체를 상속 받는 DataLabel(데이터 라벨)의 객체를 만든다.
+ 만든이 : 안예솔
+ ******************************************************************/
 function DataLabel(data){
+    Label.apply(this, arguments);
+}
+
+/******************************************************************
+ 기능 : Label 객체를 상속 받는 NormalLabel(일반 라벨)의 객체를 만든다.
+ 만든이 : 안예솔
+ ******************************************************************/
+function NormalLabel(data){
+    Label.apply(this, arguments);
+}
+
+/******************************************************************
+ 기능 : Label 객체를 상속 받는 Expression(수식 라벨)의 객체를 만든다. (구현 보류)
+ 만든이 : 안예솔
+ ******************************************************************/
+function Expression(data){
+    Label.apply(this, arguments);
+}
+
+/******************************************************************
+ 기능 : Label 객체를 상속 받는 GroupLabel(그룹 라벨)의 객체를 만든다.
+ 만든이 : 안예솔
+ ******************************************************************/
+function GroupLabel(data){
+    Label.apply(this, arguments);
+}
+
+/******************************************************************
+ 기능 : Label 객체를 상속 받는 ParameterLabel(파라미터 라벨)의 객체를 만든다.
+ 만든이 : 안예솔
+ ******************************************************************/
+function ParameterLabel(data){
     Label.apply(this, arguments);
 }
