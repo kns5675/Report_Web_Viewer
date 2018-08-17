@@ -22,10 +22,57 @@ function makeReportTemplate(data) {
 
  function makeReport(report) {
 
+     console.log(report);
+
     setPage(report);
+    setBackGroundLayer(report);
+    setForeGroundLayer(report);
     setReport(report);
 
     pageNum++;
+}
+
+function setBackGroundLayer(report) {
+    $(('#page' + pageNum)).append('<div id="backGroundLayer' + pageNum + '"class = backGroundLayer></div>');
+
+    console.log(report);
+    console.log(report.layers.backGroundLayer.bands[0]);
+
+    setBackGroundLayerDirection(report);
+
+}
+
+function setBackGroundLayerDirection(report){
+
+    if(report.paperDirection){
+        $('#backGroundLayer' + pageNum).css('width', 722+'px');
+        $('#backGroundLayer' + pageNum).css('height', 1052.6 + 'px');
+    }else{
+        $('#backGroundLayer' + pageNum).css('width', 1052.6 + 'px');
+        $('#backGroundLayer' + pageNum).css('height', 722+'px');
+    }
+
+}
+
+function setForeGroundLayer(report){
+    $(('#page' + pageNum)).append('<div id="foreGroundLayer' + pageNum + '"class = foreGroundLayer></div>');
+
+    setForeGroundLayerDirection(report);
+
+}
+
+function setForeGroundLayerDirection(report){
+
+    if(report.paperDirection){
+        $('#foreGroundLayer' + pageNum).css('width', 200+'px');
+        // $('#foreGroundLayer' + pageNum).css('width', 722+'px');
+        // $('#foreGroundLayer' + pageNum).css('height', 1052.6 + 'px');
+        $('#foreGroundLayer' + pageNum).css('height', 200 + 'px');
+    }else{
+        $('#foreGroundLayer' + pageNum).css('width', 1052.6 + 'px');
+        $('#foreGroundLayer' + pageNum).css('height', 722+'px');
+    }
+
 }
 
 /******************************************************************
@@ -33,16 +80,11 @@ function makeReportTemplate(data) {
  author : powerku
  ******************************************************************/
 function setReport(report){
-    $(('#page' + pageNum)).append('<div id="report' + reportNum + '"class = report' + reportNum + '></div>');
+    $(('#page' + pageNum)).append('<div id="report' + reportNum + '"class = report report' + reportNum + '></div>');
 
 
     setReportDirection(report);
-    $('#report' + reportNum).css('background-color', 'blue');
     $('#report' + reportNum).css('border', 'black');
-    $('#report' + reportNum).css('margin-top', 38 + 'px');
-    $('#report' + reportNum).css('margin-bottom', 38 + 'px');
-    $('#report' + reportNum).css('margin-left', 38 + 'px');
-    $('#report' + reportNum).css('margin-right', 38 + 'px');
 
     makeTableByData();
 
@@ -90,8 +132,10 @@ function makeTableByData() {
 function setReportDirection(report){
 
     if(report.paperDirection){
-        $('#report' + reportNum).css('width', 722+'px');
-        $('#report' + reportNum).css('height', 1052.6 + 'px');
+        $('#report' + reportNum).css('width', 400+'px');
+        // $('#report' + reportNum).css('width', 722+'px');
+        // $('#report' + reportNum).css('height', 1052.6 + 'px');
+        $('#report' + reportNum).css('height', 400 + 'px');
     }else{
         $('#report' + reportNum).css('width', 1052.6 + 'px');
         $('#report' + reportNum).css('height', 722+'px');
@@ -111,7 +155,6 @@ function setPage(report) {
     $('#reportTemplate').append('<div id="page' + pageNum + '" class="page paperType-' + paperType + '"></div>');
 
     setPageDirection(report);
-    $('#page' + pageNum).css('background-color', 'yellow');
     $('#page' + pageNum).css('border', 'solid blue');
 
 }
