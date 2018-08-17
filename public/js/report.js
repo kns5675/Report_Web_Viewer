@@ -55,9 +55,9 @@ function setReport(report){
 function makeTableByData() {
 
     let html = '<table><thead>';
-    var fieldLength = Object.keys(dt2.DataSetName.dt[0]).length;
+    var fieldLength = Object.keys(dataTable.DataSetName.dt[0]).length;
 
-    Object.keys(dt2.DataSetName.dt[0]).forEach(function(field){ //Header
+    Object.keys(dataTable.DataSetName.dt[0]).forEach(function(field){ //Header
         if(field == 'DRDSEQ'){
             html += '<th clsss = "DRDSEQ">' + field + '</th>';
         }else{
@@ -66,7 +66,7 @@ function makeTableByData() {
 
     });
     html  +='</thead><tbody>';
-    dt2.DataSetName.dt.forEach(function (data, i) { //Body
+    dataTable.DataSetName.dt.forEach(function (data) { //Body
         html += '<tr>';
         for(key in data){
             html+='<td>' + data[key]._text + '</td>';

@@ -7,8 +7,8 @@ var xml = fs.readFileSync('xml/Sample01.xml', 'utf-8');
 // var inspect = require('util').inspect;
 var json = convert.xml2json(xml, {compact : true});
 
-const tempData = fs.readFileSync('xml/TempData.xml', 'utf-8');
-const tempData_json = JSON.parse(convert.xml2json(tempData, {compact : true}));
+var tempData = fs.readFileSync('xml/TempData.xml', 'utf-8');
+var dataTable = convert.xml2json(tempData, {compact : true});
 
 /* GET home page. */
 router.get('/', function(req, res) {
@@ -24,10 +24,9 @@ router.get('/data', function(req, res) {
         layout: false,
         data : json,
         // dataTableName : dataTableName,
-        dt: tempData_json.DataSetName.dt
+        dataTable: dataTable
     });
 });
-
 
 module.exports = router;
 

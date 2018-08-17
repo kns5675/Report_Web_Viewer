@@ -7,9 +7,7 @@
     <meta name="description" content="test document">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>Document</title>
-    <link rel="stylesheet" href="css/main.css"/>
-    <link rel="stylesheet" href="css/index.css"/>
-    <link rel="stylesheet" href="css/print.css"/>
+
     <style type="text/css">
 
         #header {
@@ -33,13 +31,17 @@
     <script src="js/print.js"></script>
     <script src="js/viewer.js"></script>
     <script src="js/index.js"></script>
-<script>
+    <script src="js/createBand.js"></script>
+    <link rel="stylesheet" href="css/main.css"/>
+    <link rel="stylesheet" href="css/index.css"/>
+    <link rel="stylesheet" href="css/print.css"/>
+    <script>
+        var data = <%-data%>;  //xml json 데이터
+        var dataTable = <%- dataTable %> //임시 데이터 dataTable
     $(document).ready(function(){
         $("#header").load("/include/header.ejs");
         $("#myModal").load("/include/modal.ejs");
 
-
-        var data = <%-data%>;
         var jbOffset = $( '#header' ).offset();
         console.log("jbOffset : ",jbOffset);
         $( window ).scroll( function() {
@@ -50,9 +52,6 @@
                 $( '#header' ).removeClass( 'jbFixed' );
             }
         });
-
-        var data = <%- data %>;
-        console.log(data);
 
         var jbOffset = $( '#header' ).offset();
         console.log("jbOffset : ",jbOffset);
@@ -68,29 +67,15 @@
         makeReportTemplate(data);
 
     });
-</script>
+    </script>
+
 </head>
 <body>
 <div id="header"></div>
 <div id="myModal" class="modal"></div>
-<div id="content">
 
-    <table border="1" style="width:450px;">
-        <colgroup style="background-color:red;">
-            <col style="width:50%;" />
-            <col style="width:50%;" />
-        </colgroup>
-        <tbody>
-        <tr>
-            <td>#1</td>
-            <td>#2</td>
-        </tr>
-        <tr>
-            <td>#3</td>
-            <td>#4</td>
-        </tr>
-        </tbody>
-    </table>
+<div id="test">
+
 </div>
 
 <div id="reportTemplate"></div>
