@@ -19,15 +19,4 @@ router.get('/', function(req, res) {
     });
 });
 
-router.get('/data', function(req, res) {
-
-    res.render('index', {
-        layout: false,
-        data : json,
-        // dataTableName : dataTableName,
-        dataTable: dataTable
-    });
-});
-
-
 module.exports = router;
