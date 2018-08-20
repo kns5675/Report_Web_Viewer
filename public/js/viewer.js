@@ -144,14 +144,72 @@ function zoomOut(){
     }
 }
 /******************************************************************
- 기능 : 모달창의 닫기 버튼
+ 기능 : 모달창 닫기 - 데이터값 초기화 밑 기본값 세팅 처리
  author : 하지연
  ******************************************************************/
 function close_pop() {
     $('#myModal').hide();
+
+    //데이터값 초기화
+    $("#copyratio").val("100");
+    $("input:radio[name='copyornot']:radio[value='인쇄함']").prop("checked",false);
+    $("input:radio[name='copyornot']:radio[value='인쇄안함']").prop("checked",true);
+
+    $("input:radio[name='titleposition']:radio[value='타이틀상단']").prop("checked",true);
+    $("input:radio[name='titleposition']:radio[value='타이틀하단']").prop("checked",false);
+
+    $("input:radio[name='fontform']:radio[value='굴림체']").prop("checked",true);
+    $("input:radio[name='fontform']:radio[value='바탕체']").prop("checked",false);
+    $("input:radio[name='fontform']:radio[value='돋움체']").prop("checked",false);
+
+    $("input:radio[name='fontcontent']:radio[value='굴림체']").prop("checked",true);
+    $("input:radio[name='fontcontent']:radio[value='바탕체']").prop("checked",false);
+    $("input:radio[name='fontcontent']:radio[value='돋움체']").prop("checked",false);
+
+    $("input:checkbox[name='fontandtilt']").prop("checked",false);
+
+    $("#pagesizeoptions").val("A4").attr("selected","selected");
+
+    $("input:radio[name='direction']:radio[value='세로']").prop("checked",true);
+    $("input:radio[name='direction']:radio[value='가로']").prop("checked",false);
+
+    $("input:radio[name='copydate']:radio[value='인쇄함']").prop("checked",false);
+    $("input:radio[name='copydate']:radio[value='인쇄안함']").prop("checked",true);
+
+    $("input:radio[name='copycount']:radio[value='인쇄함']").prop("checked",false);
+    $("input:radio[name='copycount']:radio[value='인쇄안함']").prop("checked",true);
+
+    $("input:checkbox[name='extra']").prop("checked",false);
+
+    $("#extraheadoptions").val("상단좌측").attr("selected","selected");
+    $("#extrahead").val('');
+
+    $("#extratailoptions").val("하단좌측").attr("selected","selected");
+    $("#extratail").val('');
+
+
+
+
+
+
+    $("#copyOptions").val("--인쇄--").attr("selected","selected");
+};
+function close_pop1() {
+    //얜 값을 넘겨야함
+    $('#myModal').hide();
+    $("#copyratio").val("100");
     $("#copyOptions").val("--인쇄--").attr("selected","selected");
 };
 function close_pop2(){
+    //데이터 초기화
+    $("#sign").val('');
+    $("input:checkbox[name='rangesetting']").prop("checked",false);
+    $("#range1").val('');
+    $("#range2").val('');
+
+    $('#modalcase').hide();
+}
+function close_pop3(){
     $('#modalcase').hide();
 }
 
