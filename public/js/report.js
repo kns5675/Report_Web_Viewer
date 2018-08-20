@@ -197,7 +197,7 @@ function setReportDirection(report){
         $('#report' + reportNum).css('width', report.rectangle.height + 'px');
         $('#report' + reportNum).css('height', report.rectangle.width+'px');
     }
-
+    $('#report' + reportNum).css('text-align', 'center'); // 추가 : 안예솔
 }
 
 /******************************************************************

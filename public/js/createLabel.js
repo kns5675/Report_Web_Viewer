@@ -1,4 +1,4 @@
-document.write("<script type='text/javascript' src='/JS/label.js' ><" + "/script>");
+document.write("<script type='text/javascript' src='/js/label.js' ><" + "/script>");
 var BandBackGround;
 var BandPageHeader;
 var BandTitle; // 밴드 추가 >> BandDummyHeader, BandDummyFooter
@@ -26,175 +26,29 @@ var normalLabelNum = 1;
 var expressionNum = 1;
 var groupLabelNum = 1;
 var parameterLabelNum = 1;
-
-/******************************************************************
- 기능 : 어떤 밴드인지 판단하는 함수를 만든다.
- 만든이 : 안예솔
- ******************************************************************/
-function judgementBand(Layers) {
-    for (var k = 0; k < Layers.length; k++) {
-        if (Array.isArray(Layers[k].Bands.anyType)) { // 배열이면 true 아니면 false
-            for (var m = 0; m < Layers[k].Bands.anyType.length; m++) {
-                switch (Layers[k].Bands.anyType[m]._attributes["xsi:type"]) {
-                    case "BandBackGround" :
-                        BandBackGround = Layers[k].Bands.anyType[m];
-                        judgementControlList(BandBackGround);
-                        break;
-                    case "BandPageHeader" :
-                        BandPageHeader = Layers[k].Bands.anyType[m];
-                        judgementControlList(BandPageHeader);
-                        break;
-                    case "BandTitle" :
-                        BandTitle = Layers[k].Bands.anyType[m];
-                        judgementChildBand(BandTitle);
-                        judgementControlList(BandTitle);
-                        break;
-                    case "BandData" :
-                        BandData = Layers[k].Bands.anyType[m];
-                        judgementChildBand(BandData);
-                        judgementControlList(BandData);
-                        break;
-                    case "BandPageFooter" :
-                        BandPageFooter = Layers[k].Bands.anyType[m];
-                        judgementControlList(BandPageFooter);
-                        break;
-                    case "BandForeGround" :
-                        BandForeGround = Layers[k].Bands.anyType[m];
-                        judgementControlList(BandForeGround);
-                        break;
-                }
-            }
-        } else {
-            switch (Layers[k].Bands.anyType._attributes["xsi:type"]) {
-                case "BandBackGround" :
-                    BandBackGround = Layers[k].Bands.anyType;
-                    judgementControlList(BandBackGround);
-                    break;
-                case "BandPageHeader" :
-                    BandPageHeader = Layers[k].Bands.anyType;
-                    judgementControlList(BandPageHeader);
-                    break;
-                case "BandTitle" :
-                    BandTitle = Layers[k].Bands.anyType;
-                    judgementChildBand(BandTitle);
-                    judgementControlList(BandTitle);
-                    break;
-                case "BandData" :
-                    BandData = Layers[k].Bands.anyType;
-                    judgementControlList(BandData);
-                    break;
-                case "BandPageFooter" :
-                    BandPageFooter = Layers[k].Bands.anyType;
-                    judgementControlList(BandPageFooter);
-                    break;
-                case "BandForeGround" :
-                    BandForeGround = Layers[k].Bands.anyType;
-                    judgementControlList(BandForeGround);
-                    break;
-            }
-        }
-    }
-}
-
-/******************************************************************
- 기능 : 하위 밴드의 유무 및 어떤 하위 밴드인지 판단하는 함수를 만든다.
- 만든이 : 안예솔
- ******************************************************************/
-function judgementChildBand(data) {
-    var childBandName;
-
-    if (!(data.ChildBands.anyType === undefined)) {
-    }
-    if (!(data.ChildHeaderBands.anyType === undefined)) {
-        if (Array.isArray(data.ChildHeaderBands.anyType)) {
-            for (var i = 0; i < data.ChildHeaderBands.anyType.length; i++) {
-                childBandName = data.ChildHeaderBands.anyType[i]._attributes["xsi:type"];
-
-                switch (childBandName) {
-                    case "BandDataHeader" :
-                        BandDataHeader = data.ChildHeaderBands.anyType[i];
-                        judgementControlList(BandDataHeader);
-                        break;
-                    case "BandDummyHeader" :
-                        BandDummyHeader = data.ChildHeaderBands.anyType[i];
-                        judgementControlList(BandDummyHeader);
-                        break;
-                    case "BandGroupHeader" :
-                        BandGroupHeader = data.ChildHeaderBands.anyType[i];
-                        judgementControlList(BandGroupHeader);
-                        break;
-                }
-            }
-        } else {
-            childBandName = data.ChildHeaderBands.anyType._attributes["xsi:type"];
-            switch (childBandName) {
-                case "BandDataHeader" :
-                    BandDataHeader = data.ChildHeaderBands.anyType;
-                    judgementControlList(BandDataHeader);
-                    break;
-                case "BandDummyHeader" :
-                    BandDummyHeader = data.ChildHeaderBands.anyType;
-                    judgementControlList(BandDummyHeader);
-                    break;
-                case "BandGroupHeader" :
-                    BandGroupHeader = data.ChildHeaderBands.anyType;
-                    judgementControlList(BandGroupHeader);
-                    break;
-            }
-        }
-    }
-    if (!(data.ChildFooterBands.anyType == undefined)) {
-        if (Array.isArray(data.ChildFooterBands.anyType)) {
-            for (var i = 0; i < data.ChildFooterBands.anyType.length; i++) {
-                childBandName = data.ChildFooterBands.anyType[i]._attributes["xsi:type"];
-                switch (childBandName) {
-                    case "BandDataFooter" :
-                        BandDataFooter = data.ChildFooterBands.anyType[i];
-                        judgementControlList(BandDataFooter);
-                        break;
-                    case "BandDummyFooter" :
-                        BandDummyFooter = data.ChildFooterBands.anyType[i];
-                        judgementControlList(BandDummyFooter);
-                        break;
-                    case "BandGroupFooter" :
-                        BandGroupFooter = data.ChildFooterBands.anyType[i];
-                        judgementControlList(BandGroupFooter);
-                        break;
-                }
-            }
-        } else {
-            childBandName = data.ChildFooterBands.anyType._attributes["xsi:type"];
-            switch (childBandName) {
-                case "BandDataFooter" :
-                    BandDataFooter = data.ChildFooterBands.anyType;
-                    judgementControlList(BandDataFooter);
-                    break;
-                case "BandDummyFooter" :
-                    BandDummyFooter = data.ChildFooterBands.anyType;
-                    judgementControlList(BandDummyFooter);
-                    break;
-                case "BandGroupFooter" :
-                    BandGroupFooter = data.ChildFooterBands.anyType;
-                    judgementControlList(BandGroupFooter);
-                    break;
-            }
-        }
-    }
-}
+var dateNum = 1;
+var timeNum = 1;
+var dateTimeNum = 1;
+var pageNumberNum = 1;
+var pageNumTotalPageNum = 1;
+var totalPageNum = 1;
 
 /******************************************************************
  기능 : ControlList의 유무를 판단하는 함수를 만든다.
  만든이 : 안예솔
  ******************************************************************/
-function judgementControlList(data) {
-    if (!(data.ControlList.anyType === undefined)) { // ControlList태그 안에 뭔가가 있을 때
-        var controlList = data.ControlList.anyType;
+function judgementControlList(data, divId) {
+    if (!(data.controlList.anyType === undefined)) { // ControlList태그 안에 뭔가가 있을 때
+        var controlList = data.controlList.anyType;
+
         if (Array.isArray(controlList)) {
-            controlList.forEach(function (controlList) {
-                judgementLabel(controlList);
+            controlList.forEach(function (list) {
+                console.log(list);
+                judgementLabel(list, divId);
             });
         } else {
-            judgementLabel(controlList);
+            console.log(data);
+            judgementLabel(controlList, divId);
         }
     } else {
         console.log('ControlList none');
@@ -205,7 +59,8 @@ function judgementControlList(data) {
  기능 : 어떤 Label인지를 판단하여 객체를 생성해주는 함수를 만든다.
  만든이 : 안예솔
  ******************************************************************/
-function judgementLabel(data) {
+function judgementLabel(data, divId) {
+    console.log(data);
     var attr = data._attributes["xsi:type"];
     if (attr == "ControlDynamicTable") { // 동적 테이블
         var controlDynamicTable = new Table(data);
@@ -214,11 +69,12 @@ function judgementLabel(data) {
         var tableLabels = data.Labels.TableLabel;
 
         for (var i = 0; i < tableLabels.length; i++) {
-            var tableLabel = new DynamicTableLabel(data, i);
+            console.log(tableLabels[i]);
+            var tableLabel = new DynamicTableLabel(tableLabels[i], i);
+            console.log(tableLabel);
             tableLabelList.push(tableLabel);
         }
-
-        drawingDynamicTable(controlDynamicTable, tableLabelList);
+        drawingDynamicTable(controlDynamicTable, tableLabelList, divId);
 
     } else if (attr == "ControlFixedTable") { // 고정 테이블
         var controlFixedTable = new Table(data);
@@ -226,49 +82,50 @@ function judgementLabel(data) {
 
         var tableLabels = data.Labels.TableLabel;
         for (var i = 0; i < tableLabels.length; i++) {
-            var tableLabel = new FixedTableLabel(data, i);
+            var tableLabel = new FixedTableLabel(tableLabels, i);
             tableLabelList.push(tableLabel);
         }
-        drawingFixedTable(controlFixedTable, tableLabelList);
+        drawingFixedTable(controlFixedTable, tableLabelList, divId);
 
     } else if (attr == "ControlLabel") {
+        console.log(attr);
         if (!(data.DataType === undefined)) {
             switch (data.DataType._text) {
                 case "SummaryLabel" : // 요약 라벨
                     var label = new SummaryLabel(data);
                     labelList.push(label);
-                    drawingSummaryLabel(label);
+                    drawingSummaryLabel(label, divId);
                     break;
                 case "DataLabel" : // 데이터 라벨
                     var label = new DataLabel(data);
                     labelList.push(label);
-                    drawingDataLabel(label);
+                    drawingDataLabel(label, divId);
                     break;
                 case "Expression" : // 수식 라벨
                     var label = new Expression(data);
                     labelList.push(label);
-                    drawingExpression(label);
+                    drawingExpression(label, divId);
                     break;
                 case "GroupLabel" : // 그룹 라벨
                     var label = new GroupLabel(data);
                     labelList.push(label);
-                    drawingGroupLabel(label);
+                    drawingGroupLabel(label, divId);
                     break;
                 case "ParameterLabel" : // 파라미터 라벨
                     var label = new ParameterLabel(data);
                     labelList.push(label);
-                    drawingParameterLabel(label);
+                    drawingParameterLabel(label, divId);
                     break;
                 case "SystemLabel" : // 시스템 라벨
                     var label = new SystemLabel(data);
                     labelList.push(label);
-                    drawingSystemLabel(label);
+                    drawingSystemLabel(label, divId);
                     break;
             }
         } else {
-            var label = new Label(data);
+            var label = new NormalLabel(data);
             labelList.push(label);
-            drawingNormalLabel(label);
+            drawingNormalLabel(label, divId);
         }
     }
 }
@@ -278,15 +135,15 @@ function judgementLabel(data) {
  부모를 기준으로 자식의 위치를 잡을 수 있다.
  ******************************************************************/
 
-/* 객체를 만들 때 데이터 바인딩도 해보아야한당 */
+/* 밴드도 파라미터로 받아와야함 */
 /******************************************************************
  기능 : DynamicTable(동적 테이블)을 화면에 그려주는 함수를 만든다.
  만든이 : 안예솔
  ******************************************************************/
-function drawingDynamicTable(table, tableLabel) {
-    $('#report').append('<div id="Table"></div>');
+function drawingDynamicTable(table, tableLabel, divId) {
+    $('#' + divId).append('<div id="Table"></div>');
     $('#Table').append('<table id="dynamicTable"></table>');
-    $('#report').css('position', 'relative');
+    $('#' + divId).css('position', 'relative');
     $('#Table').css('position', 'absolute');
 
     $('#Table').css('left', table.rectangle.x + 'px');
@@ -295,46 +152,35 @@ function drawingDynamicTable(table, tableLabel) {
     $('#dynamicTable').css('width', table.rectangle.width + 'px');
     $('#dynamicTable').css('height', table.rectangle.height + 'px');
 
-
-/*     let html = '<table>'
-         +'<thead>'
-         +'<th><%= Object.keys(dt[0])[0]%></th>'
-         +'<th><%= Object.keys(dt[0])[1]%></th>'
-         +'<th><%= Object.keys(dt[0])[2]%></th>'
-        +'<th><%= Object.keys(dt[0])[3]%></th>'
-        +'<th><%= Object.keys(dt[0])[4]%></th>'
-        +'</thead>'
-        +'<tbody>'
-        <% dt.forEach(function(data){ %>
-            +'<tr>'
-            +'<td><%= data.이름._text %> </td>'
-            +'<td><%= data.품명._text %> </td>'
-            +'<td><%= data.수량._text %> </td>'
-            +'<td><%= data.단가._text %> </td>'
-            +'<td><%= data.금액._text %> </td>'
-            +'</tr>'
-            <% })%>
-        +'</tbody>'
-        +'</table>';*/
-
-    $('#dynamicTable').html(html);
-
     $('#dynamicTable').append('<tr id = "dynamicTitleLabel"></tr>');
     $('#dynamicTable').append('<tr id = "dynamicValueLabel"></tr>');
 
     if (Array.isArray(tableLabel)) {
-        tableLabel.forEach(function (tableLabel, i) {
+        tableLabel.forEach(function (tableLabel) {
             switch (tableLabel._attributes) {
                 case "DynamicTableTitleLabel" :
-                    $('#dynamicTitleLabel').append('<th>a</th>');
-                    $('#dynamicTitleLabel').css('width', tableLabel.rectangle.width);
-                    $('#dynamicTitleLabel').css('height', tableLabel.rectangle.height);
-                    $('th').css('border', '1px solid black');
+                    var temp = Object.keys(dataTable.DataSetName.dt[0]);
+                    for(var i = 0; i < temp.length; i++){
+                        // console.log(tableLabel);
+                        if(tableLabel.text == temp[i]){
+                            $('#dynamicTitleLabel').append('<th id = "' + temp[i] + '"></th>');
+                            $('#dynamicTitleLabel').css('width', tableLabel.rectangle.width);
+                            $('#dynamicTitleLabel').css('height', tableLabel.rectangle.height);
+                            $('#dynamicTitleLabel').css('font-size', tableLabel.fontSize);
+                            $('#dynamicTitleLabel').css('font-family', tableLabel.fontFamily);
+                            $('#dynamicTitleLabel').css('font-weight', tableLabel.fontStyle);
+                            $('th').css('border', '1px solid black');
+                            $('#' + temp[i]).append(temp[i]);
+                        }
+                    }
                     break;
                 case "DynamicTableValueLabel" :
                     $('#dynamicValueLabel').append('<td>a</td>');
                     $('#dynamicValueLabel').css('width', tableLabel.rectangle.width);
                     $('#dynamicValueLabel').css('height', tableLabel.rectangle.height);
+                    $('#dynamicValueLabel').css('font-size', tableLabel.fontSize);
+                    $('#dynamicValueLabel').css('font-family', tableLabel.fontFamily);
+                    $('#dynamicValueLabel').css('font-weight', tableLabel.fontStyle);
                     $('td').css('border', '1px solid black');
                     break;
             }
@@ -350,8 +196,11 @@ function drawingDynamicTable(table, tableLabel) {
  기능 : FixedTable(고정 테이블)을 화면에 그려주는 함수를 만든다.
  만든이 : 안예솔
  ******************************************************************/
-function drawingFixedTable(table, tableLabel) {
-    $('#report').append('<table id="fixedTable"></table>');
+function drawingFixedTable(table, tableLabel, divId) {
+    $('#' + divId).append('<div id="Table"></div>');
+    $('#Table').append('<table id="fixedTable"></table>');
+    $('#' + divId).css('position', 'relative');
+    $('#Table').css('position', 'absolute');
 
     $('#fixedTable').css('width', table.rectangle.width);
     $('#fixedTable').css('height', table.rectangle.height);
@@ -369,11 +218,16 @@ function drawingFixedTable(table, tableLabel) {
                     $('#fixedTitleLabel').append('<th></th>');
                     $('#fixedTitleLabel').css('width', tableLabel.rectangle.width);
                     $('#fixedTitleLabel').css('height', tableLabel.rectangle.height);
+                    $('#fixedTitleLabel').css('font-size', tableLabel.fontSize);
+                    $('#fixedTitleLabel').css('font-family', tableLabel.fontFamily);
+                    $('#fixedTitleLabel').css('font-weigth', tableLabel.fontStyle);
                     break;
                 case "FixedTableValueLabel" :
                     $('#fixedValueLabel').append('<td></td>');
                     $('#fixedValueLabel').css('width', tableLabel.rectangle.width);
                     $('#fixedValueLabel').css('height', tableLabel.rectangle.height);
+                    $('#fixedValueLabel').css('font-family', tableLabel.fontFamily);
+                    $('#fixedValueLabel').css('font-weight', tableLabel.fontStyle);
                     break;
             }
         })
@@ -388,8 +242,9 @@ function drawingFixedTable(table, tableLabel) {
  기능 : SystemLabel(시스템 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 안예솔
  ******************************************************************/
-function drawingSystemLabel(data) {
-    $('#report').append('<div id = "SystemLabel' + systemLabelNum + '">SystemLabel</div>');
+function drawingSystemLabel(data, divId) {
+    $('#' + divId).css('position', 'relative');
+    $('#' + divId).append('<div id = "SystemLabel' + systemLabelNum + '"></div>');
 
     $('#SystemLabel' + systemLabelNum).css('width', data.rectangle.width);
     $('#SystemLabel' + systemLabelNum).css('height', data.rectangle.height);
@@ -398,16 +253,75 @@ function drawingSystemLabel(data) {
     $('#SystemLabel' + systemLabelNum).css('left', data.rectangle.x + 'px');
     $('#SystemLabel' + systemLabelNum).css('top', data.rectangle.y + 'px');
 
+    $('#SystemLabel' + systemLabelNum).css('text-align', 'center');
+
     $('#SystemLabel' + systemLabelNum).css('border', '1px solid black');
+    $('#SystemLabel' + systemLabelNum).css('font-size', data.fontSize);
+    $('#SystemLabel' + systemLabelNum).css('font-family', data.fontFamily);
+    $('#SystemLabel' + systemLabelNum).css('font-weight', data.fontStyle);
+
+    var date = new Date();
+    switch (data.systemFieldName) {
+        case 'Date' :
+            var year = date.getFullYear();
+            var month = plusZero(date.getMonth() + 1); // month는 0부터 시작
+            var day = plusZero(date.getDate());
+            var dateStr = year + '-' + month + '-' + day;
+
+            $('#SystemLabel' + systemLabelNum).append('<p id = "date' +  dateNum + '">' + dateStr + '</p>');
+
+            verticalCenter(('date' + dateNum), data);
+
+            dateNum++;
+            break;
+        case 'Date/time' :
+            var year = date.getFullYear();
+            var month = plusZero(date.getMonth() + 1); // month는 0부터 시작
+            var day = plusZero(date.getDate());
+            var hour = plusZero(date.getHours());
+            var min = plusZero(date.getMinutes());
+            var sec = plusZero(date.getSeconds());
+            var dateTimeStr = year + '-' + month + '-' + day + ' ' + hour + ':' + min + ':' + sec;
+
+            $('#SystemLabel' + systemLabelNum).append('<p id = "dateTime' +  dateTimeNum + '">' + dateTimeStr + '</p>');
+
+            verticalCenter(('dateTime' + dateTimeNum), data);
+
+            dateTimeNum++;
+            break;
+        case 'Time' :
+            var hour = plusZero(date.getHours());
+            var min = plusZero(date.getMinutes());
+            var sec = plusZero(date.getSeconds());
+            var timeStr = hour + ':' + min + ':' + sec;
+
+            $('#SystemLabel' + systemLabelNum).append('<p id = "time' +  timeNum + '">' + timeStr + '</p>');
+
+            verticalCenter(('time' + timeNum), data);
+
+            timeNum++;
+            break;
+        case 'PageNumber' : // 현재 페이지 번호
+            pageNumberNum++;
+            break;
+        case 'TotalPage' : // 전체 페이지 번호
+            totalPageNum++;
+            break;
+        case 'PageNumber / TotalPage' :  // 현재 페이지 번호 / 전체 페이지 정보
+            pageNumTotalPageNum++;
+            break;
+    }
     systemLabelNum++;
 }
+
 
 /******************************************************************
  기능 : SummaryLabel(요약 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 안예솔
  ******************************************************************/
-function drawingSummaryLabel(data) {
-    $('#report').append('<div id = "SummaryLabel' + summaryLabelNum + '">SummaryLabel</div>');
+function drawingSummaryLabel(data, divId) {
+    $('#' + divId).css('position', 'relative');
+    $('#' + divId).append('<div id = "SummaryLabel' + summaryLabelNum + '">SummaryLabel</div>');
 
     $('#SummaryLabel' + summaryLabelNum).css('width', data.rectangle.width);
     $('#SummaryLabel' + summaryLabelNum).css('height', data.rectangle.height);
@@ -417,6 +331,15 @@ function drawingSummaryLabel(data) {
     $('#SummaryLabel' + summaryLabelNum).css('top', data.rectangle.y + 'px');
 
     $('#SummaryLabel' + summaryLabelNum).css('border', '1px solid black');
+    $('#SummaryLabel' + summaryLabelNum).css('font-size', data.fontSize);
+    $('#SummaryLabel' + summaryLabelNum).css('font-family', data.fontFamily);
+    $('#SummaryLabel' + summaryLabelNum).css('font-weight', data.fontStyle);
+
+    $('#SummaryLabel' + summaryLabelNum).append('<p id = "PSummaryLabel' + summaryLabelNum + '"></p>');
+    //$('#PSummaryLabel' + summaryLabelNum).append(data.text);
+
+    verticalCenter(('SummaryLabel' + summaryLabelNum), data);
+
     summaryLabelNum++;
 }
 
@@ -424,8 +347,9 @@ function drawingSummaryLabel(data) {
  기능 : DataLabel(데이터 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 안예솔
  ******************************************************************/
-function drawingDataLabel(data) {
-    $('#report').append('<div id = "DataLabel' + dataLabelNum + '">DataLabel</div>');
+function drawingDataLabel(data, divId) {
+    $('#' + divId).css('position', 'relative');
+    $('#' + divId).append('<div id = "DataLabel' + dataLabelNum + '">DataLabel</div>');
 
     $('#DataLabel' + dataLabelNum).css('width', data.rectangle.width);
     $('#DataLabel' + dataLabelNum).css('height', data.rectangle.height);
@@ -435,6 +359,15 @@ function drawingDataLabel(data) {
     $('#DataLabel' + dataLabelNum).css('top', data.rectangle.y + 'px');
 
     $('#DataLabel' + dataLabelNum).css('border', '1px solid black');
+    $('#DataLabel' + dataLabelNum).css('font-size', data.fontSize);
+    $('#DataLabel' + dataLabelNum).css('font-family', data.fontFamily);
+    $('#DataLabel' + dataLabelNum).css('font-weight', data.fontStyle);
+
+    $('#DataLabel' + dataLabelNum).append('<p id = "PDataLabel' + dataLabelNum + '"></p>');
+    //$('#PDataLabel' + dataLabelNum).append(data.text);
+
+    verticalCenter(('DataLabel' + dataLabelNum), data);
+
     dataLabelNum++;
 }
 
@@ -442,8 +375,9 @@ function drawingDataLabel(data) {
  기능 : NormalLabel(일반 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 안예솔
  ******************************************************************/
-function drawingNormalLabel(data) {
-    $('#report').append('<div id = "NormalLabel' + normalLabelNum + '">NormalLabel</div>');
+function drawingNormalLabel(data, divId) {
+    $('#' + divId).css('position', 'relative');
+    $('#' + divId).append('<div id = "NormalLabel' + normalLabelNum + '"></div>');
 
     $('#NormalLabel' + normalLabelNum).css('width', data.rectangle.width);
     $('#NormalLabel' + normalLabelNum).css('height', data.rectangle.height);
@@ -453,6 +387,18 @@ function drawingNormalLabel(data) {
     $('#NormalLabel' + normalLabelNum).css('top', data.rectangle.y + 'px');
 
     $('#NormalLabel' + normalLabelNum).css('border', '1px solid black');
+    $('#NormalLabel' + normalLabelNum).css('font-size', data.fontSize);
+    $('#NormalLabel' + normalLabelNum).css('font-family', data.fontFamily);
+    $('#NormalLabel' + normalLabelNum).css('font-weight', data.fontStyle);
+    $('#NormalLabel' + normalLabelNum).css('white-space', 'nowrap');
+    $('#NormalLabel' + normalLabelNum).css('overflow', 'visible');
+
+    $('#NormalLabel' + normalLabelNum).append('<p id = "PNormalLabel' + normalLabelNum + '"></p>');
+    $('#PNormalLabel' + normalLabelNum).append(data.text);
+    $('#PNormalLabel' + normalLabelNum).css('display', 'block');
+
+    verticalCenter(('PNormalLabel' + normalLabelNum), data);
+
     normalLabelNum++;
 }
 
@@ -460,8 +406,9 @@ function drawingNormalLabel(data) {
  기능 : Expression(수식 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 안예솔
  ******************************************************************/
-function drawingExpression(data) {
-    $('#report').append('<div id = "Expression' + expressionNum + '">Expression</div>');
+function drawingExpression(data, divId) {
+    $('#' + divId).css('position', 'relative');
+    $('#' + divId).append('<div id = "Expression' + expressionNum + '">Expression</div>');
 
     $('#Expression' + expressionNum).css('width', data.rectangle.width);
     $('#Expression' + expressionNum).css('height', data.rectangle.height);
@@ -471,6 +418,15 @@ function drawingExpression(data) {
     $('#Expression' + expressionNum).css('top', data.rectangle.y + 'px');
 
     $('#Expression' + expressionNum).css('border', '1px solid black');
+    $('#Expression' + expressionNum).css('font-size', data.fontSize);
+    $('#Expression' + expressionNum).css('font-family', data.fontFamily);
+    $('#Expression' + expressionNum).css('font-weight', data.fontStyle);
+
+    $('#Expression' + expressionNum).append('<p id = "PExpression' + expressionNum + '"></p>');
+    //$('#PExpression' + expressionNum).append(data.text);
+
+    verticalCenter(('PExpression' + expressionNum), data);
+
     expressionNum++;
 }
 
@@ -478,8 +434,9 @@ function drawingExpression(data) {
  기능 : GroupLabel(그룹 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 안예솔
  ******************************************************************/
-function drawingGroupLabel(data) {
-    $('#report').append('<div id = "GroupLabel' + groupLabelNum + '">GroupLabel</div>');
+function drawingGroupLabel(data, divId) {
+    $('#' + divId).css('position', 'relative');
+    $('#' + divId).append('<div id = "GroupLabel' + groupLabelNum + '">GroupLabel</div>');
 
     $('#GroupLabel' + groupLabelNum).css('width', data.rectangle.width);
     $('#GroupLabel' + groupLabelNum).css('height', data.rectangle.height);
@@ -489,6 +446,15 @@ function drawingGroupLabel(data) {
     $('#GroupLabel' + groupLabelNum).css('top', data.rectangle.y + 'px');
 
     $('#GroupLabel' + groupLabelNum).css('border', '1px solid black');
+    $('#GroupLabel' + groupLabelNum).css('font-size', data.fontSize);
+    $('#GroupLabel' + groupLabelNum).css('font-family', data.fontFamily);
+    $('#GroupLabel' + groupLabelNum).css('font-weight', data.fontStyle);
+
+    $('#GroupLabel' + groupLabelNum).append('<p id = "PGroupLabel' + groupLabelNum + '"></p>');
+    //$('#PGroupLabel' + groupLabelNum).append(data.text);
+
+    verticalCenter(('PGroupLabel' + groupLabelNum), data);
+
     groupLabelNum++;
 }
 
@@ -496,8 +462,9 @@ function drawingGroupLabel(data) {
  기능 : ParameterLabel(파라미터 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 안예솔
  ******************************************************************/
-function drawingParameterLabel(data) {
-    $('#report').append('<div id = "ParameterLabel' + parameterLabelNum + '">ParameterLabel</div>');
+function drawingParameterLabel(data, divId) {
+    $('#' + divId).css('position', 'relative');
+    $('#' + divId).append('<div id = "ParameterLabel' + parameterLabelNum + '">ParameterLabel</div>');
 
     $('#ParameterLabel' + parameterLabelNum).css('width', data.rectangle.width);
     $('#ParameterLabel' + parameterLabelNum).css('height', data.rectangle.height);
@@ -507,5 +474,42 @@ function drawingParameterLabel(data) {
     $('#ParameterLabel' + parameterLabelNum).css('top', data.rectangle.y + 'px');
 
     $('#ParameterLabel' + parameterLabelNum).css('border', '1px solid black');
+    $('#ParameterLabel' + parameterLabelNum).css('font-size', data.fontSize);
+    $('#ParameterLabel' + parameterLabelNum).css('font-family', data.fontFamily);
+    $('#ParameterLabel' + parameterLabelNum).css('font-weight', data.fontStyle);
+
+    $('#ParameterLabel' + parameterLabelNum).append('<p id = "PParameterLabel' + parameterLabelNum + '"></p>');
+    //$('#PParameterLabel' + parameterLabelNum).append(data.text);
+
+    verticalCenter(('PParameterLabel' + parameterLabelNum), data);
+
     parameterLabelNum++;
 }
+
+
+/******************************************************************
+ 기능 : 시간 또는 날짜를 출력할 때 한 자리 숫자일 경우 0을 붙여줘서 두 자리 숫자로 출력 해주는 함수를 만든다.
+ 만든이 : 안예솔
+ ******************************************************************/
+function plusZero(data) {
+    var str = data.toString();
+    if(str.length == 1){
+        data = '0' + data;
+    }
+    return data;
+}
+
+
+/******************************************************************
+ 기능 : 텍스트를 세로로 가운데 정렬할 수 있는 함수를 만든다.
+ 만든이 : 안예솔
+ ******************************************************************/
+function verticalCenter(divId, data) {
+    var fontsize = ($('#' + divId).css('font-size')).split('p');
+    // 16pt 이런 식으로 값이 받아져서 p앞으로 끊어서 숫자만 받아오려고 한 문자열 자르기 작업
+    var mid = (data.rectangle.height - fontsize[0] - 3) / 2; // 왜 그런지는 모르겠지만 3을 빼줘야 width를 벗어나지 않음..
+
+    $('#' + divId).css('margin-top', mid);
+    $('#' + divId).css('margin-bottom', mid);
+}
+

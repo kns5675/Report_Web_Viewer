@@ -12,7 +12,7 @@
  만든이 : 안예솔
  ******************************************************************/
 function Label(data){
-    this.parentId = data.ParentID._text;
+    this.parentId = data.ParentID === undefined ? undefined : data.ParentID._text;
     this.id = data.Id._text;
     // x : (data.Rectangle.X === undefined ? 0 : data.Rectangle.X._text)
     this.rectangle = {
@@ -27,49 +27,57 @@ function Label(data){
     this.imageTransparent = (data.ImageTransparent === undefined ? 0 : data.ImageTransparent._text); // 이미지 투명도
     this.zOrder = (data.ZOrder === undefined ? 0 : data.ZOrder._text);
 
-    this.borderThickness = { // 테두리 두께 (있을 수도 있고 없을 수도 있는 속성)
+    this.borderThickness = (data.BorderThickness === undefined ? undefined : { // 테두리 두께 (있을 수도 있고 없을 수도 있는 속성)
         left : (data.BorderThickness.Left === undefined ? 0 : data.BorderThickness.Left._text),
         top : (data.BorderThickness.Top === undefined ? 0 : data.BorderThickness.Top._text),
         right : (data.BorderThickness.Right === undefined ? 0 : data.BorderThickness.Right._text),
         bottom : (data.BorderThickness.Bottom === undefined ? 0 : data.BorderThickness.Bottom._text)
-    };
+    });
 
-    this.enableBorder = { // boolean이라는 태그 이름으로 총 4개가 들어가있어서 어떻게 해야할지 모르겠담..
+    this.enableBorder = (data.EnableBorder === undefined ? undefined : { // boolean이라는 태그 이름으로 총 4개가 들어가있어서 어떻게 해야할지 모르겠담..
         boolean1 : data.EnableBorder.boolean[0]._text,
         boolean2 : data.EnableBorder.boolean[1]._text,
         boolean3 : data.EnableBorder.boolean[2]._text,
         boolean4 : data.EnableBorder.boolean[3]._text
-    };
+    });
 
-    Font = (data.Font._text).split(','); // 굴림, 10pt(, style=bold)로 되어있어서 잘라야함
-    this.fontFamily = Font[0];
-    this.fontSize = (Font[1]).trim(); // 공백 제거
-    if(Font.length == 3){ // ex) 굴림, 10pt, style=bold일 때
-        this.fontStyle = (Font[2]).trim(); // 공백 제거
+    if(data.Font === undefined){
+        this.fontFamily = '굴림';
+        this.fontSize = '10pt';
+        this.fontStyle = 'normal';
+    } else {
+        Font = (data.Font._text).split(','); // 굴림, 10pt(, style=bold)로 되어있어서 잘라야함
+        this.fontFamily = Font[0];
+        this.fontSize = (Font[1]).trim(); // 공백 제거
+        if(Font.length == 3){ // ex) 굴림, 10pt, style=bold일 때
+            this.fontStyle = (Font[2]).trim(); // 공백 제거
+        } else {
+            this.fontStyle = 'normal';
+        }
     }
-    this.borderDottedLines = data.BorderDottedLines._text;
-    this.indentLB = data.IndentLB._text; // 들여쓰기
-    this.interMargin = data.InterMargin._text; // 내부 여백
+    this.borderDottedLines = data.EnableBorder === undefined ? undefined : data.BorderDottedLines._text;
+    this.indentLB = data.IndentLB === undefined ? undefined : data.IndentLB._text; // 들여쓰기
+    this.interMargin = data.InterMargin === undefined ? undefined : data.InterMargin._text; // 내부 여백
 
-    this.lbRec = {
+    this.lbRec = (data.LbRec === undefined ? undefined : {
         x : (data.GradientLB.LbRec.X === undefined ? 0 : data.GradientLB.LbRec.X._text),
         y : (data.GradientLB.LbRec.Y === undefined ? 0 : data.GradientLB.LbRec.Y._text),
         width : (data.GradientLB.LbRec.Width === undefined ? 0 : data.GradientLB.LbRec.Width._text),
         height : (data.GradientLB.LbRec.Height === undefined ? 0 : data.GradientLB.LbRec.Height._text)
-    };
+    });
 
-    this.indexUnderLine = { // 이중 밑줄
+    this.indexUnderLine = (data.IndexUnderLine === undefined ? undefined : { // 이중 밑줄
         isUse : (data.IndexUnderLine.IsUse === undefined ? 0 : data.IndexUnderLine.IsUse._text),
         verSpace : (data.IndexUnderLine.VerSpace === undefined ? 0 : data.IndexUnderLine.VerSpace._text),
         edgeSpace : (data.IndexUnderLine.EdgeSpace === undefined ? 0 : data.IndexUnderLine.EdgeSpace._text),
         firstLineThickness : (data.IndexUnderLine.FirstLineThickness === undefined ? 0 : data.IndexUnderLine.FirstLineThickness._text),
         secondLineThickness : (data.IndexUnderLine.SecondLineThickness === undefined ? 0 : data.IndexUnderLine.SecondLineThickness._text)
-    };
+    });
 
-    this.text = data.Text._text;
-    this.dziName = data.DziName._text; // 데이터 셋 이름
-    this.dataTableName = data.DataTableName._text; // 데이터 테이블 이름
-    this.base64ImageFromViewer = data.Base64ImageFromViewer._text; // 이미지 저장값을 예로 하는 경우 해당 이미지를 Base64형태로 변환하여 저장한다
+    this.text = data.Text === undefined ? undefined : data.Text._text;
+    this.dziName = data.DziName === undefined ? undefined : data.DziName._text; // 데이터 셋 이름
+    this.dataTableName = data.DataTableName === undefined ? undefined : data.DataTableName._text; // 데이터 테이블 이름
+    this.base64ImageFromViewer = data.Base64ImageFromViewer === undefined ? undefined : data.Base64ImageFromViewer._text; // 이미지 저장값을 예로 하는 경우 해당 이미지를 Base64형태로 변환하여 저장한다
 
     this.labelTextType = (data.LabelTextType === undefined ? 0 : data.LabelTextType._text); // 문자 형식
     this.format = (data.Format === undefined ? 0 : data.Format._text);
@@ -80,7 +88,7 @@ function Label(data){
 
 
 /******************************************************************
- 기능 : DynamicTable(동적 테이블)과 FixedTable(고정 테이블)의 공통 속성을 빼내서 객체를 만든다.
+ 기능 : Table에 대한 객체를 만든다.
  만든이 : 안예솔
  ******************************************************************/
 function Table(data){ // ControlList 밑에 anyType이 ControlFixedTable, ControlDynamicTable인 애들
@@ -112,7 +120,8 @@ function Table(data){ // ControlList 밑에 anyType이 ControlFixedTable, Contro
  만든이 : 안예솔
  ******************************************************************/
 function FixedTableLabel(data, i){
-    Table.apply(this, arguments);
+    Label.apply(this, arguments);
+    // Table.apply(this, arguments);
 
     var tableLabelData = data.Labels.TableLabel;
 
@@ -132,12 +141,13 @@ function FixedTableLabel(data, i){
  만든이 : 안예솔
  ******************************************************************/
 function DynamicTableLabel(data, i){
-    Table.apply(this, arguments);
+    Label.apply(this, arguments);
+    // Table.apply(this, arguments);
 
-    var tableLabelData = data.Labels.TableLabel;
-    this._attributes = tableLabelData[i]._attributes["xsi:type"];
-    this.selected = tableLabelData[i].Selected._text; // 테이블 라벨에만 있는 것 같음
-    this.fieldName = tableLabelData[i].FieldName === undefined ? 0 : tableLabelData[i].FieldName._text; // 동적 테이블 밸류 라벨에만 있는 것 같음
+    // var tableLabelData = data.Labels.TableLabel;
+    this._attributes = data._attributes["xsi:type"];
+    this.selected = data.Selected._text; // 테이블 라벨에만 있는 것 같음
+    this.fieldName = data.FieldName === undefined ? 0 : data.FieldName._text; // 동적 테이블 밸류 라벨에만 있는 것 같음
 }
 
 /******************************************************************
@@ -146,7 +156,7 @@ function DynamicTableLabel(data, i){
  ******************************************************************/
 function SystemLabel(data){
     Label.apply(this, arguments);
-    this.systemFieldName = data.SystemFieldName === undefined ? 0 : data.SystemFieldName._text; // 시스템 필드 이름
+    this.systemFieldName = data.SystemFieldName === undefined ? 'Date' : data.SystemFieldName._text; // 시스템 필드 이름
 }
 
 /******************************************************************
@@ -163,6 +173,8 @@ function SummaryLabel(data){
  ******************************************************************/
 function DataLabel(data){
     Label.apply(this, arguments);
+
+    this.fieldName = data.FieldName._text;
 }
 
 /******************************************************************
