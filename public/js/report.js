@@ -19,41 +19,67 @@ function makeReportTemplate(data) {
  기능 : make report in function makeReportTemplate
  author : powerku
  ******************************************************************/
-
  function makeReport(report) {
 
-     console.log(report);
-
     setPage(report);
-    setBackGroundLayer(report);
-    setForeGroundLayer(report);
     setReport(report);
 
     pageNum++;
 }
 
-function setBackGroundLayer(report) {
-    $(('#page' + pageNum)).append('<div id="backGroundLayer' + pageNum + '"class = backGroundLayer></div>');
+function setDesignLayer(report){
+    $(('#page' + pageNum)).append('<div id="designLayer' + pageNum + '"class = designLayer></div>');
 
-    console.log(report);
-    console.log(report.layers.backGroundLayer.bands[0]);
+    setDesignLayerDirection(report);
 
-    setBackGroundLayerDirection(report);
+    $('#designLayer' + pageNum).css('margin-top', report.rectangle.width+'px');
+
 
 }
 
+function setDesignLayerDirection(report){
+    if(report.paperDirection){
+        $('#designLayer' + pageNum).css('width', report.rectangle.width+'px');
+        $('#designLayer' + pageNum).css('height', report.rectangle.height + 'px');
+    }else{
+        $('#designLayer' + pageNum).css('width', report.rectangle.height + 'px');
+        $('#designLayer' + pageNum).css('height', report.rectangle.width+'px');
+    }
+}
+
+
+
+/******************************************************************
+ 기능 : 백그라운드레이어 세팅
+ author : powerku
+ ******************************************************************/
+function setBackGroundLayer(report) {
+    $(('#page' + pageNum)).append('<div id="backGroundLayer' + pageNum + '"class = backGroundLayer></div>');
+
+    setBackGroundLayerDirection(report);
+}
+
+/******************************************************************
+ 기능 : 백그라운드레이어 방향 설정에 따른 크기 세팅
+ author : powerku
+ ******************************************************************/
 function setBackGroundLayerDirection(report){
 
     if(report.paperDirection){
-        $('#backGroundLayer' + pageNum).css('width', 722+'px');
-        $('#backGroundLayer' + pageNum).css('height', 1052.6 + 'px');
+        $('#backGroundLayer' + pageNum).css('width', report.rectangle.width+'px');
+        $('#backGroundLayer' + pageNum).css('height', report.rectangle.height + 'px');
     }else{
-        $('#backGroundLayer' + pageNum).css('width', 1052.6 + 'px');
-        $('#backGroundLayer' + pageNum).css('height', 722+'px');
+        $('#backGroundLayer' + pageNum).css('width', report.rectangle.height + 'px');
+        $('#backGroundLayer' + pageNum).css('height', report.rectangle.width+'px');
     }
 
 }
 
+
+/******************************************************************
+ 기능 : 포그라운드 레이어 크기 세팅
+ author : powerku
+ ******************************************************************/
 function setForeGroundLayer(report){
     $(('#page' + pageNum)).append('<div id="foreGroundLayer' + pageNum + '"class = foreGroundLayer></div>');
 
@@ -61,16 +87,18 @@ function setForeGroundLayer(report){
 
 }
 
+/******************************************************************
+ 기능 : 포그라운드 레이어 방향 설정에 따른 크기 세팅
+ author : powerku
+ ******************************************************************/
 function setForeGroundLayerDirection(report){
 
     if(report.paperDirection){
-        // $('#foreGroundLayer' + pageNum).css('width', 200+'px');
-        $('#foreGroundLayer' + pageNum).css('width', 722+'px');
-        $('#foreGroundLayer' + pageNum).css('height', 1052.6 + 'px');
-        // $('#foreGroundLayer' + pageNum).css('height', 200 + 'px');
+        $('#foreGroundLayer' + pageNum).css('width', report.rectangle.width+'px');
+        $('#foreGroundLayer' + pageNum).css('height', report.rectangle.height + 'px');
     }else{
-        $('#foreGroundLayer' + pageNum).css('width', 1052.6 + 'px');
-        $('#foreGroundLayer' + pageNum).css('height', 722+'px');
+        $('#foreGroundLayer' + pageNum).css('width', report.rectangle.height + 'px');
+        $('#foreGroundLayer' + pageNum).css('height', report.rectangle.width+'px');
     }
 
 }
@@ -80,11 +108,15 @@ function setForeGroundLayerDirection(report){
  author : powerku
  ******************************************************************/
 function setReport(report){
-    $(('#page' + pageNum)).append('<div id="report' + reportNum + '"class = report report' + reportNum + '></div>');
+    $(('#page' + pageNum)).append('<div id="report' + reportNum + '"class = report' +'></div>');
 
+    console.log(report);
 
     setReportDirection(report);
-    $('#report' + reportNum).css('border', 'black');
+
+    setBackGroundLayer(report);
+    setDesignLayer(report);
+    setForeGroundLayer(report);
 
     makeTableByData();
 
@@ -121,7 +153,7 @@ function makeTableByData() {
 
     html +='</tbody></table>';
 
-    $('#test').html(html);
+    $('#designLayer1').html(html);
     $('td:nth-child(' + fieldLength + '),th:nth-child('+fieldLength+')').hide(); //DRDSEQ 컬럼 숨기기
 }
 
@@ -132,14 +164,11 @@ function makeTableByData() {
 function setReportDirection(report){
 
     if(report.paperDirection){
-        // $('#report' + reportNum).css('width', 400+'px');
-        $('#report' + reportNum).css('width', 722+'px');
-        $('#report' + reportNum).css('height', 1052.6 + 'px');
-        // $('#report' + reportNum).css('height', 400 + 'px');
+        $('#report' + reportNum).css('width', report.rectangle.width+'px');
+        $('#report' + reportNum).css('height', report.rectangle.height + 'px');
     }else{
-        $('#report' + reportNum).css('width', 1052.6 + 'px');
-        $('#report' + reportNum).css('height', 722+'px');
-
+        $('#report' + reportNum).css('width', report.rectangle.height + 'px');
+        $('#report' + reportNum).css('height', report.rectangle.width+'px');
     }
 
 }
@@ -165,11 +194,11 @@ function setPage(report) {
  ******************************************************************/
 function setPageDirection(report){
     if(report.paperDirection){
-        $('#page' + pageNum).css('width', 798 + 'px');
-        $('#page' + pageNum).css('height', 1128.6 + 'px');
+        $('#page' + pageNum).css('width', report.paperSize.width + 'px');
+        $('#page' + pageNum).css('height', report.paperSize.height + 'px');
     }else{
-        $('#page' + pageNum).css('width', 1128.6 + 'px');
-        $('#page' + pageNum).css('height', 798 + 'px');
+        $('#page' + pageNum).css('width', report.paperSize.height + 'px');
+        $('#page' + pageNum).css('height', report.paperSize.width + 'px');
     }
 }
 
