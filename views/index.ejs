@@ -10,21 +10,11 @@
     <link rel="stylesheet" href="css/main.css"/>
     <link rel="stylesheet" href="css/index.css"/>
     <link rel="stylesheet" href="css/print.css"/>
-    <style type="text/css">
-
-        #header {
-            background-color: #00B7FF;
-        }
-
-        .jbFixed {
-            position: fixed;
-            top: 0px;
-        }
-
-        .show-on-scroll { visibility: hidden; }
-        .show-on-scroll.shown { visibility: visible; }
-
-    </style>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
+          rel = "stylesheet">
+    <script src = "https://code.jquery.com/jquery-1.10.2.js"></script>
+    <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="js/viewer.js"></script>
     <script src="js/report.js"></script>
@@ -35,15 +25,14 @@
     <script src="js/viewer_header01.js"></script>
     <script src="js/viewer.js"></script>
     <script src="js/drawingBand.js"></script>
-    <script src="js/label.js" language="JavaScript" type="text/javascript"></script>
-    <script src="js/createLabel.js" language="JavaScript" type="text/javascript"></script>
+    <!--<script src="https://code.jquery.com/jquery-1.12.4.js"></script>-->
+    <!--<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>-->
     <script>
         var data = <%-data%>;  //xml json 데이터
         var dataTable = <%- dataTable %> //임시 데이터 dataTable
             $(document).ready(function () {
                 $("#header").load("/include/header.ejs");
                 $("#myModal").load("/include/modal.ejs");
-                $("#myModal2").load("/include/modal2.ejs");
 
                 makeReportTemplate(data);
 
@@ -70,15 +59,27 @@
 <div id="Image_Modal">
     <div id="modalLayer">
         <div class="modalContent">
-            <form class="modelform" action="header.ejs" method="post">
-                <input name="image_insert" type="file" multiple accept="image/*"><br/>
-                <input id="upload_button" type="button" value="확인">
-                <button type="button">취소</button>
-            </form>
-
+            <!--<form class="modelform" action="header.ejs" method="post">-->
+                <input id="image_insert" type="file" multiple accept="image/*"><br/>
+                <button id="upload_button" type="submit" value="">확인</button>
+                <button id="upload_cancel" type="button">취소</button>
+            <!--</form>-->
         </div>
     </div>
 </div>
 <div id="reportTemplate"></div>
+<div class="test">
+    <!--<div id="resizable" class="ui-widget-content">-->
+        <!--<h3 class="ui-widget-header">Resizable</h3>-->
+    <!--</div>-->
+    <div class='box'>
+        <div class='boxheader'>Header</div>
+        <div class='boxbody'>
+            Resize me
+        </div>
+        <div class='win-size-grip'></div>
+    </div>
+</div>
+
 </body>
 </html>

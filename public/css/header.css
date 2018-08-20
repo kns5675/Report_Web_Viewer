@@ -14,7 +14,9 @@ ul.submenu li a{
 ul.submenu li a:hover{
     color:pink;
 }
-
+.menubar{
+    z-index:199;
+}
 .menubar li ul {
     background: rgb(109,109,109);
     display:none;  /* 평상시에는 서브메뉴가 안보이게 하기 */

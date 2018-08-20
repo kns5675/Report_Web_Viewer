@@ -1,3 +1,5 @@
+var ImageNum = 1;
+
 /******************************************************************
  기능 : 첫 페이지 버튼 기능 함수.
  만든이 : hagdung-i
@@ -116,32 +118,88 @@ function PageValue() {
  ******************************************************************/
 function image_upload() {
 
+
     var modalLayer = $("#modalLayer");
     var modalCont = $(".modalContent");
     var marginLeft = modalCont.outerWidth()/2;
     var marginTop = modalCont.outerHeight()/2;
 
+    /******************************************************************
+     기능 : image_upload_button(이미지 추가 버튼) 클릭시 반응.
+     만든이 : hagdung-i
+     ******************************************************************/
     $(".image_upload_button").on("click" ,function () { //이미지 추가 버튼 클릭.
-
         modalLayer.fadeIn("slow");
         modalCont.css({"margin-top" : -marginTop, "margin-left" : -marginLeft});
         $(this).blur();
         return false;
     });
-    $(".modelform > #upload_button").click(function () { //이미지 추가 모달의 확인 버튼 클릭.
+
+    /******************************************************************
+     기능 : upload_button(모달창의 확인 버튼) 클릭시 반응.
+     만든이 : hagdung-i
+     ******************************************************************/
+    $("#upload_button").click(function () { //이미지 추가 모달의 확인 버튼 클릭.
+        modalLayer.fadeOut("slow");
+    });
+
+    /******************************************************************
+     기능 : upload_cancel(모달창의 취소 버튼) 클릭시 반응.
+     만든이 : hagdung-i
+     ******************************************************************/
+    $("#upload_cancel").click(function(){ //이미지 추가 모달의 취소 버튼 클릭.
+        modalLayer.fadeOut("slow");
         var nowpagenum = $("#NowPage").val();
-        var nowpage = $("#page"+nowpagenum).offset().top;
-
-        var image = $("#image_insert_id").val();
-        console.log("image : ",image);
-        $("#page"+nowpagenum).prepend("<img id= 'theImg' src= 'theImg.png' />");
-        modalLayer.fadeOut("slow");
-
-        if($(document).scrollTop() <= nowpage){       //현재 보이는 페이지에 이미지 삽입
-            console.log("해당 페이지에 이미지 추가");
-        }
+        console.log("삭제 이미지 번호 : ",nowpagenum);
+        $("#image"+nowpagenum).remove();
     });
-    $(".modalContent > .modelform > button").click(function(){ //이미지 추가 모달의 취소 버튼 클릭.
-        modalLayer.fadeOut("slow");
+}
+
+
+/******************************************************************
+ 기능 : 보안상의 이유로 실제 파일 접근 경로를 변환해서 가져오기 때문에 실제 url이 필요하여 해당 로직 추가.
+ 만든이 : hagdung-i
+ ******************************************************************/
+function readURL(input) {
+    var nowpagenum = $("#NowPage").val();
+    console.log("페이지 번호 : ",nowpagenum);
+    console.log("추가 이미지 번호 : ",ImageNum);
+    $("#report"+nowpagenum).append("<div class='box'>" +
+        "<div class='boxheader'>Header</div>" +
+        "<div class='boxbody'>\n" +
+        "        Resize me\n" +
+        "      </div>" +
+        "image_upload_button" +
+        "</div>");
+    // "<img id= 'image"+ImageNum+"' class='ui-widget-content' src= '#' width=\"153\" height=\"204\"/>" +
+
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            $('#image'+ImageNum).attr('src', e.target.result);
+            ImageNum++;
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+
+}
+
+/******************************************************************
+ 기능 : realURL 함수 호출.
+ 만든이 : hagdung-i
+ ******************************************************************/
+$(function() {
+    $('#image_insert').on("change", function () {
+        readURL(this);
     });
+
+});
+
+function resizes() {
+    console.log("resizes in");
+    // $('.box').resizable({
+    //     handleSelector: ".win-size-grip"
+    // });
+    $('#box').draggable({handle:".win-size-grip"});
+    $('#box').resizable();
 }

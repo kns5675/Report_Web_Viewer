@@ -1,4 +1,8 @@
-/* The Modal (background) */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
 .modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
@@ -46,7 +50,7 @@
 .leftpart{
     float:left;
     width:40%;
-    background-color:lightblue;
+    /*background-color:lightblue;*/
     margin:5% 5%;
     height:380px;
 }
@@ -59,7 +63,7 @@
     overflow: hidden;
 }
 .partstyle2{
-    background-color:hotpink;
+   /* background-color:hotpink;*/
     width:100%;
     margin:3px 3px;
     font-size:12px;
@@ -75,27 +79,27 @@
 .div1{
     width:25%;
     float:left;
-    background-color:red;
+   /* background-color:red;*/
 }
 .div2{
     width:35%;
     float:left;
-    background-color:yellow;
+    /*background-color:yellow;*/
 }
 .div3{
     width:40%;
     float:left;
-    background-color:green;
+    /*background-color:green;*/
 }
 .div4{
     width:75%;
     float:left;
-    background-color:mediumpurple;
+    /*background-color:mediumpurple;*/
 }
 .rightpart{
     float:left;
     width:40%;
-    background-color:lightyellow;
+    /*background-color:lightyellow;*/
     margin:5% 5%;
     height:380px;
 }
@@ -128,40 +132,42 @@ span.subject{
     float:left;
     width:50%;
     height:20%;
-    background-color:lightblue;
     margin:0px auto;
 }
 .rightside{
     float:left;
     width:50%;
     height:20%;
-    background-color:lightyellow;
     margin:0px auto;
 }
 .downside{
     float:left;
     width:100%;
     height:80%;
-    background-color:lightgreen;
     margin:0px auto;
 }
 .num{
     width:50px;
 }
-#table{
+#modaltable{
     border:solid 1px #6495ED;
     border-collapse: collapse;
     width:90%;
     height:60%;
     margin: 5px auto;
 }
-#table tr{
+#modaltable tr{
     border:solid 1px #6495ED;
     border-collapse: collapse;
 }
-#table td{
+#modaltable td{
     width:12.5%;
     border:solid 1px #6495ED;
     border-collapse: collapse;
+    font-size: 12px;
+    color:black;
+    background-color:#E3E3E3;
 }
-
+#myModal{
+    z-index: 999;
+}

@@ -74,7 +74,7 @@
   <li><input type="button" value="파일열기"></li>
   <li>
     <select id="copyOptions">
-      <option selected disabled hidden>--인쇄--</option>
+      <option id="defaultoption"selected disabled hidden>--인쇄--</option>
       <option id="print" value="copy">인쇄</option>
       <option id="enhancedcopy" value="ecopy">고급인쇄설정</option>
     </select>
@@ -113,21 +113,18 @@
 </div>
   </body>
 <script>
-    //var pagecount = $(".page").length;
-    //var image_src = "<%= request.getParameter('image_insert')%>";
-    //console.log("imagesrc : ",image_src);
-    //$("#TotalPage").text(pagecount+"(TotalPage)"); //totalpage
+    var pagecount = $(".page").length;
+    $("#TotalPage").text(pagecount+"(TotalPage)"); //totalpage
 
-    // $(document).ready(function () {
-    //     FirstPage();
-    //     NowPage();
-    //     PreviousPage();
-    //     NextPage();
-    //     LastPage(pagecount);
-    //     HeaderFixAndPageScroll(pagecount);
-    //     console.log("test");
-    //     image_upload();
-    // });
+    $(document).ready(function () {
+        FirstPage();
+        NowPage();
+        PreviousPage();
+        NextPage();
+        LastPage(pagecount);
+        HeaderFixAndPageScroll(pagecount);
+        image_upload();
+    });
 
 </script>
 </html>
