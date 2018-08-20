@@ -1,5 +1,6 @@
 var ImageNum = 1;
-
+var imageid;
+var imagezIndex = 12;
 /******************************************************************
  기능 : 첫 페이지 버튼 기능 함수.
  만든이 : hagdung-i
@@ -151,7 +152,7 @@ function image_upload() {
         modalLayer.fadeOut("slow");
         var nowpagenum = $("#NowPage").val();
         console.log("삭제 이미지 번호 : ",nowpagenum);
-        $("#image"+nowpagenum).remove();
+        $("#"+imageid).remove();
     });
 }
 
@@ -162,17 +163,40 @@ function image_upload() {
  ******************************************************************/
 function readURL(input) {
     var nowpagenum = $("#NowPage").val();
-    console.log("페이지 번호 : ",nowpagenum);
-    console.log("추가 이미지 번호 : ",ImageNum);
-    $("#report"+nowpagenum).append("<div class='box'>" +
-        "<div class='boxheader'>Header</div>" +
-        "<div class='boxbody'>\n" +
-        "        Resize me\n" +
-        "      </div>" +
-        "image_upload_button" +
-        "</div>");
-    // "<img id= 'image"+ImageNum+"' class='ui-widget-content' src= '#' width=\"153\" height=\"204\"/>" +
 
+    //이미지 영역 생성 & 이미지 생성
+    var Packing = document.createElement("div");
+    var imagediv = document.createElement("div");
+    var images = document.createElement("img");
+    var set_button = document.createElement("button");
+
+    set_button.id = "image_button"+ImageNum;
+    set_button.value = "image_button"+ImageNum;
+    Packing.id = "ImageDivPacking"+ImageNum;
+    Packing.style.position = "absolute";
+    Packing.style.height = "1px";
+    imageid = "imagediv"+ImageNum;
+    imagediv.id = imageid;
+    imagediv.class = "ImageDiv";
+    console.log("imagediv.id : ",imagediv.id);
+    imagediv.style.height = "400px";
+    imagediv.style.backgroundColor = "black";
+    images.id = "image"+ImageNum;
+    images.class = "Images";
+    images.src = "#";
+    images.style.width = "100%";
+    images.style.height = "100%";
+    document.getElementById("designLayer"+nowpagenum).appendChild(Packing);
+    document.getElementById(Packing.id).appendChild(imagediv);
+    document.getElementById(imagediv.id).appendChild(images);
+    document.getElementById(images.id).appendChild(set_button);
+    //이미지 영역의 드래그 이동 & 크기 조정 기능.
+    $("#"+imagediv.id).draggable({ containment:"#backGroundLayer"+nowpagenum, zIndex:13}); //영역 나가지 못하게 하는 설정.
+    $("#"+imagediv.id).resizable({});
+    image_setting(imagediv.id, "delete"); //이미지 영역의 id값 받아가기 위함.
+    //
+    image_setting(imagediv.id, "set");
+    //이미지 추가
     if (input.files && input.files[0]) {
         var reader = new FileReader();
         reader.onload = function(e) {
@@ -185,6 +209,45 @@ function readURL(input) {
 }
 
 /******************************************************************
+ 기능 : 이미지 삭제, 수정 기능.
+ 만든이 : hagdung-i
+ ******************************************************************/
+function image_setting(id, setting){
+    if(setting == "delete"){
+        if($("#"+imageid)[0]){
+            $("#"+imageid).dblclick(function () {
+                console.log("id : ",id);
+                console.log("더블 클릭!");
+                $("#"+id).remove();
+                // $("#" + id).dialog({
+                //     modal: true,
+                //     appendTo: "#report"+nowpagenum,
+                //     show: "puff",
+                //     hide: "explode",
+                //     resizable: true,
+                //     closeOnEscape: false,
+                //     minWidth: 200,
+                //     minHeight: 150,
+                //     position: { my: "left top", of: "left top"}
+                // });
+            });
+        }
+    }else if(setting == "set"){
+        $("#"+imageid).on("click",function () {
+            console.log("한번 클릭");
+            console.log($("#"+id)[0].style.zIndex);
+            $("#"+id)[0].style.zIndex =imagezIndex;
+            imagezIndex ++;
+        });
+        $("#"+imageid).on("mouseover",function () {
+            console.log("마우스 오버");
+
+        });
+    }
+}
+
+
+/******************************************************************
  기능 : realURL 함수 호출.
  만든이 : hagdung-i
  ******************************************************************/
@@ -192,14 +255,8 @@ $(function() {
     $('#image_insert').on("change", function () {
         readURL(this);
     });
-
 });
 
-function resizes() {
-    console.log("resizes in");
-    // $('.box').resizable({
-    //     handleSelector: ".win-size-grip"
-    // });
-    $('#box').draggable({handle:".win-size-grip"});
-    $('#box').resizable();
-}
+
+
+

@@ -1,20 +1,4 @@
 document.write("<script type='text/javascript' src='/js/label.js' ><" + "/script>");
-var BandBackGround;
-var BandPageHeader;
-var BandTitle; // 밴드 추가 >> BandDummyHeader, BandDummyFooter
-var BandDummyHeader;
-var BandDummy;
-var BandDummyFooter;
-var BandData; // 밴드 추가 >> BandDataHeader, BandDataFooter, BandDummyHeader, BandDummyFooter, BandGroupHeader, BandGroupFooter
-var BandGroupHeader; // 밴드 추가 >> BandDummyHeader, BandDummyFooter
-var BandGroupFooter;
-var BandDataHeader;
-var BandDataFooter;
-var BandPageFooter;
-var BandForeGround;
-var BandTail;
-var BandSummary;
-var BandSubReport;
 
 var labelList = new Array();
 var tableLabelList = new Array();
@@ -43,15 +27,12 @@ function judgementControlList(data, divId) {
 
         if (Array.isArray(controlList)) {
             controlList.forEach(function (list) {
-                console.log(list);
                 judgementLabel(list, divId);
             });
         } else {
-            console.log(data);
             judgementLabel(controlList, divId);
         }
     } else {
-        console.log('ControlList none');
     }
 }
 
@@ -60,7 +41,6 @@ function judgementControlList(data, divId) {
  만든이 : 안예솔
  ******************************************************************/
 function judgementLabel(data, divId) {
-    console.log(data);
     var attr = data._attributes["xsi:type"];
     if (attr == "ControlDynamicTable") { // 동적 테이블
         var controlDynamicTable = new Table(data);
@@ -69,9 +49,7 @@ function judgementLabel(data, divId) {
         var tableLabels = data.Labels.TableLabel;
 
         for (var i = 0; i < tableLabels.length; i++) {
-            console.log(tableLabels[i]);
             var tableLabel = new DynamicTableLabel(tableLabels[i], i);
-            console.log(tableLabel);
             tableLabelList.push(tableLabel);
         }
         drawingDynamicTable(controlDynamicTable, tableLabelList, divId);
@@ -82,13 +60,12 @@ function judgementLabel(data, divId) {
 
         var tableLabels = data.Labels.TableLabel;
         for (var i = 0; i < tableLabels.length; i++) {
-            var tableLabel = new FixedTableLabel(tableLabels, i);
+            var tableLabel = new FixedTableLabel(tableLabels[i], i);
             tableLabelList.push(tableLabel);
         }
         drawingFixedTable(controlFixedTable, tableLabelList, divId);
 
     } else if (attr == "ControlLabel") {
-        console.log(attr);
         if (!(data.DataType === undefined)) {
             switch (data.DataType._text) {
                 case "SummaryLabel" : // 요약 라벨
@@ -139,6 +116,10 @@ function judgementLabel(data, divId) {
 /******************************************************************
  기능 : DynamicTable(동적 테이블)을 화면에 그려주는 함수를 만든다.
  만든이 : 안예솔
+
+수정 : DynamicTableValueLabel에 데이터 바인딩
+ Date : 2018-08-20
+ From 구영준
  ******************************************************************/
 function drawingDynamicTable(table, tableLabel, divId) {
     $('#' + divId).append('<div id="Table"></div>');
@@ -161,7 +142,6 @@ function drawingDynamicTable(table, tableLabel, divId) {
                 case "DynamicTableTitleLabel" :
                     var temp = Object.keys(dataTable.DataSetName.dt[0]);
                     for(var i = 0; i < temp.length; i++){
-                        // console.log(tableLabel);
                         if(tableLabel.text == temp[i]){
                             $('#dynamicTitleLabel').append('<th id = "' + temp[i] + '"></th>');
                             $('#dynamicTitleLabel').css('width', tableLabel.rectangle.width);
@@ -174,14 +154,23 @@ function drawingDynamicTable(table, tableLabel, divId) {
                         }
                     }
                     break;
+                    //수정사항
                 case "DynamicTableValueLabel" :
-                    $('#dynamicValueLabel').append('<td>a</td>');
-                    $('#dynamicValueLabel').css('width', tableLabel.rectangle.width);
-                    $('#dynamicValueLabel').css('height', tableLabel.rectangle.height);
-                    $('#dynamicValueLabel').css('font-size', tableLabel.fontSize);
-                    $('#dynamicValueLabel').css('font-family', tableLabel.fontFamily);
-                    $('#dynamicValueLabel').css('font-weight', tableLabel.fontStyle);
-                    $('td').css('border', '1px solid black');
+                    dataTable.DataSetName.dt.forEach(function (data, i) {
+                        $('#dynamicTable').append('<tr id = "dynamicValueLabel'+i+'"></tr>');
+                        for (key in data) {
+                            if (tableLabel.fieldName == key) {
+                                $('#dynamicValueLabel'+i).append('<td>' + data[key]._text + '</td>');
+
+                                $('#dynamicValueLabel'+i).css('width', tableLabel.rectangle.width);
+                                $('#dynamicValueLabel'+i).css('height', tableLabel.rectangle.height);
+                                $('#dynamicValueLabel'+i).css('font-size', tableLabel.fontSize);
+                                $('#dynamicValueLabel'+i).css('font-family', tableLabel.fontFamily);
+                                $('#dynamicValueLabel'+i).css('font-weight', tableLabel.fontStyle);
+                                $('td').css('border', '1px solid black');
+                            }
+                        }
+                    });
                     break;
             }
         })
@@ -220,7 +209,7 @@ function drawingFixedTable(table, tableLabel, divId) {
                     $('#fixedTitleLabel').css('height', tableLabel.rectangle.height);
                     $('#fixedTitleLabel').css('font-size', tableLabel.fontSize);
                     $('#fixedTitleLabel').css('font-family', tableLabel.fontFamily);
-                    $('#fixedTitleLabel').css('font-weigth', tableLabel.fontStyle);
+                    $('#fixedTitleLabel').css('font-weight', tableLabel.fontStyle);
                     break;
                 case "FixedTableValueLabel" :
                     $('#fixedValueLabel').append('<td></td>');
@@ -248,6 +237,7 @@ function drawingSystemLabel(data, divId) {
 
     $('#SystemLabel' + systemLabelNum).css('width', data.rectangle.width);
     $('#SystemLabel' + systemLabelNum).css('height', data.rectangle.height);
+    $('#SystemLabel' + systemLabelNum).css('text-align', 'center');
 
     $('#SystemLabel' + systemLabelNum).css('position', 'absolute');
     $('#SystemLabel' + systemLabelNum).css('left', data.rectangle.x + 'px');
@@ -256,9 +246,7 @@ function drawingSystemLabel(data, divId) {
     $('#SystemLabel' + systemLabelNum).css('text-align', 'center');
 
     $('#SystemLabel' + systemLabelNum).css('border', '1px solid black');
-    $('#SystemLabel' + systemLabelNum).css('font-size', data.fontSize);
-    $('#SystemLabel' + systemLabelNum).css('font-family', data.fontFamily);
-    $('#SystemLabel' + systemLabelNum).css('font-weight', data.fontStyle);
+
 
     var date = new Date();
     switch (data.systemFieldName) {
@@ -268,9 +256,13 @@ function drawingSystemLabel(data, divId) {
             var day = plusZero(date.getDate());
             var dateStr = year + '-' + month + '-' + day;
 
-            $('#SystemLabel' + systemLabelNum).append('<p id = "date' +  dateNum + '">' + dateStr + '</p>');
+            $('#SystemLabel' + systemLabelNum).append('<p id = "PDate' +  dateNum + '">' + dateStr + '</p>');
 
-            verticalCenter(('date' + dateNum), data);
+            $('#PDate' + dateNum).css('font-size', data.fontSize);
+            $('#PDate' + dateNum).css('font-family', data.fontFamily);
+            $('#PDate' + dateNum).css('font-weight', data.fontStyle);
+
+            verticalCenter(('PDate' + dateNum), data);
 
             dateNum++;
             break;
@@ -283,9 +275,13 @@ function drawingSystemLabel(data, divId) {
             var sec = plusZero(date.getSeconds());
             var dateTimeStr = year + '-' + month + '-' + day + ' ' + hour + ':' + min + ':' + sec;
 
-            $('#SystemLabel' + systemLabelNum).append('<p id = "dateTime' +  dateTimeNum + '">' + dateTimeStr + '</p>');
+            $('#SystemLabel' + systemLabelNum).append('<p id = "PDateTime' +  dateTimeNum + '">' + dateTimeStr + '</p>');
 
-            verticalCenter(('dateTime' + dateTimeNum), data);
+            $('#PDateTime' + dateTimeNum).css('font-size', data.fontSize);
+            $('#PDateTime' + dateTimeNum).css('font-family', data.fontFamily);
+            $('#PDateTime' + dateTimeNum).css('font-weight', data.fontStyle);
+
+            verticalCenter(('PDateTime' + dateTimeNum), data);
 
             dateTimeNum++;
             break;
@@ -295,9 +291,13 @@ function drawingSystemLabel(data, divId) {
             var sec = plusZero(date.getSeconds());
             var timeStr = hour + ':' + min + ':' + sec;
 
-            $('#SystemLabel' + systemLabelNum).append('<p id = "time' +  timeNum + '">' + timeStr + '</p>');
+            $('#SystemLabel' + systemLabelNum).append('<p id = "PTime' +  timeNum + '">' + timeStr + '</p>');
 
-            verticalCenter(('time' + timeNum), data);
+            $('#PTime' + timeNum).css('font-size', data.fontSize);
+            $('#PTime' + timeNum).css('font-family', data.fontFamily);
+            $('#PTime' + timeNum).css('font-weight', data.fontStyle);
+
+            verticalCenter(('PTime' + timeNum), data);
 
             timeNum++;
             break;
@@ -305,9 +305,15 @@ function drawingSystemLabel(data, divId) {
             pageNumberNum++;
             break;
         case 'TotalPage' : // 전체 페이지 번호
+            // var pagecount = $(".page").length;
+            // $('#SystemLabel' + systemLabelNum).append('<p id = "totalPage' +  totalPageNum + '">' + pagecount + '</p>');
+            // verticalCenter(('totalPage' + totalPageNum), data);
             totalPageNum++;
             break;
         case 'PageNumber / TotalPage' :  // 현재 페이지 번호 / 전체 페이지 정보
+            // var pagecount = $(".page").length;
+            // $('#SystemLabel' + systemLabelNum).append('<p id = "pageNumberTotalPage' +  pageNumTotalPageNum + '">' + pagecount + '</p>');
+            // verticalCenter(('pageNumberTotalPage' + pageNumTotalPageNum), data);
             pageNumTotalPageNum++;
             break;
     }
@@ -325,6 +331,7 @@ function drawingSummaryLabel(data, divId) {
 
     $('#SummaryLabel' + summaryLabelNum).css('width', data.rectangle.width);
     $('#SummaryLabel' + summaryLabelNum).css('height', data.rectangle.height);
+    $('#SummaryLabel' + summaryLabelNum).css('text-align', 'center');
 
     $('#SummaryLabel' + summaryLabelNum).css('position', 'absolute');
     $('#SummaryLabel' + summaryLabelNum).css('left', data.rectangle.x + 'px');
@@ -350,10 +357,11 @@ function drawingSummaryLabel(data, divId) {
  ******************************************************************/
 function drawingDataLabel(data, divId) {
     $('#' + divId).css('position', 'relative');
-    $('#' + divId).append('<div id = "DataLabel' + dataLabelNum + '">DataLabel</div>');
+    $('#' + divId).append('<div id = "DataLabel' + dataLabelNum + '"></div>');
 
     $('#DataLabel' + dataLabelNum).css('width', data.rectangle.width);
     $('#DataLabel' + dataLabelNum).css('height', data.rectangle.height);
+    $('#DataLabel' + dataLabelNum).css('text-align', 'center');
 
     $('#DataLabel' + dataLabelNum).css('position', 'absolute');
     $('#DataLabel' + dataLabelNum).css('left', data.rectangle.x + 'px');
@@ -366,7 +374,7 @@ function drawingDataLabel(data, divId) {
     $('#PDataLabel' + dataLabelNum).css('font-size', data.fontSize);
     $('#PDataLabel' + dataLabelNum).css('font-family', data.fontFamily);
     $('#PDataLabel' + dataLabelNum).css('font-weight', data.fontStyle);
-    //$('#PDataLabel' + dataLabelNum).append(data.text);
+    $('#PDataLabel' + dataLabelNum).append(data.fieldName);
 
     verticalCenter(('PDataLabel' + dataLabelNum), data);
 
@@ -383,6 +391,7 @@ function drawingNormalLabel(data, divId) {
 
     $('#NormalLabel' + normalLabelNum).css('width', data.rectangle.width);
     $('#NormalLabel' + normalLabelNum).css('height', data.rectangle.height);
+    $('#NormalLabel' + normalLabelNum).css('text-align', 'center');
 
     $('#NormalLabel' + normalLabelNum).css('position', 'absolute');
     $('#NormalLabel' + normalLabelNum).css('left', data.rectangle.x + 'px');
@@ -400,7 +409,6 @@ function drawingNormalLabel(data, divId) {
     $('#PNormalLabel' + normalLabelNum).css('font-weight', data.fontStyle);
     $('#PNormalLabel' + normalLabelNum).append(data.text);
     $('#PNormalLabel' + normalLabelNum).css('display', 'block');
-    console.log(data.text);
     verticalCenter(('PNormalLabel' + normalLabelNum), data);
 
     normalLabelNum++;
@@ -416,6 +424,7 @@ function drawingExpression(data, divId) {
 
     $('#Expression' + expressionNum).css('width', data.rectangle.width);
     $('#Expression' + expressionNum).css('height', data.rectangle.height);
+    $('#Expression' + expressionNum).css('text-align', 'center');
 
     $('#Expression' + expressionNum).css('position', 'absolute');
     $('#Expression' + expressionNum).css('left', data.rectangle.x + 'px');
@@ -445,6 +454,7 @@ function drawingGroupLabel(data, divId) {
 
     $('#GroupLabel' + groupLabelNum).css('width', data.rectangle.width);
     $('#GroupLabel' + groupLabelNum).css('height', data.rectangle.height);
+    $('#GroupLabel' + groupLabelNum).css('text-align', 'center');
 
     $('#GroupLabel' + groupLabelNum).css('position', 'absolute');
     $('#GroupLabel' + groupLabelNum).css('left', data.rectangle.x + 'px');
@@ -474,6 +484,7 @@ function drawingParameterLabel(data, divId) {
 
     $('#ParameterLabel' + parameterLabelNum).css('width', data.rectangle.width);
     $('#ParameterLabel' + parameterLabelNum).css('height', data.rectangle.height);
+    $('#ParameterLabel' + parameterLabelNum).css('text-align', 'center');
 
     $('#ParameterLabel' + parameterLabelNum).css('position', 'absolute');
     $('#ParameterLabel' + parameterLabelNum).css('left', data.rectangle.x + 'px');
@@ -500,7 +511,7 @@ function drawingParameterLabel(data, divId) {
  ******************************************************************/
 function plusZero(data) {
     var str = data.toString();
-    if(str.length == 1){
+    if (str.length == 1) {
         data = '0' + data;
     }
     return data;
@@ -512,14 +523,16 @@ function plusZero(data) {
  만든이 : 안예솔
  ******************************************************************/
 function verticalCenter(divId, data) {
-    console.log(data);
-    console.log(divId);
-    console.log($('#' + divId).css('font-family'));
     var fontsize = ($('#' + divId).css('font-size')).split('p');
     // 16pt 이런 식으로 값이 받아져서 p앞으로 끊어서 숫자만 받아오려고 한 문자열 자르기 작업
-    var mid = (data.rectangle.height - fontsize[0] - 3) / 2; // 왜 그런지는 모르겠지만 3을 빼줘야 width를 벗어나지 않음..
+    var brCount = $('#' + divId + ' br').length;
+
+    if(brCount >= 1) {
+        var mid = (data.rectangle.height - fontsize[0] * (brCount + 1)) / 2;
+    } else {
+        var mid = (data.rectangle.height - fontsize[0]) / 2; // 왜 그런지는 모르겠지만 3을 빼줘야 width를 벗어나지 않음..
+    }
 
     $('#' + divId).css('margin-top', mid);
     $('#' + divId).css('margin-bottom', mid);
 }
-

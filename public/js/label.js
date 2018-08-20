@@ -121,18 +121,14 @@ function Table(data){ // ControlList 밑에 anyType이 ControlFixedTable, Contro
  ******************************************************************/
 function FixedTableLabel(data, i){
     Label.apply(this, arguments);
-    // Table.apply(this, arguments);
 
-    var tableLabelData = data.Labels.TableLabel;
-
-    this._attributes = tableLabelData[i]._attributes["xsi:type"];
-    this.horizontalTextAlignment = tableLabelData[i].HorizontalTextAlignment._text; // 텍스트 수평 정렬
-    this.selected = tableLabelData[i].Selected._text; // 테이블 라벨에만 있는 것 같음
-    this.leftBorderColor = tableLabelData[i].LeftBorderColor._text; // 고정 테이블에만 있는 것 같음
-    this.rightBorderColor = tableLabelData[i].RightBorderColor._text; // 고정 테이블에만 있는 것 같음
-    this.topBorderColor = tableLabelData[i].TopBorderColor._text; // 고정 테이블에만 있는 것 같음
-    this.bottomBorderColor = tableLabelData[i].BottomBorderColor._text; // 고정 테이블에만 있는 것 같음
-    this.horizontalTextAlignment = tableLabelData[i].HorizontalTextAlignment._text;
+    this._attributes = data._attributes["xsi:type"];
+    this.horizontalTextAlignment = data.HorizontalTextAlignment === undefined ? undefined : data.HorizontalTextAlignment._text; // 텍스트 수평 정렬
+    this.selected = data.Selected._text; // 테이블 라벨에만 있는 것 같음
+    this.leftBorderColor = data.LeftBorderColor === undefined ? undefined : data.LeftBorderColor._text; // 고정 테이블에만 있는 것 같음
+    this.rightBorderColor = data.RightBorderColor === undefined ? undefined : data.RightBorderColor._text; // 고정 테이블에만 있는 것 같음
+    this.topBorderColor = data.TopBorderColor === undefined ? undefined : data.TopBorderColor._text; // 고정 테이블에만 있는 것 같음
+    this.bottomBorderColor = data.BottomBorderColor === undefined ? undefined : data.BottomBorderColor._text; // 고정 테이블에만 있는 것 같음
 }
 
 
