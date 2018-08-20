@@ -11,13 +11,13 @@
                 close_pop();
             });
             $("#closebtn2").click(function(){
-                close_pop();
+                close_pop1();
             });
             $("#closebtn3").click(function(){
                 close_pop2();
             });
             $("#closebtn4").click(function(){
-                close_pop2();
+                close_pop3();
             });
             $("#sign").on('keyup',function(){
                 try{
@@ -56,12 +56,11 @@
     </div>
     <div class="downpart">
         <div class="leftpart">
-
             <span class="subject">인쇄설정</span>
             <div class="partstyle">
                 <div class="partstyle2" style="height:50px;">
                     <span>인쇄 배율</span>
-                    <input type="number"value="100" max="100" min="0">&nbsp;%
+                    <input id="copyratio"type="number"value="100" max="100" min="0">&nbsp;%
                 </div>
             </div>
 
@@ -72,9 +71,9 @@
                         <span>인쇄여부</span>
                     </div>
                     <div class="div2">
-                        <label><input type="radio" name="copyornot"/>인쇄함</label>
+                        <label><input id="copyornot1" type="radio" name="copyornot" value="인쇄함"/>인쇄함</label>
                         <br/>
-                        <label><input type="radio" name="copyornot" checked="checked"/>인쇄안함</label>
+                        <label><input id="copyornot2" type="radio" name="copyornot" value="인쇄안함" checked="checked"/>인쇄안함</label>
                     </div>
                     <div class="div3">
                         <label class="container">
@@ -88,10 +87,10 @@
                         <span>인쇄 위치</span>
                     </div>
                     <div class="div2">
-                        <label><input type="radio" name="titleposition" checked="checked"/>타이틀상단</label>
+                        <label><input type="radio" name="titleposition" value="타이틀상단"checked="checked"/>타이틀상단</label>
                     </div>
                     <div class="div3">
-                        <label><input type="radio" name="titleposition"/>타이틀하단</label>
+                        <label><input type="radio" name="titleposition" value="타이틀하단"/>타이틀하단</label>
                     </div>
                 </div>
 
@@ -101,25 +100,26 @@
                 <div class="partstyle2">
                     <span>폰트서식</span>
 
-                    <label><input type="radio" name="fontform" checked="checked"/>굴림체</label>
-                    <label><input type="radio" name="fontform" />바탕체</label>
-                    <label><input type="radio" name="fontform" />돋움체</label>
+                    <label><input type="radio" name="fontform" value="굴림체" checked="checked"/>굴림체</label>
+                    <label><input type="radio" name="fontform" value="바탕체" />바탕체</label>
+                    <label><input type="radio" name="fontform" value="돋움체"/>돋움체</label>
 
                     <br/>
 
                     <span>폰트내용</span>
 
-                    <label><input type="radio" name="fontcontent" checked="checked"/>굴림체</label>
-                    <label><input type="radio" name="fontcontent" />바탕체</label>
-                    <label><input type="radio" name="fontcontent" />돋움체</label>
+                    <label><input type="radio" name="fontcontent" value="굴림체" checked="checked"/>굴림체</label>
+                    <label><input type="radio" name="fontcontent" value="바탕체" />바탕체</label>
+                    <label><input type="radio" name="fontcontent" value="돋움체" />돋움체</label>
 
                     <br/>
                 </div>
 
                 <div class="partstyle2" >
-                    <label><input type="checkbox">폰트자동조정</label>
+                    <label><input name="fontandtilt" type="checkbox">폰트자동조정</label>
                     <br/>
-                    <label><input type="checkbox">금액 기울임꼴 표시</label>
+                    <label><input name="fontandtilt" type="checkbox">금액 기울임꼴 표시</label>
+
                 </div>
             </div>
 
@@ -134,7 +134,7 @@
                     </div>
 
                     <div class="div4">
-                        <select>
+                        <select id="pagesizeoptions">
                             <option>Letter</option>
                             <option>Tabloid</option>
                             <option>Legal</option>
@@ -154,8 +154,8 @@
                         <span>용지방향</span>
                     </div>
                     <div class="div4">
-                        <label><input type="radio" name="direction"checked="checked">세로</label>
-                        <label><input type="radio" name="direction">가로</label>
+                        <label><input type="radio" name="direction" value="세로" checked="checked">세로</label>
+                        <label><input type="radio" name="direction" value="가로">가로</label>
                     </div>
                 </div>
             </div>
@@ -168,58 +168,58 @@
                         <span>출력일인쇄</span>
                     </div>
                     <div class="div4">
-                            <label><input type="radio" name="copydate"/>인쇄함</label>
-                            <label><input type="radio" name="copydate" checked="checked"/>인쇄안함</label>
+                            <label><input type="radio" name="copydate" value="인쇄함"/>인쇄함</label>
+                            <label><input type="radio" name="copydate" value="인쇄안함" checked="checked"/>인쇄안함</label>
                     </div>
 
                     <div class="div1">
                         <span>매수 인쇄</span>
                     </div>
                     <div class="div4">
-                        <label><input type="radio" name="copycount"/>인쇄함</label>
-                        <label><input type="radio" name="copycount" checked="checked"/>인쇄안함</label>
+                        <label><input type="radio" name="copycount" value="인쇄함"/>인쇄함</label>
+                        <label><input type="radio" name="copycount" value="인쇄안함" checked="checked"/>인쇄안함</label>
                     </div>
                 </div>
                 <br/>
                 <div class="partstyle2" style="height:50px;" >
                     <div class="div1">
                         <label class="container">
-                            <input type="checkbox">머리글
+                            <input name="extra" type="checkbox">머리글
                             <span class="checkmark"></span>
                         </label>
                     </div>
                     <div class="div4">
-                        <select>
+                        <select id="extraheadoptions">
                             <option>상단좌측</option>
                             <option>상단중앙</option>
                             <option>상단우측</option>
                         </select>
                         <br/>
-                        <input type="text"/>
+                        <input id="extrahead" type="text"/>
                     </div>
                 </div>
                 <br/>
                 <div class="partstyle2" style="height:50px;" >
                     <div class="div1">
                         <label class="container">
-                            <input type="checkbox">꼬리글
+                            <input name="extra" type="checkbox">꼬리글
                             <span class="checkmark"></span>
                         </label>
                     </div>
                     <div class="div4">
-                        <select>
+                        <select id="extratailoptions">
                             <option>하단좌측</option>
                             <option>하단중앙</option>
                             <option>하단우측</option>
                         </select>
                         <br/>
-                        <input type="text"/>
+                        <input id="extratail" type="text"/>
                     </div>
                 </div>
             </div>
         </div>
         <div class="close" style="float:right; margin-right:38px; margin-top:-10px;background-color:#D7DFE7;">
-            <input type="submit" name="close" id="closebtn2" value="닫기" tabindex="3" style="cursor:pointer;width:70px;height:25px;">
+            <input type="submit" name="close" id="closebtn2" value="확인" tabindex="3" style="cursor:pointer;width:70px;height:25px;">
         </div>
     </div>
 </div>
@@ -237,8 +237,8 @@
                     </div>
                     <div class="rightside" style="background-color:#D7DFE7;">
                         <label class="container">
-                            <input type="checkbox">전결 범위 지정
-                            <input class="num" type="number"/> &nbsp;~&nbsp; <input class="num" type="number"/>
+                            <input name="rangesetting" type="checkbox">전결 범위 지정
+                            <input id="range1" class="num" type="number"/> &nbsp;~&nbsp; <input id="range2" class="num" type="number"/>
                             <!--<span class="checkmark"></span>-->
                         </label>
                     </div>
