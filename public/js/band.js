@@ -1,10 +1,10 @@
 // 작성자 : 전형준
 // 각 Band 객체들을 정의한 File.
 // 모든 Band들은 'Band' 객체를 상속하여 생성된다
+var bandNum = 1;
 
 
-
-/********** 기본 밴드 객체 - 모든 밴드는 이 객체를 상속해서 사용(공통분모) ************
+/********** 기본 밴드 객체 - 모든 밴드는 이 객체를 상속해서 사용 ************
  * 작성자 : 전형준
 **************************************************************************************/
 function Band(data){
@@ -20,14 +20,11 @@ function Band(data){
         width : data.Rectangle.Width._text,
         height : (data.Rectangle.Height === undefined ? "0" : data.Rectangle.Height._text)
     };
+    // this.divClass = "report" + reportNum+ "_bandNum" + bandNum;
 
     this.bandYOrder = data.BandYOrder._text;
     // 아마 밴드 위치 설정하기 위한 옵션인 듯
     // 디자이너에서만 사용되고 뷰어에는 불필요한 옵션인 듯
-
-    // this.childBands = data.ChildBands.anyType;
-    // this.childHeaderBands = data.ChildHeaderBands.anyType;
-    // this.childFooterBands = data.ChildFooterBands.anyType;
 
     this.childBands // 자식 밴드들
         = (typeof data.ChildBands.anyType === "undefined" ?
@@ -40,6 +37,7 @@ function Band(data){
         null : CreateBandArray(data.ChildFooterBands));
     this.controlList // 임시로 해둔것 - 안예솔 팀원에게 물어보고 인자를 넘겨줄 것
         = (typeof data.ControlList === undefined ? null : data.ControlList);
+    // this.divId = "report" + reportNum + "_";
 }
 /*************************************************************************************
  *************************************************************************************/
