@@ -16,8 +16,8 @@ function drawBand(bands, layerName){
         // }
         // childBands라는 애가 필요없는 애일 수 있음
 
-        $('#' + layerName).append("<div id='" + band.id + "' class='" + band.attributes["xsi:type"] + "'>" + band.name + "</div>");
-        $('#' + band.id).css({
+        $('#' + layerName).append("<div id='b" + band.id + "' class='" + band.attributes["xsi:type"] + "'>" + band.name + "</div>");
+        $('#b' + band.id).css({
            'width' : band.rectangle.width,
            'height' : band.rectangle.height,
            'border-bottom' : "1px solid red",
@@ -26,7 +26,7 @@ function drawBand(bands, layerName){
         if(band.childFooterBands !== null){
             drawBand(band.childFooterBands, layerName);
         }
-        // judgementControlList(band);
+        judgementControlList(band, 'b'+band.id);
         bandNum++;
 
     });

@@ -331,14 +331,15 @@ function drawingSummaryLabel(data, divId) {
     $('#SummaryLabel' + summaryLabelNum).css('top', data.rectangle.y + 'px');
 
     $('#SummaryLabel' + summaryLabelNum).css('border', '1px solid black');
-    $('#SummaryLabel' + summaryLabelNum).css('font-size', data.fontSize);
-    $('#SummaryLabel' + summaryLabelNum).css('font-family', data.fontFamily);
-    $('#SummaryLabel' + summaryLabelNum).css('font-weight', data.fontStyle);
 
     $('#SummaryLabel' + summaryLabelNum).append('<p id = "PSummaryLabel' + summaryLabelNum + '"></p>');
+
+    $('#PSummaryLabel' + summaryLabelNum).css('font-size', data.fontSize);
+    $('#PSummaryLabel' + summaryLabelNum).css('font-family', data.fontFamily);
+    $('#PSummaryLabel' + summaryLabelNum).css('font-weight', data.fontStyle);
     //$('#PSummaryLabel' + summaryLabelNum).append(data.text);
 
-    verticalCenter(('SummaryLabel' + summaryLabelNum), data);
+    verticalCenter(('PSummaryLabel' + summaryLabelNum), data);
 
     summaryLabelNum++;
 }
@@ -359,14 +360,15 @@ function drawingDataLabel(data, divId) {
     $('#DataLabel' + dataLabelNum).css('top', data.rectangle.y + 'px');
 
     $('#DataLabel' + dataLabelNum).css('border', '1px solid black');
-    $('#DataLabel' + dataLabelNum).css('font-size', data.fontSize);
-    $('#DataLabel' + dataLabelNum).css('font-family', data.fontFamily);
-    $('#DataLabel' + dataLabelNum).css('font-weight', data.fontStyle);
 
     $('#DataLabel' + dataLabelNum).append('<p id = "PDataLabel' + dataLabelNum + '"></p>');
+
+    $('#PDataLabel' + dataLabelNum).css('font-size', data.fontSize);
+    $('#PDataLabel' + dataLabelNum).css('font-family', data.fontFamily);
+    $('#PDataLabel' + dataLabelNum).css('font-weight', data.fontStyle);
     //$('#PDataLabel' + dataLabelNum).append(data.text);
 
-    verticalCenter(('DataLabel' + dataLabelNum), data);
+    verticalCenter(('PDataLabel' + dataLabelNum), data);
 
     dataLabelNum++;
 }
@@ -387,16 +389,18 @@ function drawingNormalLabel(data, divId) {
     $('#NormalLabel' + normalLabelNum).css('top', data.rectangle.y + 'px');
 
     $('#NormalLabel' + normalLabelNum).css('border', '1px solid black');
-    $('#NormalLabel' + normalLabelNum).css('font-size', data.fontSize);
-    $('#NormalLabel' + normalLabelNum).css('font-family', data.fontFamily);
-    $('#NormalLabel' + normalLabelNum).css('font-weight', data.fontStyle);
     $('#NormalLabel' + normalLabelNum).css('white-space', 'nowrap');
     $('#NormalLabel' + normalLabelNum).css('overflow', 'visible');
 
     $('#NormalLabel' + normalLabelNum).append('<p id = "PNormalLabel' + normalLabelNum + '"></p>');
+
+    $('#PNormalLabel' + normalLabelNum).css('font-size', data.fontSize);
+
+    $('#PNormalLabel' + normalLabelNum).css('font-family', data.fontFamily);
+    $('#PNormalLabel' + normalLabelNum).css('font-weight', data.fontStyle);
     $('#PNormalLabel' + normalLabelNum).append(data.text);
     $('#PNormalLabel' + normalLabelNum).css('display', 'block');
-
+    console.log(data.text);
     verticalCenter(('PNormalLabel' + normalLabelNum), data);
 
     normalLabelNum++;
@@ -418,11 +422,12 @@ function drawingExpression(data, divId) {
     $('#Expression' + expressionNum).css('top', data.rectangle.y + 'px');
 
     $('#Expression' + expressionNum).css('border', '1px solid black');
-    $('#Expression' + expressionNum).css('font-size', data.fontSize);
-    $('#Expression' + expressionNum).css('font-family', data.fontFamily);
-    $('#Expression' + expressionNum).css('font-weight', data.fontStyle);
 
     $('#Expression' + expressionNum).append('<p id = "PExpression' + expressionNum + '"></p>');
+
+    $('#PExpression' + expressionNum).css('font-size', data.fontSize);
+    $('#PExpression' + expressionNum).css('font-family', data.fontFamily);
+    $('#PExpression' + expressionNum).css('font-weight', data.fontStyle);
     //$('#PExpression' + expressionNum).append(data.text);
 
     verticalCenter(('PExpression' + expressionNum), data);
@@ -446,11 +451,12 @@ function drawingGroupLabel(data, divId) {
     $('#GroupLabel' + groupLabelNum).css('top', data.rectangle.y + 'px');
 
     $('#GroupLabel' + groupLabelNum).css('border', '1px solid black');
-    $('#GroupLabel' + groupLabelNum).css('font-size', data.fontSize);
-    $('#GroupLabel' + groupLabelNum).css('font-family', data.fontFamily);
-    $('#GroupLabel' + groupLabelNum).css('font-weight', data.fontStyle);
 
     $('#GroupLabel' + groupLabelNum).append('<p id = "PGroupLabel' + groupLabelNum + '"></p>');
+
+    $('#PGroupLabel' + groupLabelNum).css('font-size', data.fontSize);
+    $('#PGroupLabel' + groupLabelNum).css('font-family', data.fontFamily);
+    $('#PGroupLabel' + groupLabelNum).css('font-weight', data.fontStyle);
     //$('#PGroupLabel' + groupLabelNum).append(data.text);
 
     verticalCenter(('PGroupLabel' + groupLabelNum), data);
@@ -474,11 +480,12 @@ function drawingParameterLabel(data, divId) {
     $('#ParameterLabel' + parameterLabelNum).css('top', data.rectangle.y + 'px');
 
     $('#ParameterLabel' + parameterLabelNum).css('border', '1px solid black');
-    $('#ParameterLabel' + parameterLabelNum).css('font-size', data.fontSize);
-    $('#ParameterLabel' + parameterLabelNum).css('font-family', data.fontFamily);
-    $('#ParameterLabel' + parameterLabelNum).css('font-weight', data.fontStyle);
 
     $('#ParameterLabel' + parameterLabelNum).append('<p id = "PParameterLabel' + parameterLabelNum + '"></p>');
+
+    $('#PParameterLabel' + parameterLabelNum).css('font-size', data.fontSize);
+    $('#PParameterLabel' + parameterLabelNum).css('font-family', data.fontFamily);
+    $('#PParameterLabel' + parameterLabelNum).css('font-weight', data.fontStyle);
     //$('#PParameterLabel' + parameterLabelNum).append(data.text);
 
     verticalCenter(('PParameterLabel' + parameterLabelNum), data);
@@ -505,6 +512,9 @@ function plusZero(data) {
  만든이 : 안예솔
  ******************************************************************/
 function verticalCenter(divId, data) {
+    console.log(data);
+    console.log(divId);
+    console.log($('#' + divId).css('font-family'));
     var fontsize = ($('#' + divId).css('font-size')).split('p');
     // 16pt 이런 식으로 값이 받아져서 p앞으로 끊어서 숫자만 받아오려고 한 문자열 자르기 작업
     var mid = (data.rectangle.height - fontsize[0] - 3) / 2; // 왜 그런지는 모르겠지만 3을 빼줘야 width를 벗어나지 않음..
