@@ -8,7 +8,7 @@ body{
 
 #header {
     background-color: #00B7FF;
-    z-index: 999;
+    z-index: 4;
 }
 
 .jbFixed {
@@ -34,31 +34,34 @@ th .DRDSEQ{
     width : 100px;
 }
 
-.backGroundLayer{
+.designLayer{
     position: absolute;
-    margin: 38px 38px 38px 38px;
-    z-index: 1;
+    z-index:2;
     background-color: lightgreen;
 }
 
-.foreGroundLayer{
-    margin: 38px 38px 38px 38px;
-    z-index: 3;
-    background-color: lightcoral;
+.backGroundLayer{
     position: absolute;
-
+    z-index: 1;
+    background-color: transparent;
 }
 
 .report{
     position: absolute;
-    z-index:2;
-    margin: 38px 38px 38px 38px;
-    background-color: lightblue;
+    background-color: lightgreen;
+    border: 1px groove black;
 
 }
 
+.foreGroundLayer{
+    z-index: 3;
+    position: absolute;
+    background-color: transparent;
+}
+
+
 .page{
-    z-index: -2;
+    z-index: 0;
     background-color: transparent;
 }
 
