@@ -20,6 +20,9 @@
             $("#btnZoomOut").click(function(){
                 zoomOut();
             });
+            $("#showpages").click(function(){
+                $("#showPages").show();
+            });
         });
     </script>
     <title></title>
@@ -88,7 +91,35 @@
   <li><input type="button" value="다음 페이지" id="NextPage"></li>
   <li><input type="button" value="마지막 페이지" id="LastPage"></li>
   <li><input type="button" value="한 페이지만 보기"></li>
-  <li><input type="button" value="여러 페이지 보기"></li>
+  <li><input id="showpages" type="button" value="여러 페이지 보기">
+  <div id="showPages">
+
+    <div id="rectangles">
+      <div id="howmany">
+        <p>a * b pages</p>
+      </div>
+      <div id="howmanybottom">
+        <div class="room"><input value="1"></div>
+        <div class="room"><input value="2"></div>
+        <div class="room"><input value="3"></div>
+        <div class="room"><input value="4"></div>
+        <div class="room"><input value="5"></div>
+        <div class="room"><input value="6"></div>
+        <div class="room"><input value="7"></div>
+        <div class="room" id="h1"><input value="8"></div>
+        <div class="room"><input value="()"></div>
+        <div class="room"><input value="10"></div>
+        <div class="room"><input value="11"></div>
+        <div class="room"><input value="12"></div>
+        <div class="room"><input value="13"></div>
+        <div class="room"><input value="14"></div>
+        <div class="room"><input value="15"></div>
+        <div class="room"><input class="test" value="16"></div>
+      </div>
+
+    </div>
+  </div>
+  </li>
   <li>
     <select id="txtZoom">
       <option value="2.0">200%</option>
@@ -124,6 +155,7 @@
         LastPage(pagecount);
         HeaderFixAndPageScroll(pagecount);
         image_upload();
+        $("#h1 > .test").val();
     });
 
 </script>
