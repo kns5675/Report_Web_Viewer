@@ -6,10 +6,16 @@ function copyoptions(){
     try{
         if ($("#copyOptions").val() == 'ecopy')
         {
+            /*if($("#copyOptions option:eq(0)").on("click", function(){
+                    $('#myModal').show();
+                }
+            ));*/
             $('#myModal').show();
         }else if($("#copyOptions").val() == 'copy'){
             $('#myModal').css('display','none');
             pagePrint();
+
+
 
         }else{
             console.log("인식못했음");
@@ -143,6 +149,7 @@ function zoomOut(){
  ******************************************************************/
 function close_pop() {
     $('#myModal').hide();
+    $("#copyOptions").val("--인쇄--").attr("selected","selected");
 };
 function close_pop2(){
     $('#modalcase').hide();

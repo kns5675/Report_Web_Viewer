@@ -6,8 +6,7 @@
     <script>
         $(function(){
             $('#print').click(function(){
-                var ratio =1;
-                pagePrint(ratio);
+                pagePrint();
             });
             $('#txtZoom').on("change",function(){
                 test();
@@ -75,7 +74,7 @@
   <li><input type="button" value="파일열기"></li>
   <li>
     <select id="copyOptions">
-      <option selected disabled hidden>--인쇄--</option>
+      <option id="defaultoption"selected disabled hidden>--인쇄--</option>
       <option id="print" value="copy">인쇄</option>
       <option id="enhancedcopy" value="ecopy">고급인쇄설정</option>
     </select>
