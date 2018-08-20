@@ -37,6 +37,9 @@ function setDesignLayer(report){
     $('#designLayer' + pageNum).css('margin-right', report.margin.height+'px');
     $('#designLayer' + pageNum).css('margin-left', report.margin.width+'px');
 
+    var layerName = "designLayer" + pageNum;
+    drawBand(report.layers.designLayer.bands, layerName); // 추가 - 전형준
+
 
 }
 
@@ -65,6 +68,9 @@ function setBackGroundLayer(report) {
     $('#backGroundLayer' + pageNum).css('margin-bottom', report.margin.y+'px');
     $('#backGroundLayer' + pageNum).css('margin-right', report.margin.height+'px');
     $('#backGroundLayer' + pageNum).css('margin-left', report.margin.width+'px');
+
+    var layerName = "backGroundLayer" + pageNum;
+    drawBand(report.layers.backGroundLayer.bands, layerName); // 추가 - 전형준
 
 }
 
@@ -98,6 +104,9 @@ function setForeGroundLayer(report){
     $('#foreGroundLayer' + pageNum).css('margin-bottom', report.margin.y+'px');
     $('#foreGroundLayer' + pageNum).css('margin-right', report.margin.height+'px');
     $('#foreGroundLayer' + pageNum).css('margin-left', report.margin.width+'px');
+
+    var layerName = "foreGroundLayer" + pageNum;
+    drawBand(report.layers.foreGroundLayer.bands, layerName); // 추가 - 전형준
 }
 
 /******************************************************************
@@ -136,9 +145,9 @@ function setReport(report){
     setDesignLayer(report);
     setForeGroundLayer(report);
 
-    makeTableByData();
+    // makeTableByData();
 
-    drawBand(report); // 추가 - 전형준
+    // drawBand(report); // 추가 - 전형준
 
     reportNum++;
 }
