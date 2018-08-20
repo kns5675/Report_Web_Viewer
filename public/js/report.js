@@ -32,7 +32,10 @@ function setDesignLayer(report){
 
     setDesignLayerDirection(report);
 
-    $('#designLayer' + pageNum).css('margin-top', report.rectangle.width+'px');
+    $('#designLayer' + pageNum).css('margin-top', report.margin.x+'px');
+    $('#designLayer' + pageNum).css('margin-bottom', report.margin.y+'px');
+    $('#designLayer' + pageNum).css('margin-right', report.margin.height+'px');
+    $('#designLayer' + pageNum).css('margin-left', report.margin.width+'px');
 
 
 }
@@ -57,6 +60,12 @@ function setBackGroundLayer(report) {
     $(('#page' + pageNum)).append('<div id="backGroundLayer' + pageNum + '"class = backGroundLayer></div>');
 
     setBackGroundLayerDirection(report);
+
+    $('#backGroundLayer' + pageNum).css('margin-top', report.margin.x+'px');
+    $('#backGroundLayer' + pageNum).css('margin-bottom', report.margin.y+'px');
+    $('#backGroundLayer' + pageNum).css('margin-right', report.margin.height+'px');
+    $('#backGroundLayer' + pageNum).css('margin-left', report.margin.width+'px');
+
 }
 
 /******************************************************************
@@ -85,6 +94,10 @@ function setForeGroundLayer(report){
 
     setForeGroundLayerDirection(report);
 
+    $('#foreGroundLayer' + pageNum).css('margin-top', report.margin.x+'px');
+    $('#foreGroundLayer' + pageNum).css('margin-bottom', report.margin.y+'px');
+    $('#foreGroundLayer' + pageNum).css('margin-right', report.margin.height+'px');
+    $('#foreGroundLayer' + pageNum).css('margin-left', report.margin.width+'px');
 }
 
 /******************************************************************
@@ -113,6 +126,11 @@ function setReport(report){
     console.log(report);
 
     setReportDirection(report);
+
+    $('#report' + reportNum).css('margin-top', report.margin.x+'px');
+    $('#report' + reportNum).css('margin-bottom', report.margin.y+'px');
+    $('#report' + reportNum).css('margin-right', report.margin.height+'px');
+    $('#report' + reportNum).css('margin-left', report.margin.width+'px');
 
     setBackGroundLayer(report);
     setDesignLayer(report);
