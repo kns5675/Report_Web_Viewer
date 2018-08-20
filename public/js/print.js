@@ -11,7 +11,8 @@ function pagePrint(){
         if (jQuery.browser.msie) {
             flexiblecontent.style.zoom = 1.0;
             window.print();
-            alert($("#txtZoom option:selected").val());
+            $("#copyOptions").val("--인쇄--").attr("selected","selected");
+            //alert($("#txtZoom option:selected").val());
         }
         else {
             $(flexiblecontent).css('-webkit-transform','scale(' + (1.0) + ')');
@@ -20,7 +21,8 @@ function pagePrint(){
             $(flexiblecontent).css('-moz-transform-origin','0 0');
             $(flexiblecontent).css('-o-transform','scale(' + (1.0) + ')');
             $(flexiblecontent).css('-o-transform-origin','0 0');
-            window.print();//100%비율 값 넣고 윈도우의 프린트 기능 이용하여 프린트 
+            window.print();//100%비율 값 넣고 윈도우의 프린트 기능 이용하여 프린트
+            $("#copyOptions").val("--인쇄--").attr("selected","selected");
             
             nowsize = $("#txtZoom option:selected").val();//기존에 적용된 option에 값을 들고와서
             $("#option1").val(nowsize).attr("selected","selected");
