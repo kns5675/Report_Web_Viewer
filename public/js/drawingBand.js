@@ -26,7 +26,7 @@ function drawBand(bands, layerName){
         if(band.childFooterBands !== null){
             drawBand(band.childFooterBands, layerName);
         }
-        // judgementControlList(band);
+        judgementControlList(band, band.id);
         bandNum++;
 
     });
