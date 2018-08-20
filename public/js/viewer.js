@@ -6,17 +6,10 @@ function copyoptions(){
     try{
         if ($("#copyOptions").val() == 'ecopy')
         {
-            /*if($("#copyOptions option:eq(0)").on("click", function(){
-                    $('#myModal').show();
-                }
-            ));*/
             $('#myModal').show();
         }else if($("#copyOptions").val() == 'copy'){
             $('#myModal').css('display','none');
             pagePrint();
-
-
-
         }else{
             console.log("인식못했음");
         }
