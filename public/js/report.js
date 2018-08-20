@@ -56,31 +56,31 @@ function setReport(report){
  ******************************************************************/
 function makeTableByData() {
 
-    let html = '<table><thead>';
-    var fieldLength = Object.keys(dataTable.DataSetName.dt[0]).length;
-
-    Object.keys(dataTable.DataSetName.dt[0]).forEach(function(field){ //Header
-        if(field == 'DRDSEQ'){
-            html += '<th clsss = "DRDSEQ">' + field + '</th>';
-        }else{
-            html += '<th>' + field + '</th>';
-        }
-
-    });
-    html  +='</thead><tbody>';
-    dataTable.DataSetName.dt.forEach(function (data) { //Body
-        html += '<tr>';
-        for(key in data){
-            html+='<td>' + data[key]._text + '</td>';
-        }
-
-        + '</tr>';
-    });
-
-    html +='</tbody></table>';
-
-    $('#test').html(html);
-    $('td:nth-child(' + fieldLength + '),th:nth-child('+fieldLength+')').hide(); //DRDSEQ 컬럼 숨기기
+    // let html = '<table><thead>';
+    // var fieldLength = Object.keys(dataTable.DataSetName.dt[0]).length;
+    //
+    // Object.keys(dataTable.DataSetName.dt[0]).forEach(function(field){ //Header
+    //     if(field == 'DRDSEQ'){
+    //         html += '<th clsss = "DRDSEQ">' + field + '</th>';
+    //     }else{
+    //         html += '<th>' + field + '</th>';
+    //     }
+    //
+    // });
+    // html  +='</thead><tbody>';
+    // dataTable.DataSetName.dt.forEach(function (data) { //Body
+    //     html += '<tr>';
+    //     for(key in data){
+    //         html+='<td>' + data[key]._text + '</td>';
+    //     }
+    //
+    //     + '</tr>';
+    // });
+    //
+    // html +='</tbody></table>';
+    //
+    // $('#B901e8ca2-970a-4053-8fc1-803239b9de2e').html(html);
+    // $('td:nth-child(' + fieldLength + '),th:nth-child('+fieldLength+')').hide(); //DRDSEQ 컬럼 숨기기
 }
 
 /******************************************************************
@@ -90,14 +90,14 @@ function makeTableByData() {
 function setReportDirection(report){
 
     if(report.paperDirection){
-        $('#report' + reportNum).css('width', 722+'px');
-        $('#report' + reportNum).css('height', 1052.6 + 'px');
+        $('#report' + reportNum).css('width', 824.6+'px');
+        $('#report' + reportNum).css('height', 1231.2 + 'px');
     }else{
         $('#report' + reportNum).css('width', 1052.6 + 'px');
         $('#report' + reportNum).css('height', 722+'px');
 
     }
-
+    $('#report' + reportNum).css('text-align', 'center'); // 추가 : 안예솔
 }
 
 /******************************************************************
@@ -122,8 +122,8 @@ function setPage(report) {
  ******************************************************************/
 function setPageDirection(report){
     if(report.paperDirection){
-        $('#page' + pageNum).css('width', 798 + 'px');
-        $('#page' + pageNum).css('height', 1128.6 + 'px');
+        $('#page' + pageNum).css('width', 976.6 + 'px');
+        $('#page' + pageNum).css('height', 1383.2 + 'px');
     }else{
         $('#page' + pageNum).css('width', 1128.6 + 'px');
         $('#page' + pageNum).css('height', 798 + 'px');

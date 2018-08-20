@@ -7,12 +7,14 @@
 function drawBand(report){
     report.layers.designLayer.bands.forEach(function (band) {
         // console.log(report.name + "의" + band.name);
-        $('.report' + reportNum).append("<div id='B" + band.id + "'>" + band.name + "</div>");
+        $('.report' + reportNum).append("<div id='B" + band.id + "'></div>");
+        // $('.report' + reportNum).append("<div id='B" + band.id + "'>" + band.name + "</div>");
         $('#B' + band.id).css({
            'width' : band.rectangle.width,
            'height' : band.rectangle.height,
            'border-bottom' : "1px solid red",
         });
+        // judgementControlList(band, band.id);
     });
 }
 /************************************************************

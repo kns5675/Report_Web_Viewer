@@ -14,7 +14,8 @@ var dataTable = convert.xml2json(tempData, {compact : true});
 router.get('/', function(req, res) {
     res.render('index', {
         layout: false,
-        data : json
+        data : json,
+        dataTable: dataTable
     });
 });
 
