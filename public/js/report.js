@@ -64,10 +64,10 @@ function setForeGroundLayer(report){
 function setForeGroundLayerDirection(report){
 
     if(report.paperDirection){
-        $('#foreGroundLayer' + pageNum).css('width', 200+'px');
-        // $('#foreGroundLayer' + pageNum).css('width', 722+'px');
-        // $('#foreGroundLayer' + pageNum).css('height', 1052.6 + 'px');
-        $('#foreGroundLayer' + pageNum).css('height', 200 + 'px');
+        // $('#foreGroundLayer' + pageNum).css('width', 200+'px');
+        $('#foreGroundLayer' + pageNum).css('width', 722+'px');
+        $('#foreGroundLayer' + pageNum).css('height', 1052.6 + 'px');
+        // $('#foreGroundLayer' + pageNum).css('height', 200 + 'px');
     }else{
         $('#foreGroundLayer' + pageNum).css('width', 1052.6 + 'px');
         $('#foreGroundLayer' + pageNum).css('height', 722+'px');
@@ -132,10 +132,10 @@ function makeTableByData() {
 function setReportDirection(report){
 
     if(report.paperDirection){
-        $('#report' + reportNum).css('width', 400+'px');
-        // $('#report' + reportNum).css('width', 722+'px');
-        // $('#report' + reportNum).css('height', 1052.6 + 'px');
-        $('#report' + reportNum).css('height', 400 + 'px');
+        // $('#report' + reportNum).css('width', 400+'px');
+        $('#report' + reportNum).css('width', 722+'px');
+        $('#report' + reportNum).css('height', 1052.6 + 'px');
+        // $('#report' + reportNum).css('height', 400 + 'px');
     }else{
         $('#report' + reportNum).css('width', 1052.6 + 'px');
         $('#report' + reportNum).css('height', 722+'px');
