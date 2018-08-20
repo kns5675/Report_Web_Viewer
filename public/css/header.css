@@ -15,7 +15,7 @@ ul.submenu li a:hover{
     color:pink;
 }
 .menubar{
-    z-index:199;
+    z-index:999;
 }
 .menubar li ul {
     background: rgb(109,109,109);
@@ -26,7 +26,7 @@ ul.submenu li a:hover{
     border:0px;
     position:absolute;
     width:200px;
-    z-index:200;
+    z-index:999;
 }
 
 .menubar ul li:hover ul {

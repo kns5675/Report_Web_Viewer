@@ -168,6 +168,10 @@ function readURL(input) {
     var Packing = document.createElement("div");
     var imagediv = document.createElement("div");
     var images = document.createElement("img");
+    var set_button = document.createElement("button");
+
+    set_button.id = "image_button"+ImageNum;
+    set_button.value = "image_button"+ImageNum;
     Packing.id = "ImageDivPacking"+ImageNum;
     Packing.style.position = "absolute";
     Packing.style.height = "1px";
@@ -182,12 +186,13 @@ function readURL(input) {
     images.src = "#";
     images.style.width = "100%";
     images.style.height = "100%";
-    document.getElementById("report"+nowpagenum).appendChild(Packing);
+    document.getElementById("designLayer"+nowpagenum).appendChild(Packing);
     document.getElementById(Packing.id).appendChild(imagediv);
     document.getElementById(imagediv.id).appendChild(images);
+    document.getElementById(images.id).appendChild(set_button);
     //이미지 영역의 드래그 이동 & 크기 조정 기능.
-    $("#"+imagediv.id).draggable({ containment:"#backGroundLayer"+nowpagenum, zIndex:13});
-    $("#"+imagediv.id).resizable({ containment:"#backGroundLayer"+nowpagenum});
+    $("#"+imagediv.id).draggable({ containment:"#backGroundLayer"+nowpagenum, zIndex:13}); //영역 나가지 못하게 하는 설정.
+    $("#"+imagediv.id).resizable({});
     image_setting(imagediv.id, "delete"); //이미지 영역의 id값 받아가기 위함.
     //
     image_setting(imagediv.id, "set");
@@ -235,10 +240,6 @@ function image_setting(id, setting){
             imagezIndex ++;
         });
         $("#"+imageid).on("mouseover",function () {
-            var set_button = document.createElement("button");
-            set_button.id = "image_button"+ImageNum;
-
-            document.getElementById(id).appendChild(set_button);
             console.log("마우스 오버");
 
         });
