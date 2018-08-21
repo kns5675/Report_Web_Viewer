@@ -21,11 +21,40 @@ function makeReportTemplate(data) {
  ******************************************************************/
  function makeReport(report) {
 
+     numOfDataInOnePage(report);
+
     setPage(report);
     setReport(report);
 
     pageNum++;
 }
+
+
+/***********************************************************
+ 기능 : 밴드 길이 계산
+ 만든이 : 구영준
+ * *********************************************************/
+function numOfDataInOnePage(report){
+    var bands = report.layers.designLayer.bands;
+    var bandHeightWithoutBandData = 0;
+    console.log(bands);
+
+    bands.forEach(function(band){
+        console.log(band.attributes["xsi:type"]);
+        if(band.attributes["xsi:type"] != BandData){
+        bandHeightWithoutBandData += Number(band.rectangle.height);
+        }
+    });
+
+   console.log(bandHeightWithoutBandData);
+
+    //데이터 밴드를 제외한 밴드 높이 계산
+    //Report Rectangle height - 밴드 높이
+    //데이터 밴드 높이 바꿔주기
+    //동적 테이블 길이 계산 -> 한 페이지에 들어갈 수 있는 데이터 양 계산
+    //페이지 계산
+}
+
 
 function setDesignLayer(report){
     $(('#page' + pageNum)).append('<div id="designLayer' + pageNum + '"class = designLayer></div>');
@@ -39,9 +68,9 @@ function setDesignLayer(report){
 
     var layerName = "designLayer" + pageNum;
     drawBand(report.layers.designLayer.bands, layerName); // 추가 - 전형준
-
-
 }
+
+
 
 function setDesignLayerDirection(report){
     if(report.paperDirection){
