@@ -15,7 +15,7 @@ ul.submenu li a:hover{
     color:pink;
 }
 .menubar{
-    z-index:199;
+    z-index:999;
 }
 .menubar li ul {
     background: rgb(109,109,109);
@@ -26,7 +26,7 @@ ul.submenu li a:hover{
     border:0px;
     position:absolute;
     width:200px;
-    z-index:200;
+    z-index:999;
 }
 
 .menubar ul li:hover ul {
@@ -36,4 +36,53 @@ ul.submenu li a:hover{
 .topMenu ul li{
     display:inline;
     padding:0 3px;
+}
+
+/*위에는 version1 헤더  아래는 version2헤더*/
+div#showPages{
+    position:absolute; top:76px; left:1199px; float:left;
+    width:85px;
+    height:105px;
+    background:white;
+    border:1px solid #909090;
+    display:none;
+    float:left;
+}
+div#rectangles{
+    width:69px;
+    height:69px;
+}
+div#howmany{
+    width:58px;
+    height:10px;
+    margin-left:13px;
+    margin-top:5px;
+    margin-bottom:10px;
+}
+div#howmanybottom{
+    width:79px;
+    height:79px;
+    float:left;
+    margin-left:6px;
+    opacity:0.5;
+
+}
+div#howmany p{
+    display:inline-block;
+    position:absolute; top:-5px; left:14px;
+    padding:0px;
+    font-size:9px;
+    color:black;
+}
+div.room{
+    width:14px;
+    height:14px;
+    border:1px solid #B8C4D3;
+    margin-right:3px;
+    margin-bottom:3px;
+    float:left;
+    display:block;
+}
+div.room:hover{
+    background-color:#CADFFF;
 }

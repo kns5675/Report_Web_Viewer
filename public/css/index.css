@@ -8,7 +8,7 @@ body{
 
 #header {
     background-color: #00B7FF;
-    z-index: 4;
+    z-index: 999;
 }
 
 .jbFixed {
@@ -25,7 +25,7 @@ body{
 }
 
 #modalLayer{display:none; position:relative;}
-#modalLayer .modalContent{width:440px; height:200px; padding:20px; border:1px solid #ccc; position:fixed; left:50%; top:50%; z-index:11; background:#fff;}
+#modalLayer .modalContent{width:440px; height:200px; padding:20px; border:1px solid #ccc; position:fixed; left:50%; top:50%; z-index:551; background:#fff;}
 #modalLayer .modalContent button{right:0; top:0; cursor:pointer;}
 
 th .DRDSEQ{
@@ -36,7 +36,7 @@ th .DRDSEQ{
 
 .designLayer{
     position: absolute;
-    z-index:2;
+    z-index:301;
     background-color: lightgreen;
 }
 
@@ -47,6 +47,7 @@ th .DRDSEQ{
 }
 
 .report{
+    z-index: 3;
     position: absolute;
     background-color: lightgreen;
     border: 1px groove black;
@@ -54,7 +55,7 @@ th .DRDSEQ{
 }
 
 .foreGroundLayer{
-    z-index: 3;
+    z-index: 601;
     position: absolute;
     background-color: transparent;
 }

@@ -5,7 +5,6 @@
  * 리포트에 밴드들을 그려줌
  * *********************************************************/
 function drawBand(bands, layerName){
-    var bandNum = 1;
     bands.forEach(function (band) {
 
         if(band.childHeaderBands !== null){
@@ -16,8 +15,9 @@ function drawBand(bands, layerName){
         // }
         // childBands라는 애가 필요없는 애일 수 있음
 
-        $('#' + layerName).append("<div id='b" + band.id + "' class='" + band.attributes["xsi:type"] + "'>" + band.name + "</div>");
-        $('#b' + band.id).css({
+        var div_id = 'b' + band.id;
+        $('#' + layerName).append("<div id='" + div_id + "' class='" + band.attributes["xsi:type"] + "'>" + band.name + "</div>");
+        $('#' + div_id).css({
            'width' : band.rectangle.width,
            'height' : band.rectangle.height,
            'border-bottom' : "1px solid red",
@@ -26,7 +26,7 @@ function drawBand(bands, layerName){
         if(band.childFooterBands !== null){
             drawBand(band.childFooterBands, layerName);
         }
-        judgementControlList(band, 'b'+band.id);
+        judgementControlList(band, div_id);
         bandNum++;
 
     });
