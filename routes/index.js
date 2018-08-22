@@ -3,12 +3,11 @@ var router = express.Router();
 
 var convert = require('xml-js');
 var fs = require('fs');
-var xml = fs.readFileSync('xml/TestSample.xml', 'utf-8');
+// var xml = fs.readFileSync('xml/TestSample.xml', 'utf-8');
+var xml = fs.readFileSync('xml/Sample01.xml', 'utf-8');
 // var inspect = require('util').inspect;
-var json = convert.xml2json(xml, {compact : true});
-console.log(json);
-var json2 = json.replace(/\\r/gi, '<br/>');
-console.log(json2);
+var json_origin = convert.xml2json(xml, {compact : true});
+var json = json_origin.replace(/\\r/gi, '<br/>'); // 엔터키(\r)를 <br/>로 치환
 
 var tempData = fs.readFileSync('xml/TempData.xml', 'utf-8');
 var dataTable = convert.xml2json(tempData, {compact : true});
@@ -17,8 +16,7 @@ var dataTable = convert.xml2json(tempData, {compact : true});
 router.get('/', function(req, res) {
     res.render('index', {
         layout: false,
-        data2 : json2,
-        data : json2,
+        data : json,
         dataTable: dataTable
     });
 });

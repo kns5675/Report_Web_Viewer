@@ -32,17 +32,21 @@
     <!--<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>-->
     <script>
         var data = <%-data%>;  //xml json 데이터
-        var dataTable = <%- dataTable %> //임시 데이터 dataTable
-            $(document).ready(function () {
-                $("#header").load("/include/header.ejs");
-                $("#myModal").load("/include/modal.ejs");
+        var dataTable = <%- dataTable %>; //임시 데이터 dataTable
 
-                makeReportTemplate(data);
+        $(document).ready(function () {
+            $("#header").load("/include/header.ejs");
+            $("#myModal").load("/include/modal.ejs");
 
-                image_setting();
-            });
+            makeReportTemplate(data);
+
+            image_setting();
+        });
     </script>
     <style>
+        *{
+            letter-spacing : -1.2pt;
+        }
         .backGroundLayer, .foreGroundLayer{
             visibility : hidden;
         }
