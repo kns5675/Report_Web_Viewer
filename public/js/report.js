@@ -22,7 +22,6 @@ function makeReportTemplate(data) {
 function makeReport(report) {
 
     var numOfPage = getNumOfPage(report);
-    console.log('page : ' + numOfPage);
     for (var i = 0; i < numOfPage; i++) {
 
         setPage(report);
@@ -49,7 +48,6 @@ function getNumOfPage(report) {
             if (!(band.controlList.anyType === undefined)) {
                 if (band.controlList.anyType._attributes["xsi:type"] == "ControlDynamicTable"){
                     var tableLabels = band.controlList.anyType.Labels.TableLabel;
-                    console.log(tableLabels);
                     tableLabels.forEach(function(label, i){
                         var tableLabel = new DynamicTableLabel(label, i);
                         tableLabelList.push(tableLabel);
@@ -112,7 +110,6 @@ function getBandHeight(bands, reportHeight) {
  * *********************************************************/
 function getNumOfDataInOnePage(tableLabel, divId) {
     var bandDataHeight = 0;
-    console.log(tableLabel);
     if (typeof divId == 'object') {
         bandDataHeight = $('#' + divId).height();
     } else {
