@@ -49,7 +49,6 @@ function changeColor(tds){
  ******************************************************************/
 function beforeSubmit(){
     var copyRatio = $("#copyratio");
-    alert("copyRatio value : " + copyRatio.val());
     if(copyRatio.val()>100 || copyRatio.val() == ''){
         $("#copyratio").focus();
         $("#warning").text("인쇄배율의 범위는 0~100 입니다.");
