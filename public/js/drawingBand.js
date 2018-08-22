@@ -20,8 +20,9 @@ function drawBand(bands, layerName){
         // 어디서 재귀호출해야 할 지 명확치 않아 우선 주석처리
 
         // 밴드 div를 그려주고 CSS 입힘
-        var div_id = 'band' + bandNum;
-        $('#' + layerName).append("<div id='" + div_id + "' class='" + band.attributes["xsi:type"] + "'>" + band.name + "</div>"); 
+        var div_id = 'band' + (bandNum++);
+
+        $('#' + layerName).append("<div id='" + div_id + "' class='" + band.attributes["xsi:type"] + "'>" + band.name + "</div>");
         $('#' + div_id).css({
            'width' : band.rectangle.width,
            'height' : band.rectangle.height,
@@ -34,7 +35,6 @@ function drawBand(bands, layerName){
 
         judgementControlList(band, div_id); // 라벨을 그려줌
 
-        bandNum++;
     });
 }
 /************************************************************
