@@ -144,7 +144,7 @@ function close_pop() {
     $('#myModal').hide();
 
     //데이터값 초기화
-    $("#copyratio").val("100");
+    /*$("#copyratio").val("100");*/
     $("input:radio[name='copyornot']:radio[value='인쇄함']").prop("checked",false);
     $("input:radio[name='copyornot']:radio[value='인쇄안함']").prop("checked",true);
 
@@ -187,10 +187,13 @@ function close_pop() {
 
     $("#copyOptions").val("--인쇄--").attr("selected","selected");
 };
+/******************************************************************
+ 기능 : 모달창 닫기 - 데이터값 초기화 밑 기본값 세팅 처리
+ author : 하지연
+ ******************************************************************/
 function close_pop1() {
     //얜 값을 넘겨야함
     $('#myModal').hide();
-    $("#copyratio").val("100");
     $("#copyOptions").val("--인쇄--").attr("selected","selected");
 };
 function close_pop2(){
@@ -206,6 +209,7 @@ function close_pop3(){
     $('#modalcase').hide();
 }
 
+
 jQuery.browser = {}; //jQuery.browser.msie 사용 위함.
 (function () {
     jQuery.browser.msie = false;
@@ -215,3 +219,7 @@ jQuery.browser = {}; //jQuery.browser.msie 사용 위함.
         jQuery.browser.version = RegExp.$1;
     }
 })();
+
+function howmanyPages(thisvalue){
+    alert("this value : " + thisvalue);
+}

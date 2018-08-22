@@ -256,7 +256,3 @@ $(function() {
         readURL(this);
     });
 });
-
-
-
-
