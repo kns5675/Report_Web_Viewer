@@ -1,4 +1,5 @@
 // 작성자 : 전형준
+var bandNum = 1;
 
 /***********************************************************
  * 임시로 만든 함수.
@@ -19,8 +20,7 @@ function drawBand(bands, layerName){
         // 어디서 재귀호출해야 할 지 명확치 않아 우선 주석처리
 
         // 밴드 div를 그려주고 CSS 입힘
-        console.log(band.name);
-        var div_id = 'b' + band.id;
+        var div_id = 'band' + bandNum;
         $('#' + layerName).append("<div id='" + div_id + "' class='" + band.attributes["xsi:type"] + "'>" + band.name + "</div>"); 
         $('#' + div_id).css({
            'width' : band.rectangle.width,
@@ -33,6 +33,8 @@ function drawBand(bands, layerName){
         }
 
         judgementControlList(band, div_id); // 라벨을 그려줌
+
+        bandNum++;
     });
 }
 /************************************************************
