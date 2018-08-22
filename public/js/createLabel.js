@@ -117,7 +117,7 @@ function judgementLabel(data, divId) {
  기능 : DynamicTable(동적 테이블)을 화면에 그려주는 함수를 만든다.
  만든이 : 안예솔
 
-수정 : DynamicTableValueLabel에 데이터 바인딩
+ 수정 : DynamicTableValueLabel에 데이터 바인딩
  Date : 2018-08-20
  From 구영준
  ******************************************************************/
@@ -136,13 +136,15 @@ function drawingDynamicTable(table, tableLabel, divId) {
     $('#dynamicTable').append('<tr id = "dynamicTitleLabel"></tr>');
     $('#dynamicTable').append('<tr id = "dynamicValueLabel"></tr>');
 
+    var numOfData = getNumOfDataInOnePage(tableLabel, divId);
+
     if (Array.isArray(tableLabel)) {
         tableLabel.forEach(function (tableLabel) {
             switch (tableLabel._attributes) {
                 case "DynamicTableTitleLabel" :
                     var temp = Object.keys(dataTable.DataSetName.dt[0]);
-                    for(var i = 0; i < temp.length; i++){
-                        if(tableLabel.text == temp[i]){
+                    for (var i = 0; i < temp.length; i++) {
+                        if (tableLabel.text == temp[i]) {
                             $('#dynamicTitleLabel').append('<th id = "' + temp[i] + '"></th>');
                             $('#dynamicTitleLabel').css('width', tableLabel.rectangle.width);
                             $('#dynamicTitleLabel').css('height', tableLabel.rectangle.height);
@@ -154,23 +156,26 @@ function drawingDynamicTable(table, tableLabel, divId) {
                         }
                     }
                     break;
-                    //수정사항
+                //수정사항
                 case "DynamicTableValueLabel" :
-                    dataTable.DataSetName.dt.forEach(function (data, i) {
-                        $('#dynamicTable').append('<tr id = "dynamicValueLabel'+i+'"></tr>');
+
+                    // dataTable.DataSetName.dt.forEach(function (data, i) {
+                    for (var j = 0; j < numOfData; j++) {
+                        var data = dataTable.DataSetName.dt[j];
+                        $('#dynamicTable').append('<tr id = "dynamicValueLabel' + j + '"></tr>');
                         for (key in data) {
                             if (tableLabel.fieldName == key) {
-                                $('#dynamicValueLabel'+i).append('<td>' + data[key]._text + '</td>');
-
-                                $('#dynamicValueLabel'+i).css('width', tableLabel.rectangle.width);
-                                $('#dynamicValueLabel'+i).css('height', tableLabel.rectangle.height);
-                                $('#dynamicValueLabel'+i).css('font-size', tableLabel.fontSize);
-                                $('#dynamicValueLabel'+i).css('font-family', tableLabel.fontFamily);
-                                $('#dynamicValueLabel'+i).css('font-weight', tableLabel.fontStyle);
+                                $('#dynamicValueLabel' + j).append('<td>' + data[key]._text + '</td>');
+                                $('#dynamicValueLabel' + j).css('width', tableLabel.rectangle.width);
+                                $('#dynamicValueLabel' + j).css('height', tableLabel.rectangle.height);
+                                $('#dynamicValueLabel' + j).css('font-size', tableLabel.fontSize);
+                                $('#dynamicValueLabel' + j).css('font-family', tableLabel.fontFamily);
+                                $('#dynamicValueLabel' + j).css('font-weight', tableLabel.fontStyle);
                                 $('td').css('border', '1px solid black');
                             }
                         }
-                    });
+                    }
+                    // });
                     break;
             }
         })
@@ -256,7 +261,7 @@ function drawingSystemLabel(data, divId) {
             var day = plusZero(date.getDate());
             var dateStr = year + '-' + month + '-' + day;
 
-            $('#SystemLabel' + systemLabelNum).append('<p id = "PDate' +  dateNum + '">' + dateStr + '</p>');
+            $('#SystemLabel' + systemLabelNum).append('<p id = "PDate' + dateNum + '">' + dateStr + '</p>');
 
             $('#PDate' + dateNum).css('font-size', data.fontSize);
             $('#PDate' + dateNum).css('font-family', data.fontFamily);
@@ -275,7 +280,7 @@ function drawingSystemLabel(data, divId) {
             var sec = plusZero(date.getSeconds());
             var dateTimeStr = year + '-' + month + '-' + day + ' ' + hour + ':' + min + ':' + sec;
 
-            $('#SystemLabel' + systemLabelNum).append('<p id = "PDateTime' +  dateTimeNum + '">' + dateTimeStr + '</p>');
+            $('#SystemLabel' + systemLabelNum).append('<p id = "PDateTime' + dateTimeNum + '">' + dateTimeStr + '</p>');
 
             $('#PDateTime' + dateTimeNum).css('font-size', data.fontSize);
             $('#PDateTime' + dateTimeNum).css('font-family', data.fontFamily);
@@ -291,7 +296,7 @@ function drawingSystemLabel(data, divId) {
             var sec = plusZero(date.getSeconds());
             var timeStr = hour + ':' + min + ':' + sec;
 
-            $('#SystemLabel' + systemLabelNum).append('<p id = "PTime' +  timeNum + '">' + timeStr + '</p>');
+            $('#SystemLabel' + systemLabelNum).append('<p id = "PTime' + timeNum + '">' + timeStr + '</p>');
 
             $('#PTime' + timeNum).css('font-size', data.fontSize);
             $('#PTime' + timeNum).css('font-family', data.fontFamily);
@@ -527,7 +532,7 @@ function verticalCenter(divId, data) {
     // 16pt 이런 식으로 값이 받아져서 p앞으로 끊어서 숫자만 받아오려고 한 문자열 자르기 작업
     var brCount = $('#' + divId + ' br').length;
 
-    if(brCount >= 1) {
+    if (brCount >= 1) {
         var mid = (data.rectangle.height - fontsize[0] * (brCount + 1)) / 2;
     } else {
         var mid = (data.rectangle.height - fontsize[0]) / 2; // 왜 그런지는 모르겠지만 3을 빼줘야 width를 벗어나지 않음..
