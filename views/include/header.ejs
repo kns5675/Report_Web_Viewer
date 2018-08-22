@@ -23,6 +23,14 @@
             $("#showpages").click(function(){
                 $("#showPages").show();
             });
+            $("div.room").mouseover(function(){
+               $(this).css("background-color","#CADFFF");
+              //alert($(this>input).val());
+               //howmanyPages(thisvalue);
+            });
+            $("div.room").mouseleave(function(){
+                $(this).css("background-color","white");
+            });
         });
     </script>
     <title></title>
@@ -96,25 +104,25 @@
 
     <div id="rectangles">
       <div id="howmany">
-        <p>a * b pages</p>
+        <p>a x b pages</p>
       </div>
       <div id="howmanybottom">
-        <div class="room"><input value="1"></div>
-        <div class="room"><input value="2"></div>
-        <div class="room"><input value="3"></div>
-        <div class="room"><input value="4"></div>
-        <div class="room"><input value="5"></div>
-        <div class="room"><input value="6"></div>
-        <div class="room"><input value="7"></div>
-        <div class="room" id="h1"><input value="8"></div>
-        <div class="room"><input value="()"></div>
-        <div class="room"><input value="10"></div>
-        <div class="room"><input value="11"></div>
-        <div class="room"><input value="12"></div>
-        <div class="room"><input value="13"></div>
-        <div class="room"><input value="14"></div>
-        <div class="room"><input value="15"></div>
-        <div class="room"><input class="test" value="16"></div>
+        <div class="room"><input value="(0,0)" hidden></div>
+        <div class="room"><input value="(0,1)" hidden></div>
+        <div class="room"><input value="(0,2)" hidden></div>
+        <div class="room"><input value="(0,3)" hidden></div>
+        <div class="room"><input value="(1,0)" hidden></div>
+        <div class="room"><input value="(1,1)" hidden></div>
+        <div class="room"><input value="(1,2)" hidden></div>
+        <div class="room"><input value="(1,3)" hidden></div>
+        <div class="room"><input value="(2,0)" hidden></div>
+        <div class="room"><input value="(2,1)" hidden></div>
+        <div class="room"><input value="(2,2)" hidden></div>
+        <div class="room"><input value="(2,3)" hidden></div>
+        <div class="room"><input value="(3,0)" hidden></div>
+        <div class="room"><input value="(3,1)" hidden></div>
+        <div class="room"><input value="(3,2)" hidden></div>
+        <div class="room"><input value="(3,3)" hidden></div>
       </div>
 
     </div>

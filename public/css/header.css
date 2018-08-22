@@ -47,6 +47,7 @@ div#showPages{
     border:1px solid #909090;
     display:none;
     float:left;
+    z-index: 999;
 }
 div#rectangles{
     width:69px;
@@ -83,6 +84,6 @@ div.room{
     float:left;
     display:block;
 }
-div.room:hover{
+/*div.room:hover{
     background-color:#CADFFF;
-}
+}*/

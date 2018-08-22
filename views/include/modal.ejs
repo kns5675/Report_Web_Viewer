@@ -2,50 +2,7 @@
 <html lang="en" dir="ltr">
 <head>
     <meta charset="utf-8">
-    <script>
-        $(document).ready(function(){
-            $("#mymodal2").click(function(){
-                $("#modalcase").css("display","block");
-            });
-            $("#closebtn").click(function(){
-                close_pop();
-            });
-            $("#closebtn2").click(function(){
-                close_pop1();
-            });
-            $("#closebtn3").click(function(){
-                close_pop2();
-            });
-            $("#closebtn4").click(function(){
-                close_pop3();
-            });
-            $("#sign").on('keyup',function(){
-                try{
-                    var tds = this.value;
-                    if(tds>0 && tds<=8){
-                        changeColor(tds);
-                    }else{
-                        alert("결재란 칸 수는 1 이상 8 이하여야 합니다.");
-                        this.value="";
-                    }
-                }catch(e){
-                    console.log(e.message);
-                }
-            });
-        });
-        function changeColor(tds){
-            tds = parseInt(tds);
-            tds = tds-1;
-            for(var i = 0; i<=tds; i++){
-                $("table#modaltable tr:eq(0) td:eq("+i+")").css("background-color","white");
-                $("table#modaltable tr:eq(1) td:eq("+i+")").css("background-color","#E6E6FA");
-                /*이거 예외처리를 더 해야함.... .. ... .................지연*/
-                for(var x=7-tds;x<7 && x>i;x--){
-                    $("table#modaltable tr:eq(0) td:eq("+x+")").css("background-color","#E3E3E3");
-                    $("table#modaltable tr:eq(1) td:eq("+x+")").css("background-color","#E3E3E3");
-                }
-            }
-        };
+    <script src="js/modal.js">
     </script>
 </head>
 <body>
@@ -55,16 +12,22 @@
         <span id="closebtn"class="pop_bt" style="cursor:pointer;float:right;margin-right:10px;">X</span>
     </div>
     <div class="downpart">
+        <!--<form id="modalForm" name="modalForm" onsubmit="return beforeSubmit();">-->
+        <form id="modalForm" name="modalForm">
         <div class="leftpart">
             <span class="subject">인쇄설정</span>
             <div class="partstyle">
                 <div class="partstyle2" style="height:50px;">
                     <span>인쇄 배율</span>
-                    <input id="copyratio"type="number"value="100" max="100" min="0">&nbsp;%
+                    <input id="copyratio" name="copyratio" type="text" onkeydown="return onlyNumber(event)" onkeyup="removeChar(event)"
+                           autofocus style="width:70px; ime-mode: disabled">&nbsp;%
+                    <p id="warning" style="display:block; color:darkred; margin-top:10px; font-size:9px;"></p>
+                    <p id="warning2" style="display:block; color:darkred; margin-top:10px; font-size:9px;"></p>
+                  <!--인쇄배율의 범위는 0~100 입니다.-->
                 </div>
             </div>
 
-            <span class="subject">결제란 설정</span>
+            <span class="subject">결재란 설정</span>
             <div class="partstyle">
                 <div class="partstyle2" style="height:50px;">
                     <div class="div1">
@@ -219,8 +182,9 @@
             </div>
         </div>
         <div class="close" style="float:right; margin-right:38px; margin-top:-10px;background-color:#D7DFE7;">
-            <input type="submit" name="close" id="closebtn2" value="확인" tabindex="3" style="cursor:pointer;width:70px;height:25px;">
+            <input type="button" name="close" onclick="beforeSubmit();" id="closebtn2" value="확인" tabindex="3" style="cursor:pointer;width:70px;height:25px;">
         </div>
+        </form>
     </div>
 </div>
 <div id="modalcase" class="modal" style="display:none;">
@@ -269,7 +233,8 @@
 
                         </table>
                         <input id="closebtn4" type="submit" value="취소" tabindex="3" style="cursor:pointer;width:70px;height:25px;float:right;margin-top:5px;margin-right:32px;">
-                        <input type="submit" value="확인" tabindex="3" style="cursor:pointer;width:70px;height:25px;float:right;margin-top:5px;margin-right:10px;">
+                        <input type="submit" value="확인" tabindex="3"
+                               style="cursor:pointer;width:70px;height:25px;float:right;margin-top:5px;margin-right:10px;">
                     </div>
 
                 </div>
