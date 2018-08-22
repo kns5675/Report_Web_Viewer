@@ -165,7 +165,6 @@ function BandGroupHeader(band){
             i++;
         }
     });
-
     this.groupFieldArray = groupFieldArray;
 }
 
