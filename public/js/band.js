@@ -140,6 +140,33 @@ function BandGroupHeader(band){
     this.dataTableName = band.DataTableName._text; // 데이터 테이블 이름
     this.groupFiledName = band.GroupFiledName._text; // 그룹 기준 필드
     this.isApprovalBase = band.IsApprovalBase._text; // 결재란 기준 밴드
+    /******************************************************************
+     추가
+     기능 : 그룹 기준 필드에 대한 데이터를 배열에 담는다.
+     만든이 : 안예솔
+     일시 : 2018.08.22
+     ******************************************************************/
+    groupFieldArray = new Array();
+    groupFieldName = band.GroupFiledName._text;
+    var i = 0;
+    dataTable.DataSetName.dt.forEach(function (data) {
+        var comparison = groupFieldArray.some(function (arr) {
+            if (arr[0] == data[groupFieldName]._text) {
+                arr.push(data);
+                return true; // 배열 중 같은 이름이 있으면 break;
+            } else {
+                return false; // continue;
+            }
+        });
+        if (!comparison) {
+            groupFieldArray[i] = new Array();
+            groupFieldArray[i].push(data[groupFieldName]._text);
+            groupFieldArray[i].push(data);
+            i++;
+        }
+    });
+
+    this.groupFieldArray = groupFieldArray;
 }
 
 // 그룹 풋터 밴드
