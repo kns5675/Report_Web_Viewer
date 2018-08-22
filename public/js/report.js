@@ -25,8 +25,8 @@ function makeReportTemplate(data) {
 
     setPage(report);
     setReport(report);
-
     pageNum++;
+
 }
 
 
