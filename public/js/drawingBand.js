@@ -10,11 +10,11 @@ var bandNum = 1;
  * BandData일 경우 페이지 크기에 맞게 BandData Height 변경
  * from 구영준
  * *********************************************************/
-function drawBand(bands, layerName){
+function drawBand(bands, layerName, reportHeight){
     bands.forEach(function (band) { // 밴드 갯수만큼 반복문 돌음
 
         if(band.childHeaderBands !== null){ // 자식헤더밴드에서 재호출
-            drawBand(band.childHeaderBands, layerName);
+            drawBand(band.childHeaderBands, layerName, reportHeight);
         }
         // if(band.childBands !== null){
         //     drawBand(band.childBands);
@@ -43,7 +43,7 @@ function drawBand(bands, layerName){
         }
 
         if(band.childFooterBands !== null){ // 자식풋터밴드에서 재호출
-            drawBand(band.childFooterBands, layerName);
+            drawBand(band.childFooterBands, layerName, reportHeight);
         }
 
         judgementControlList(band, div_id); // 라벨을 그려줌

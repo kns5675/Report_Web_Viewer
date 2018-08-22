@@ -64,7 +64,7 @@ function getNumOfPage(report) {
         if(numOfDataInOnePage == 0){
             return 1;
         }else{
-            return Math.ceil(numOfAllData / numOfDataInOnePage);
+            return Math.floor(numOfAllData / numOfDataInOnePage);
         }
     }
 }
@@ -110,15 +110,13 @@ function getBandHeight(bands, reportHeight) {
  * *********************************************************/
 function getNumOfDataInOnePage(tableLabel, divId) {
     var bandDataHeight = 0;
-    if (typeof divId == 'object') {
+    if (typeof divId == 'string') {
         bandDataHeight = $('#' + divId).height();
-    } else {
+    } else if(typeof divId =='number'){
         bandDataHeight = divId;
     }
-
     var firstLine = tableLabel[0].rectangle.height;
     var dataLine = Number(tableLabel[tableLabel.length - 1].rectangle.height);
-
     return Math.floor((bandDataHeight - firstLine) / dataLine);
 }
 
@@ -310,10 +308,10 @@ function setPage(report) {
  author : powerku
  ******************************************************************/
 function setPageDirection(report) {
-    if (report.paperDirection) {
+    if (report.paperDirection) { //세로
         $('#page' + pageNum).css('width', report.paperSize.width + 'px');
         $('#page' + pageNum).css('height', report.paperSize.height + 'px');
-    } else {
+    } else { //가로
         $('#page' + pageNum).css('width', report.paperSize.height + 'px');
         $('#page' + pageNum).css('height', report.paperSize.width + 'px');
     }

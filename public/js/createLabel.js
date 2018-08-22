@@ -17,14 +17,20 @@ var pageNumberNum = 1;
 var pageNumTotalPageNum = 1;
 var totalPageNum = 1;
 var groupFieldNum = 0; // 그룹으로 묶었을 경우 BandGroupHeader에서 DataLabel을 사용했을 때 몇 번째 그룹이 출력중인지 알 수 있는 변수
+var tableNum = 1;
+var dynamicTableNum = 1;
+var dynamicTitleLabelNum = 1;
+var thNum = 1;
+var dynamicValueLabelNum = 1;
 var groupFieldArray = new Array();
+var row = 0;
 
 /******************************************************************
  기능 : ControlList의 유무를 판단하는 함수를 만든다.
  만든이 : 안예솔
  ******************************************************************/
 function judgementControlList(band, divId) {
-    if(band.groupFieldArray !== undefined) {
+    if (band.groupFieldArray !== undefined) {
         groupFieldArray = band.groupFieldArray;
     }
     if (!(band.controlList.anyType === undefined)) { // ControlList 태그 안에 뭔가가 있을 때
@@ -53,9 +59,11 @@ function judgementLabel(data, divId) {
 
         var tableLabels = data.Labels.TableLabel;
 
-        tableLabels.forEach(function(label, i){
-           var tableLabel = new DynamicTableLabel(label, i);
-           tableLabelList.push(tableLabel);
+        tableLabels.forEach(function (label, i) {
+            var tableLabel = new DynamicTableLabel(label, i);
+            if (tableLabelList.length < tableLabels.length) {
+                tableLabelList.push(tableLabel);
+            }
         });
         drawingDynamicTable(controlDynamicTable, tableLabelList, divId);
 
@@ -65,7 +73,7 @@ function judgementLabel(data, divId) {
 
         var tableLabels = data.Labels.TableLabel;
 
-        tableLabels.forEach(function(label, i){
+        tableLabels.forEach(function (label, i) {
             var tableLabel = new FixedTableLabel(label, i);
             tableLabelList.push(tableLabel);
         });
@@ -129,50 +137,54 @@ function judgementLabel(data, divId) {
  ******************************************************************/
 function drawingDynamicTable(table, tableLabel, divId) {
     var div = $('#' + divId);
-    div.append('<div id="Table"></div>');
+    div.append('<div id = "Table' + tableNum + '"></div>');
 
-    var divIdTable = $('#Table');
-    divIdTable.append('<table id="dynamicTable"></table>');
-
+    var divIdTable = $('#Table' + tableNum);
+    divIdTable.append('<table id="dynamicTable' + dynamicTableNum + '"></table>');
 
     div.css('position', 'relative');
 
     divIdTable.css({
-        'position' : 'absolute',
-        'left' : table.rectangle.x + 'px',
-        'top' : table.rectangle.y + 'px'
+        'position': 'absolute',
+        'left': table.rectangle.x + 'px',
+        'top': table.rectangle.y + 'px'
     });
 
-    var tableId = $('#dynamicTable');
+    var tableId = $('#dynamicTable' + dynamicTableNum);
 
     tableId.css({
-        'width' : table.rectangle.width + 'px',
-        'height' : table.rectangle.height + 'px'
+        'width': table.rectangle.width + 'px',
+        'height': table.rectangle.height + 'px'
     });
 
-    tableId.append('<tr id = "dynamicTitleLabel"></tr>');
-    tableId.append('<tr id = "dynamicValueLabel"></tr>');
+    tableId.append('<tr id = "dynamicTitleLabel' + dynamicTitleLabelNum + '"></tr>');
+    // tableId.append('<tr id = "dynamicValueLabel' + dynamicValueLabelNum + '"></tr>');
 
-    var titleTrId = $('#dynamicTitleLabel');
+    var titleTrId = $('#dynamicTitleLabel' + dynamicTitleLabelNum);
 
     var numOfData = getNumOfDataInOnePage(tableLabel, divId);
+
+    if (pageNum != 1)
+        row = pageNum * 7;
+
+    var rowLength = row + numOfData;
 
     if (Array.isArray(tableLabel)) {
         tableLabel.forEach(function (label) {
             switch (label._attributes) {
                 case "DynamicTableTitleLabel" :
                     var temp = Object.keys(dataTable.DataSetName.dt[0]);
-                    temp.forEach(function(titleName){
-                        if(label.text == titleName){
-                            titleTrId.append('<th id = "' + titleName + '"></th>');
+                    temp.forEach(function (titleName) {
+                        if (label.text == titleName) {
+                            titleTrId.append('<th id = "' + titleName + thNum + '"></th>');
                             titleTrId.css({
-                                'width' : label.rectangle.width,
-                                'height' : label.rectangle.height,
-                                'font-size' : label.fontSize,
-                                'font-family' : label.fontFamily,
-                                'font-weight' : label.fontStyle
+                                'width': label.rectangle.width,
+                                'height': label.rectangle.height,
+                                'font-size': label.fontSize,
+                                'font-family': label.fontFamily,
+                                'font-weight': label.fontStyle
                             });
-                            var thId = $('#' + titleName);
+                            var thId = $('#' + titleName + thNum);
                             thId.css('border', '1px solid black');
                             thId.append(titleName);
                         }
@@ -180,37 +192,42 @@ function drawingDynamicTable(table, tableLabel, divId) {
                     break;
                 //수정사항
                 case "DynamicTableValueLabel" :
-                    // dataTable.DataSetName.dt.forEach(function (data, i) {
-                    for (var j = 0; j < numOfData; j++) {
+                    for (var j = row; j < rowLength; j++) {
                         var data = dataTable.DataSetName.dt[j];
-                        $('#dynamicTable').append('<tr id = "dynamicValueLabel' + j + '"></tr>');
-                        for (key in data) {
-                             if (label.fieldName == key) {
-                                var valueTrId = $('#dynamicValueLabel' + i);
-                                valueTrId.append('<td>' + data[key]._text + '</td>');
+                        tableId.append('<tr id = "dynamicValueLabel' + j + '"></tr>');
+                        var valueTrId = $('#dynamicValueLabel' + j);
 
+                        for (key in data) {
+                            if (label.fieldName == key) {
+                                var valueTrId = $('#dynamicValueLabel' + j);
+                                valueTrId.append('<td>' + data[key]._text + '</td>');
                                 valueTrId.css({
-                                    'width' : label.rectangle.width,
-                                    'height' : label.rectangle.height,
-                                    'font-size' : label.fontSize,
-                                    'font-family' : label.fontFamily,
-                                    'font-weight' : label.fontStyle
+                                    'width': label.rectangle.width,
+                                    'height': label.rectangle.height,
+                                    'font-size': label.fontSize,
+                                    'font-family': label.fontFamily,
+                                    'font-weight': label.fontStyle
                                 });
                                 var td = $('td');
                                 td.css('border', '1px solid black');
                             }
                         }
                     }
-                    // });
                     break;
             }
-        })
+        });
+        tableId.css({
+            'border': '1px solid black',
+            'border-collapse': 'collapse',
+            'text-align': 'center'
+        });
+
+        tableNum++;
+        dynamicTableNum++;
+        thNum++;
+        dynamicTitleLabelNum++;
+        dynamicValueLabelNum++;
     }
-    tableId.css({
-        'border' : '1px solid black',
-        'border-collapse' : 'collapse',
-        'text-align': 'center'
-    });
 }
 
 
@@ -230,10 +247,10 @@ function drawingFixedTable(table, tableLabel, divId) {
     var tableId = $('#fixedTable');
 
     tableId.css({
-        'width' : table.rectangle.width,
-        'height' : table.rectangle.height,
-        'left' : table.rectangle.x + 'px',
-        'top' : table.rectangle.y + 'px'
+        'width': table.rectangle.width,
+        'height': table.rectangle.height,
+        'left': table.rectangle.x + 'px',
+        'top': table.rectangle.y + 'px'
     });
 
     tableId.append('<tr id = "fixedTitleLabel"></tr>');
@@ -248,30 +265,30 @@ function drawingFixedTable(table, tableLabel, divId) {
                 case "FixedTableTitleLabel" :
                     titleTrId.append('<th></th>');
                     titleTrId.css({
-                        'width' : label.rectangle.width,
-                        'height' : label.rectangle.height,
-                        'font-size' : label.fontSize,
-                        'font-family' : label.fontFamily,
-                        'font-weight' : label.fontStyle
+                        'width': label.rectangle.width,
+                        'height': label.rectangle.height,
+                        'font-size': label.fontSize,
+                        'font-family': label.fontFamily,
+                        'font-weight': label.fontStyle
                     });
                     break;
                 case "FixedTableValueLabel" :
                     valueTrId.append('<td></td>');
                     valueTrId.css({
-                        'width' : label.rectangle.width,
-                        'height' : label.rectangle.height,
-                        'font-size' : label.fontSize,
-                        'font-family' : label.fontFamily,
-                        'font-weight' : label.fontStyle
+                        'width': label.rectangle.width,
+                        'height': label.rectangle.height,
+                        'font-size': label.fontSize,
+                        'font-family': label.fontFamily,
+                        'font-weight': label.fontStyle
                     });
                     break;
             }
         })
     }
     tableId.css({
-        'border' : '1px solid black',
-        'border-collapse' : 'collapse',
-        'text-align' : 'center'
+        'border': '1px solid black',
+        'border-collapse': 'collapse',
+        'text-align': 'center'
     });
 }
 
@@ -288,13 +305,13 @@ function drawingSystemLabel(data, divId) {
     var systemLabelId = $('#SystemLabel' + systemLabelNum);
 
     systemLabelId.css({
-        'width' : data.rectangle.width,
-        'height' : data.rectangle.height,
-        'position' : 'absolute',
-        'left' : data.rectangle.x + 'px',
-        'top' : data.rectangle.y + 'px',
-        'text-align' : 'center',
-        'border' : '1px solid black'
+        'width': data.rectangle.width,
+        'height': data.rectangle.height,
+        'position': 'absolute',
+        'left': data.rectangle.x + 'px',
+        'top': data.rectangle.y + 'px',
+        'text-align': 'center',
+        'border': '1px solid black'
     });
 
     var date = new Date();
@@ -305,14 +322,14 @@ function drawingSystemLabel(data, divId) {
             var day = plusZero(date.getDate());
             var dateStr = year + '-' + month + '-' + day;
 
-            systemLabelId.append('<p id = "PDate' +  dateNum + '">' + dateStr + '</p>');
+            systemLabelId.append('<p id = "PDate' + dateNum + '">' + dateStr + '</p>');
 
             var pId = $('#PData' + dateNum);
 
             pId.css({
-                'font-size' : data.fontSize,
-                'font-family' : data.fontFamily,
-                'font-weight' : data.fontStyle
+                'font-size': data.fontSize,
+                'font-family': data.fontFamily,
+                'font-weight': data.fontStyle
             });
 
             verticalCenter(('PDate' + dateNum), data);
@@ -328,14 +345,14 @@ function drawingSystemLabel(data, divId) {
             var sec = plusZero(date.getSeconds());
             var dateTimeStr = year + '-' + month + '-' + day + ' ' + hour + ':' + min + ':' + sec;
 
-            systemLabelId.append('<p id = "PDateTime' +  dateTimeNum + '">' + dateTimeStr + '</p>');
+            systemLabelId.append('<p id = "PDateTime' + dateTimeNum + '">' + dateTimeStr + '</p>');
 
             var pId = $('#PDateTime' + dateTimeNum);
 
             pId.css({
-                'font-size' : data.fontSize,
-                'font-family' : data.fontFamily,
-                'font-weight' : data.fontStyle
+                'font-size': data.fontSize,
+                'font-family': data.fontFamily,
+                'font-weight': data.fontStyle
             });
 
             verticalCenter(('PDateTime' + dateTimeNum), data);
@@ -348,14 +365,14 @@ function drawingSystemLabel(data, divId) {
             var sec = plusZero(date.getSeconds());
             var timeStr = hour + ':' + min + ':' + sec;
 
-            systemLabelId.append('<p id = "PTime' +  timeNum + '">' + timeStr + '</p>');
+            systemLabelId.append('<p id = "PTime' + timeNum + '">' + timeStr + '</p>');
 
             var pId = $('#PTime' + timeNum);
 
             pId.css({
-                'font-size' : data.fontSize,
-                'font-family' : data.fontFamily,
-                'font-weight' : data.fontStyle
+                'font-size': data.fontSize,
+                'font-family': data.fontFamily,
+                'font-weight': data.fontStyle
             });
 
             verticalCenter(('PTime' + timeNum), data);
@@ -394,13 +411,13 @@ function drawingSummaryLabel(data, divId) {
     var summaryLabelId = $('#SummaryLabel' + summaryLabelNum);
 
     summaryLabelId.css({
-        'width' : data.rectangle.width,
-        'height' : data.rectangle.height,
-        'position' : 'absolute',
-        'left' : data.rectangle.x + 'px',
-        'top' : data.rectangle.y + 'px',
-        'text-align' : 'center',
-        'border' : '1px solid black'
+        'width': data.rectangle.width,
+        'height': data.rectangle.height,
+        'position': 'absolute',
+        'left': data.rectangle.x + 'px',
+        'top': data.rectangle.y + 'px',
+        'text-align': 'center',
+        'border': '1px solid black'
     });
 
     summaryLabelId.append('<p id = "PSummaryLabel' + summaryLabelNum + '"></p>');
@@ -408,9 +425,9 @@ function drawingSummaryLabel(data, divId) {
     var pId = $('#PSummaryLabel' + summaryLabelNum);
 
     pId.css({
-        'font-size' : data.fontSize,
-        'font-family' : data.fontFamily,
-        'font-weight' : data.fontStyle
+        'font-size': data.fontSize,
+        'font-family': data.fontFamily,
+        'font-weight': data.fontStyle
     });
 
     //pId.append(data.text);
@@ -432,13 +449,13 @@ function drawingDataLabel(data, divId) {
     var dataLabelId = $('#DataLabel' + dataLabelNum);
 
     dataLabelId.css({
-        'width' : data.rectangle.width,
-        'height' : data.rectangle.height,
-        'position' : 'absolute',
-        'left' : data.rectangle.x + 'px',
-        'top' : data.rectangle.y + 'px',
-        'text-align' : 'center',
-        'border' : '1px solid black'
+        'width': data.rectangle.width,
+        'height': data.rectangle.height,
+        'position': 'absolute',
+        'left': data.rectangle.x + 'px',
+        'top': data.rectangle.y + 'px',
+        'text-align': 'center',
+        'border': '1px solid black'
     });
 
     dataLabelId.append('<p id = "PDataLabel' + dataLabelNum + '"></p>');
@@ -446,15 +463,15 @@ function drawingDataLabel(data, divId) {
     var pId = $('#PDataLabel' + dataLabelNum);
 
     pId.css({
-        'font-size' : data.fontSize,
-        'font-family' : data.fontFamily,
-        'font-weight' : data.fontStyle
+        'font-size': data.fontSize,
+        'font-family': data.fontFamily,
+        'font-weight': data.fontStyle
     });
 
     /********************************************
      한 그룹의 데이터 출력이 끝나면 groupFieldNum++를 어디선가 해줘야함..어떻게해야하지..모르겠담
      *******************************************/
-    if(groupFieldArray !== undefined){
+    if (groupFieldArray !== undefined) {
         pId.append(groupFieldArray[groupFieldNum][0]);
     }
 
@@ -475,15 +492,15 @@ function drawingNormalLabel(data, divId) {
     var normalLabelId = $('#NormalLabel' + normalLabelNum);
 
     normalLabelId.css({
-        'width' : data.rectangle.width,
-        'height' : data.rectangle.height,
-        'position' : 'absolute',
-        'left' : data.rectangle.x + 'px',
-        'top' : data.rectangle.y + 'px',
-        'text-align' : 'center',
-        'border' : '1px solid black',
-        'white-space' : 'nowrap',
-        'overflow' : 'visible'
+        'width': data.rectangle.width,
+        'height': data.rectangle.height,
+        'position': 'absolute',
+        'left': data.rectangle.x + 'px',
+        'top': data.rectangle.y + 'px',
+        'text-align': 'center',
+        'border': '1px solid black',
+        'white-space': 'nowrap',
+        'overflow': 'visible'
     });
 
     normalLabelId.append('<p id = "PNormalLabel' + normalLabelNum + '"></p>');
@@ -491,11 +508,11 @@ function drawingNormalLabel(data, divId) {
     var pId = $('#PNormalLabel' + normalLabelNum);
 
     pId.css({
-        'font-size' : data.fontSize,
-        'font-family' : data.fontFamily,
-        'font-weight' : data.fontStyle,
-        'font-stretch' : 'ultra-condensed',
-        'display' : 'block'
+        'font-size': data.fontSize,
+        'font-family': data.fontFamily,
+        'font-weight': data.fontStyle,
+        'font-stretch': 'ultra-condensed',
+        'display': 'block'
     });
 
     pId.append(data.text);
@@ -517,13 +534,13 @@ function drawingExpression(data, divId) {
     var expressionId = $('#Expression' + expressionNum);
 
     expressionId.css({
-        'width' : data.rectangle.width,
-        'height' : data.rectangle.height,
-        'position' : 'absolute',
-        'left' : data.rectangle.x + 'px',
-        'top' : data.rectangle.y + 'px',
-        'text-align' : 'center',
-        'border' : '1px solid black'
+        'width': data.rectangle.width,
+        'height': data.rectangle.height,
+        'position': 'absolute',
+        'left': data.rectangle.x + 'px',
+        'top': data.rectangle.y + 'px',
+        'text-align': 'center',
+        'border': '1px solid black'
     });
 
     expressionId.append('<p id = "PExpression' + expressionNum + '"></p>');
@@ -531,9 +548,9 @@ function drawingExpression(data, divId) {
     var pId = $('#PExpression' + expressionNum);
 
     pId.css({
-        'font-size' : data.fontSize,
-        'font-family' : data.fontFamily,
-        'font-weight' : data.fontStyle
+        'font-size': data.fontSize,
+        'font-family': data.fontFamily,
+        'font-weight': data.fontStyle
     });
     //$('#PExpression' + expressionNum).append(data.text);
 
@@ -554,13 +571,13 @@ function drawingGroupLabel(data, divId) {
     var groupLabelId = $('#GroupLabel' + groupLabelNum);
 
     groupLabelId.css({
-        'width' : data.rectangle.width,
-        'height' : data.rectangle.height,
-        'position' : 'absolute',
-        'left' : data.rectangle.x + 'px',
-        'top' : data.rectangle.y + 'px',
-        'text-align' : 'center',
-        'border' : '1px solid black'
+        'width': data.rectangle.width,
+        'height': data.rectangle.height,
+        'position': 'absolute',
+        'left': data.rectangle.x + 'px',
+        'top': data.rectangle.y + 'px',
+        'text-align': 'center',
+        'border': '1px solid black'
     });
 
     groupLabelId.append('<p id = "PGroupLabel' + groupLabelNum + '"></p>');
@@ -568,9 +585,9 @@ function drawingGroupLabel(data, divId) {
     var pId = $('#PGroupLabel' + groupLabelNum);
 
     pId.css({
-        'font-size' : data.fontSize,
-        'font-family' : data.fontFamily,
-        'font-weight' : data.fontStyle
+        'font-size': data.fontSize,
+        'font-family': data.fontFamily,
+        'font-weight': data.fontStyle
     });
     //$('#PGroupLabel' + groupLabelNum).append(data.text);
 
@@ -591,13 +608,13 @@ function drawingParameterLabel(data, divId) {
     var parameterLabelId = $('#ParameterLabel' + parameterLabelNum);
 
     parameterLabelId.css({
-        'width' : data.rectangle.width,
-        'height' : data.rectangle.height,
-        'position' : 'absolute',
-        'left' : data.rectangle.x + 'px',
-        'top' : data.rectangle.y + 'px',
-        'text-align' : 'center',
-        'border' : '1px solid black'
+        'width': data.rectangle.width,
+        'height': data.rectangle.height,
+        'position': 'absolute',
+        'left': data.rectangle.x + 'px',
+        'top': data.rectangle.y + 'px',
+        'text-align': 'center',
+        'border': '1px solid black'
     });
 
     parameterLabelId.append('<p id = "PParameterLabel' + parameterLabelNum + '"></p>');
@@ -605,9 +622,9 @@ function drawingParameterLabel(data, divId) {
     var pId = $('#PParameterLabel' + parameterLabelNum);
 
     pId.css({
-        'font-size' : data.fontSize,
-        'font-family' : data.fontFamily,
-        'font-weight' : data.fontStyle
+        'font-size': data.fontSize,
+        'font-family': data.fontFamily,
+        'font-weight': data.fontStyle
     });
     //$('#PParameterLabel' + parameterLabelNum).append(data.text);
 
@@ -646,7 +663,7 @@ function verticalCenter(divId, data) {
     var mid = (data.rectangle.height - fontsize[0] * (brCount + 1)) / 2;
 
     div.css({
-        'margin-top' : mid,
-        'margin-bottom' : mid
+        'margin-top': mid,
+        'margin-bottom': mid
     });
 }
