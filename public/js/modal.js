@@ -70,39 +70,25 @@ function beforeSubmit(){
  author : 하지연
  ******************************************************************/
 function eCopyRatio(eCopyRate){
-    alert("인쇄배율 평션 들어왔음돠" + eCopyRate);
     try {
-        alert("try들옴");
         var eCopyRatioContent = document.getElementById('designLayer' + 1);
         var ecopyratio = eCopyRate;
         ecopyratio = Number(ecopyratio);
-        alert("ecopyratio 타입 : " + typeof ecopyratio);
-        alert("ecopyratio : " + ecopyratio);
         if (jQuery.browser.msie) {
-            alert("if들옴");
             eCopyRatioContent.style.zoom = ecopyratio;
         }
         else {
             alert("else들옴");
             $(eCopyRatioContent).css('-webkit-transform','scale(' + (ecopyratio) + ')');
-            alert("ecopyratio : "+ecopyratio);
-            alert("1");
             $(eCopyRatioContent).css('-webkit-transform-origin','0 0');
-            alert("2");
             $(eCopyRatioContent).css('-moz-transform','scale(' + (ecopyratio) + ')');
-            alert("3");
             $(eCopyRatioContent).css('-moz-transform-origin','0 0');
-            alert("4");
             $(eCopyRatioContent).css('-o-transform','scale(' + (ecopyratio) + ')');
-            alert("5");
             $(eCopyRatioContent).css('-o-transform-origin','0 0');
-            alert("6");
             $(eCopyRatioContent).css('transform','scale('+(ecopyratio)+')');
-            alert("eCopyRatioContent : " + $(eCopyRatioContent).css.scale);
         }
     }
     catch(e) {
-        alert("catch로 잡음");
         console.log(e.message);
     }
 }
