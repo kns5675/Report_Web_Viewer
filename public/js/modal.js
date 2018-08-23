@@ -14,6 +14,7 @@ $(document).ready(function(){
     $("#sign").on('keyup',function(){
         try{
             var tds = this.value;
+            alert(tds);
             if(tds>0 && tds<=8){
                 changeColor(tds);
             }else{
@@ -36,7 +37,7 @@ function changeColor(tds){
     for(var i = 0; i<=tds; i++){
         $("table#modaltable tr:eq(0) td:eq("+i+")").css("background-color","white");
         $("table#modaltable tr:eq(1) td:eq("+i+")").css("background-color","#E6E6FA");
-        /*이거 예외처리를 더 해야함.... .. ... .................지연*/
+
         for(var x=7-tds;x<7 && x>i;x--){
             $("table#modaltable tr:eq(0) td:eq("+x+")").css("background-color","#E3E3E3");
             $("table#modaltable tr:eq(1) td:eq("+x+")").css("background-color","#E3E3E3");

@@ -373,6 +373,7 @@ function setPage(report) {
 
     var page = $('#page' + pageNum);
     page.css('border', 'solid blue');
+    page.css('background-color','lightyellow');
 
 }
 
