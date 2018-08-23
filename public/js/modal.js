@@ -78,7 +78,6 @@ function eCopyRatio(eCopyRate){
             eCopyRatioContent.style.zoom = ecopyratio;
         }
         else {
-            alert("else들옴");
             $(eCopyRatioContent).css('-webkit-transform','scale(' + (ecopyratio) + ')');
             $(eCopyRatioContent).css('-webkit-transform-origin','0 0');
             $(eCopyRatioContent).css('-moz-transform','scale(' + (ecopyratio) + ')');
