@@ -63,7 +63,7 @@ function judgementLabel(data, divId) {
 
         tableLabels.forEach(function (label, i) {
             var tableLabel = new DynamicTableLabel(label, i);
-            if (tableLabelList.length < tableLabels.length) {
+            if (tableLabelList.length < tableLabels.length) { //영준 수정
                 tableLabelList.push(tableLabel);
             }
         });
