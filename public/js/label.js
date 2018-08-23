@@ -1,10 +1,5 @@
 // Label 객체
 
-// DrawingType, isSaveImage, LabelTypeFormSetFont, Autosize, IsVectorCharacter, VectorValue, AutoFontType, WordWrap, FormatType, ShowZeroState
-// Visible, NumberToTextType, IsSameWidth, Editable, BackGroundColor, Clipping, BorderLineLocation, TextColor, TextDirection, VerticalTextAlignment
-// CharacterSpacing, LineSpacing, IsUseBasicInnerMargin, LabelShape, CircleLineColor, IsUseGradient, GradientColor, StartGradientDirection, GradientDerection
-// DetailWhere, ParameterName, SummaryType, QRCodeEncodingType, BarcodeType, PriorLabel, GroupingRule, ImageSizeType
-
 // console.log(data.ReportTemplate.ReportList.anyType.Layers.anyType[1].Bands.anyType[0].ControlList.anyType);
 
 /******************************************************************
@@ -55,7 +50,7 @@ function Label(data){
             this.fontStyle = 'normal';
         }
     }
-    this.borderDottedLines = data.EnableBorder === undefined ? undefined : data.BorderDottedLines._text;
+    this.borderDottedLines = data.EnableBorder === undefined ? undefined : data.BorderDottedLines._text; // 테두리 점선 left, right, top, bottom있는 것 같음
     this.indentLB = data.IndentLB === undefined ? undefined : data.IndentLB._text; // 들여쓰기
     this.interMargin = data.InterMargin === undefined ? undefined : data.InterMargin._text; // 내부 여백
 
@@ -67,11 +62,12 @@ function Label(data){
     });
 
     this.indexUnderLine = (data.IndexUnderLine === undefined ? undefined : { // 이중 밑줄
-        isUse : (data.IndexUnderLine.IsUse === undefined ? 0 : data.IndexUnderLine.IsUse._text),
-        verSpace : (data.IndexUnderLine.VerSpace === undefined ? 0 : data.IndexUnderLine.VerSpace._text),
-        edgeSpace : (data.IndexUnderLine.EdgeSpace === undefined ? 0 : data.IndexUnderLine.EdgeSpace._text),
-        firstLineThickness : (data.IndexUnderLine.FirstLineThickness === undefined ? 0 : data.IndexUnderLine.FirstLineThickness._text),
-        secondLineThickness : (data.IndexUnderLine.SecondLineThickness === undefined ? 0 : data.IndexUnderLine.SecondLineThickness._text)
+        isUse : (data.IndexUnderLine.IsUse === undefined ? 0 : data.IndexUnderLine.IsUse._text), // 사용 여부
+        verSpace : (data.IndexUnderLine.VerSpace === undefined ? 0 : data.IndexUnderLine.VerSpace._text), // 수직 공백
+        edgeSpace : (data.IndexUnderLine.EdgeSpace === undefined ? 0 : data.IndexUnderLine.EdgeSpace._text), // 모서리 너비
+        firstLineThickness : (data.IndexUnderLine.FirstLineThickness === undefined ? 0 : data.IndexUnderLine.FirstLineThickness._text), // 첫 번째 라인 두께
+        secondLineThickness : (data.IndexUnderLine.SecondLineThickness === undefined ? 0 : data.IndexUnderLine.SecondLineThickness._text), // 두 번째 라인 두께
+        betweenLineSpace : (data.BetweenLineSpace === undefined ? undefined : data.BetweenLineSpace._text) // 두 라인 사이 간격
     });
 
     this.text = data.Text === undefined ? undefined : data.Text._text;
@@ -80,10 +76,48 @@ function Label(data){
     this.base64ImageFromViewer = data.Base64ImageFromViewer === undefined ? undefined : data.Base64ImageFromViewer._text; // 이미지 저장값을 예로 하는 경우 해당 이미지를 Base64형태로 변환하여 저장한다
 
     this.labelTextType = (data.LabelTextType === undefined ? 0 : data.LabelTextType._text); // 문자 형식
-    this.format = (data.Format === undefined ? 0 : data.Format._text);
+    this.format = (data.Format === undefined ? 0 : data.Format._text); // 표시 형식
     this.startBindScript = (data.StartBindScript === undefined ? 0 : data.StartBindScript._text); // 아마도 JavaScript 코드
     this.reVectorValue = (data.ReVectorValue === undefined ? 0 : data.ReVectorValue._text); // 어디서 쓰이는지 모르겠음
     this._formatFieldNone = (data._formatFieldNone === undefined ? 0 : data._formatFieldNone._text);
+
+    this.drawingType = data.DrawingType === undefined ? undefined : data.DrawingType._text; // 그리기 형태
+    this.isSaveImage = data.IsSaveImage === undefined ? undefined : data.IsSaveImage._text; // 이미지 저장
+    this.labelTypeForSetFont = data.LabelTypeForSetFont === undefined ? undefined : data.LabelTypeForSetFont._text; // 폰트 지정 타입
+    this.autosize = data.Autosize === undefined ? undefined : data.Autosize._text; // 자동 높이 조정
+    this.isVectorCharacter = data.IsVectorCharacter === undefined ? undefined : data.IsVectorCharacter._text; // 장평 조정 설정
+    this.vectorValue = data.VectorValue === undefined ? undefined : data.VectorValue._text; // 수동 장평 조절
+    this.autoFontType = data.AutoFontType === undefined ? undefined : data.AutoFontType._text; // 폰트 크기 자동 조절
+    this.wordWrap = data.WordWrap === undefined ? undefined : data.WordWrap._text; // 자동 줄바꾸기
+    this.formatType = data.FormatType === undefined ? undefined : data.FormatType._text; // 소수점 자릿수
+    this.showZeroState = data.ShowZeroState === undefined ? undefined : data.ShowZeroState._text; // 0값 표시 여부
+    this.visible = data.Visible === undefined ? undefined : data.Visible._text; // VISIBLE
+    this.numberToTextType = data.NumberToTextType === undefined ? undefined : data.NumberToTextType._text; // 금액 표시 방법
+    this.isSameWidth = data.IsSameWidth === undefined ? undefined : data.IsSameWidth._text; // 글자 크기 동일 여부
+    this.editable = data.Editable === undefined ? undefined : data.Editable._text; // 편집 가능
+    this.backGroundColor = data.BackGroundColor === undefined ? undefined : data.BackGroundColor._text; // 바탕색
+    this.clipping = data.Clipping === undefined ? undefined : data.Clipping._text; // 클립핑
+    this.borderLineLocation = data.BorderLineLocation === undefined ? undefined : data.BorderLineLocation._text; // 테두리 라인 위치
+    this.textColor = data.TextColor === undefined ? undefined : data.TextColor._text; // 글꼴 색
+    this.textDirection = data.TextDirection === undefined ? undefined : data.TextDirection._text; // 텍스트 방향
+    this.verticalTextAlignment = data.VerticalTextAlignment === undefined ? undefined : data.VerticalTextAlignment._text;
+    this.characterSpacing = data.CharacterSpacing === undefined ? undefined : data.CharacterSpacing._text; // 자간
+    this.lineSpacing = data.LineSpacing === undefined ? undefined : data.LineSpacing._text; // 줄 간격
+    this.isUseBasicInnerMargin = data.IsUseBasicInnerMargin === undefined ? undefined : data.IsUseBasicInnerMargin._text; // 기본 여백 사용
+    this.labelShape = data.LabelShape === undefined ? undefined : data.LabelShape._text; // 라벨 형태
+    this.circleLineColor = data.CircleLineColor === undefined ? undefined : data.CircleLineColor._text; // 원 테두리 색
+    this.isUseGradient = data.IsUseGradient === undefined ? undefined : data.IsUseGradient._text; // 그라데이션 사용 여부
+    this.gradientColor = data.GradientColor === undefined ? undefined : data.GradientColor._text; // 그라데이션 색
+    this.startGradientDirection = data.StartGradientDirection === undefined ? undefined : data.StartGradientDirection._text; // 그라데이션 시작 방향
+    this.gradientDerection = data.GradientDerection === undefined ? undefined : data.GradientDerection._text; // 그라데이션 방향
+    this.detailWhere = data.DetailWhere === undefined ? undefined : data.DetailWhere._text; // 요약 라벨 조건절
+    this.parameterName = data.ParameterName === undefined ? undefined : data.ParameterName._text; // 파라미터 이름
+    this.summaryType = data.SummaryType === undefined ? undefined : data.SummaryType._text; // 요약 타입
+    this.qrCodeEncodingType = data.QRCodeEncodingType === undefined ? undefined : data.QRCodeEncodingType._text; // QR 코드 인코딩 타입
+    this.barcodeType = data.BarcodeType === undefined ? undefined : data.BarcodeType._text; // 바코드 타입
+    this.priorLabel = data.PriorLabel === undefined ? undefined : data.PriorLabel._text; // 선행 라벨
+    this.groupingRule = data.GroupingRule === undefined ? undefined : data.GroupingRule._text; // 그룹핑규칙
+    this.imageSizeType = data.ImageSizeType === undefined ? undefined : data.ImageSizeType._text; //이미지 크기
 }
 
 
@@ -102,15 +136,21 @@ function Table(data){ // ControlList 밑에 anyType이 ControlFixedTable, Contro
     };
     this.name = data.Name._text;
 
-    this.isShowAtColumnSelect = data.IsShowAtColumnSelect._text;
-    this.isRepeatToPageBottom = data.IsRepeatToPageBottom._text;
-    this.columnCount = data.ColumnCount._text;
-    this.rowCount = data.RowCount._text;
-    this.relateTableList = data.RelateTableList === undefined ? 0 : data.RelateTableList._text;
+    this.isShowAtColumnSelect = data.IsShowAtColumnSelect._text; // 뷰어 항목 선택 표시 여부
+    // 인쇄 미리보기에서 항목선택을 하는 경우 원하는 컬럼을 추가 및 제거할 수 있다.
+    this.isRepeatToPageBottom = data.IsRepeatToPageBottom._text; // 페이지 하단까지 채우기
+    this.columnCount = data.ColumnCount._text; // 열수
+    this.rowCount = data.RowCount._text; // 행수
+    this.isApprovalBox = data.IsApprovalBox === undefined ? undefined : data.IsApprovalBox._text;
+    this.relateTableList = data.RelateTableList === undefined ? 0 : data.RelateTableList._text; // 연결된 테이블
     this.forceAnnex = data.ForceAnnex === undefined ? 0 : data.ForceAnnex._text;
-    this.minimumRowCount = data.MinimumRowCount === undefined ? 0 : data.MinimumRowCount._text;
-    this.fixRowCount = data.FixRowCount === undefined ? 0 : data.FixRowCount._text;
-    this.isAnnexMark = data.isAnnexMark === undefined ? 0 : data.isAnnexMark._text;
+    this.minimumRowCount = data.MinimumRowCount === undefined ? 1 : data.MinimumRowCount._text; // 최소 행 개수 (DRD에서 Default값이 1임)
+    this.fixRowCount = data.FixRowCount === undefined ? 0 : data.FixRowCount._text; // 최대 행 개수 (DRD에서 Default값이 0임)
+    this.isForceOverRow = data.IsForceOverRow === undefined ? true : data.IsForceOverRow._text; // 최대 행 이후의 데이터 true 일 때는 페이지 넘기기 false일 때는 제거(별지 출력)
+    this.isAnnexMark = data.isAnnexMark === undefined ? 0 : data.isAnnexMark._text; // 별지 마크 표시 여부
+    this.annexReportName = data.AnnextReportName === undefined ? undefined : data.AnnextReportName._text; // 별지 리포트 명
+    this.isFirstPagePrint = data.IsFirstPagePrint === undefined ? undefined : data.IsFirstPagePrint._text; // 첫 페이지만 출력, 결재란 여부가 예 일때 결재란을 첫페이지에만 출력할것인지, 전체 페이지에 출력할것인지 판단하는 값
+    this.IsdynamicBinding = data.IsdynamicBinding === undefined ? undefined : data.IsdynamicBinding._text; // 결재란의 컬럼을 동적으로 (수정 못하니까 신경 안써도 됨)
 }
 
 
@@ -125,10 +165,10 @@ function FixedTableLabel(data, i){
     this._attributes = data._attributes["xsi:type"];
     this.horizontalTextAlignment = data.HorizontalTextAlignment === undefined ? undefined : data.HorizontalTextAlignment._text; // 텍스트 수평 정렬
     this.selected = data.Selected._text; // 테이블 라벨에만 있는 것 같음
-    this.leftBorderColor = data.LeftBorderColor === undefined ? undefined : data.LeftBorderColor._text; // 고정 테이블에만 있는 것 같음
-    this.rightBorderColor = data.RightBorderColor === undefined ? undefined : data.RightBorderColor._text; // 고정 테이블에만 있는 것 같음
-    this.topBorderColor = data.TopBorderColor === undefined ? undefined : data.TopBorderColor._text; // 고정 테이블에만 있는 것 같음
-    this.bottomBorderColor = data.BottomBorderColor === undefined ? undefined : data.BottomBorderColor._text; // 고정 테이블에만 있는 것 같음
+    this.leftBorderColor = data.LeftBorderColor === undefined ? undefined : data.LeftBorderColor._text; // 고정 테이블에만 있는 것 같음? 왼쪽 테두리 색
+    this.rightBorderColor = data.RightBorderColor === undefined ? undefined : data.RightBorderColor._text; // 고정 테이블에만 있는 것 같음? 오른쪽 테두리 색
+    this.topBorderColor = data.TopBorderColor === undefined ? undefined : data.TopBorderColor._text; // 고정 테이블에만 있는 것 같음? 위쪽 테두리 색
+    this.bottomBorderColor = data.BottomBorderColor === undefined ? undefined : data.BottomBorderColor._text; // 고정 테이블에만 있는 것 같음? 아래쪽 테두리 색
 }
 
 

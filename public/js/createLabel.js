@@ -23,6 +23,8 @@ var dynamicTitleLabelNum = 1;
 var thNum = 1;
 var dynamicValueLabelNum = 1;
 var groupFieldArray = new Array();
+var titleArray = new Array(); // 그룹으로 묶었을 경우 titleName으로만 접근이 가능해져서 그 titleName을 담을 배열
+var dynamicTableValueNum = 0;
 var row = 0;
 
 /******************************************************************
@@ -174,9 +176,10 @@ function drawingDynamicTable(table, tableLabel, divId) {
             switch (label._attributes) {
                 case "DynamicTableTitleLabel" :
                     var temp = Object.keys(dataTable.DataSetName.dt[0]);
-                    temp.forEach(function (titleName) {
-                        if (label.text == titleName) {
-                            titleTrId.append('<th id = "' + titleName + thNum + '"></th>');
+                    temp.forEach(function(titleName){
+                        if(label.text == titleName){
+                            titleArray.push(titleName);
+                            titleTrId.append('<th id = "' + titleName + '"></th>');
                             titleTrId.css({
                                 'width': label.rectangle.width,
                                 'height': label.rectangle.height,
@@ -190,7 +193,8 @@ function drawingDynamicTable(table, tableLabel, divId) {
                         }
                     });
                     break;
-                //수정사항
+                    //수정사항
+                    // 수정 180822 YeSol
                 case "DynamicTableValueLabel" :
                     for (var j = row; j < rowLength; j++) {
                         var data = dataTable.DataSetName.dt[j];
@@ -324,7 +328,7 @@ function drawingSystemLabel(data, divId) {
 
             systemLabelId.append('<p id = "PDate' + dateNum + '">' + dateStr + '</p>');
 
-            var pId = $('#PData' + dateNum);
+            var pId = $('#PDate' + dateNum);
 
             pId.css({
                 'font-size': data.fontSize,
@@ -332,7 +336,7 @@ function drawingSystemLabel(data, divId) {
                 'font-weight': data.fontStyle
             });
 
-            verticalCenter(('PDate' + dateNum), data);
+            verticalCenter('PDate' + dateNum);
 
             dateNum++;
             break;
@@ -355,7 +359,7 @@ function drawingSystemLabel(data, divId) {
                 'font-weight': data.fontStyle
             });
 
-            verticalCenter(('PDateTime' + dateTimeNum), data);
+            verticalCenter('PDateTime' + dateTimeNum);
 
             dateTimeNum++;
             break;
@@ -375,7 +379,7 @@ function drawingSystemLabel(data, divId) {
                 'font-weight': data.fontStyle
             });
 
-            verticalCenter(('PTime' + timeNum), data);
+            verticalCenter('PTime' + timeNum);
 
             timeNum++;
             break;
@@ -385,13 +389,13 @@ function drawingSystemLabel(data, divId) {
         case 'TotalPage' : // 전체 페이지 번호
             // var pagecount = $(".page").length;
             // systemLabelId.append('<p id = "totalPage' +  totalPageNum + '">' + pagecount + '</p>');
-            // verticalCenter(('totalPage' + totalPageNum), data);
+            // verticalCenter('totalPage' + totalPageNum);
             totalPageNum++;
             break;
         case 'PageNumber / TotalPage' :  // 현재 페이지 번호 / 전체 페이지 정보
             // var pagecount = $(".page").length;
             // systemLabelId.append('<p id = "pageNumberTotalPage' +  pageNumTotalPageNum + '">' + pagecount + '</p>');
-            // verticalCenter(('pageNumberTotalPage' + pageNumTotalPageNum), data);
+            // verticalCenter('pageNumberTotalPage' + pageNumTotalPageNum);
             pageNumTotalPageNum++;
             break;
     }
@@ -432,7 +436,7 @@ function drawingSummaryLabel(data, divId) {
 
     //pId.append(data.text);
 
-    verticalCenter(('PSummaryLabel' + summaryLabelNum), data);
+    verticalCenter('PSummaryLabel' + summaryLabelNum);
 
     summaryLabelNum++;
 }
@@ -475,7 +479,7 @@ function drawingDataLabel(data, divId) {
         pId.append(groupFieldArray[groupFieldNum][0]);
     }
 
-    verticalCenter(('PDataLabel' + dataLabelNum), data);
+    verticalCenter('PDataLabel' + dataLabelNum);
 
     dataLabelNum++;
 }
@@ -508,18 +512,36 @@ function drawingNormalLabel(data, divId) {
     var pId = $('#PNormalLabel' + normalLabelNum);
 
     pId.css({
-        'font-size': data.fontSize,
-        'font-family': data.fontFamily,
-        'font-weight': data.fontStyle,
-        'font-stretch': 'ultra-condensed',
-        'display': 'block'
+        'font-size' : data.fontSize,
+        'font-family' : data.fontFamily,
+        'font-weight' : data.fontStyle
     });
+    // var str = data.text.toString();
+    // console.log(str.length);
+    // for(var i = 0; i < str.length; i++){
+    //     console.log(str[i]);
+    // }
+    // pId.append(data.text);
+    toStringFn(data.text, pId);
 
-    pId.append(data.text);
-
-    verticalCenter(('PNormalLabel' + normalLabelNum), data);
+    verticalCenter('PNormalLabel' + normalLabelNum);
 
     normalLabelNum++;
+}
+
+function toStringFn(text, pId) {
+    var str = text.toString();
+    // console.log(str);
+    // var appendStr = str[0];
+    for(var i = 1; i < str.length; i++){
+        // appendStr += str[i];
+        pId.append(str[i]);
+        // console.log(str[i].small())
+        // console.log(pId.width());
+    }
+    // pId.append(appendStr);
+    // pId.css('object-fit', 'cover');
+    // pId.css('justify-content', 'space-between');
 }
 
 /******************************************************************
@@ -554,7 +576,7 @@ function drawingExpression(data, divId) {
     });
     //$('#PExpression' + expressionNum).append(data.text);
 
-    verticalCenter(('PExpression' + expressionNum), data);
+    verticalCenter('PExpression' + expressionNum);
 
     expressionNum++;
 }
@@ -591,7 +613,7 @@ function drawingGroupLabel(data, divId) {
     });
     //$('#PGroupLabel' + groupLabelNum).append(data.text);
 
-    verticalCenter(('PGroupLabel' + groupLabelNum), data);
+    verticalCenter('PGroupLabel' + groupLabelNum);
 
     groupLabelNum++;
 }
@@ -628,7 +650,7 @@ function drawingParameterLabel(data, divId) {
     });
     //$('#PParameterLabel' + parameterLabelNum).append(data.text);
 
-    verticalCenter(('PParameterLabel' + parameterLabelNum), data);
+    verticalCenter('PParameterLabel' + parameterLabelNum);
 
     parameterLabelNum++;
 }
@@ -651,19 +673,22 @@ function plusZero(data) {
  기능 : 텍스트를 세로로 가운데 정렬할 수 있는 함수를 만든다.
  만든이 : 안예솔
  ******************************************************************/
-function verticalCenter(divId, data) {
-    var div = $('#' + divId);
+function verticalCenter(pTagId) {
+    var div = $('#' + pTagId);
     var fontsize = (div.css('font-size')).split('p');
     // 16pt 이런 식으로 값이 받아져서 p앞으로 끊어서 숫자만 받아오려고 한 문자열 자르기 작업
 
-    var divBr = $('#' + divId + ' br');
+    var divBr = $('#' + pTagId + ' br');
     var brCount = divBr.length;
     // text중에서 <br/>의 개수를 구함
 
-    var mid = (data.rectangle.height - fontsize[0] * (brCount + 1)) / 2;
+    var parentHeightString = div.parent().css('height');
+    var parentHeight = parentHeightString.split('p');
+
+    var mid = (parentHeight[0] - fontsize[0] * (brCount + 1)) / 2 - brCount;
 
     div.css({
-        'margin-top': mid,
-        'margin-bottom': mid
+        'margin-top' : mid + 'px',
+        'margin-bottom' : mid + 'px'
     });
 }
