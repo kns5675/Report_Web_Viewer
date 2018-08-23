@@ -56,7 +56,6 @@ th .DRDSEQ{
     border: 3px groove darkgreen;
     opacity:1;
     overflow:hidden;
-
 }
 .forcopyratio{
     position: absolute;
@@ -75,6 +74,10 @@ th .DRDSEQ{
 .page{
     z-index: 0;
     background-color: transparent;
+}
+.pageforcopyratio{
+    z-index:0;
+    margin: 0px auto;
 }
 
 

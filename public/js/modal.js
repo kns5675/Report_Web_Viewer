@@ -14,7 +14,7 @@ $(document).ready(function(){
     $("#sign").on('keyup',function(){
         try{
             var tds = this.value;
-            alert(tds);
+            /*alert(tds);*/
             if(tds>0 && tds<=8){
                 changeColor(tds);
             }else{
@@ -37,7 +37,7 @@ function changeColor(tds){
     for(var i = 0; i<=tds; i++){
         $("table#modaltable tr:eq(0) td:eq("+i+")").css("background-color","white");
         $("table#modaltable tr:eq(1) td:eq("+i+")").css("background-color","#E6E6FA");
-
+        //이거 고쳐야됨 하지연 지연
         for(var x=7-tds;x<7 && x>i;x--){
             $("table#modaltable tr:eq(0) td:eq("+x+")").css("background-color","#E3E3E3");
             $("table#modaltable tr:eq(1) td:eq("+x+")").css("background-color","#E3E3E3");
@@ -58,23 +58,27 @@ function beforeSubmit(){
         var eCopyRate = $("#copyratio").val();
         eCopyRate = (Number(eCopyRate))/100;
 
-
-        eCopyRatio(eCopyRate);//인쇄배율 변경 펑션
+        $(".page").each(function (i, e) {
+           console.log("e : ", e.id);
+           var idnum = e.id.replace(/[^0-9]/g,'');
+           eCopyRatio(eCopyRate, idnum);//인쇄배율 변경 펑션
+        });
         close_pop1();
         //alert("인쇄 배율 : "+copyRatio.val() + " %");
         return true;
     }
 }
 /******************************************************************
- 기능 : 고급인쇄설정 - 인쇄설정 - 인쇄배율기능 (default:100, max: 100)
- 방법1: resizable, 방법2 : scale조정
+ 기능 : 고급인쇄설정 - 인쇄설정 - 인쇄배율기능
  author : 하지연
  ******************************************************************/
-function eCopyRatio(eCopyRate){
+function eCopyRatio(eCopyRate, idnum){
     try {
-        var eCopyRatioContent = document.getElementById('designLayer' + 1);
+        var eCopyRatioContent = document.getElementById('page' + idnum);
+        //'page' + idnum
         var ecopyratio = eCopyRate;
         ecopyratio = Number(ecopyratio);
+      /*  alert(ecopyratio);*/
         if (jQuery.browser.msie) {
             eCopyRatioContent.style.zoom = ecopyratio;
         }
