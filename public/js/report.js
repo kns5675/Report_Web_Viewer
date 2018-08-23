@@ -159,16 +159,29 @@ function setForeGroundLayerDirection(report){
  author : powerku
  ******************************************************************/
 function setReport(report){
-    $(('#page' + pageNum)).append('<div id="report' + reportNum + '"class = report' +'></div>');
+    /*$(('#page' + pageNum)).append('<div id="report' + reportNum + '"class = report' +'></div>'); 영준짱꺼*/
+
+    $(('#page' + pageNum)).append('<div id="forcopyratio' + reportNum + '"class = forcopyratio' +'></div>');//지연
+    //지연 - 인쇄배율 조정을 위한 div 하나 더 생성.
+    $(('#forcopyratio' + reportNum)).append('<div id="report' + reportNum + '"class = report' +'></div>');//지연
 
     console.log(report);
 
+    setForCopyRatioDirection(report);//추가 - 지연
     setReportDirection(report);
 
-    $('#report' + reportNum).css('margin-top', report.margin.x+'px');
+    $('#forcopyratio' + reportNum).css("position","absolute");
+
+
+    /*$('#report' + reportNum).css('margin-top', report.margin.x+'px');
     $('#report' + reportNum).css('margin-bottom', report.margin.y+'px');
     $('#report' + reportNum).css('margin-right', report.margin.height+'px');
-    $('#report' + reportNum).css('margin-left', report.margin.width+'px');
+    $('#report' + reportNum).css('margin-left', report.margin.width+'px');*/
+    //  지연 수정
+    $('#forcopyratio' + reportNum).css('margin-top', report.margin.x+'px');
+    $('#forcopyratio' + reportNum).css('margin-bottom', report.margin.y+'px');
+    $('#forcopyratio' + reportNum).css('margin-right', report.margin.height+'px');
+    $('#forcopyratio' + reportNum).css('margin-left', report.margin.width+'px');
 
     setBackGroundLayer(report);
     setDesignLayer(report);
@@ -212,23 +225,34 @@ function makeTableByData() {
     $('#designLayer1').html(html);
     $('td:nth-child(' + fieldLength + '),th:nth-child('+fieldLength+')').hide(); //DRDSEQ 컬럼 숨기기
 }
-
 /******************************************************************
  기능 : 페이지안의 리포트 방향 설정
  author : powerku
  ******************************************************************/
 function setReportDirection(report){
 
-    if(report.paperDirection){
-        $('#report' + reportNum).css('width', report.rectangle.width+'px');
-        $('#report' + reportNum).css('height', report.rectangle.height + 'px');
-    }else{
-        $('#report' + reportNum).css('width', report.rectangle.height + 'px');
-        $('#report' + reportNum).css('height', report.rectangle.width+'px');
+    if(report.paperDirection){// 지연 수정
+        $('#report' + reportNum).css('width', '100%');
+        $('#report' + reportNum).css('height', '100%');
+    }else{//지연 수정
+        $('#report' + reportNum).css('width', $('#forcopyratio' + reportNum).height);
+        $('#report' + reportNum).css('height', $('#forcopyratio' + reportNum).width);
     }
     $('#report' + reportNum).css('text-align', 'center'); // 추가 : 안예솔
 }
-
+/******************************************************************
+ 기능 : 리포트 div의 부모 div인 forcopyratio div를 만든후 report의 크기로 지정하고, 방향지정.
+ author : 하지연
+ ******************************************************************/
+function setForCopyRatioDirection(report){  //지연 추가
+    if(report.paperDirection){
+        $('#forcopyratio' + reportNum).css('width', report.rectangle.width+'px');
+        $('#forcopyratio' + reportNum).css('height', report.rectangle.height + 'px');
+    }else{
+        $('#forcopyratio' + reportNum).css('width', report.rectangle.height + 'px');
+        $('#forcopyratio' + reportNum).css('height', report.rectangle.width+'px');
+    }
+}
 /******************************************************************
  기능 : 페이지 크기 렌더링
  author : powerku
@@ -241,9 +265,7 @@ function setPage(report) {
 
     setPageDirection(report);
     $('#page' + pageNum).css('border', 'solid blue');
-
 }
-
 /******************************************************************
  기능 : 페이지 방향 설정
  author : powerku
@@ -257,4 +279,3 @@ function setPageDirection(report){
         $('#page' + pageNum).css('height', report.paperSize.width + 'px');
     }
 }
-

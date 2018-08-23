@@ -94,7 +94,7 @@ function zoomIn(){
     }
 }
 /******************************************************************
- 기능 : select option의 선택값을 기본으로 -버튼 클릭 시 5%가 추가 축소되는
+ 기능 : select option의 선택값을 기본으로 - 버튼 클릭 시 5%가 추가 축소되는
         값을 받아와 zoomOut기능 구현
  author : 하지연
  ******************************************************************/
@@ -126,6 +126,7 @@ function zoomOut(){
                 $(flexiblecontent).css('-moz-transform-origin','0 0');
                 $(flexiblecontent).css('-o-transform','scale(' + (size) + ')');
                 $(flexiblecontent).css('-o-transform-origin','0 0');
+
             }
         }
         catch(e) {
