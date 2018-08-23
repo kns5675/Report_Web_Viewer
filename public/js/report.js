@@ -20,7 +20,7 @@ function makeReportTemplate(data) {
  author : powerku
  ******************************************************************/
 function makeReport(report) {
-    console.log(report);
+
     var numOfPage = getNumOfPage(report);
 
     for (var i = 0; i < numOfPage; i++) {
@@ -257,13 +257,19 @@ function setForeGroundLayerDirection(report) {
  author : powerku
  ******************************************************************/
 function setReport(report) {
-    $(('#page' + pageNum)).append('<div id="report' + reportNum + '-' + pageNum + '"class = report' + '></div>');
+    /*$(('#page' + pageNum)).append('<div id="report' + reportNum + '"class = report' +'></div>'); 영준짱꺼*/
 
+    $(('#page' + pageNum)).append('<div id="forcopyratio' + reportNum + '-' + pageNum +  '"class = forcopyratio' +'></div>');//지연
+    //지연 - 인쇄배율 조정을 위한 div 하나 더 생성.
+    $(('#forcopyratio' + reportNum)).append('<div id="report' + reportNum + '-' + pageNum +  '"class = report' +'></div>');//지연
+
+    setForCopyRatioDirection(report);//추가 - 지연
     setReportDirection(report);
 
-    var reportInPage = $('#report' + reportNum + '-' + pageNum);
+    var forcopyratioInPage = $('#forcopyratio' + reportNum + '-' + pageNum);
+    forcopyratioInPage.css("position","absolute");
 
-    reportInPage.css({
+    forcopyratioInPage.css({
         'margin-top': report.margin.x + 'px',
         'margin-bottom': report.margin.y + 'px',
         'margin-right': report.margin.height + 'px',
@@ -318,17 +324,29 @@ function setReportDirection(report) {
     var reportInPage = $('#report' + reportNum + '-' + pageNum);
     if (report.paperDirection) {
         reportInPage.css({
-            'width': report.rectangle.width + 'px',
-            'height': report.rectangle.height + 'px'
+            'width': '100%',
+            'height': '100%'
         });
-    } else {
+    }else{//지연 수정
         reportInPage.css({
-            'height': report.rectangle.width + 'px',
-            'width': report.rectangle.height + 'px'
+            'height': $('#forcopyratio' + reportNum).width,
+            'width': $('#forcopyratio' + reportNum).height
         });
     }
 }
-
+/******************************************************************
+ 기능 : 리포트 div의 부모 div인 forcopyratio div를 만든후 report의 크기로 지정하고, 방향지정.
+ author : 하지연
+ ******************************************************************/
+function setForCopyRatioDirection(report){  //지연 추가
+    if(report.paperDirection){
+        $('#forcopyratio' + reportNum).css('width', report.rectangle.width+'px');
+        $('#forcopyratio' + reportNum).css('height', report.rectangle.height + 'px');
+    }else{
+        $('#forcopyratio' + reportNum).css('width', report.rectangle.height + 'px');
+        $('#forcopyratio' + reportNum).css('height', report.rectangle.width+'px');
+    }
+}
 /******************************************************************
  기능 : 페이지 크기 렌더링
  author : powerku

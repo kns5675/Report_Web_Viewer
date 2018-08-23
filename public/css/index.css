@@ -37,7 +37,9 @@ th .DRDSEQ{
 .designLayer{
     position: absolute;
     z-index:301;
-    background-color: lightgreen;
+    /*background-color: white;*/
+    opacity:1;
+
 }
 
 .backGroundLayer{
@@ -48,11 +50,20 @@ th .DRDSEQ{
 
 .report{
     z-index: 3;
-    position: absolute;
-    background-color: lightgreen;
-    border: 1px groove black;
+    /*position: absolute;*/
+    background-color: transparent;
+    opacity:1;
+    border: 3px groove darkgreen;
+    opacity:1;
+    overflow:hidden;
 
 }
+.forcopyratio{
+    position: absolute;
+    background-color: transparent;
+    border:3px solid orangered;
+}
+
 
 .foreGroundLayer{
     z-index: 601;
