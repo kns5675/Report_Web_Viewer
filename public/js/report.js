@@ -8,7 +8,7 @@ var reportNum = 1;
 function makeReportTemplate(data) {
     var reportTemplate = new ReportTemplate(data);
 
-    reportTemplate.reportList.forEach(function(value, i){
+    reportTemplate.reportList.forEach(function (value, i) {
         var report = reportTemplate.reportList[i];
         makeReport(report);
     });
@@ -19,66 +19,148 @@ function makeReportTemplate(data) {
  기능 : make report in function makeReportTemplate
  author : powerku
  ******************************************************************/
- function makeReport(report) {
+function makeReport(report) {
 
-     numOfDataInOnePage(report);
+    var numOfPage = getNumOfPage(report);
 
-    setPage(report);
-    setReport(report);
-    pageNum++;
+    for (var i = 0; i < numOfPage; i++) {
 
+        setPage(report);
+        setReport(report);
+
+        pageNum++;
+    }
 }
 
-
 /***********************************************************
- 기능 : 밴드 길이 계산
+ 기능 : 페이지 계산
+ 전체 데이터 / 한페이지 데이터 = 페이지 개수
  만든이 : 구영준
  * *********************************************************/
-function numOfDataInOnePage(report){
+function getNumOfPage(report) {
+    var numOfAllData = dataTable.DataSetName.dt.length; //데이터 총 개수
     var bands = report.layers.designLayer.bands;
-    var bandHeightWithoutBandData = 0;
-    console.log(bands);
+    var reportHeight = report.rectangle.height;
+    var bandHeight = getBandHeight(bands, reportHeight); //데이터 밴드 길이
+    var numOfDataInOnePage = 0; // 한 페이지에 들어갈 데이터 개수
 
-    bands.forEach(function(band){
-        console.log(band.attributes["xsi:type"]);
-        if(band.attributes["xsi:type"] != BandData){
-        bandHeightWithoutBandData += Number(band.rectangle.height);
+    bands.forEach(function (band) {
+        if (band.attributes["xsi:type"] == 'BandData') {
+            if (!(band.controlList.anyType === undefined)) {
+                if (band.controlList.anyType._attributes["xsi:type"] == "ControlDynamicTable") {
+                    var tableLabels = band.controlList.anyType.Labels.TableLabel;
+                    tableLabels.forEach(function (label, i) {
+                        var tableLabel = new DynamicTableLabel(label, i);
+                        tableLabelList.push(tableLabel);
+                    });
+                    numOfDataInOnePage = getNumOfDataInOnePage(tableLabelList, bandHeight);
+                }
+            }
         }
     });
 
-   console.log(bandHeightWithoutBandData);
 
-    //데이터 밴드를 제외한 밴드 높이 계산
-    //Report Rectangle height - 밴드 높이
-    //데이터 밴드 높이 바꿔주기
-    //동적 테이블 길이 계산 -> 한 페이지에 들어갈 수 있는 데이터 양 계산
-    //페이지 계산
+    if (numOfAllData == 0) {
+        return 1;
+    } else {
+        if (numOfDataInOnePage == 0) {
+            return 1;
+        } else {
+            return Math.ceil(numOfAllData / numOfDataInOnePage);
+        }
+    }
 }
 
+/***********************************************************
+ 기능 : 밴드 길이 계산
+ 1. 데이터 밴드를 제외한 밴드 높이 계산
+ 2. Report Rectangle height - 데이터 밴드를 제외한 밴드높이 = dataBand 길이
+ 만든이 : 구영준
+ * *********************************************************/
+function getBandHeight(bands, reportHeight) {
+    var bandHeightWithoutBandData = 0;
+    var bandDataHeight = 0;
 
-function setDesignLayer(report){
+    bands.forEach(function (band) {
+        if (band.attributes["xsi:type"] != 'BandData') {
+            bandHeightWithoutBandData += Number(band.rectangle.height);
+        } else {
+            if (Array.isArray(band.childFooterBands)) {
+                band.childFooterBands.forEach(function (childFooterBand) {
+                    bandHeightWithoutBandData += Number(childFooterBand.rectangle.height)
+                });
+                band.childHeaderBands.forEach(function (childHeaderBand) {
+                    bandHeightWithoutBandData += Number(childHeaderBand.rectangle.height)
+                });
+            }
+        }
+    });
+
+    bands.forEach(function (band) {
+        if (band.attributes["xsi:type"] == 'BandData') {
+            bandDataHeight = Number(reportHeight - bandHeightWithoutBandData)
+        }
+    });
+
+    return bandDataHeight;
+
+}
+
+/***********************************************************
+ 기능 : 한 페이지에 들어갈 데이터 개수 구하기
+ : (밴드 길이 - 첫 행 높이) / 데이터 라벨 높이 => 한페이지에 들어가야할 밴드 개수
+ 만든이 : 구영준
+ * *********************************************************/
+function getNumOfDataInOnePage(tableLabel, divId) {
+    var bandDataHeight = 0;
+    if (typeof divId == 'string') {
+        bandDataHeight = $('#' + divId).height();
+    } else if (typeof divId == 'number') {
+        bandDataHeight = divId;
+    }
+    var firstLine = tableLabel[0].rectangle.height;
+    var dataLine = Number(tableLabel[tableLabel.length - 1].rectangle.height);
+    return Math.floor((bandDataHeight - firstLine) / dataLine);
+}
+
+/******************************************************************
+ 기능 : 디자인 레이어 세팅
+ author : powerku
+ ******************************************************************/
+function setDesignLayer(report) {
     $(('#page' + pageNum)).append('<div id="designLayer' + pageNum + '"class = designLayer></div>');
 
     setDesignLayerDirection(report);
 
-    $('#designLayer' + pageNum).css('margin-top', report.margin.x+'px');
-    $('#designLayer' + pageNum).css('margin-bottom', report.margin.y+'px');
-    $('#designLayer' + pageNum).css('margin-right', report.margin.height+'px');
-    $('#designLayer' + pageNum).css('margin-left', report.margin.width+'px');
+    var designLayer = $('#designLayer' + pageNum);
+    designLayer.css({
+        'margin-top': report.margin.x + 'px',
+        'margin-bottom': report.margin.y + 'px',
+        'margin-right': report.margin.height + 'px',
+        'margin-left': report.margin.width + 'px',
+    });
 
     var layerName = "designLayer" + pageNum;
-    drawBand(report.layers.designLayer.bands, layerName); // 추가 - 전형준
+    var reportHeight = report.rectangle.height;
+    drawBand(report.layers.designLayer.bands, layerName, reportHeight); // 추가 - 전형준
 }
 
-
-
-function setDesignLayerDirection(report){
-    if(report.paperDirection){
-        $('#designLayer' + pageNum).css('width', report.rectangle.width+'px');
-        $('#designLayer' + pageNum).css('height', report.rectangle.height + 'px');
-    }else{
-        $('#designLayer' + pageNum).css('width', report.rectangle.height + 'px');
-        $('#designLayer' + pageNum).css('height', report.rectangle.width+'px');
+/******************************************************************
+ 기능 : 디자인 레이어 방향 세팅
+ author : powerku
+ ******************************************************************/
+function setDesignLayerDirection(report) {
+    var designLayer = $('#designLayer' + pageNum);
+    if (report.paperDirection) {
+        designLayer.css({
+            'width': report.rectangle.width + 'px',
+            'height': report.rectangle.height + 'px'
+        });
+    } else {
+        designLayer.css({
+            'height': report.rectangle.width + 'px',
+            'width': report.rectangle.height + 'px'
+        });
     }
 }
 
@@ -93,10 +175,14 @@ function setBackGroundLayer(report) {
 
     setBackGroundLayerDirection(report);
 
-    $('#backGroundLayer' + pageNum).css('margin-top', report.margin.x+'px');
-    $('#backGroundLayer' + pageNum).css('margin-bottom', report.margin.y+'px');
-    $('#backGroundLayer' + pageNum).css('margin-right', report.margin.height+'px');
-    $('#backGroundLayer' + pageNum).css('margin-left', report.margin.width+'px');
+    var backGroundLayer = $('#backGroundLayer' + pageNum);
+
+    backGroundLayer.css({
+        'margin-top': report.margin.x + 'px',
+        'margin-bottom': report.margin.y + 'px',
+        'margin-right': report.margin.height + 'px',
+        'margin-left': report.margin.width + 'px',
+    });
 
     var layerName = "backGroundLayer" + pageNum;
     drawBand(report.layers.backGroundLayer.bands, layerName); // 추가 - 전형준
@@ -107,16 +193,20 @@ function setBackGroundLayer(report) {
  기능 : 백그라운드레이어 방향 설정에 따른 크기 세팅
  author : powerku
  ******************************************************************/
-function setBackGroundLayerDirection(report){
+function setBackGroundLayerDirection(report) {
 
-    if(report.paperDirection){
-        $('#backGroundLayer' + pageNum).css('width', report.rectangle.width+'px');
-        $('#backGroundLayer' + pageNum).css('height', report.rectangle.height + 'px');
-    }else{
-        $('#backGroundLayer' + pageNum).css('width', report.rectangle.height + 'px');
-        $('#backGroundLayer' + pageNum).css('height', report.rectangle.width+'px');
+    var backGroundLayer = $('#backGroundLayer' + pageNum);
+    if (report.paperDirection) {
+        backGroundLayer.css({
+            'width': report.rectangle.width + 'px',
+            'height': report.rectangle.height + 'px'
+        });
+    } else {
+        backGroundLayer.css({
+            'height': report.rectangle.width + 'px',
+            'width': report.rectangle.height + 'px'
+        });
     }
-
 }
 
 
@@ -124,15 +214,19 @@ function setBackGroundLayerDirection(report){
  기능 : 포그라운드 레이어 크기 세팅
  author : powerku
  ******************************************************************/
-function setForeGroundLayer(report){
+function setForeGroundLayer(report) {
     $(('#page' + pageNum)).append('<div id="foreGroundLayer' + pageNum + '"class = foreGroundLayer></div>');
 
     setForeGroundLayerDirection(report);
 
-    $('#foreGroundLayer' + pageNum).css('margin-top', report.margin.x+'px');
-    $('#foreGroundLayer' + pageNum).css('margin-bottom', report.margin.y+'px');
-    $('#foreGroundLayer' + pageNum).css('margin-right', report.margin.height+'px');
-    $('#foreGroundLayer' + pageNum).css('margin-left', report.margin.width+'px');
+    var foreGroundLayer = $('#foreGroundLayer' + pageNum);
+
+    foreGroundLayer.css({
+        'margin-top': report.margin.x + 'px',
+        'margin-bottom': report.margin.y + 'px',
+        'margin-right': report.margin.height + 'px',
+        'margin-left': report.margin.width + 'px',
+    });
 
     var layerName = "foreGroundLayer" + pageNum;
     drawBand(report.layers.foreGroundLayer.bands, layerName); // 추가 - 전형준
@@ -142,14 +236,18 @@ function setForeGroundLayer(report){
  기능 : 포그라운드 레이어 방향 설정에 따른 크기 세팅
  author : powerku
  ******************************************************************/
-function setForeGroundLayerDirection(report){
-
-    if(report.paperDirection){
-        $('#foreGroundLayer' + pageNum).css('width', report.rectangle.width+'px');
-        $('#foreGroundLayer' + pageNum).css('height', report.rectangle.height + 'px');
-    }else{
-        $('#foreGroundLayer' + pageNum).css('width', report.rectangle.height + 'px');
-        $('#foreGroundLayer' + pageNum).css('height', report.rectangle.width+'px');
+function setForeGroundLayerDirection(report) {
+    var foreGroundLayer = $('#foreGroundLayer' + pageNum);
+    if (report.paperDirection) {
+        foreGroundLayer.css({
+            'width': report.rectangle.width + 'px',
+            'height': report.rectangle.height + 'px'
+        });
+    } else {
+        foreGroundLayer.css({
+            'height': report.rectangle.width + 'px',
+            'width': report.rectangle.height + 'px'
+        });
     }
 
 }
@@ -158,25 +256,26 @@ function setForeGroundLayerDirection(report){
  기능 : 페이지안의 리포트를 만듬
  author : powerku
  ******************************************************************/
-function setReport(report){
+function setReport(report) {
     /*$(('#page' + pageNum)).append('<div id="report' + reportNum + '"class = report' +'></div>'); 영준짱꺼*/
 
     $(('#page' + pageNum)).append('<div id="forcopyratio' + reportNum + '"class = forcopyratio' +'></div>');//지연
     //지연 - 인쇄배율 조정을 위한 div 하나 더 생성.
     $(('#forcopyratio' + reportNum)).append('<div id="report' + reportNum + '"class = report' +'></div>');//지연
 
-    console.log(report);
-
     setForCopyRatioDirection(report);//추가 - 지연
     setReportDirection(report);
 
+    var reportInPage = $('#report' + reportNum);
     $('#forcopyratio' + reportNum).css("position","absolute");
 
+    /*reportInPage.css({
+        'margin-top': report.margin.x + 'px',
+        'margin-bottom': report.margin.y + 'px',
+        'margin-right': report.margin.height + 'px',
+        'margin-left': report.margin.width + 'px',
+    });*/
 
-    /*$('#report' + reportNum).css('margin-top', report.margin.x+'px');
-    $('#report' + reportNum).css('margin-bottom', report.margin.y+'px');
-    $('#report' + reportNum).css('margin-right', report.margin.height+'px');
-    $('#report' + reportNum).css('margin-left', report.margin.width+'px');*/
     //  지연 수정
     $('#forcopyratio' + reportNum).css('margin-top', report.margin.x+'px');
     $('#forcopyratio' + reportNum).css('margin-bottom', report.margin.y+'px');
@@ -193,8 +292,9 @@ function setReport(report){
 
     reportNum++;
 }
+
 /******************************************************************
- 기능 : 테이블안에 데이터를 바인딩함
+ 기능 : 테이블안에 데이터를 바인딩함(사용 안함)
  author : powerku
  ******************************************************************/
 function makeTableByData() {
@@ -202,43 +302,50 @@ function makeTableByData() {
     let html = '<table><thead>';
     var fieldLength = Object.keys(dataTable.DataSetName.dt[0]).length;
 
-    Object.keys(dataTable.DataSetName.dt[0]).forEach(function(field){ //Header
-        if(field == 'DRDSEQ'){
+    Object.keys(dataTable.DataSetName.dt[0]).forEach(function (field) { //Header
+        if (field == 'DRDSEQ') {
             html += '<th clsss = "DRDSEQ">' + field + '</th>';
-        }else{
+        } else {
             html += '<th>' + field + '</th>';
         }
 
     });
-    html  +='</thead><tbody>';
+    html += '</thead><tbody>';
     dataTable.DataSetName.dt.forEach(function (data) { //Body
         html += '<tr>';
-        for(key in data){
-            html+='<td>' + data[key]._text + '</td>';
+        for (key in data) {
+            html += '<td>' + data[key]._text + '</td>';
         }
 
-        + '</tr>';
+        +'</tr>';
     });
 
-    html +='</tbody></table>';
+    html += '</tbody></table>';
 
     $('#designLayer1').html(html);
-    $('td:nth-child(' + fieldLength + '),th:nth-child('+fieldLength+')').hide(); //DRDSEQ 컬럼 숨기기
+    $('td:nth-child(' + fieldLength + '),th:nth-child(' + fieldLength + ')').hide(); //DRDSEQ 컬럼 숨기기
 }
+
 /******************************************************************
  기능 : 페이지안의 리포트 방향 설정
  author : powerku
  ******************************************************************/
-function setReportDirection(report){
+function setReportDirection(report) {
 
-    if(report.paperDirection){// 지연 수정
-        $('#report' + reportNum).css('width', '100%');
-        $('#report' + reportNum).css('height', '100%');
-    }else{//지연 수정
-        $('#report' + reportNum).css('width', $('#forcopyratio' + reportNum).height);
-        $('#report' + reportNum).css('height', $('#forcopyratio' + reportNum).width);
+    var reportInPage = $('#report' + reportNum);
+    if (report.paperDirection) {
+        reportInPage.css({
+            'width': '100%',
+            'height': '100%'
+        });
+    } else {
+        reportInPage.css({
+            'height': $('#forcopyratio' + reportNum).height),
+            'width': $('#forcopyratio' + reportNum).width)
+        });
     }
-    $('#report' + reportNum).css('text-align', 'center'); // 추가 : 안예솔
+
+    reportInPage.css('text-align', 'center'); // 추가 : 안예솔
 }
 /******************************************************************
  기능 : 리포트 div의 부모 div인 forcopyratio div를 만든후 report의 크기로 지정하고, 방향지정.
@@ -264,18 +371,24 @@ function setPage(report) {
     $('#reportTemplate').append('<div id="page' + pageNum + '" class="page paperType-' + paperType + '"></div>');
 
     setPageDirection(report);
-    $('#page' + pageNum).css('border', 'solid blue');
+
+    var page = $('#page' + pageNum);
+    page.css('border', 'solid blue');
+
 }
+
 /******************************************************************
  기능 : 페이지 방향 설정
  author : powerku
  ******************************************************************/
-function setPageDirection(report){
-    if(report.paperDirection){
-        $('#page' + pageNum).css('width', report.paperSize.width + 'px');
-        $('#page' + pageNum).css('height', report.paperSize.height + 'px');
-    }else{
-        $('#page' + pageNum).css('width', report.paperSize.height + 'px');
-        $('#page' + pageNum).css('height', report.paperSize.width + 'px');
+function setPageDirection(report) {
+    var page = $('#page' + pageNum);
+
+    if (report.paperDirection) { //세로
+        page.css('width', report.paperSize.width + 'px');
+        page.css('height', report.paperSize.height + 'px');
+    } else { //가로
+        page.css('width', report.paperSize.height + 'px');
+        page.css('height', report.paperSize.width + 'px');
     }
 }
