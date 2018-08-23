@@ -292,7 +292,6 @@ function setReport(report) {
 
     reportNum++;
 }
-
 /******************************************************************
  기능 : 테이블안에 데이터를 바인딩함(사용 안함)
  author : powerku
@@ -333,16 +332,16 @@ function makeTableByData() {
 function setReportDirection(report) {
 
     var reportInPage = $('#report' + reportNum);
-    if (report.paperDirection) {
+    if(report.paperDirection){// 지연 수정
         reportInPage.css({
             'width': '100%',
             'height': '100%'
         });
-    } else {
+    }else{//지연 수정
         reportInPage.css({
-            'height': $('#forcopyratio' + reportNum).height),
-            'width': $('#forcopyratio' + reportNum).width)
-        });
+            'height': $('#forcopyratio' + reportNum).width,
+            'width': $('#forcopyratio' + reportNum).height
+    });
     }
 
     reportInPage.css('text-align', 'center'); // 추가 : 안예솔
@@ -392,3 +391,4 @@ function setPageDirection(report) {
         page.css('height', report.paperSize.width + 'px');
     }
 }
+
