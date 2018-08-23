@@ -20,7 +20,7 @@ function makeReportTemplate(data) {
  author : powerku
  ******************************************************************/
 function makeReport(report) {
-
+    console.log(report);
     var numOfPage = getNumOfPage(report);
 
     for (var i = 0; i < numOfPage; i++) {
@@ -30,6 +30,7 @@ function makeReport(report) {
 
         pageNum++;
     }
+    reportNum++;
 }
 
 /***********************************************************
@@ -128,16 +129,16 @@ function getNumOfDataInOnePage(tableLabel, divId) {
  author : powerku
  ******************************************************************/
 function setDesignLayer(report) {
-    $(('#page' + pageNum)).append('<div id="designLayer' + pageNum + '"class = designLayer></div>');
+    $(('#report' + reportNum + '-' + pageNum)).append('<div id="designLayer' + pageNum + '"class = designLayer></div>');
 
     setDesignLayerDirection(report);
 
     var designLayer = $('#designLayer' + pageNum);
     designLayer.css({
-        'margin-top': report.margin.x + 'px',
-        'margin-bottom': report.margin.y + 'px',
-        'margin-right': report.margin.height + 'px',
-        'margin-left': report.margin.width + 'px',
+        'margin-top': 0 + 'px',
+        'margin-bottom': 0 + 'px',
+        'margin-right': 0 + 'px',
+        'margin-left': 0 + 'px',
     });
 
     var layerName = "designLayer" + pageNum;
@@ -170,17 +171,17 @@ function setDesignLayerDirection(report) {
  author : powerku
  ******************************************************************/
 function setBackGroundLayer(report) {
-    $(('#page' + pageNum)).append('<div id="backGroundLayer' + pageNum + '"class = backGroundLayer></div>');
+    $(('#report' + reportNum + '-' + pageNum)).append('<div id="backGroundLayer' + pageNum + '"class = backGroundLayer></div>');
 
     setBackGroundLayerDirection(report);
 
     var backGroundLayer = $('#backGroundLayer' + pageNum);
 
     backGroundLayer.css({
-        'margin-top': report.margin.x + 'px',
-        'margin-bottom': report.margin.y + 'px',
-        'margin-right': report.margin.height + 'px',
-        'margin-left': report.margin.width + 'px',
+        'margin-top': 0+ 'px',
+        'margin-bottom': 0 + 'px',
+        'margin-right': 0 + 'px',
+        'margin-left': 0 + 'px',
     });
 
     var layerName = "backGroundLayer" + pageNum;
@@ -214,17 +215,17 @@ function setBackGroundLayerDirection(report) {
  author : powerku
  ******************************************************************/
 function setForeGroundLayer(report) {
-    $(('#page' + pageNum)).append('<div id="foreGroundLayer' + pageNum + '"class = foreGroundLayer></div>');
+    $(('#report' + reportNum + '-' + pageNum)).append('<div id="foreGroundLayer' + pageNum + '"class = foreGroundLayer></div>');
 
     setForeGroundLayerDirection(report);
 
     var foreGroundLayer = $('#foreGroundLayer' + pageNum);
 
     foreGroundLayer.css({
-        'margin-top': report.margin.x + 'px',
-        'margin-bottom': report.margin.y + 'px',
-        'margin-right': report.margin.height + 'px',
-        'margin-left': report.margin.width + 'px',
+        'margin-top': 0 + 'px',
+        'margin-bottom': 0 + 'px',
+        'margin-right': 0 + 'px',
+        'margin-left': 0 + 'px',
     });
 
     var layerName = "foreGroundLayer" + pageNum;
@@ -256,11 +257,11 @@ function setForeGroundLayerDirection(report) {
  author : powerku
  ******************************************************************/
 function setReport(report) {
-    $(('#page' + pageNum)).append('<div id="report' + reportNum + '"class = report' + '></div>');
+    $(('#page' + pageNum)).append('<div id="report' + reportNum + '-' + pageNum + '"class = report' + '></div>');
 
     setReportDirection(report);
 
-    var reportInPage = $('#report' + reportNum);
+    var reportInPage = $('#report' + reportNum + '-' + pageNum);
 
     reportInPage.css({
         'margin-top': report.margin.x + 'px',
@@ -273,7 +274,6 @@ function setReport(report) {
     setDesignLayer(report);
     setForeGroundLayer(report);
 
-    reportNum++;
 }
 
 /******************************************************************
@@ -315,7 +315,7 @@ function makeTableByData() {
  ******************************************************************/
 function setReportDirection(report) {
 
-    var reportInPage = $('#report' + reportNum);
+    var reportInPage = $('#report' + reportNum + '-' + pageNum);
     if (report.paperDirection) {
         reportInPage.css({
             'width': report.rectangle.width + 'px',
@@ -327,8 +327,6 @@ function setReportDirection(report) {
             'width': report.rectangle.height + 'px'
         });
     }
-
-    reportInPage.css('text-align', 'center'); // 추가 : 안예솔
 }
 
 /******************************************************************
