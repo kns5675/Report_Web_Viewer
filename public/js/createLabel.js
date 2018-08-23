@@ -162,12 +162,12 @@ function drawingDynamicTable(table, tableLabel, divId) {
 
     var titleTrId = $('#dynamicTitleLabel' + dynamicTitleLabelNum);
 
-    var numOfData = getNumOfDataInOnePage(tableLabel, divId);
+    var numOfData = getNumOfDataInOnePage(tableLabel, divId); //한 페이지에 들어갈 데이터 개수
+    row = (pageNum-1) * numOfData; //한 페이지 출력 해야할 시작 row
+    var rowLength = row + numOfData; //한 페이지에 마지막으로 출력해야할 row
 
-    if (pageNum != 1)
-        row = pageNum * 7;
-
-    var rowLength = row + numOfData;
+    console.log("첫 행 : " + row);
+    console.log("마지막 행 : " + rowLength);
 
     if (Array.isArray(tableLabel)) {
         tableLabel.forEach(function (label) {
