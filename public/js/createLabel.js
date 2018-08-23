@@ -179,7 +179,7 @@ function drawingDynamicTable(table, tableLabel, divId) {
                     temp.forEach(function(titleName){
                         if(label.text == titleName){
                             titleArray.push(titleName);
-                            titleTrId.append('<th id = "' + titleName + '"></th>');
+                            titleTrId.append('<th id = "' + titleName + thNum + '"></th>');
                             titleTrId.css({
                                 'width': label.rectangle.width,
                                 'height': label.rectangle.height,
@@ -532,14 +532,13 @@ function drawingNormalLabel(data, divId) {
 function toStringFn(text, pId) {
     var str = text.toString();
     // console.log(str);
-    // var appendStr = str[0];
+    var appendStr = str[0];
     for(var i = 1; i < str.length; i++){
-        // appendStr += str[i];
-        pId.append(str[i]);
+        appendStr += str[i];
         // console.log(str[i].small())
         // console.log(pId.width());
     }
-    // pId.append(appendStr);
+    pId.append(appendStr);
     // pId.css('object-fit', 'cover');
     // pId.css('justify-content', 'space-between');
 }
