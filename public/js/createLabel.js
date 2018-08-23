@@ -168,9 +168,6 @@ function drawingDynamicTable(table, tableLabel, divId) {
     row = (pageNum-1) * numOfData; //한 페이지 출력 해야할 시작 row
     var rowLength = row + numOfData; //한 페이지에 마지막으로 출력해야할 row
 
-    console.log("첫 행 : " + row);
-    console.log("마지막 행 : " + rowLength);
-
     if (Array.isArray(tableLabel)) {
         tableLabel.forEach(function (label) {
             switch (label._attributes) {
@@ -179,7 +176,7 @@ function drawingDynamicTable(table, tableLabel, divId) {
                     temp.forEach(function(titleName){
                         if(label.text == titleName){
                             titleArray.push(titleName);
-                            titleTrId.append('<th id = "' + titleName + '"></th>');
+                            titleTrId.append('<th id = "' + titleName + thNum + '"></th>');
                             titleTrId.css({
                                 'width': label.rectangle.width,
                                 'height': label.rectangle.height,

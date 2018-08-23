@@ -22,7 +22,7 @@ function makeReportTemplate(data) {
 function makeReport(report) {
 
     var numOfPage = getNumOfPage(report);
-    console.log('전체 페이지 : ' + numOfPage);
+
     for (var i = 0; i < numOfPage; i++) {
 
         setPage(report);
@@ -59,8 +59,6 @@ function getNumOfPage(report) {
         }
     });
 
-    console.log("전체 데이터 : " + numOfAllData)
-    console.log("한 페이지에 들어가야할 데이터 : " + numOfDataInOnePage)
 
     if (numOfAllData == 0) {
         return 1;
