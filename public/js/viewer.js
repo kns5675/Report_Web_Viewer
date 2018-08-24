@@ -145,7 +145,7 @@ function close_pop() {
     $('#myModal').hide();
 
     //데이터값 초기화
-    /*$("#copyratio").val("100");*/
+    $("#copyratio").val("100");
     $("input:radio[name='copyornot']:radio[value='인쇄함']").prop("checked",false);
     $("input:radio[name='copyornot']:radio[value='인쇄안함']").prop("checked",true);
 
@@ -181,12 +181,11 @@ function close_pop() {
     $("#extratailoptions").val("하단좌측").attr("selected","selected");
     $("#extratail").val('');
 
-
-
-
-
-
     $("#copyOptions").val("--인쇄--").attr("selected","selected");
+    onlyNumber(event);
+    copyRatioCheck();
+    eReSetFont();
+    paperDirection();
 };
 /******************************************************************
  기능 : 모달창 닫기 - 데이터값 초기화 밑 기본값 세팅 처리

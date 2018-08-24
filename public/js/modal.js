@@ -12,19 +12,63 @@ $(document).ready(function(){
         close_pop3();
     });
     $("#sign").on('keyup',function(){
-        try{
-            var tds = this.value;
-            if(tds>0 && tds<=8){
-                changeColor(tds);
-            }else{
-                alert("결재란 칸 수는 1 이상 8 이하여야 합니다.");
-                this.value="";
-            }
-        }catch(e){
-            console.log(e.message);
+        dataValidity2();    //고급인쇄 - 결재란 칸수 지정 데이터 유효성 검증
+    });
+    $("#copyratio").on({
+        keydown: function(){
+            onlyNumber(event);  //고급인쇄 - 인쇄배율 input박스 내에 숫자만 받도록 제어
+        },
+        keyup: function () {
+            removeChar();   //고급인쇄 - 인쇄배율 input박스 내에 글자입력시 삭제하도록 제어
+        },
+        change: function(){
+            copyRatioCheck();   //고급인쇄 - 인쇄배율 -> input 박스 내에 범위 지정 & 예외처리 & 입력된 배율값 적용
         }
     });
+    $(".fontform,.fontcontent").on("change",function(){ //고급인쇄 - 폰트설정 - 폰트내용, 폰트서식 변경
+        eSetFont();
+    });
+
+
+
+
+
+
+    /*//학준 추가
+    //용지 크기 선택(A4,B4 등)
+    $("#pagesizeoptions").on("change", function () {
+        pagesizeselect($(this).val());
+    });
+    //용지방향 설정
+    $(".direction").on("change",function () {
+        paperDirection();
+    });
+    $(".copydate").on("change",function () {
+        var print = $('input[id="copydate_id"]:checked').val();
+        console.log("print : ",print);
+        if(print){
+            datePrinting();
+        }
+    });*/
+
 });
+/******************************************************************
+ 기능 : 고급인쇄 -  결재란 칸수 지정 데이터 유효성 검증
+ author : 하지연
+ ******************************************************************/
+function dataValidity2(){
+    try{
+        var tds = this.value;
+        if(tds>0 && tds<=8){
+            changeColor(tds);
+        }else{
+            alert("결재란 칸 수는 1 이상 8 이하여야 합니다.");
+            this.value="";
+        }
+    }catch(e){
+        console.log(e.message);
+    }
+}
 /******************************************************************
  기능 : 고급인쇄설정 - 결재란 설정 - 결재란 등록 모달창 - 결재란 칸수 지정시
         결재라인 css 변경 함수
@@ -53,7 +97,6 @@ function changeColor(tds){
 function beforeSubmit(){
     var copyRatio = $("#copyratio");
     if(copyRatio.val()>100 || copyRatio.val() == ''){
-        $("#copyratio").focus();
         $("#warning").text("인쇄배율의 범위는 0~100 입니다.");
         return false;
     }else{
@@ -73,33 +116,50 @@ function beforeSubmit(){
     }
 }
 /******************************************************************
+ 기능 : 고급인쇄 -  인쇄배율 -> input 박스 내에 범위 지정 & 예외처리 & 입력된 배율값 적용
+ author : 하지연
+ ******************************************************************/
+function copyRatioCheck(){
+    var copyRatio = $("#copyratio");
+    if(copyRatio.val()>100 || copyRatio.val() == ''){
+        $("#warning").text("인쇄배율의 범위는 0~100 입니다.");
+        $("#copyratio").val("");
+        $("#copyratio").focus();
+    }else{
+        var eCopyRate = copyRatio.val();
+        eCopyRate = (Number(eCopyRate))/100;
+
+        $(".page").each(function (i, e) {
+            console.log("e : ", e.id);
+            var idnum = e.id.replace(/[^0-9]/g,'');
+
+            eCopyRatio(eCopyRate, idnum);//인쇄배율 변경 펑션
+        });
+        //close_pop1();
+    }
+}
+/******************************************************************
  기능 : 고급인쇄설정 - 폰트설정 - 폰트서식, 폰트내용 폰트 변경 기능
  author : 하지연
  ******************************************************************/
-function eSetFont(data){
+function eSetFont(){
     var checkedFontForm = $("input[type=radio][name=fontform]:checked").val();
-    console.log("폰트 서식 선택된 폰트 : " + checkedFontForm);
+    $('.Label:not(".DataLabel")').css('font-family', checkedFontForm);
 
     var checkedFontContent = $("input[type=radio][name=fontcontent]:checked").val();
-    console.log("폰트 내용 선택된 폰트 : " + checkedFontContent);
+    $('.Label.DataLabel').css('font-family', checkedFontContent);
 
+}
+/******************************************************************
+ 기능 : 고급인쇄설정 - 폰트설정 - 폰트서식, 폰트내용 폰트 변경 기능
+ author : 하지연
+ ******************************************************************/
+function eReSetFont(){
+    var checkedFontForm = ('굴림');
+    $('.Label:not(".DataLabel")').css('font-family', checkedFontForm);
 
-    /*var systemLabelId = $('#SystemLabel' + systemLabelNum);
-
-    systemLabelId.css({
-        'width': data.rectangle.width,
-        'height': data.rectangle.height,
-        'position': 'absolute',
-        'left': data.rectangle.x + 'px',
-        'top': data.rectangle.y + 'px',
-        'text-align': 'center',
-        'border': '1px solid black'
-    });*/
-
-
-    /*if(data.DataType === DataLabel){
-        ch
-    }*/
+    var checkedFontContent = ('굴림');
+    $('.Label.DataLabel').css('font-family', checkedFontContent);
 
 }
 /******************************************************************
