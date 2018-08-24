@@ -24,9 +24,8 @@ function drawBand(bands, layerName, reportHeight){
 
         // 밴드 div를 그려주고 CSS 입힘
         var div_id = 'band' + (bandNum++);
-
         $('#' + layerName).append("<div id='" + div_id + "' class='Band " + band.attributes["xsi:type"] + "'>" + band.name + "</div>");
-
+        
         if (band.attributes["xsi:type"] == 'BandData') {
             var dataBandHeight = getBandHeight(bands, reportHeight);
             $('#' + div_id).css({

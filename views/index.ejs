@@ -27,6 +27,7 @@
     <script src="js/drawingBand.js"></script>
     <script src="js/label.js"></script>
     <script src="js/createLabel.js"></script>
+    <script src="js/drawCurrPageNTotalPage.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <!--<script src="https://code.jquery.com/jquery-1.12.4.js"></script>-->
     <!--<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>-->
@@ -40,12 +41,15 @@
 
             makeReportTemplate(data);
 
+            drawCurrPageNTotalPageLabel();
+            drawTotalPageLabel();
+
             image_setting();
         });
     </script>
     <style>
         *{
-            letter-spacing: -1.2pt;
+            letter-spacing: -1.181pt;
         }
         .backGroundLayer, .foreGroundLayer{
             visibility : hidden;

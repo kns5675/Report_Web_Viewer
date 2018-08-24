@@ -384,15 +384,34 @@ function drawingSystemLabel(data, divId) {
             pageNumberNum++;
             break;
         case 'TotalPage' : // 전체 페이지 번호
-            // var pagecount = $(".page").length;
-            // systemLabelId.append('<p id = "totalPage' +  totalPageNum + '">' + pagecount + '</p>');
-            // verticalCenter('totalPage' + totalPageNum);
+            var totalPage = "totalPage";
+            systemLabelId.append('<p id ="' + totalPage +  totalPageNum + '" class="' + totalPage + '"></p>');
+
+            var pId = $('#' + totalPage + totalPageNum);
+
+            pId.css({
+                'font-size': data.fontSize,
+                'font-family': data.fontFamily,
+                'font-weight': data.fontStyle
+            });
+
+            verticalCenter(totalPage + totalPageNum);
             totalPageNum++;
             break;
         case 'PageNumber / TotalPage' :  // 현재 페이지 번호 / 전체 페이지 정보
-            // var pagecount = $(".page").length;
-            // systemLabelId.append('<p id = "pageNumberTotalPage' +  pageNumTotalPageNum + '">' + pagecount + '</p>');
-            // verticalCenter('pageNumberTotalPage' + pageNumTotalPageNum);
+            var pageNumberTotalPage = "pageNumberTotalPage";
+
+            systemLabelId.append('<p id ="' + pageNumberTotalPage +  pageNumTotalPageNum + '" class="' + pageNumberTotalPage + '"></p>');
+
+            var pId = $('#' + pageNumberTotalPage + pageNumTotalPageNum);
+
+            pId.css({
+                'font-size': data.fontSize,
+                'font-family': data.fontFamily,
+                'font-weight': data.fontStyle
+            });
+
+            verticalCenter(pageNumberTotalPage + pageNumTotalPageNum);
             pageNumTotalPageNum++;
             break;
     }
