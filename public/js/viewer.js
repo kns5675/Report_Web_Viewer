@@ -176,7 +176,7 @@ function resetData(){
 
     $("input:checkbox[name='extra']").prop("checked",false);
 
-    $("#extraheadoptions").val("상단좌측").attr("selected","selected");
+    $("#extraheadoptions").val("상단좌측").attr("selected","selected"); 
     $("#extrahead").val('');
 
     $("#extratailoptions").val("하단좌측").attr("selected","selected");
