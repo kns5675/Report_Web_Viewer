@@ -25,7 +25,9 @@
   },
   "description": "\"# testproject\"",
   "main": "app.js",
-  "devDependencies": {},
+  "devDependencies": {
+    "nodemon": "^1.18.3"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/kns5675/Report_Web_Viewer.git"
