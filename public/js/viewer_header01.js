@@ -23,7 +23,6 @@ function FirstPage(){
 function NowPage(){
     $("#NowPage").on("keyup",function () {
         $(this).val($(this).val().replace(/[^0-9]/g,""));
-        //console.log("page : ",$(this).val());
         var inputpage = "page"+$(this).val();
         var pagevalue = $('#'+inputpage).offset().top-page_offset;
         $(window).scrollTop(pagevalue);
@@ -60,7 +59,6 @@ function NextPage(){
         if(nowpage <= totalpage){
             var page;
             if(nowpage == 2){
-                //console.log("test");
                 page = $("#page"+nowpage).offset().top-235;
             }else{
                 page = $("#page"+nowpage).offset().top-page_offset;
@@ -135,10 +133,10 @@ function image_upload() {
     var marginTop = modalCont.outerHeight()/2;
 
     /******************************************************************
-     기능 : image_upload_button(이미지 추가 버튼) 클릭시 반응.
+     기능 : 이미지 추가 버튼
      만든이 : hagdung-i
      ******************************************************************/
-    $(".image_upload_button").on("click" ,function () { //이미지 추가 버튼 클릭.
+    $(".image_upload_button").on("click" ,function () {
         modalLayer.fadeIn("slow");
         modalCont.css({"margin-top" : -marginTop, "margin-left" : -marginLeft});
         $(this).blur();
@@ -146,22 +144,20 @@ function image_upload() {
     });
 
     /******************************************************************
-     기능 : upload_button(모달창의 확인 버튼) 클릭시 반응.
+     기능 : 이미지 추가 모달창의 확인 버튼
      만든이 : hagdung-i
      ******************************************************************/
-    $("#upload_button").click(function () { //이미지 추가 모달의 확인 버튼 클릭.
+    $("#upload_button").click(function () {
         modalLayer.fadeOut("slow");
 
     });
 
     /******************************************************************
-     기능 : upload_cancel(모달창의 취소 버튼) 클릭시 반응.
+     기능 : 이미지 추가 모달창의 취소 버튼
      만든이 : hagdung-i
      ******************************************************************/
-    $("#upload_cancel").click(function(){ //이미지 추가 모달의 취소 버튼 클릭.
+    $("#upload_cancel").click(function(){
         modalLayer.fadeOut("slow");
-        var nowpagenum = $("#NowPage").val();
-        //console.log("삭제 이미지 번호 : ",nowpagenum);
         $("#"+imagedivid).remove();
     });
 }
@@ -173,8 +169,12 @@ function image_upload() {
  ******************************************************************/
 function readURL(input) {
     var scope = "designLayer";
-    tag_Making(scope);
-    //이미지 추가
+    tag_Making(scope); //이미지 추가.
+
+    /******************************************************************
+     기능 : 실제 url 가져오는 기능.
+     만든이 : hagdung-i
+     ******************************************************************/
     if (input.files && input.files[0]) {
         var reader = new FileReader();
         reader.onload = function(e) {
@@ -185,10 +185,19 @@ function readURL(input) {
     }
 }
 
-function tag_Making(scope, imgae_src) {
+/******************************************************************
+ 기능 : 태그 생성 함수.
+ 만든이 : hagdung-i
+ ******************************************************************/
+function tag_Making(scope, imgae_src, imgnum) {
     var nowpagenum = $("#NowPage").val();
-
-    //이미지 영역 생성 & 이미지 생성
+    if(imgnum){
+        ImageNum = imgnum;
+    }
+    /******************************************************************
+     기능 : 이미지 영역 생성 & 이미지 생성
+     만든이 : hagdung-i
+     ******************************************************************/
     var Packing = document.createElement("div");
     Packing.id = "ImageDivPacking"+ImageNum;
     Packing.style.position = "absolute";
@@ -269,8 +278,10 @@ function tag_Making(scope, imgae_src) {
     cancel_dialog.value = "취소";
     cancel_dialog.type = "button";
 
-    //이미지 추가 기능 모달창.
-    //console.log("nowpagenum : ",nowpagenum);
+    /******************************************************************
+     기능 : 이미지 추가 기능 모달창 생성.
+     만든이 : hagdung-i
+     ******************************************************************/
     if(scope === "designLayer"){
         document.getElementById("designLayer"+nowpagenum).appendChild(Packing);
     }else if(scope === "backGroundLayer"){
@@ -283,7 +294,10 @@ function tag_Making(scope, imgae_src) {
     document.getElementById(imagediv.id).appendChild(setdiv);
     document.getElementById(setdiv.id).appendChild(set_button);
 
-    //이미지 수정 기능 모달창.
+    /******************************************************************
+     기능 : 이미지 수정 기능 모달창 생성.
+     만든이 : hagdung-i
+     ******************************************************************/
     document.getElementById(main_dialog).appendChild(dialog_main_div);
     document.getElementById(dialog_main_div.id).appendChild(dialog_div);
     document.getElementById(dialog_div.id).appendChild(dialog);
@@ -293,14 +307,20 @@ function tag_Making(scope, imgae_src) {
     document.getElementById(dialog_div.id).appendChild(back_dialog);
     document.getElementById(dialog_div.id).appendChild(cancel_dialog);
 
-    //이미지 영역의 드래그 이동 & 크기 조정 기능.
+    /******************************************************************
+     기능 : 이미지 영역의 드래그 이동 & 크기 조정 기능.
+     만든이 : hagdung-i
+     ******************************************************************/
     $("#"+imagediv.id).draggable({ containment:"#backGroundLayer"+nowpagenum, zIndex:13}); //영역 나가지 못하게 하는 설정.
     $("#"+imagediv.id).resizable({});
-    image_setting(imagediv.id, set_buttonid, ImageNum, "delete"); //이미지 영역의 id값 받아가기 위함.
-    //
-    image_setting(imagediv.id, set_buttonid, ImageNum, "set");
+
+    image_setting(imagediv.id, set_buttonid, ImageNum); //이미지 영역의 id값 받아가기 위함.
 }
 
+/******************************************************************
+ 기능 : 이미지 모달창 닫기 기능.
+ 만든이 : hagdung-i
+ ******************************************************************/
 function image_moal_fadeout(ImageNum) {
     var modalLayer = $("#image_dialog");
     var dialog_div = $("#dialog_div"+ImageNum);
@@ -308,6 +328,10 @@ function image_moal_fadeout(ImageNum) {
     dialog_div.css({"visibility": "hidden"});
 }
 
+/******************************************************************
+ 기능 : 이미지 앞으로/뒤로 기능(영역 변경이 아닌 이미지간의 순서만 변경).
+ 만든이 : hagdung-i
+ ******************************************************************/
 function image_level(level, ImageNum) {
     $(".ImageDiv").each(function (i, e) {
         if(level === "up"){ //이미지 순서 앞으로/뒤로
@@ -330,104 +354,100 @@ function image_level(level, ImageNum) {
  기능 : 이미지 삭제, 수정 기능.
  만든이 : hagdung-i
  ******************************************************************/
-function image_setting(id, btn, ImageNum, setting){
+function image_setting(id, btn, ImageNum){
 
-    if(setting == "delete"){
-        if($("#"+imagedivid)[0].id){
-            // $("#"+imageid).dblclick(function () {
+    /******************************************************************
+     기능 : 이미지에 마우스 올릴 시에만 이미지 속성 버튼이 나타남.
+     만든이 : hagdung-i
+     ******************************************************************/
+    $("#"+id).on("mouseover",function () {
+        var styles = $("#"+btn);
+        styles[0].style.visibility = "visible";
+    });
+    $("#"+id).on("mouseleave",function () {
+        var styles = $("#"+btn);
+        styles[0].style.visibility = "hidden";
+    });
 
-            $("#dialog"+id).on("click",function () {
-                //console.log("this : ",this);
-                //console.log("id : ",id);
-                $("#"+id).remove();
-            });
-        }
-    }else if(setting == "set"){
-        $("#"+id).on("mouseover",function () {
-            var styles = $("#"+btn);
-            styles[0].style.visibility = "visible";
-        });
-        $("#"+id).on("mouseleave",function () {
-            var styles = $("#"+btn);
-            styles[0].style.visibility = "hidden";
-        });
+    var modalLayer = $("#image_dialog");
+    var dialog = $("#dialog");
+    var dialog_div = $("#dialog_div"+ImageNum);
+    dialog_div.css({"visibility": "hidden"});
+    var marginLeft = dialog.outerWidth()/2;
+    var marginTop = dialog.outerHeight()/2;
 
-        var modalLayer = $("#image_dialog");
-        var dialog = $("#dialog");
-        var dialog_div = $("#dialog_div"+ImageNum);
-        //console.log("dialog_div : ",dialog_div[0]);
-        dialog_div.css({"visibility": "hidden"});
-        var marginLeft = dialog.outerWidth()/2;
-        var marginTop = dialog.outerHeight()/2;
+    /******************************************************************
+     기능 : 이미지 속성 버튼 클릭시 이벤트
+     만든이 : hagdung-i
+     ******************************************************************/
+    $(".setting_button").on("click", function () {
+        modalLayer.fadeIn("slow");
+        ImageNum = this.id.replace(/[^0-9]/g,'');
+        dialog.css({"margin-top" : -marginTop, "margin-left" : -marginLeft});
+        $("#dialog_div"+ImageNum).css({"visibility": "visible"});
+        $(this).blur();
+        return false;
+    });
+    /******************************************************************
+     기능 : 이미지 속성 - 취소 버튼 클릭시 이벤트
+     만든이 : hagdung-i
+     ******************************************************************/
+    $("#image_update_cancel"+ImageNum).on("click",function () {
+        image_moal_fadeout(ImageNum);
+    });
+    /******************************************************************
+     기능 : 이미지 속성 - 삭제 버튼 클릭시 이벤트
+     만든이 : hagdung-i
+     ******************************************************************/
+    $("#dialog"+ImageNum).on("click", function () {
+        $("#ImageDivPacking"+ImageNum).remove();
+        $("#dialog_div"+ImageNum).remove();
+        image_moal_fadeout(ImageNum);
+    });
 
-        //이미지 속성 버튼 클릭시.
-        $(".setting_button").on("click", function () {
-            modalLayer.fadeIn("slow");
-            ImageNum = this.id.replace(/[^0-9]/g,'');
-            dialog.css({"margin-top" : -marginTop, "margin-left" : -marginLeft});
-            $("#dialog_div"+ImageNum).css({"visibility": "visible"});
-            $(this).blur();
-            return false;
-        });
-        $("#image_update_cancel"+ImageNum).on("click",function () {
-            image_moal_fadeout(ImageNum);
-            // $("#dialog").remove();
-        });
-        // 이미지 삭제 버튼
-        $("#dialog"+ImageNum).on("click", function () {
-            $("#ImageDivPacking"+ImageNum).remove();
-            $("#dialog_div"+ImageNum).remove();
-            image_moal_fadeout(ImageNum);
-        });
+    /******************************************************************
+     기능 : 이미지 속성 - 이미지 맨 앞으로 보내기 버튼 클릭시 이벤트
+     만든이 : hagdung-i
+     ******************************************************************/
+    $("#limit_fore_dialog"+ImageNum).on("click", function () {
+        var imgae_src = $("#image"+ImageNum)[0].src;
+        $("#ImageDivPacking"+ImageNum).remove(); // 다른 레이어에 새로 그리려면 지워야지~
+        $("#dialog_div"+ImageNum).remove(); //이미지 모달 창의 버튼들도 새로 그려주기 때문에 지움.
 
-        //이미지 맨 앞으로 보내기 버튼
-        $("#limit_fore_dialog"+ImageNum).on("click", function () {
-            //console.log("맨 앞으로 보내기 버튼");
-            //console.log("ImageNum : ",ImageNum);
-            var imgae_src = $("#image"+ImageNum)[0].src;
-            //console.log("imgae_src : ",imgae_src);
-            $("#ImageDivPacking"+ImageNum).remove(); // 다른 레이어에 새로 그리려면 지워야지~
+        var scope = "foreGroundLayer";
+        tag_Making(scope,imgae_src, ImageNum);
+        image_moal_fadeout(ImageNum);
+    });
 
-            var scope = "foreGroundLayer";
-            tag_Making(scope,imgae_src);
-            // if(imagezIndex <= 550){
-            //     //console.log("imagezIndex : ",imagezIndex);
-            //     imagezIndex = 550;
-            //     $("#imagediv"+ImageNum)[0].style.zIndex =imagezIndex;
-            // }
-            image_moal_fadeout(ImageNum);
-        });
+    /******************************************************************
+     기능 : 이미지 속성 - 이미지 맨 뒤로 보내기 버튼 클릭시 이벤트
+     만든이 : hagdung-i
+     ******************************************************************/
+    $("#limit_back_dialog"+ImageNum).on("click", function () {
+        var imgae_src = $("#image"+ImageNum)[0].src;
+        $("#ImageDivPacking"+ImageNum).remove();
+        $("#dialog_div"+ImageNum).remove();
+        var scope = "backGroundLayer";
+        tag_Making(scope, imgae_src, ImageNum);
+        image_moal_fadeout(ImageNum);
+    });
 
-        //이미지 맨 뒤로 보내기 버튼
-        $("#limit_back_dialog"+ImageNum).on("click", function () {
-            //console.log("맨 뒤로 보내기 버튼");
-            //console.log("ImageNum : ",ImageNum);
-            var imgae_src = $("#image"+ImageNum)[0].src;
-            //console.log("imgae_src : ",imgae_src);
-            $("#ImageDivPacking"+ImageNum).remove(); // 다른 레이어에 새로 그리려면 지워야지~
-            var scope = "backGroundLayer";
-            tag_Making(scope, imgae_src);
-            // if(imagezIndex >=401){
-            //     //console.log("imagezIndex : ",imagezIndex);
-            //     imagezIndex= 401;
-            //     $("#imagediv"+ImageNum)[0].style.zIndex = imagezIndex;
-            // }
-            image_moal_fadeout(ImageNum);
-        });
-
-        //이미지 앞으로 보내기 버튼
-        $("#fore_dialog"+ImageNum).on("click", function () {
-            //console.log("앞으로 보내기 버튼");
-            image_level("up",ImageNum);
-            image_moal_fadeout(ImageNum);
-        });
-        //이미지 뒤로 보내기 버튼
-        $("#back_dialog"+ImageNum).on("click", function () {
-            //console.log("뒤로 보내기 버튼");
-            image_level("down",ImageNum);
-            image_moal_fadeout(ImageNum);
-        });
-    }
+    /******************************************************************
+     기능 : 이미지 속성 - 이미지 앞으로 보내기 버튼 클릭시 이벤트
+     만든이 : hagdung-i
+     ******************************************************************/
+    $("#fore_dialog"+ImageNum).on("click", function () {
+        image_level("up",ImageNum);
+        image_moal_fadeout(ImageNum);
+    });
+    /******************************************************************
+     기능 : 이미지 속성 - 이미지 뒤로 보내기 버튼 클릭시 이벤트
+     만든이 : hagdung-i
+     ******************************************************************/
+    $("#back_dialog"+ImageNum).on("click", function () {
+        image_level("down",ImageNum);
+        image_moal_fadeout(ImageNum);
+    });
 }
 
 
