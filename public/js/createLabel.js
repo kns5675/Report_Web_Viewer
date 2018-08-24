@@ -238,7 +238,7 @@ function drawingDynamicTable(table, tableLabel, divId) {
                     //수정사항
                     // 수정 180822 YeSol
                 case "DynamicTableValueLabel" :
-                    if(groupFieldArray == undefined) {
+                    if(groupFieldArray != undefined) {
                         for (var j = row; j < rowLength; j++) {
 
                             var data = dataTable.DataSetName.dt[j];
