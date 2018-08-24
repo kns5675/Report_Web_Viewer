@@ -76,7 +76,6 @@ function dataValidity2(){
  author : 하지연
  ******************************************************************/
 function changeColor(tds){
-    alert("change color 들어왔음");
     tds = parseInt(tds);
     tds = tds-1;
     $(".modaltd").each(function (i, e) {
