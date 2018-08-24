@@ -1,5 +1,6 @@
 var pageNum = 1;
 var reportNum = 1;
+var groupFieldArray = new Array();
 
 /******************************************************************
  기능 : 페이지에서 Json 파일을 매개변수로 받아서 ReportTemplate를 만듬

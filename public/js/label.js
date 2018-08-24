@@ -61,6 +61,11 @@ function Label(data){
         height : (data.GradientLB.LbRec.Height === undefined ? 0 : data.GradientLB.LbRec.Height._text)
     });
 
+    this.isUseGradient = data.IsUseGradient === undefined ? false : data.IsUseGradient._text; // 그라데이션 사용 여부
+    this.gradientColor = data.GradientColor === undefined ? undefined : data.GradientColor._text; // 그라데이션 색
+    this.startGradientDirection = data.StartGradientDirection === undefined ? undefined : data.StartGradientDirection._text; // 그라데이션 시작 방향
+    this.gradientDerection = data.GradientDerection === undefined ? undefined : data.GradientDerection._text; // 그라데이션 방향
+
     this.indexUnderLine = (data.IndexUnderLine === undefined ? undefined : { // 이중 밑줄
         isUse : (data.IndexUnderLine.IsUse === undefined ? 0 : data.IndexUnderLine.IsUse._text), // 사용 여부
         verSpace : (data.IndexUnderLine.VerSpace === undefined ? 0 : data.IndexUnderLine.VerSpace._text), // 수직 공백
@@ -95,21 +100,18 @@ function Label(data){
     this.numberToTextType = data.NumberToTextType === undefined ? undefined : data.NumberToTextType._text; // 금액 표시 방법
     this.isSameWidth = data.IsSameWidth === undefined ? undefined : data.IsSameWidth._text; // 글자 크기 동일 여부
     this.editable = data.Editable === undefined ? undefined : data.Editable._text; // 편집 가능
-    this.backGroundColor = data.BackGroundColor === undefined ? undefined : data.BackGroundColor._text; // 바탕색
+    this.backGroundColor = data.BackGroundColor === undefined ? 'white' : data.BackGroundColor._text; // 바탕색
     this.clipping = data.Clipping === undefined ? undefined : data.Clipping._text; // 클립핑
     this.borderLineLocation = data.BorderLineLocation === undefined ? undefined : data.BorderLineLocation._text; // 테두리 라인 위치
-    this.textColor = data.TextColor === undefined ? undefined : data.TextColor._text; // 글꼴 색
+    this.textColor = data.TextColor === undefined ? 'black' : data.TextColor._text; // 글꼴 색
     this.textDirection = data.TextDirection === undefined ? undefined : data.TextDirection._text; // 텍스트 방향
     this.verticalTextAlignment = data.VerticalTextAlignment === undefined ? undefined : data.VerticalTextAlignment._text;
-    this.characterSpacing = data.CharacterSpacing === undefined ? undefined : data.CharacterSpacing._text; // 자간
+    this.characterSpacing = data.CharacterSpacing === undefined ? 0 : data.CharacterSpacing._text; // 자간
     this.lineSpacing = data.LineSpacing === undefined ? undefined : data.LineSpacing._text; // 줄 간격
-    this.isUseBasicInnerMargin = data.IsUseBasicInnerMargin === undefined ? undefined : data.IsUseBasicInnerMargin._text; // 기본 여백 사용
+    this.isUseBasicInnerMargin = data.IsUseBasicInnerMargin === undefined ? true : data.IsUseBasicInnerMargin._text; // 기본 여백 사용 기본 값이 true 인 듯
     this.labelShape = data.LabelShape === undefined ? undefined : data.LabelShape._text; // 라벨 형태
     this.circleLineColor = data.CircleLineColor === undefined ? undefined : data.CircleLineColor._text; // 원 테두리 색
-    this.isUseGradient = data.IsUseGradient === undefined ? undefined : data.IsUseGradient._text; // 그라데이션 사용 여부
-    this.gradientColor = data.GradientColor === undefined ? undefined : data.GradientColor._text; // 그라데이션 색
-    this.startGradientDirection = data.StartGradientDirection === undefined ? undefined : data.StartGradientDirection._text; // 그라데이션 시작 방향
-    this.gradientDerection = data.GradientDerection === undefined ? undefined : data.GradientDerection._text; // 그라데이션 방향
+
     this.detailWhere = data.DetailWhere === undefined ? undefined : data.DetailWhere._text; // 요약 라벨 조건절
     this.parameterName = data.ParameterName === undefined ? undefined : data.ParameterName._text; // 파라미터 이름
     this.summaryType = data.SummaryType === undefined ? undefined : data.SummaryType._text; // 요약 타입

@@ -27,6 +27,44 @@ var titleArray = new Array(); // 그룹으로 묶었을 경우 titleName으로�
 var dynamicTableValueNum = 0;
 var row = 0;
 
+/************** 샘플 받으면 해야할 일! ****************/
+/****************************그라데이션****************************/
+// 'background' : 'linear-gradient(to right, white 1%, black 50%, white 100%)' // 시작방향 모서리, 방향 수평
+// 'background' : 'linear-gradient(to right, black 1%, white 50%, black 100%)' // 시작방향 가운데, 방향 수평
+// 'background' : 'linear-gradient(to left, white, black)' // 시작방향 역방향, 방향 수평 오른쪽에서 왼쪽으로 옅어짐 (to left)
+// 'background' : 'linear-gradient(to right, white, black)' // 시작방향 정방향, 방향 수평 오른쪽에서 왼쪽으로 옅어짐 (to left)
+
+// 'background' : 'linear-gradient(to bottom, white 1%, black 50%, white 100%)' // 시작방향 모서리, 방향 수직
+// 'background' : 'linear-gradient(to bottom, black 1%, white 50%, black 100%)' // 시작방향 가운데, 방향 수직
+// 'background' : 'linear-gradient(to bottom, white, black)' // 시작방향 정방향, 방향 수직 위쪽에서 아래쪽으로 옅어짐 (to bottom)
+// 'background' : 'linear-gradient(to top, white, black)' // 시작방향 역방향, 방향 수직 아래쪽에서 위쪽으로 옅어짐 (to top)
+
+// 'background': 'linear-gradient(to bottom right, white 1%, black 50%, white 100%)' // 시작방향 모서리, 방향 하향
+// 'background': 'linear-gradient(to bottom right, black 1%, white 50%, black 100%)' // 시작방향 가운데, 방향 하향
+// 'background': 'linear-gradient(to bottom right, white, black)' // 시작방향 정방향, 방향 하향 위쪽에서 아래쪽으로 옅어짐 (to bottom)
+// 'background': 'linear-gradient(to bottom right, black, white)' // 시작방향 역방향, 방향 하향 아래쪽에서 위쪽으로 옅어짐 (to top)
+
+// 'background': 'linear-gradient(to top right, white 1%, black 50%, white 100%)' // 시작방향 모서리, 방향 상향
+// 'background': 'linear-gradient(to top right, black 1%, white 50%, black 100%)' // 시작방향 가운데, 방향 상향
+// 'background': 'linear-gradient(to bottom left, white, black)' // 시작방향 정방향, 방향 상향 위쪽에서 아래쪽으로 옅어짐 (to bottom)
+// 'background': 'linear-gradient(to bottom left, black, white)' // 시작방향 역방향, 방향 상향 아래쪽에서 위쪽으로 옅어짐 (to top)
+
+/****************************라벨 형태, 테두리 색****************************/
+// 'border-radius': '100%', // LabelShape가 원일 때
+//  'border-color': 'black', // (원 테두리 색) CircleLineColor가 white일 때
+//  'border' : '9px solid' // (원 테두리 두께) 속성이 뭔지 모르겠땀
+
+/*****************************얇은 밑줄 두 줄***************************/
+// 'text-decoration' : 'underline',
+// 'text-decoration-style' : 'double',
+// 'text-underline-position' : 'under'
+
+/*****************************자간***************************/
+// 'letter-spacing' : ....characterSpacing._text
+
+
+
+
 /******************************************************************
  기능 : ControlList의 유무를 판단하는 함수를 만든다.
  만든이 : 안예솔
@@ -128,7 +166,6 @@ function judgementLabel(data, divId) {
  부모를 기준으로 자식의 위치를 잡을 수 있다.
  ******************************************************************/
 
-/* 밴드도 파라미터로 받아와야함 */
 /******************************************************************
  기능 : DynamicTable(동적 테이블)을 화면에 그려주는 함수를 만든다.
  만든이 : 안예솔
@@ -136,7 +173,7 @@ function judgementLabel(data, divId) {
  수정 : DynamicTableValueLabel에 데이터 바인딩
  Date : 2018-08-20
  From 구영준
- 
+
  수정 : DynamicTable의 th, td tag에 클래스 추가
  Date : 2018-08-24
  From 전형준
@@ -186,7 +223,9 @@ function drawingDynamicTable(table, tableLabel, divId) {
                                 'height': label.rectangle.height,
                                 'font-size': label.fontSize,
                                 'font-family': label.fontFamily,
-                                'font-weight': label.fontStyle
+                                'font-weight': label.fontStyle,
+                                'font-color' : label.textColor,
+                                'background-color' : label.backGroundColor
                             });
                             var thId = $('#' + titleName + thNum);
                             thId.css('border', '1px solid black');
@@ -199,29 +238,61 @@ function drawingDynamicTable(table, tableLabel, divId) {
                     //수정사항
                     // 수정 180822 YeSol
                 case "DynamicTableValueLabel" :
-                    for (var j = row; j < rowLength; j++) {
-                        var data = dataTable.DataSetName.dt[j];
-                        tableId.append('<tr id = "dynamicValueLabel' + j + '"></tr>');
-                        var valueTrId = $('#dynamicValueLabel' + j);
+                    if(groupFieldArray == undefined) {
+                        for (var j = row; j < rowLength; j++) {
 
-                        for (key in data) {
-                            if (label.fieldName == key) {
-                                var valueTrId = $('#dynamicValueLabel' + j);
-                                valueTrId.append(
-                                    '<td class="Label ' + label._attributes + ' ' + label.dataType + '">' + data[key]._text + '</td>'
-                                );
-                                valueTrId.css({
-                                    'width': label.rectangle.width,
-                                    'height': label.rectangle.height,
-                                    'font-size': label.fontSize,
-                                    'font-family': label.fontFamily,
-                                    'font-weight': label.fontStyle
-                                });
-                                var td = $('td');
-                                td.css('border', '1px solid black');
+                            var data = dataTable.DataSetName.dt[j];
+                            tableId.append('<tr id = "dynamicValueLabel' + j + '"></tr>');
+                            var valueTrId = $('#dynamicValueLabel' + j);
+
+                            for (key in data) {
+                                if (label.fieldName == key) {
+                                    var valueTrId = $('#dynamicValueLabel' + j);
+                                    valueTrId.append(
+                                        '<td class="Label ' + label._attributes + ' ' + label.dataType + '">' + data[key]._text + '</td>'
+                                    );
+                                    valueTrId.css({
+                                        'width': label.rectangle.width,
+                                        'height': label.rectangle.height,
+                                        'font-size': label.fontSize,
+                                        'font-family': label.fontFamily,
+                                        'font-weight': label.fontStyle,
+                                        'background-color': label.backGroundColor
+                                    });
+                                    var td = $('td');
+                                    td.css('border', '1px solid black');
+                                }
                             }
                         }
-                    }
+                    }else {
+                            for (var j = row; j < rowLength; j++) {
+                                var data = groupFieldArray[groupFieldNum];
+                                tableId.append('<tr id = "dynamicValueLabel' + j + '"></tr>');
+                                for (key in data[j]) {
+                                    var valueTrId = $('#dynamicValueLabel' + j);
+                                    if (label.fieldName == key) {
+                                        valueTrId.append('<td>' + data[j][key]._text + '</td>');
+                                        valueTrId.css({
+                                            'width': label.rectangle.width,
+                                            'height': label.rectangle.height,
+                                            'font-size': label.fontSize,
+                                            'font-family': label.fontFamily,
+                                            'font-weight': label.fontStyle,
+                                            'background-color' : label.backGroundColor
+                                        });
+                                        var td = $('td');
+                                        td.css('border', '1px solid black');
+                                    }
+                                    // if(j + 1 == data.length){
+                                    //     console.log('여기');
+                                    //     groupFieldNum++;
+                                    //     // row = 0;
+                                    //     // rowLength = numOfData;
+                                    //     // j = 0;
+                                    // }
+                                }
+                            }
+                        }
                     break;
             }
         });
@@ -278,7 +349,8 @@ function drawingFixedTable(table, tableLabel, divId) {
                         'height': label.rectangle.height,
                         'font-size': label.fontSize,
                         'font-family': label.fontFamily,
-                        'font-weight': label.fontStyle
+                        'font-weight': label.fontStyle,
+                        'background-color' : label.backGroundColor
                     });
                     break;
                 case "FixedTableValueLabel" :
@@ -288,7 +360,8 @@ function drawingFixedTable(table, tableLabel, divId) {
                         'height': label.rectangle.height,
                         'font-size': label.fontSize,
                         'font-family': label.fontFamily,
-                        'font-weight': label.fontStyle
+                        'font-weight': label.fontStyle,
+                        'background-color' : label.backGroundColor
                     });
                     break;
             }
@@ -325,7 +398,8 @@ function drawingSystemLabel(data, divId) {
         'left': data.rectangle.x + 'px',
         'top': data.rectangle.y + 'px',
         'text-align': 'center',
-        'border': '1px solid black'
+        'border': '1px solid black',
+        'background-color' : data.backGroundColor
     });
 
     var date = new Date();
@@ -455,7 +529,8 @@ function drawingSummaryLabel(data, divId) {
         'left': data.rectangle.x + 'px',
         'top': data.rectangle.y + 'px',
         'text-align': 'center',
-        'border': '1px solid black'
+        'border': '1px solid black',
+        'background-color' : data.backGroundColor
     });
 
     summaryLabelId.append('<p id = "PSummaryLabel' + summaryLabelNum + '"></p>');
@@ -498,7 +573,8 @@ function drawingDataLabel(data, divId) {
         'left': data.rectangle.x + 'px',
         'top': data.rectangle.y + 'px',
         'text-align': 'center',
-        'border': '1px solid black'
+        'border': '1px solid black',
+        'background-color' : data.backGroundColor
     });
 
     dataLabelId.append('<p id = "PDataLabel' + dataLabelNum + '"></p>');
@@ -547,10 +623,11 @@ function drawingNormalLabel(data, divId) {
         'position': 'absolute',
         'left': data.rectangle.x + 'px',
         'top': data.rectangle.y + 'px',
-        'text-align': 'center',
+        'text-align': 'center', // 텍스트 수평 정렬에 따라 center, right, left써주기!
         'border': '1px solid black',
         'white-space': 'nowrap',
-        'overflow': 'visible'
+        'overflow': 'visible',
+        'background-color' : data.backGroundColor
     });
 
     normalLabelId.append('<p id = "PNormalLabel' + normalLabelNum + '"></p>');
@@ -562,34 +639,18 @@ function drawingNormalLabel(data, divId) {
         'font-family' : data.fontFamily,
         'font-weight' : data.fontStyle
     });
-    // var str = data.text.toString();
-    // console.log(str.length);
-    // for(var i = 0; i < str.length; i++){
-    //     console.log(str[i]);
-    // }
-    // pId.append(data.text);
-    toStringFn(data.text, pId);
+    // toStringFn(data.text, "PNormalLabel" + normalLabelNum);
+    textEqualDivision(data.text, "PNormalLabel" + normalLabelNum);
 
-    verticalCenter('PNormalLabel' + normalLabelNum);
+    verticalCenter('PNormalLabel' + normalLabelNum); // 텍스트 수직 정렬이 중간인 경우
+    // verticalTop('PNormalLabel' + normalLabelNum); // 텍스트 수직 정렬이 위쪽인 경우
+    // verticalBottom('PNormalLabel' + normalLabelNum); // 텍스트 수직 정렬이 아래쪽인 경우
+    // verticalCenterEqualDivision('PNormalLabel' + normalLabelNum); // 텍스트 수직 정렬이 중간인 경우
 
     pId.addClass('Label');
     pId.addClass('NormalLabel');
 
     normalLabelNum++;
-}
-
-function toStringFn(text, pId) {
-    var str = text.toString();
-    // console.log(str);
-    var appendStr = str[0];
-    for(var i = 1; i < str.length; i++){
-        appendStr += str[i];
-        // console.log(str[i].small())
-        // console.log(pId.width());
-    }
-    pId.append(appendStr);
-    // pId.css('object-fit', 'cover');
-    // pId.css('justify-content', 'space-between');
 }
 
 /******************************************************************
@@ -614,7 +675,8 @@ function drawingExpression(data, divId) {
         'left': data.rectangle.x + 'px',
         'top': data.rectangle.y + 'px',
         'text-align': 'center',
-        'border': '1px solid black'
+        'border': '1px solid black',
+        'background-color' : data.backGroundColor
     });
 
     expressionId.append('<p id = "PExpression' + expressionNum + '"></p>');
@@ -654,7 +716,8 @@ function drawingGroupLabel(data, divId) {
         'left': data.rectangle.x + 'px',
         'top': data.rectangle.y + 'px',
         'text-align': 'center',
-        'border': '1px solid black'
+        'border': '1px solid black',
+        'background-color' : data.backGroundColor
     });
 
     groupLabelId.append('<p id = "PGroupLabel' + groupLabelNum + '"></p>');
@@ -694,7 +757,8 @@ function drawingParameterLabel(data, divId) {
         'left': data.rectangle.x + 'px',
         'top': data.rectangle.y + 'px',
         'text-align': 'center',
-        'border': '1px solid black'
+        'border': '1px solid black',
+        'background-color' : data.backGroundColor
     });
 
     parameterLabelId.append('<p id = "PParameterLabel' + parameterLabelNum + '"></p>');
@@ -729,9 +793,52 @@ function plusZero(data) {
     return data;
 }
 
+/******************************************************************
+ 기능 : 한 글자씩 출력하는 함수를 만든다.
+ 만든이 : 안예솔
+ ******************************************************************/
+function toStringFn(text, pId) {
+    var str = text.toString();
+    var appendStr = str[0];
+    for(var i = 1; i < str.length; i++){
+        appendStr += str[i];
+    }
+    pId.append(appendStr);
+}
 
 /******************************************************************
- 기능 : 텍스트를 세로로 가운데 정렬할 수 있는 함수를 만든다.
+ 기능 : 텍스트 수평 정렬이 균등분할인 속성을 구현한다.
+ 만든이 : 안예솔
+ ******************************************************************/
+function textEqualDivision(text, pTagId) {
+    var tag = $('#' + pTagId);
+    var str = text.toString();
+    var fontsize = (tag.css('font-size')).split('p');
+    var parentWidth = tag.css('width').split('p');
+    // 16pt 이런 식으로 값이 받아져서 p앞으로 끊어서 숫자만 받아오려고 한 문자열 자르기 작업
+    var appendStr = str[0];
+    for(var i = 1; i < str.length; i++){
+        if(str[i] != ' '){
+            appendStr += str[i];
+        }
+        var num = appendStr.indexOf("<br/>");
+
+        if(num != -1){
+            var spacing = (parentWidth[0] - fontsize[0] * num) / (num - 1);
+            tag.append('<p style = "letter-spacing : ' + spacing + 'px; margin:0px;">' + appendStr + '</p>');
+            appendStr = '';
+        }
+    }
+    var num = appendStr.length;
+    var spacing = (parentWidth[0] - fontsize[0] * num) / (num - 1);
+    tag.append('<p style = "letter-spacing : ' + spacing + 'px; margin:0px;">' + appendStr + '</p>');
+    // tag.append(appendStr);
+
+    // var divBr = $('#' + pTagId + ' br');
+}
+
+/******************************************************************
+ 기능 : 텍스트 수직 정렬이 가운데인 속성을 구현한다.
  만든이 : 안예솔
  ******************************************************************/
 function verticalCenter(pTagId) {
@@ -752,4 +859,76 @@ function verticalCenter(pTagId) {
         'margin-top' : mid + 'px',
         'margin-bottom' : mid + 'px'
     });
+}
+
+
+/******************************************************************
+ 기능 : 텍스트 수직 정렬이 위쪽인 속성을 구현한다.
+ 만든이 : 안예솔
+ ******************************************************************/
+function verticalTop(pTagId) {
+    var div = $('#' + pTagId);
+
+    div.css({
+        'margin-top' : '0px'
+    });
+}
+
+/******************************************************************
+ 기능 : 텍스트 수직 정렬이 아래쪽인 속성을 구현한다.
+ 만든이 : 안예솔
+ ******************************************************************/
+function verticalBottom(pTagId) {
+    var div = $('#' + pTagId);
+    var fontsize = (div.css('font-size')).split('p');
+    // 16pt 이런 식으로 값이 받아져서 p앞으로 끊어서 숫자만 받아오려고 한 문자열 자르기 작업
+
+    var divBr = $('#' + pTagId + ' br');
+    var brCount = divBr.length;
+    // text중에서 <br/>의 개수를 구함
+
+    var parentHeightString = div.parent().css('height');
+    var parentHeight = parentHeightString.split('p');
+
+    var spacing = parentHeight[0] - fontsize[0] * (brCount + 1) - brCount - 1.33;
+
+    div.css({
+        'margin-top' : spacing + 'px',
+        'margin-bottom' : '0px'
+    });
+}
+
+/******************************************************************
+ 기능 : 텍스트 수직 정렬이 균등분할인 속성을 구현한다.
+ 만든이 : 안예솔
+ ******************************************************************/
+function verticalCenterEqualDivision(pTagId) {
+    var div = $('#' + pTagId);
+    div.css({
+        'margin-top' : '0px',
+        'margin-bottom' : '0px',
+    });
+
+    var fontsize = (div.css('font-size')).split('p');
+    // 16pt 이런 식으로 값이 받아져서 p앞으로 끊어서 숫자만 받아오려고 한 문자열 자르기 작업
+
+    var divBr = $('#' + pTagId + ' br');
+    var brCount = divBr.length;
+    // text중에서 <br/>의 개수를 구함
+
+    var parentHeightString = div.parent().css('height');
+    var parentHeight = parentHeightString.split('p');
+
+    if(brCount == 0){
+        var mid = (parentHeight[0] - fontsize[0] * (brCount + 1)) / 2 - brCount;
+
+        div.css({
+            'margin-top' : mid + 'px',
+            'margin-bottom' : mid + 'px'
+        });
+    } else {
+        var spacing = (parentHeight[0] - fontsize[0] * (brCount + 1)) / brCount - brCount;
+        divBr.before('<p style = "height : ' + spacing + 'px; margin-top : 0px; margin-bottom : 0px;"></p>');
+        divBr.remove();
+    }
 }
