@@ -14,7 +14,6 @@ $(document).ready(function(){
     $("#sign").on('keyup',function(){
         try{
             var tds = this.value;
-            /*alert(tds);*/
             if(tds>0 && tds<=8){
                 changeColor(tds);
             }else{
@@ -34,15 +33,18 @@ $(document).ready(function(){
 function changeColor(tds){
     tds = parseInt(tds);
     tds = tds-1;
-    for(var i = 0; i<=tds; i++){
-        $("table#modaltable tr:eq(0) td:eq("+i+")").css("background-color","white");
-        $("table#modaltable tr:eq(1) td:eq("+i+")").css("background-color","#E6E6FA");
-        //이거 고쳐야됨 하지연 지연
-        for(var x=7-tds;x<7 && x>i;x--){
-            $("table#modaltable tr:eq(0) td:eq("+x+")").css("background-color","#E3E3E3");
-            $("table#modaltable tr:eq(1) td:eq("+x+")").css("background-color","#E3E3E3");
+    $(".modaltd").each(function (i, e) {
+        console.log(e.id);
+        var tdid = e.id.replace(/[^0-9]/g, "");
+        console.log(tdid);
+        if (tds >= tdid) {
+            $("table#modaltable tr:eq(0) td:eq(" + tdid + ")").css("background-color", "white");
+            $("table#modaltable tr:eq(1) td:eq(" + tdid + ")").css("background-color", "#E6E6FA");
+        } else {
+            $("table#modaltable tr:eq(0) td:eq(" + tdid + ")").css("background-color", "#E3E3E3");
+            $("table#modaltable tr:eq(1) td:eq(" + tdid + ")").css("background-color", "#E3E3E3");
         }
-    }
+    });
 };
 /******************************************************************
  기능 : 모달 '확인'버튼 누르기 전 데이터 유효성 검증
@@ -61,12 +63,44 @@ function beforeSubmit(){
         $(".page").each(function (i, e) {
            console.log("e : ", e.id);
            var idnum = e.id.replace(/[^0-9]/g,'');
+
+           eSetFont();
            eCopyRatio(eCopyRate, idnum);//인쇄배율 변경 펑션
         });
         close_pop1();
         //alert("인쇄 배율 : "+copyRatio.val() + " %");
         return true;
     }
+}
+/******************************************************************
+ 기능 : 고급인쇄설정 - 폰트설정 - 폰트서식, 폰트내용 폰트 변경 기능
+ author : 하지연
+ ******************************************************************/
+function eSetFont(data){
+    var checkedFontForm = $("input[type=radio][name=fontform]:checked").val();
+    console.log("폰트 서식 선택된 폰트 : " + checkedFontForm);
+
+    var checkedFontContent = $("input[type=radio][name=fontcontent]:checked").val();
+    console.log("폰트 내용 선택된 폰트 : " + checkedFontContent);
+
+
+    /*var systemLabelId = $('#SystemLabel' + systemLabelNum);
+
+    systemLabelId.css({
+        'width': data.rectangle.width,
+        'height': data.rectangle.height,
+        'position': 'absolute',
+        'left': data.rectangle.x + 'px',
+        'top': data.rectangle.y + 'px',
+        'text-align': 'center',
+        'border': '1px solid black'
+    });*/
+
+
+    /*if(data.DataType === DataLabel){
+        ch
+    }*/
+
 }
 /******************************************************************
  기능 : 고급인쇄설정 - 인쇄설정 - 인쇄배율기능
