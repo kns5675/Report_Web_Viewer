@@ -142,8 +142,17 @@ function zoomOut(){
  author : 하지연
  ******************************************************************/
 function close_pop() {
-    $('#myModal').hide();
+    $('#myModal').hide();//고급인쇄 모달창 닫기
 
+    resetData();//데이터값 초기화 밑 기본값 세팅처리
+
+
+};
+/******************************************************************
+ 기능 : 고급인쇄 모달창의 데이터값 초기화 밑 기본값 세팅처리
+ author : 하지연
+ ******************************************************************/
+function resetData(){
     //데이터값 초기화
     $("#copyratio").val("100");
     $("input:radio[name='copyornot']:radio[value='인쇄함']").prop("checked",false);
@@ -152,20 +161,12 @@ function close_pop() {
     $("input:radio[name='titleposition']:radio[value='타이틀상단']").prop("checked",true);
     $("input:radio[name='titleposition']:radio[value='타이틀하단']").prop("checked",false);
 
-    $("input:radio[name='fontform']:radio[value='굴림체']").prop("checked",true);
-    $("input:radio[name='fontform']:radio[value='바탕체']").prop("checked",false);
-    $("input:radio[name='fontform']:radio[value='돋움체']").prop("checked",false);
-
-    $("input:radio[name='fontcontent']:radio[value='굴림체']").prop("checked",true);
-    $("input:radio[name='fontcontent']:radio[value='바탕체']").prop("checked",false);
-    $("input:radio[name='fontcontent']:radio[value='돋움체']").prop("checked",false);
-
     $("input:checkbox[name='fontandtilt']").prop("checked",false);
 
-    $("#pagesizeoptions").val("A4").attr("selected","selected");
+   /* $("#pagesizeoptions").val("A4").attr("selected","selected");*/
 
-    $("input:radio[name='direction']:radio[value='세로']").prop("checked",true);
-    $("input:radio[name='direction']:radio[value='가로']").prop("checked",false);
+    /*$("input:radio[name='direction']:radio[value='세로']").prop("checked",true);
+    $("input:radio[name='direction']:radio[value='가로']").prop("checked",false);*/
 
     $("input:radio[name='copydate']:radio[value='인쇄함']").prop("checked",false);
     $("input:radio[name='copydate']:radio[value='인쇄안함']").prop("checked",true);
@@ -185,8 +186,8 @@ function close_pop() {
     onlyNumber(event);
     copyRatioCheck();
     eReSetFont();
-    paperDirection();
-};
+    /*paperDirection();*/
+}
 /******************************************************************
  기능 : 모달창 닫기 - 데이터값 초기화 밑 기본값 세팅 처리
  author : 하지연

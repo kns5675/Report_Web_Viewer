@@ -58,7 +58,8 @@ $(document).ready(function(){
  ******************************************************************/
 function dataValidity2(){
     try{
-        var tds = this.value;
+        var tds = $("#sign").val();
+        tds = parseInt(tds);
         if(tds>0 && tds<=8){
             changeColor(tds);
         }else{
@@ -75,6 +76,7 @@ function dataValidity2(){
  author : 하지연
  ******************************************************************/
 function changeColor(tds){
+    alert("change color 들어왔음");
     tds = parseInt(tds);
     tds = tds-1;
     $(".modaltd").each(function (i, e) {
@@ -151,13 +153,17 @@ function eSetFont(){
 
 }
 /******************************************************************
- 기능 : 고급인쇄설정 - 폰트설정 - 폰트서식, 폰트내용 폰트 변경 기능
+ 기능 : 고급인쇄설정 - 폰트설정 - 폰트서식, 폰트내용의 폼에 설정값을
+        default값으로 변경 후, viewer에 적용한다.
  author : 하지연
  ******************************************************************/
 function eReSetFont(){
+
+    $("input:radio[name='fontform']:radio[value='굴림']").prop("checked",true);
+    $("input:radio[name='fontcontent']:radio[value='굴림']").prop("checked",true);
+
     var checkedFontForm = ('굴림');
     $('.Label:not(".DataLabel")').css('font-family', checkedFontForm);
-
     var checkedFontContent = ('굴림');
     $('.Label.DataLabel').css('font-family', checkedFontContent);
 
