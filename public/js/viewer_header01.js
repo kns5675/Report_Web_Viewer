@@ -1,4 +1,4 @@
-var page_offset = 117;
+var page_offset = 97;
 var ImageNum = 1;
 var imageid;
 var imagedivid;
@@ -81,7 +81,7 @@ function NextPage(){
 function LastPage(pagecount){
     $("#LastPage").on("click",function () {
         var Last = $(".page").length;
-        var page = $("#page"+Last).offset().top-235;
+        var page = $("#page"+Last).offset().top-185;
         $(window).scrollTop(page);
         $("#NowPage").val(pagecount);
     });
