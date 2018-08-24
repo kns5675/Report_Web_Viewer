@@ -62,8 +62,10 @@ function dataValidity2(){
         tds = parseInt(tds);
         if(tds>0 && tds<=8){
             changeColor(tds);
+            $("#alertsign").text("");
         }else{
-            alert("결재란 칸 수는 1 이상 8 이하여야 합니다.");
+            $("#alertsign").text("결재란 칸 수는 1 이상 8 이하여야 합니다.");
+
             this.value="";
         }
     }catch(e){
