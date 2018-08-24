@@ -169,6 +169,9 @@ function image_upload() {
  ******************************************************************/
 function readURL(input) {
     var scope = "designLayer";
+    if($("#dialog_div"+ImageNum)[0]){
+        $("#dialog_div"+ImageNum).remove();
+    }
     tag_Making(scope); //이미지 추가.
 
     /******************************************************************

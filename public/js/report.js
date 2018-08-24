@@ -376,6 +376,18 @@ function setPage(report) {
     setPageDirection(report);
     setPageForCopyRatioDirection(report);//지연추가
 
+    //학준추가.
+    $("#pagesizeoptions").on("change", function () {
+        pagesizeselect($(this).val());
+    });
+    $("#row_direction").on("click",function () {
+        var test = $("#row_direction").val();
+        console.log("test : ",test);
+        // if(){
+        //
+        // }
+    });
+
     var page = $('#page' + pageNum);
     page.css('border', 'solid green');
     page.css('background-color','transparent');
@@ -422,4 +434,71 @@ function setPageDirection(report) {
     }*/
     page.css('width', '100%');
     page.css('height','100%');
+}
+
+//학준추가.
+function pagesizeselect(paper) {
+    var pageForCopyRatio = $('.pageforcopyratio');
+    if(paper === "Letter"){
+        pageForCopyRatio.css('width', 816.3779527559 + 'px');
+        pageForCopyRatio.css('height', 1054.488188976 + 'px');
+    }else if(paper === "Tabloid"){
+        pageForCopyRatio.css('width', 1054.488188976 + 'px');
+        pageForCopyRatio.css('height', 1632.755905512 + 'px');
+    }else if(paper === "Legal"){
+        pageForCopyRatio.css('width', 816.3779527559 + 'px');
+        pageForCopyRatio.css('height', 1345.511811024 + 'px');
+    }else if(paper === "Statement"){
+        pageForCopyRatio.css('width', 529.1338582677 + 'px');
+        pageForCopyRatio.css('height', 816.3779527559 + 'px');
+    }else if(paper === "Executive"){
+        pageForCopyRatio.css('width', 695.4330708661 + 'px');
+        pageForCopyRatio.css('height', 1009.133858268 + 'px');
+    }else if(paper === "A3"){
+        pageForCopyRatio.css('width', 1122.519685039 + 'px');
+        pageForCopyRatio.css('height', 1587.401574803 + 'px');
+    }else if(paper === "A4"){
+        console.log("pagesizeselect A4 test");
+        pageForCopyRatio.css('width', 793.7007874016 + 'px');
+        pageForCopyRatio.css('height', 1122.519685039 + 'px');
+    }else if(paper === "A5"){
+        pageForCopyRatio.css('width', 793.7007874016 + 'px');
+        pageForCopyRatio.css('height', 559.3700787402 + 'px');
+    }else if(paper === "B4 (JIS)"){
+        pageForCopyRatio.css('width', 971.3385826772 + 'px');
+        pageForCopyRatio.css('height', 1375.748031496 + 'px');
+    }else if(paper === "B5 (JIS)"){
+        pageForCopyRatio.css('width', 687.874015748 + 'px');
+        pageForCopyRatio.css('height', 971.3385826772 + 'px');
+    }
+}
+function paperDirection() {
+    $(".pageforcopyratio").each(function (i, e) {
+        var temp = e.style.width;
+        e.style.width = e.style.height;
+        e.style.height = temp;
+    });
+}
+function datePrinting() {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const day = date.getDay();
+    const hour = date.getHours();
+    const seconds = date.getSeconds();
+    console.log("date : ",year+"-"+month+"-"+day+" "+hour +":"+seconds);
+    const nowpage = $("#NowPage").val();
+    const time_area = document.createElement("div");
+    time_area.id = "time_area"+nowpage;
+    time_area.style.position = "absolute";
+    time_area.style.left = "950px";
+    time_area.style.top = "1300px";
+    time_area.style.zIndex = "999";
+    const time = document.createElement("div");
+    time.className = "SystemDate";
+    time.style.width = "100px";
+    time.style.height = "50px";
+
+    document.getElementById("page"+nowpage).appendChild(time_area);
+    document.getElementById(time_area.id).appendChild(time);
 }
