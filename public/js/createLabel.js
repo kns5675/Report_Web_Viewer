@@ -468,6 +468,19 @@ function drawingSystemLabel(data, divId) {
             timeNum++;
             break;
         case 'PageNumber' : // 현재 페이지 번호
+            var PPageNumber = "PPageNumber";
+            systemLabelId.append('<p id ="' + PPageNumber + pageNumberNum + '" class="pageNumber"></p>');
+
+            pId = $('#' + PPageNumber + pageNumberNum);
+
+            pId.css({
+                'font-size': data.fontSize,
+                'font-family': data.fontFamily,
+                'font-weight': data.fontStyle
+            });
+
+            verticalCenter(PPageNumber + pageNumberNum);
+
             pageNumberNum++;
             break;
         case 'TotalPage' : // 전체 페이지 번호
