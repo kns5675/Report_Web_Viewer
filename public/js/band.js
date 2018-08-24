@@ -20,7 +20,6 @@ function Band(data){
         width : data.Rectangle.Width._text,
         height : (data.Rectangle.Height === undefined ? "0" : data.Rectangle.Height._text)
     };
-    // this.divClass = "report" + reportNum+ "_bandNum" + bandNum;
 
     this.bandYOrder = data.BandYOrder._text;
     // 아마 밴드 위치 설정하기 위한 옵션인 듯
@@ -37,7 +36,6 @@ function Band(data){
         null : CreateBandArray(data.ChildFooterBands));
     this.controlList // 임시로 해둔것 - 안예솔 팀원에게 물어보고 인자를 넘겨줄 것
         = (typeof data.ControlList === undefined ? null : data.ControlList);
-    // this.divId = "report" + reportNum + "_";
 }
 /*************************************************************************************
  *************************************************************************************/

@@ -136,6 +136,10 @@ function judgementLabel(data, divId) {
  수정 : DynamicTableValueLabel에 데이터 바인딩
  Date : 2018-08-20
  From 구영준
+ 
+ 수정 : DynamicTable의 th, td tag에 클래스 추가
+ Date : 2018-08-24
+ From 전형준
  ******************************************************************/
 function drawingDynamicTable(table, tableLabel, divId) {
     var div = $('#' + divId);
@@ -187,6 +191,8 @@ function drawingDynamicTable(table, tableLabel, divId) {
                             var thId = $('#' + titleName + thNum);
                             thId.css('border', '1px solid black');
                             thId.append(titleName);
+                            thId.addClass('Label');
+                            thId.addClass(label._attributes);
                         }
                     });
                     break;
@@ -201,7 +207,9 @@ function drawingDynamicTable(table, tableLabel, divId) {
                         for (key in data) {
                             if (label.fieldName == key) {
                                 var valueTrId = $('#dynamicValueLabel' + j);
-                                valueTrId.append('<td>' + data[key]._text + '</td>');
+                                valueTrId.append(
+                                    '<td class="Label ' + label._attributes + ' ' + label.dataType + '">' + data[key]._text + '</td>'
+                                );
                                 valueTrId.css({
                                     'width': label.rectangle.width,
                                     'height': label.rectangle.height,
@@ -297,9 +305,14 @@ function drawingFixedTable(table, tableLabel, divId) {
 /******************************************************************
  기능 : SystemLabel(시스템 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 안예솔
+
+ 수정 : Label에 'Label', 각자의 DataType 클래스 추가
+ Date : 2018-08-24
+ From 전형준
  ******************************************************************/
 function drawingSystemLabel(data, divId) {
     var div = $('#' + divId);
+    var pId;
     div.css('position', 'relative');
     div.append('<div id = "SystemLabel' + systemLabelNum + '"></div>');
 
@@ -325,7 +338,7 @@ function drawingSystemLabel(data, divId) {
 
             systemLabelId.append('<p id = "PDate' + dateNum + '">' + dateStr + '</p>');
 
-            var pId = $('#PDate' + dateNum);
+            pId = $('#PDate' + dateNum);
 
             pId.css({
                 'font-size': data.fontSize,
@@ -348,7 +361,7 @@ function drawingSystemLabel(data, divId) {
 
             systemLabelId.append('<p id = "PDateTime' + dateTimeNum + '">' + dateTimeStr + '</p>');
 
-            var pId = $('#PDateTime' + dateTimeNum);
+            pId = $('#PDateTime' + dateTimeNum);
 
             pId.css({
                 'font-size': data.fontSize,
@@ -368,7 +381,7 @@ function drawingSystemLabel(data, divId) {
 
             systemLabelId.append('<p id = "PTime' + timeNum + '">' + timeStr + '</p>');
 
-            var pId = $('#PTime' + timeNum);
+            pId = $('#PTime' + timeNum);
 
             pId.css({
                 'font-size': data.fontSize,
@@ -384,25 +397,49 @@ function drawingSystemLabel(data, divId) {
             pageNumberNum++;
             break;
         case 'TotalPage' : // 전체 페이지 번호
-            // var pagecount = $(".page").length;
-            // systemLabelId.append('<p id = "totalPage' +  totalPageNum + '">' + pagecount + '</p>');
-            // verticalCenter('totalPage' + totalPageNum);
+            var PTotalPage = "PTotalPage";
+            systemLabelId.append('<p id ="' + PTotalPage + totalPageNum + '" class="totalPage"></p>');
+
+            pId = $('#' + PTotalPage + totalPageNum);
+
+            pId.css({
+                'font-size': data.fontSize,
+                'font-family': data.fontFamily,
+                'font-weight': data.fontStyle
+            });
+
+            verticalCenter(PTotalPage + totalPageNum);
             totalPageNum++;
             break;
         case 'PageNumber / TotalPage' :  // 현재 페이지 번호 / 전체 페이지 정보
-            // var pagecount = $(".page").length;
-            // systemLabelId.append('<p id = "pageNumberTotalPage' +  pageNumTotalPageNum + '">' + pagecount + '</p>');
-            // verticalCenter('pageNumberTotalPage' + pageNumTotalPageNum);
+            var PPageNumberNTotalPage = "PPageNumberNTotalPage";
+            systemLabelId.append('<p id ="' + PPageNumberNTotalPage +  pageNumTotalPageNum + '" class="pageNumberTotalPage"></p>');
+
+            pId = $('#' + PPageNumberNTotalPage + pageNumTotalPageNum);
+
+            pId.css({
+                'font-size': data.fontSize,
+                'font-family': data.fontFamily,
+                'font-weight': data.fontStyle
+            });
+
+            verticalCenter(PPageNumberNTotalPage + pageNumTotalPageNum);
             pageNumTotalPageNum++;
             break;
     }
     systemLabelNum++;
+    pId.addClass('Label');
+    pId.addClass(data.dataType);
 }
 
 
 /******************************************************************
  기능 : SummaryLabel(요약 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 안예솔
+
+ 수정 : Label에 'Label', 각자의 DataType 클래스 추가
+ Date : 2018-08-24
+ From 전형준
  ******************************************************************/
 function drawingSummaryLabel(data, divId) {
     var div = $('#' + divId);
@@ -432,15 +469,20 @@ function drawingSummaryLabel(data, divId) {
     });
 
     //pId.append(data.text);
+    pId.addClass('Label');
+    pId.addClass(data.dataType);
 
     verticalCenter('PSummaryLabel' + summaryLabelNum);
-
     summaryLabelNum++;
 }
 
 /******************************************************************
  기능 : DataLabel(데이터 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 안예솔
+
+ 수정 : Label에 'Label', 각자의 DataType 클래스 추가
+ Date : 2018-08-24
+ From 전형준
  ******************************************************************/
 function drawingDataLabel(data, divId) {
     var div = $('#' + divId);
@@ -478,12 +520,19 @@ function drawingDataLabel(data, divId) {
 
     verticalCenter('PDataLabel' + dataLabelNum);
 
+    pId.addClass('Label');
+    pId.addClass(data.dataType);
+
     dataLabelNum++;
 }
 
 /******************************************************************
  기능 : NormalLabel(일반 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 안예솔
+
+ 수정 : Label에 'Label', 각자의 DataType 클래스 추가
+ Date : 2018-08-24
+ From 전형준
  ******************************************************************/
 function drawingNormalLabel(data, divId) {
     var div = $('#' + divId);
@@ -523,6 +572,9 @@ function drawingNormalLabel(data, divId) {
 
     verticalCenter('PNormalLabel' + normalLabelNum);
 
+    pId.addClass('Label');
+    pId.addClass('NormalLabel');
+
     normalLabelNum++;
 }
 
@@ -543,6 +595,10 @@ function toStringFn(text, pId) {
 /******************************************************************
  기능 : Expression(수식 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 안예솔
+
+ 수정 : Label에 'Label', 각자의 DataType 클래스 추가
+ Date : 2018-08-24
+ From 전형준
  ******************************************************************/
 function drawingExpression(data, divId) {
     var div = $('#' + divId);
@@ -573,6 +629,9 @@ function drawingExpression(data, divId) {
     //$('#PExpression' + expressionNum).append(data.text);
 
     verticalCenter('PExpression' + expressionNum);
+
+    pId.addClass('Label');
+    pId.addClass(data.dataType);
 
     expressionNum++;
 }
@@ -611,6 +670,9 @@ function drawingGroupLabel(data, divId) {
 
     verticalCenter('PGroupLabel' + groupLabelNum);
 
+    pId.addClass('Label');
+    pId.addClass(data.dataType);
+
     groupLabelNum++;
 }
 
@@ -647,6 +709,9 @@ function drawingParameterLabel(data, divId) {
     //$('#PParameterLabel' + parameterLabelNum).append(data.text);
 
     verticalCenter('PParameterLabel' + parameterLabelNum);
+
+    pId.addClass('Label');
+    pId.addClass(data.dataType);
 
     parameterLabelNum++;
 }

@@ -413,11 +413,13 @@ function setPageDirection(report) {
     var page = $('#page' + pageNum);
     var pageForCopyRatio = $('#pageForCopyRatio' + pageNum);
 
-    if (report.paperDirection) { //세로
+    /*if (report.paperDirection) { //세로
         page.css('width', '100%');
         page.css('height','100%');
     } else { //가로
         page.css('width', $('#pageForCopyRatio' + pageNum).height);
         page.css('height',$('#pageForCopyRatio' + pageNum).width);
-    }
+    }*/
+    page.css('width', '100%');
+    page.css('height','100%');
 }
