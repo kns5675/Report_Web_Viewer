@@ -487,19 +487,78 @@ function datePrinting() {
     const day = date.getDay();
     const hour = date.getHours();
     const seconds = date.getSeconds();
-    console.log("date : ",year+"-"+month+"-"+day+" "+hour +":"+seconds);
-    const nowpage = $("#NowPage").val();
-    const time_area = document.createElement("div");
-    time_area.id = "time_area"+nowpage;
-    time_area.style.position = "absolute";
-    time_area.style.left = "950px";
-    time_area.style.top = "1300px";
-    time_area.style.zIndex = "999";
-    const time = document.createElement("div");
-    time.className = "SystemDate";
-    time.style.width = "100px";
-    time.style.height = "50px";
+    const totaldate = year+"-"+month+"-"+day+" "+hour +":"+seconds;
 
-    document.getElementById("page"+nowpage).appendChild(time_area);
-    document.getElementById(time_area.id).appendChild(time);
+    $(".pageforcopyratio").each(function (i,e) {
+        console.log(e.style.width);
+        const col_interval = e.style.width.replace(/[^-\.0-9]/g,"")*83/100;
+        const row_interval = e.style.height.replace(/[^-\.0-9]/g,"")*98/100;
+        const left_page = $("#page"+e.id.replace(/[^0-9]/g,"")).offset().left+col_interval;
+        const top_page = $("#page"+e.id.replace(/[^0-9]/g,"")).offset().top+row_interval;
+        const time_area = document.createElement("div");
+        time_area.id = "time_area"+e.id.replace(/[^0-9]/g,"");
+        time_area.style.position = "absolute";
+        time_area.style.left = left_page+"px";
+        time_area.style.top = top_page+"px";
+        time_area.style.width = "100px";
+        time_area.style.height = "50px";
+        time_area.style.zIndex = "999";
+
+        const time = document.createElement("div");
+        time.id = "SystemDate"+e.id.replace(/[^0-9]/g,"");
+        time.className = "SystemDate";
+
+        const time_tag = document.createElement("input");
+        time_tag.id = totaldate;
+        time_tag.value = totaldate;
+        time_tag.type = "text";
+        time_tag.style.backgroundColor = "rgba(255, 255, 255, 0)";
+        time_tag.style.border = "none";
+        time_tag.readOnly = true;
+        time_tag.style.fontSize = "12px";
+
+        document.getElementById("page"+e.id.replace(/[^0-9]/g,"")).appendChild(time_area);
+        document.getElementById(time_area.id).appendChild(time);
+        document.getElementById(time.id).appendChild(time_tag);
+    });
+
+}
+
+function countPrinting() {
+
+    $(".pageforcopyratio").each(function (i,e) {
+        console.log(e.id.replace(/[^0-9]/g, ""));
+        const col_interval = e.style.width.replace(/[^-\.0-9]/g,"")*91/100;
+        const row_interval = e.style.height.replace(/[^-\.0-9]/g,"")*98/100;
+        const left_page = $("#page"+e.id.replace(/[^0-9]/g,"")).offset().left+col_interval;
+        const top_page = $("#page" + e.id.replace(/[^0-9]/g, "")).offset().top+row_interval;
+        const count_area = document.createElement("div");
+        const totalpage = $(".page").length;
+        count_area.id = "countPage" + e.id.replace(/[^0-9]/g, "");
+        count_area.className = "countPage";
+        count_area.style.position = "absolute";
+        count_area.style.left = left_page+"px";
+        count_area.style.top = top_page+"px";
+        count_area.style.width = "100px";
+        count_area.style.height = "50px";
+        count_area.style.zIndex = "999";
+        console.log("totalpage : ", totalpage);
+
+        const count_Packing = document.createElement("div");
+        count_Packing.id = "countData" + e.id.replace(/[^0-9]/g, "");
+        count_Packing.className = "countData";
+
+        const count_tag = document.createElement("input");
+        count_tag.id = "count_tag" + e.id.replace(/[^0-9]/g, "");
+        count_tag.value = e.id.replace(/[^0-9]/g, "") + "/" + totalpage;
+        count_tag.type = "text";
+        count_tag.style.backgroundColor = "rgba(255, 255, 255, 0)";
+        count_tag.style.border = "none";
+        count_tag.readOnly = true;
+        count_tag.style.fontSize = "12px";
+
+        document.getElementById("page" + e.id.replace(/[^0-9]/g, "")).appendChild(count_area);
+        document.getElementById(count_area.id).appendChild(count_Packing);
+        document.getElementById(count_Packing.id).appendChild(count_tag);
+    });
 }

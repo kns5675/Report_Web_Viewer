@@ -28,30 +28,41 @@ $(document).ready(function(){
     $(".fontform,.fontcontent").on("change",function(){ //고급인쇄 - 폰트설정 - 폰트내용, 폰트서식 변경
         eSetFont();
     });
+    hakjoons();
+});
 
-
-
-
-
-
-    /*//학준 추가
+//학준 추가
+function hakjoons(){
     //용지 크기 선택(A4,B4 등)
     $("#pagesizeoptions").on("change", function () {
         pagesizeselect($(this).val());
     });
     //용지방향 설정
-    $(".direction").on("change",function () {
+    $(".direction").on("click",function () {
+        var test = $('input:radio[name="direction"]').is(":checked");
+        console.log("Test : ",test);
         paperDirection();
     });
+    //출력일 인쇄 기능
     $(".copydate").on("change",function () {
         var print = $('input[id="copydate_id"]:checked').val();
         console.log("print : ",print);
         if(print){
             datePrinting();
+        }else{
+            $(".countPage").remove();
         }
-    });*/
+    });
+    //매수 인쇄
+    $(".copycount").on("change", function () {
+        var count = $('input[id="copycount_id"]:checked').val();
+        console.log("count : ",count);
+        if(count){
+            countPrinting();
+        }
+    });
+}
 
-});
 /******************************************************************
  기능 : 고급인쇄 -  결재란 칸수 지정 데이터 유효성 검증
  author : 하지연
