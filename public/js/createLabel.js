@@ -639,8 +639,8 @@ function drawingNormalLabel(data, divId) {
         'font-family' : data.fontFamily,
         'font-weight' : data.fontStyle
     });
-    // toStringFn(data.text, "PNormalLabel" + normalLabelNum);
-    textEqualDivision(data.text, "PNormalLabel" + normalLabelNum);
+    toStringFn(data.text, "PNormalLabel" + normalLabelNum);
+    // textEqualDivision(data.text, "PNormalLabel" + normalLabelNum);
 
     verticalCenter('PNormalLabel' + normalLabelNum); // 텍스트 수직 정렬이 중간인 경우
     // verticalTop('PNormalLabel' + normalLabelNum); // 텍스트 수직 정렬이 위쪽인 경우
@@ -797,13 +797,14 @@ function plusZero(data) {
  기능 : 한 글자씩 출력하는 함수를 만든다.
  만든이 : 안예솔
  ******************************************************************/
-function toStringFn(text, pId) {
+function toStringFn(text, pTagId) {
+    var tag = $('#' + pTagId);
     var str = text.toString();
     var appendStr = str[0];
     for(var i = 1; i < str.length; i++){
         appendStr += str[i];
     }
-    pId.append(appendStr);
+    tag.append(appendStr);
 }
 
 /******************************************************************
@@ -832,9 +833,6 @@ function textEqualDivision(text, pTagId) {
     var num = appendStr.length;
     var spacing = (parentWidth[0] - fontsize[0] * num) / (num - 1);
     tag.append('<p style = "letter-spacing : ' + spacing + 'px; margin:0px;">' + appendStr + '</p>');
-    // tag.append(appendStr);
-
-    // var divBr = $('#' + pTagId + ' br');
 }
 
 /******************************************************************
