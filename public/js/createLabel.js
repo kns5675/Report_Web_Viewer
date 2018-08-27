@@ -25,44 +25,6 @@ var dynamicValueLabelNum = 1;
 var groupFieldArray = new Array();
 var titleArray = new Array(); // 그룹으로 묶었을 경우 titleName으로만 접근이 가능해져서 그 titleName을 담을 배열
 var dynamicTableValueNum = 0;
-var row = 0;
-
-/************** 샘플 받으면 해야할 일! ****************/
-/****************************그라데이션****************************/
-// 'background' : 'linear-gradient(to right, white 1%, black 50%, white 100%)' // 시작방향 모서리, 방향 수평
-// 'background' : 'linear-gradient(to right, black 1%, white 50%, black 100%)' // 시작방향 가운데, 방향 수평
-// 'background' : 'linear-gradient(to left, white, black)' // 시작방향 역방향, 방향 수평 오른쪽에서 왼쪽으로 옅어짐 (to left)
-// 'background' : 'linear-gradient(to right, white, black)' // 시작방향 정방향, 방향 수평 오른쪽에서 왼쪽으로 옅어짐 (to left)
-
-// 'background' : 'linear-gradient(to bottom, white 1%, black 50%, white 100%)' // 시작방향 모서리, 방향 수직
-// 'background' : 'linear-gradient(to bottom, black 1%, white 50%, black 100%)' // 시작방향 가운데, 방향 수직
-// 'background' : 'linear-gradient(to bottom, white, black)' // 시작방향 정방향, 방향 수직 위쪽에서 아래쪽으로 옅어짐 (to bottom)
-// 'background' : 'linear-gradient(to top, white, black)' // 시작방향 역방향, 방향 수직 아래쪽에서 위쪽으로 옅어짐 (to top)
-
-// 'background': 'linear-gradient(to bottom right, white 1%, black 50%, white 100%)' // 시작방향 모서리, 방향 하향
-// 'background': 'linear-gradient(to bottom right, black 1%, white 50%, black 100%)' // 시작방향 가운데, 방향 하향
-// 'background': 'linear-gradient(to bottom right, white, black)' // 시작방향 정방향, 방향 하향 위쪽에서 아래쪽으로 옅어짐 (to bottom)
-// 'background': 'linear-gradient(to bottom right, black, white)' // 시작방향 역방향, 방향 하향 아래쪽에서 위쪽으로 옅어짐 (to top)
-
-// 'background': 'linear-gradient(to top right, white 1%, black 50%, white 100%)' // 시작방향 모서리, 방향 상향
-// 'background': 'linear-gradient(to top right, black 1%, white 50%, black 100%)' // 시작방향 가운데, 방향 상향
-// 'background': 'linear-gradient(to bottom left, white, black)' // 시작방향 정방향, 방향 상향 위쪽에서 아래쪽으로 옅어짐 (to bottom)
-// 'background': 'linear-gradient(to bottom left, black, white)' // 시작방향 역방향, 방향 상향 아래쪽에서 위쪽으로 옅어짐 (to top)
-
-/****************************라벨 형태, 테두리 색****************************/
-// 'border-radius': '100%', // LabelShape가 원일 때
-//  'border-color': 'black', // (원 테두리 색) CircleLineColor가 white일 때
-//  'border' : '9px solid' // (원 테두리 두께) 속성이 뭔지 모르겠땀
-
-/*****************************얇은 밑줄 두 줄***************************/
-// 'text-decoration' : 'underline',
-// 'text-decoration-style' : 'double',
-// 'text-underline-position' : 'under'
-
-/*****************************자간***************************/
-// 'letter-spacing' : ....characterSpacing._text
-
-
 
 
 /******************************************************************
@@ -108,16 +70,21 @@ function judgementLabel(data, divId) {
         drawingDynamicTable(controlDynamicTable, tableLabelList, divId);
 
     } else if (attr == "ControlFixedTable") { // 고정 테이블
+
+        /*
+        To Do : tableLabel이 다른 밴드에 있을 경우 tableLabelList에 다겹침
+         */
         var controlFixedTable = new Table(data);
         tableList.push(controlFixedTable);
 
-        var tableLabels = data.Labels.TableLabel;
+        var fixTableLabels = data.Labels.TableLabel;
+        var fixTableLabelList = new Array();
 
-        tableLabels.forEach(function (label, i) {
-            var tableLabel = new FixedTableLabel(label, i);
-            tableLabelList.push(tableLabel);
+        fixTableLabels.forEach(function (label, i) {
+            var fixtableLabel = new FixedTableLabel(label, i);
+            fixTableLabelList.push(fixtableLabel);
         });
-        drawingFixedTable(controlFixedTable, tableLabelList, divId);
+        drawingFixedTable(controlFixedTable, fixTableLabelList, divId);
 
     } else if (attr == "ControlLabel") {
         if (!(data.DataType === undefined)) {
@@ -209,6 +176,7 @@ function drawingDynamicTable(table, tableLabel, divId) {
     row = (pageNum-1) * numOfData; //한 페이지 출력 해야할 시작 row
     var rowLength = row + numOfData; //한 페이지에 마지막으로 출력해야할 row
 
+    console.log(tableLabel);
     if (Array.isArray(tableLabel)) {
         tableLabel.forEach(function (label) {
             switch (label._attributes) {
@@ -239,15 +207,18 @@ function drawingDynamicTable(table, tableLabel, divId) {
                     // 수정 180822 YeSol
                 case "DynamicTableValueLabel" :
                     if(groupFieldArray != undefined) {
-                        for (var j = row; j < rowLength; j++) {
+                        for (curDatarow = row; curDatarow < rowLength; curDatarow++) {
 
-                            var data = dataTable.DataSetName.dt[j];
-                            tableId.append('<tr id = "dynamicValueLabel' + j + '"></tr>');
-                            var valueTrId = $('#dynamicValueLabel' + j);
+                            var data = dataTable.DataSetName.dt[curDatarow];
+                            var valueTrId = $('#dynamicValueLabel' + curDatarow);
+                            if(valueTrId.length < 1)
+                            tableId.append('<tr id = "dynamicValueLabel' + curDatarow + '"></tr>');
 
                             for (key in data) {
+                                console.log(data);
+                                console.log(key);
                                 if (label.fieldName == key) {
-                                    var valueTrId = $('#dynamicValueLabel' + j);
+                                    var valueTrId = $('#dynamicValueLabel' + curDatarow);
                                     valueTrId.append(
                                         '<td class="Label ' + label._attributes + ' ' + label.dataType + '">' + data[key]._text + '</td>'
                                     );
@@ -489,11 +460,11 @@ function drawingSystemLabel(data, divId) {
 
             pId = $('#' + PTotalPage + totalPageNum);
 
-            pId.css({
-                'font-size': data.fontSize,
-                'font-family': data.fontFamily,
-                'font-weight': data.fontStyle
-            });
+                pId.css({
+                    'font-size': data.fontSize,
+                    'font-family': data.fontFamily,
+                    'font-weight': data.fontStyle
+                });
 
             verticalCenter(PTotalPage + totalPageNum);
             totalPageNum++;

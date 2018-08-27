@@ -1,5 +1,6 @@
 var pageNum = 1;
 var reportNum = 1;
+var curDatarow = 0;
 var groupFieldArray = new Array();
 
 /******************************************************************
@@ -22,14 +23,18 @@ function makeReportTemplate(data) {
  ******************************************************************/
 function makeReport(report) {
 
-    var numOfPage = getNumOfPage(report);
+    setPage(report);
+    setReport(report);
 
-    for (var i = 0; i < numOfPage; i++) {
+    pageNum++;
 
-        setPage(report);
-        setReport(report);
-
-        pageNum++;
+    console.log(curDatarow);
+    //현재 찍힌 데이터 로우 행이 전체 데이터 보다 작을 경우 재귀함수
+    //클 경우 함수 종료 후 다음 리포트 생성
+    if (curDatarow < dataTable.DataSetName.dt.length) {
+        makeReport(report);
+    }else{
+        return
     }
 }
 
@@ -258,15 +263,15 @@ function setForeGroundLayerDirection(report) {
  author : powerku
  ******************************************************************/
 function setReport(report) {
-    $(('#page' + pageNum)).append('<div id="forcopyratio' + reportNum + '"class = forcopyratio' +'></div>');//지연
+    $(('#page' + pageNum)).append('<div id="forcopyratio' + reportNum + '"class = forcopyratio' + '></div>');//지연
     //지연 - 인쇄배율 조정을 위한 div 하나 더 생성.
-    $(('#forcopyratio' + reportNum)).append('<div id="report' + reportNum + '"class = report' +'></div>');//지연
+    $(('#forcopyratio' + reportNum)).append('<div id="report' + reportNum + '"class = report' + '></div>');//지연
 
     setForCopyRatioDirection(report);//추가 - 지연
     setReportDirection(report);
 
     var reportInPage = $('#report' + reportNum);
-    $('#forcopyratio' + reportNum).css("position","absolute");
+    $('#forcopyratio' + reportNum).css("position", "absolute");
 
     /*reportInPage.css({
         'margin-top': report.margin.x + 'px',
@@ -276,10 +281,10 @@ function setReport(report) {
     });*/
 
     //  지연 수정
-    $('#forcopyratio' + reportNum).css('margin-top', report.margin.x+'px');
-    $('#forcopyratio' + reportNum).css('margin-bottom', report.margin.y+'px');
-    $('#forcopyratio' + reportNum).css('margin-right', report.margin.height+'px');
-    $('#forcopyratio' + reportNum).css('margin-left', report.margin.width+'px');
+    $('#forcopyratio' + reportNum).css('margin-top', report.margin.x + 'px');
+    $('#forcopyratio' + reportNum).css('margin-bottom', report.margin.y + 'px');
+    $('#forcopyratio' + reportNum).css('margin-right', report.margin.height + 'px');
+    $('#forcopyratio' + reportNum).css('margin-left', report.margin.width + 'px');
 
     setBackGroundLayer(report);
     setDesignLayer(report);
@@ -331,16 +336,16 @@ function makeTableByData() {
 function setReportDirection(report) {
 
     var reportInPage = $('#report' + reportNum);
-    if(report.paperDirection){// 지연 수정
+    if (report.paperDirection) {// 지연 수정
         reportInPage.css({
             'width': '100%',
             'height': '100%'
         });
-    }else{//지연 수정
+    } else {//지연 수정
         reportInPage.css({
             'height': $('#forcopyratio' + reportNum).width,
             'width': $('#forcopyratio' + reportNum).height
-    });
+        });
     }
 
     reportInPage.css('text-align', 'center'); // 추가 : 안예솔
@@ -349,13 +354,13 @@ function setReportDirection(report) {
  기능 : 리포트 div의 부모 div인 forcopyratio div를 만든후 report의 크기로 지정하고, 방향지정.
  author : 하지연
  ******************************************************************/
-function setForCopyRatioDirection(report){  //지연 추가
-    if(report.paperDirection){
-        $('#forcopyratio' + reportNum).css('width', report.rectangle.width+'px');
+function setForCopyRatioDirection(report) {  //지연 추가
+    if (report.paperDirection) {
+        $('#forcopyratio' + reportNum).css('width', report.rectangle.width + 'px');
         $('#forcopyratio' + reportNum).css('height', report.rectangle.height + 'px');
-    }else{
+    } else {
         $('#forcopyratio' + reportNum).css('width', report.rectangle.height + 'px');
-        $('#forcopyratio' + reportNum).css('height', report.rectangle.width+'px');
+        $('#forcopyratio' + reportNum).css('height', report.rectangle.width + 'px');
     }
 }
 /******************************************************************
@@ -391,18 +396,19 @@ function setPage(report) {
 
     var page = $('#page' + pageNum);
     page.css('border', 'solid green');
-    page.css('background-color','transparent');
+    page.css('background-color', 'transparent');
 
     var pageForCopyRatio = $('#pageForCopyRatio' + pageNum);
-    pageForCopyRatio.css('border','solid red');
-    pageForCopyRatio.css('background-color','lightgreen');
+    pageForCopyRatio.css('border', 'solid red');
+    pageForCopyRatio.css('background-color', 'lightgreen');
 
 }
+
 /******************************************************************
  기능 : 페이지 부모 div인 pageForCopyRatio의 방향 설정
  author : 하지연
  ******************************************************************/
-function setPageForCopyRatioDirection(report){
+function setPageForCopyRatioDirection(report) {
     var pageForCopyRatio = $('#pageForCopyRatio' + pageNum);
 
     if (report.paperDirection) { //세로
@@ -413,6 +419,7 @@ function setPageForCopyRatioDirection(report){
         pageForCopyRatio.css('height', report.paperSize.width + 'px');
     }
 }
+
 /******************************************************************
  기능 : 페이지 방향 설정
  author : powerku
@@ -420,7 +427,7 @@ function setPageForCopyRatioDirection(report){
  수정 : 하지연
  날짜 : 2018 - 08 - 23
  내용 : page의 width, height값을 page의 부모인 pageForCopyRatio의 width, height값의 100%로 지정하고,
-        방향 설정
+ 방향 설정
  ******************************************************************/
 function setPageDirection(report) {
     var page = $('#page' + pageNum);
@@ -428,9 +435,10 @@ function setPageDirection(report) {
 
     /*if (report.paperDirection) { //세로
         page.css('width', '100%');
-        page.css('height','100%');
+        page.css('height', '100%');
     } else { //가로
         page.css('width', $('#pageForCopyRatio' + pageNum).height);
+        page.css('height', $('#pageForCopyRatio' + pageNum).width);
         page.css('height',$('#pageForCopyRatio' + pageNum).width);
     }*/
     page.css('width', '100%');
