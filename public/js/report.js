@@ -446,7 +446,7 @@ function setPageDirection(report) {
 
 //학준추가.
 function pagesizeselect(paper) {
-    var pageForCopyRatio = $('.pageforcopyratio');
+    var pageForCopyRatio = $('.page');
     if(paper === "Letter"){
         pageForCopyRatio.css('width', 816.3779527559 + 'px');
         pageForCopyRatio.css('height', 1054.488188976 + 'px');
@@ -481,7 +481,7 @@ function pagesizeselect(paper) {
     }
 }
 function paperDirection() {
-    $(".pageforcopyratio").each(function (i, e) {
+    $(".page").each(function (i, e) {
         var temp = e.style.width;
         e.style.width = e.style.height;
         e.style.height = temp;
@@ -496,18 +496,20 @@ function datePrinting() {
     const seconds = date.getSeconds();
     const totaldate = year+"-"+month+"-"+day+" "+hour +":"+seconds;
 
-    $(".pageforcopyratio").each(function (i,e) {
-        console.log(e.style.width);
-        const col_interval = e.style.width.replace(/[^-\.0-9]/g,"")*83/100;
-        const row_interval = e.style.height.replace(/[^-\.0-9]/g,"")*98/100;
-        const left_page = $("#page"+e.id.replace(/[^0-9]/g,"")).offset().left+col_interval;
-        const top_page = $("#page"+e.id.replace(/[^0-9]/g,"")).offset().top+row_interval;
+    $(".page").each(function (i,e) {
+        console.log(e.id.replace(/[^0-9]/g,""));
+        const row_interval = e.style.width.replace(/[^-\.0-9]/g,"")*0.83;
+        const col_interval = e.style.height.replace(/[^-\.0-9]/g,"")*0.98;
+        console.log("row_interval : ",row_interval);
+        console.log("col_interval : ",col_interval);
+        console.log("$(\"#page\"+e.id.replace(/[^0-9]/g,\"\")).offset().left :",$("#page"+e.id.replace(/[^0-9]/g,"")).offset().left);
+        console.log("offset : ",$("#page"+e.id.replace(/[^0-9]/g,"")).offset().top);
         const time_area = document.createElement("div");
         time_area.id = "time_area"+e.id.replace(/[^0-9]/g,"");
         time_area.style.position = "absolute";
         time_area.className = "timePage";
-        time_area.style.left = left_page+"px";
-        time_area.style.top = top_page+"px";
+        time_area.style.left = row_interval+"%";
+        time_area.style.top = col_interval+"%";
         time_area.style.width = "100px";
         time_area.style.height = "50px";
         time_area.style.zIndex = "999";
@@ -534,19 +536,17 @@ function datePrinting() {
 
 function countPrinting() {
 
-    $(".pageforcopyratio").each(function (i,e) {
+    $(".page").each(function (i,e) {
         console.log(e.id.replace(/[^0-9]/g, ""));
-        const col_interval = e.style.width.replace(/[^-\.0-9]/g,"")*91/100;
-        const row_interval = e.style.height.replace(/[^-\.0-9]/g,"")*98/100;
-        const left_page = $("#page"+e.id.replace(/[^0-9]/g,"")).offset().left+col_interval;
-        const top_page = $("#page" + e.id.replace(/[^0-9]/g, "")).offset().top+row_interval;
+        const col_interval = e.style.width.replace(/[^-\.0-9]/g,"")*0.91;
+        const row_interval = e.style.height.replace(/[^-\.0-9]/g,"")*0.98;
         const count_area = document.createElement("div");
         const totalpage = $(".page").length;
         count_area.id = "countPage" + e.id.replace(/[^0-9]/g, "");
         count_area.className = "countPage";
         count_area.style.position = "absolute";
-        count_area.style.left = left_page+"px";
-        count_area.style.top = top_page+"px";
+        count_area.style.left = col_interval+"%";
+        count_area.style.top = row_interval+"%";
         count_area.style.width = "100px";
         count_area.style.height = "50px";
         count_area.style.zIndex = "999";
@@ -571,24 +571,30 @@ function countPrinting() {
 }
 
 //머리글 그리는 함수.
-function head_test() {
-    $(".pageforcopyratio").each(function (i,e) {
+function header_test(value, input_value) {
+    $(".page").each(function (i,e) {
         // 페이지 좌표 계산.
         // if($(".PageHeader")){
         //     $(".PageHeader").remove();
         // }
-        const row_interval = e.style.width.replace(/[^-\.0-9]/g,"")*10/100;
-        const col_interval = e.style.height.replace(/[^-\.0-9]/g,"")*2/100;
-        const left_page = $("#page"+e.id.replace(/[^0-9]/g,"")).offset().left+row_interval;
-        const top_page = $("#page" + e.id.replace(/[^0-9]/g, "")).offset().top+col_interval;
+        var not_input;
+        console.log("input_value : ",input_value);
+        if(input_value != undefined){
+            not_input = input_value;
+        }else{
+            not_input = " ";
+        }
+        console.log("not_input : ",not_input);
+        const row_interval = e.style.width.replace(/[^-\.0-9]/g,"")*value;
+        const col_interval = e.style.height.replace(/[^-\.0-9]/g,"")*0.01;
         //영역 잡고, 그려줌.
         const PageHeader = document.createElement("div");
         const totalpage = $(".page").length;
         PageHeader.id = "PageHeader" + e.id.replace(/[^0-9]/g, "");
         PageHeader.className = "PageHeader";
         PageHeader.style.position = "absolute";
-        PageHeader.style.left = left_page+"px";
-        PageHeader.style.top = top_page+"px";
+        PageHeader.style.left = row_interval+"%";
+        PageHeader.style.top = col_interval+"%";
         PageHeader.style.width = "100px";
         PageHeader.style.height = "50px";
         PageHeader.style.zIndex = "999";
@@ -599,7 +605,7 @@ function head_test() {
 
         const header_tag = document.createElement("input");
         header_tag.id = "header_tag" + e.id.replace(/[^0-9]/g, "");
-        header_tag.value = "머리글";
+        header_tag.value = not_input;
         header_tag.type = "text";
         header_tag.style.backgroundColor = "rgba(255, 255, 255, 0)";
         header_tag.style.border = "none";
@@ -612,26 +618,64 @@ function head_test() {
     });
 }
 
+//머리글 영역 변경 함수
+function header_location(input_value){
+    console.log($("#extraheadoptions").val());
+    if($("#extraheadoptions").val() ==="상단좌측"){
+        var value = 0.1;
+        if($(".PageHeader").length != 0){
+            $(".PageHeader").remove();
+            header_test(value, input_value);
+        }else{
+            header_test(value, input_value);
+        }
+    }else if($("#extraheadoptions").val() ==="상단중앙"){
+        var value = 0.5;
+        if($(".PageHeader").length != 0){
+            $(".PageHeader").remove();
+            header_test(value, input_value);
+        }else{
+            header_test(value, input_value);
+        }
+    }else if($("#extraheadoptions").val() ==="상단우측"){
+        var value = 0.9;
+        if($(".PageHeader").length != 0){
+            $(".PageHeader").remove();
+            header_test(value, input_value);
+        }else{
+            header_test(value, input_value);
+        }
+    }
+}
+
 //꼬리글 그리는 함수.
-function footer_test(value) {
-    var test = $("#extratailoptions").val();
-    console.log("test : ",test);
-    $(".pageforcopyratio").each(function (i,e) {
+function footer_test(value, input_value) {
+    // console.log("value : ",value);
+    // console.log($("#PageFooter").val());
+    // if($("#PageFooter").val()){
+    //     $("#PageFooter").remove();
+    // }
+    var not_input;
+    console.log("input_value : ",input_value);
+    if(input_value != undefined){
+        not_input = input_value;
+    }else{
+        not_input = " ";
+    }
+    $(".page").each(function (i,e) {
         // 페이지 좌표 계산.
         // if($(".PageFooter")){
         //     $(".PageFooter").remove();
         // }
-        const col_interval = e.style.width.replace(/[^-\.0-9]/g,"")*value/100;
-        const row_interval = e.style.height.replace(/[^-\.0-9]/g,"")*97/100;
-        const left_page = $("#page"+e.id.replace(/[^0-9]/g,"")).offset().left+col_interval;
-        const top_page = $("#page" + e.id.replace(/[^0-9]/g, "")).offset().top+row_interval;
+        const row_interval = e.style.width.replace(/[^-\.0-9]/g,"")*value;
+        const col_interval = e.style.height.replace(/[^-\.0-9]/g,"")*0.97;
         //영역 잡고, 그려줌.
         const PageFooter = document.createElement("div");
         PageFooter.id = "PageFooter" + e.id.replace(/[^0-9]/g, "");
         PageFooter.className = "PageFooter";
         PageFooter.style.position = "absolute";
-        PageFooter.style.left = left_page+"px";
-        PageFooter.style.top = top_page+"px";
+        PageFooter.style.left = row_interval+"%";
+        PageFooter.style.top = col_interval+"%";
         PageFooter.style.width = "100px";
         PageFooter.style.height = "50px";
         PageFooter.style.zIndex = "999";
@@ -642,7 +686,7 @@ function footer_test(value) {
 
         const footer_tag = document.createElement("input");
         footer_tag.id = "footer_tag" + e.id.replace(/[^0-9]/g, "");
-        footer_tag.value = "꼬리글";
+        footer_tag.value = not_input;
         footer_tag.type = "text";
         footer_tag.style.backgroundColor = "rgba(255, 255, 255, 0)";
         footer_tag.style.border = "none";
@@ -653,4 +697,33 @@ function footer_test(value) {
         document.getElementById(PageFooter.id).appendChild(footer_Packing);
         document.getElementById(footer_Packing.id).appendChild(footer_tag);
     });
+}
+//꼬리글 영역 변경 함수
+function footer_location(input_value){
+    console.log($("#extratailoptions").val());
+    if($("#extratailoptions").val() ==="하단좌측"){
+        var value = 0.1;
+        if($(".PageFooter").length != 0){
+            $(".PageFooter").remove();
+            footer_test(value, input_value);
+        }else{
+            footer_test(value, input_value);
+        }
+    }else if($("#extratailoptions").val() ==="하단중앙"){
+        var value = 0.5;
+        if($(".PageFooter").length != 0){
+            $(".PageFooter").remove();
+            footer_test(value, input_value);
+        }else{
+            footer_test(value, input_value);
+        }
+    }else if($("#extratailoptions").val() ==="하단우측"){
+        var value = 0.9;
+        if($(".PageFooter").length != 0){
+            $(".PageFooter").remove();
+            footer_test(value, input_value);
+        }else{
+            footer_test(value, input_value);
+        }
+    }
 }

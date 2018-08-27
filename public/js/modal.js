@@ -28,7 +28,11 @@ $(document).ready(function(){
     $(".fontform,.fontcontent").on("change",function(){ //고급인쇄 - 폰트설정 - 폰트내용, 폰트서식 변경
         eSetFont();
     });
+    hakjoons();
+});
 
+//학준 추가
+function hakjoons(){
     //용지 크기 선택(A4,B4 등)
     $("#pagesizeoptions").on("change", function () {
         pagesizeselect($(this).val());
@@ -65,15 +69,22 @@ $(document).ready(function(){
         if(checked){
             $("#extraheadoptions").removeAttr("disabled");
             $("#extrahead").removeAttr("disabled").removeAttr("readonly");
-            head_test();
+            var value = 0.1;
+            header_test(value);
         }else{
             $("#extraheadoptions").attr("disabled", true).attr("readonly",false);
             $("#extrahead").attr("disabled", true).attr("readonly",true);
             $(".PageHeader").remove();
         }
     });
+    //머리글, 꼬리글 입력 값으로 뿌려주기.
     $("#extrahead").on("keyup",function () {
-        // head_test();
+        var input_value = $("#extrahead").val();
+        header_location(input_value);
+    });
+    $("#extratail").on("keyup",function () {
+        var input_value = $("#extratail").val();
+        footer_location(input_value);
     });
     //꼬리글
     $("#extra_tail_using_check").on("click", function () {
@@ -82,7 +93,7 @@ $(document).ready(function(){
         if(checked){
             $("#extratailoptions").removeAttr("disabled");
             $("#extratail").removeAttr("disabled").removeAttr("readonly");
-            var value = 40;
+            var value = 0.1;
             footer_test(value);
         }else{
             $("#extratailoptions").attr("disabled", true).attr("readonly",false);
@@ -90,10 +101,16 @@ $(document).ready(function(){
             $(".PageFooter").remove();
         }
     });
-});
 
-//학준 추가
-function hakjoons(){
+    //머리글, 꼬리글 셀렉트 박스 선택시
+    $("#extraheadoptions").on("change", function () {
+        var input_value = $("#extrahead").val();
+        header_location(input_value);
+    });
+    $("#extratailoptions").on("change", function () {
+        var input_value = $("#extratail").val();
+        footer_location(input_value);
+    });
 
 }
 
@@ -252,13 +269,13 @@ function eCopyRatio(eCopyRate, idnum){
             eCopyRatioContent.style.zoom = ecopyratio;
         }
         else {
-            // $(eCopyRatioContent).css('-webkit-transform','scale(' + (ecopyratio) + ')');
-            // $(eCopyRatioContent).css('-webkit-transform-origin','0 0');
-            // $(eCopyRatioContent).css('-moz-transform','scale(' + (ecopyratio) + ')');
-            // $(eCopyRatioContent).css('-moz-transform-origin','0 0');
-            // $(eCopyRatioContent).css('-o-transform','scale(' + (ecopyratio) + ')');
-            // $(eCopyRatioContent).css('-o-transform-origin','0 0');
-            // $(eCopyRatioContent).css('transform','scale('+(ecopyratio)+')');
+            $(eCopyRatioContent).css('-webkit-transform','scale(' + (ecopyratio) + ')');
+            $(eCopyRatioContent).css('-webkit-transform-origin','0 0');
+            $(eCopyRatioContent).css('-moz-transform','scale(' + (ecopyratio) + ')');
+            $(eCopyRatioContent).css('-moz-transform-origin','0 0');
+            $(eCopyRatioContent).css('-o-transform','scale(' + (ecopyratio) + ')');
+            $(eCopyRatioContent).css('-o-transform-origin','0 0');
+            $(eCopyRatioContent).css('transform','scale('+(ecopyratio)+')');
         }
     }
     catch(e) {

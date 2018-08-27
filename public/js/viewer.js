@@ -196,7 +196,12 @@ function resetData(){
     onlyNumber(event);
     copyRatioCheck();
     eReSetFont();
+
     paper_setting("reset",test);
+    $(".countPage").remove();
+    $(".timePage").remove();
+    $(".PageHeader").remove();
+    $(".PageFooter").remove();
 };
 /******************************************************************
  기능 : 모달창 닫기 - 데이터값 초기화 밑 기본값 세팅 처리
