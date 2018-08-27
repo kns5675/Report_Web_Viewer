@@ -72,7 +72,7 @@ function judgementLabel(data, divId) {
     } else if (attr == "ControlFixedTable") { // 고정 테이블
 
         /*
-        To Do : tableLabel이 다른 밴드에 있을 경우 tableLabelList에 다겹침
+        To Do : 하나의 페이지에 고정테이블이 2개 이상 있을 경우 fixTableLabelList에 겹침
          */
         var controlFixedTable = new Table(data);
         tableList.push(controlFixedTable);
@@ -176,7 +176,6 @@ function drawingDynamicTable(table, tableLabel, divId) {
     row = (pageNum-1) * numOfData; //한 페이지 출력 해야할 시작 row
     var rowLength = row + numOfData; //한 페이지에 마지막으로 출력해야할 row
 
-    console.log(tableLabel);
     if (Array.isArray(tableLabel)) {
         tableLabel.forEach(function (label) {
             switch (label._attributes) {
@@ -215,8 +214,6 @@ function drawingDynamicTable(table, tableLabel, divId) {
                             tableId.append('<tr id = "dynamicValueLabel' + curDatarow + '"></tr>');
 
                             for (key in data) {
-                                console.log(data);
-                                console.log(key);
                                 if (label.fieldName == key) {
                                     var valueTrId = $('#dynamicValueLabel' + curDatarow);
                                     valueTrId.append(
