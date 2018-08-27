@@ -28,21 +28,16 @@ $(document).ready(function(){
     $(".fontform,.fontcontent").on("change",function(){ //고급인쇄 - 폰트설정 - 폰트내용, 폰트서식 변경
         eSetFont();
     });
-    hakjoons();
-});
 
-//학준 추가
-function hakjoons(){
     //용지 크기 선택(A4,B4 등)
     $("#pagesizeoptions").on("change", function () {
         pagesizeselect($(this).val());
     });
-    //용지방향 설정
-    $(".direction").on("click",function () {
-        var test = $('input:radio[name="direction"]').is(":checked");
-        console.log("Test : ",test);
-        paperDirection();
+    // paper_setting();
+    $(".direction").on("change",function () {
+        paper_setting();
     });
+
     //출력일 인쇄 기능
     $(".copydate").on("change",function () {
         var print = $('input[id="copydate_id"]:checked').val();
@@ -50,7 +45,7 @@ function hakjoons(){
         if(print){
             datePrinting();
         }else{
-            $(".countPage").remove();
+            $(".timePage").remove();
         }
     });
     //매수 인쇄
@@ -59,8 +54,69 @@ function hakjoons(){
         console.log("count : ",count);
         if(count){
             countPrinting();
+        }else{
+            $(".countPage").remove();
         }
     });
+    //머리글
+    $("#extra_header_using_check").on("click", function () {
+        var checked = $("#extra_header_using_check").is(":checked");
+        console.log(checked);
+        if(checked){
+            $("#extraheadoptions").removeAttr("disabled");
+            $("#extrahead").removeAttr("disabled").removeAttr("readonly");
+            head_test();
+        }else{
+            $("#extraheadoptions").attr("disabled", true).attr("readonly",false);
+            $("#extrahead").attr("disabled", true).attr("readonly",true);
+            $(".PageHeader").remove();
+        }
+    });
+    $("#extrahead").on("keyup",function () {
+        // head_test();
+    });
+    //꼬리글
+    $("#extra_tail_using_check").on("click", function () {
+        var checked = $("#extra_tail_using_check").is(":checked");
+        console.log(checked);
+        if(checked){
+            $("#extratailoptions").removeAttr("disabled");
+            $("#extratail").removeAttr("disabled").removeAttr("readonly");
+            var value = 40;
+            footer_test(value);
+        }else{
+            $("#extratailoptions").attr("disabled", true).attr("readonly",false);
+            $("#extratail").attr("disabled", true).attr("readonly",true);
+            $(".PageFooter").remove();
+        }
+    });
+});
+
+//학준 추가
+function hakjoons(){
+
+}
+
+function paper_setting(setting,test3) {
+    //용지방향 설정
+    var test = $('input:radio[name="direction"]').is(":checked");
+    var test2 = $('input:radio[name="direction"]').val();
+
+    console.log("paper_setting : ", test);
+    console.log("setting : ", setting);
+    console.log("test2 : ", test2);
+    console.log("test3 : ",test3);
+    if(test){
+        if(setting){
+            if(test2 === "가로"){
+                paperDirection();
+                $("input:radio[name='direction']:radio[value='세로']").prop("checked",true);
+                $("input:radio[name='direction']:radio[value='가로']").prop("checked",false);
+            }
+        }else{
+            paperDirection();
+        }
+    }
 }
 
 /******************************************************************
@@ -118,7 +174,7 @@ function beforeSubmit(){
         eCopyRate = (Number(eCopyRate))/100;
 
         $(".page").each(function (i, e) {
-           console.log("e : ", e.id);
+           // console.log("e : ", e.id);
            var idnum = e.id.replace(/[^0-9]/g,'');
 
            eSetFont();
@@ -144,7 +200,7 @@ function copyRatioCheck(){
         eCopyRate = (Number(eCopyRate))/100;
 
         $(".page").each(function (i, e) {
-            console.log("e : ", e.id);
+            // console.log("e : ", e.id);
             var idnum = e.id.replace(/[^0-9]/g,'');
 
             eCopyRatio(eCopyRate, idnum);//인쇄배율 변경 펑션
@@ -190,18 +246,19 @@ function eCopyRatio(eCopyRate, idnum){
         //'page' + idnum
         var ecopyratio = eCopyRate;
         ecopyratio = Number(ecopyratio);
+        // console.log("eCopyRatioContent : ",eCopyRatioContent);
       /*  alert(ecopyratio);*/
         if (jQuery.browser.msie) {
             eCopyRatioContent.style.zoom = ecopyratio;
         }
         else {
-            $(eCopyRatioContent).css('-webkit-transform','scale(' + (ecopyratio) + ')');
-            $(eCopyRatioContent).css('-webkit-transform-origin','0 0');
-            $(eCopyRatioContent).css('-moz-transform','scale(' + (ecopyratio) + ')');
-            $(eCopyRatioContent).css('-moz-transform-origin','0 0');
-            $(eCopyRatioContent).css('-o-transform','scale(' + (ecopyratio) + ')');
-            $(eCopyRatioContent).css('-o-transform-origin','0 0');
-            $(eCopyRatioContent).css('transform','scale('+(ecopyratio)+')');
+            // $(eCopyRatioContent).css('-webkit-transform','scale(' + (ecopyratio) + ')');
+            // $(eCopyRatioContent).css('-webkit-transform-origin','0 0');
+            // $(eCopyRatioContent).css('-moz-transform','scale(' + (ecopyratio) + ')');
+            // $(eCopyRatioContent).css('-moz-transform-origin','0 0');
+            // $(eCopyRatioContent).css('-o-transform','scale(' + (ecopyratio) + ')');
+            // $(eCopyRatioContent).css('-o-transform-origin','0 0');
+            // $(eCopyRatioContent).css('transform','scale('+(ecopyratio)+')');
         }
     }
     catch(e) {
@@ -240,7 +297,6 @@ function removeChar(event) {
     else{
         event.target.value = event.target.value.replace(/[^0-9]/g, "");
     }
-
 }
 
 jQuery.browser = {}; //jQuery.browser.msie 사용 위함.

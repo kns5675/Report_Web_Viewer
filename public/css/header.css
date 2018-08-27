@@ -87,3 +87,7 @@ div.room{
 /*div.room:hover{
     background-color:#CADFFF;
 }*/
+
+#extraheadoptions{
+    readOnly : ture;
+}

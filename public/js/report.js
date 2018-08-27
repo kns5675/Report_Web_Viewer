@@ -498,6 +498,7 @@ function datePrinting() {
         const time_area = document.createElement("div");
         time_area.id = "time_area"+e.id.replace(/[^0-9]/g,"");
         time_area.style.position = "absolute";
+        time_area.className = "timePage";
         time_area.style.left = left_page+"px";
         time_area.style.top = top_page+"px";
         time_area.style.width = "100px";
@@ -542,7 +543,6 @@ function countPrinting() {
         count_area.style.width = "100px";
         count_area.style.height = "50px";
         count_area.style.zIndex = "999";
-        console.log("totalpage : ", totalpage);
 
         const count_Packing = document.createElement("div");
         count_Packing.id = "countData" + e.id.replace(/[^0-9]/g, "");
@@ -560,5 +560,90 @@ function countPrinting() {
         document.getElementById("page" + e.id.replace(/[^0-9]/g, "")).appendChild(count_area);
         document.getElementById(count_area.id).appendChild(count_Packing);
         document.getElementById(count_Packing.id).appendChild(count_tag);
+    });
+}
+
+//머리글 그리는 함수.
+function head_test() {
+    $(".pageforcopyratio").each(function (i,e) {
+        // 페이지 좌표 계산.
+        // if($(".PageHeader")){
+        //     $(".PageHeader").remove();
+        // }
+        const row_interval = e.style.width.replace(/[^-\.0-9]/g,"")*10/100;
+        const col_interval = e.style.height.replace(/[^-\.0-9]/g,"")*2/100;
+        const left_page = $("#page"+e.id.replace(/[^0-9]/g,"")).offset().left+row_interval;
+        const top_page = $("#page" + e.id.replace(/[^0-9]/g, "")).offset().top+col_interval;
+        //영역 잡고, 그려줌.
+        const PageHeader = document.createElement("div");
+        const totalpage = $(".page").length;
+        PageHeader.id = "PageHeader" + e.id.replace(/[^0-9]/g, "");
+        PageHeader.className = "PageHeader";
+        PageHeader.style.position = "absolute";
+        PageHeader.style.left = left_page+"px";
+        PageHeader.style.top = top_page+"px";
+        PageHeader.style.width = "100px";
+        PageHeader.style.height = "50px";
+        PageHeader.style.zIndex = "999";
+
+        const header_Packing = document.createElement("div");
+        header_Packing.id = "headerData" + e.id.replace(/[^0-9]/g, "");
+        header_Packing.className = "headerData";
+
+        const header_tag = document.createElement("input");
+        header_tag.id = "header_tag" + e.id.replace(/[^0-9]/g, "");
+        header_tag.value = "머리글";
+        header_tag.type = "text";
+        header_tag.style.backgroundColor = "rgba(255, 255, 255, 0)";
+        header_tag.style.border = "none";
+        header_tag.readOnly = true;
+        header_tag.style.fontSize = "12px";
+
+        document.getElementById("page" + e.id.replace(/[^0-9]/g, "")).appendChild(PageHeader);
+        document.getElementById(PageHeader.id).appendChild(header_Packing);
+        document.getElementById(header_Packing.id).appendChild(header_tag);
+    });
+}
+
+//꼬리글 그리는 함수.
+function footer_test(value) {
+    var test = $("#extratailoptions").val();
+    console.log("test : ",test);
+    $(".pageforcopyratio").each(function (i,e) {
+        // 페이지 좌표 계산.
+        // if($(".PageFooter")){
+        //     $(".PageFooter").remove();
+        // }
+        const col_interval = e.style.width.replace(/[^-\.0-9]/g,"")*value/100;
+        const row_interval = e.style.height.replace(/[^-\.0-9]/g,"")*97/100;
+        const left_page = $("#page"+e.id.replace(/[^0-9]/g,"")).offset().left+col_interval;
+        const top_page = $("#page" + e.id.replace(/[^0-9]/g, "")).offset().top+row_interval;
+        //영역 잡고, 그려줌.
+        const PageFooter = document.createElement("div");
+        PageFooter.id = "PageFooter" + e.id.replace(/[^0-9]/g, "");
+        PageFooter.className = "PageFooter";
+        PageFooter.style.position = "absolute";
+        PageFooter.style.left = left_page+"px";
+        PageFooter.style.top = top_page+"px";
+        PageFooter.style.width = "100px";
+        PageFooter.style.height = "50px";
+        PageFooter.style.zIndex = "999";
+
+        const footer_Packing = document.createElement("div");
+        footer_Packing.id = "footerData" + e.id.replace(/[^0-9]/g, "");
+        footer_Packing.className = "footerData";
+
+        const footer_tag = document.createElement("input");
+        footer_tag.id = "footer_tag" + e.id.replace(/[^0-9]/g, "");
+        footer_tag.value = "꼬리글";
+        footer_tag.type = "text";
+        footer_tag.style.backgroundColor = "rgba(255, 255, 255, 0)";
+        footer_tag.style.border = "none";
+        footer_tag.readOnly = true;
+        footer_tag.style.fontSize = "12px";
+
+        document.getElementById("page" + e.id.replace(/[^0-9]/g, "")).appendChild(PageFooter);
+        document.getElementById(PageFooter.id).appendChild(footer_Packing);
+        document.getElementById(footer_Packing.id).appendChild(footer_tag);
     });
 }

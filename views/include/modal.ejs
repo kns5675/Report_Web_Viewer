@@ -118,8 +118,10 @@
                         <span>용지방향</span>
                     </div>
                     <div class="div4">
-                        <label><input type="radio" id="col_direction" class="direction" name="direction" value="세로" checked="checked">세로</label>
-                        <label><input type="radio" class="direction" name="direction" value="가로">가로</label>
+                        <div class="paper_row_col">
+                            <input type="radio" class="direction" name="direction" value="세로" checked="checked">세로
+                            <input type="radio" class="direction" name="direction" value="가로">가로
+                        </div>
                     </div>
                 </div>
             </div>
@@ -148,36 +150,36 @@
                 <div class="partstyle2" style="height:50px;" >
                     <div class="div1">
                         <label class="container">
-                            <input name="extra" type="checkbox">머리글
+                            <input id="extra_header_using_check" name="extra" type="checkbox">머리글
                             <span class="checkmark"></span>
                         </label>
                     </div>
                     <div class="div4">
-                        <select id="extraheadoptions">
+                        <select id="extraheadoptions" disabled>
                             <option>상단좌측</option>
                             <option>상단중앙</option>
                             <option>상단우측</option>
                         </select>
                         <br/>
-                        <input id="extrahead" type="text"/>
+                        <input id="extrahead" type="text" disabled/>
                     </div>
                 </div>
                 <br/>
                 <div class="partstyle2" style="height:50px;" >
                     <div class="div1">
                         <label class="container">
-                            <input name="extra" type="checkbox">꼬리글
+                            <input id="extra_tail_using_check" name="extra" type="checkbox">꼬리글
                             <span class="checkmark"></span>
                         </label>
                     </div>
                     <div class="div4">
-                        <select id="extratailoptions">
+                        <select id="extratailoptions" disabled>
                             <option>하단좌측</option>
                             <option>하단중앙</option>
                             <option>하단우측</option>
                         </select>
                         <br/>
-                        <input id="extratail" type="text"/>
+                        <input id="extratail" type="text" disabled/>
                     </div>
                 </div>
             </div>
