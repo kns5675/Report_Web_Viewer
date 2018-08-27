@@ -170,11 +170,6 @@ function resetData(){
 
     $("input:checkbox[name='fontandtilt']").prop("checked",false);
 
-    $("input:radio[name='direction']:radio[value='세로']").prop("checked",true);
-    $("input:radio[name='direction']:radio[value='가로']").prop("checked",false);
-
-    var test = $('input:radio[name="direction"]').val();
-
     $("#pagesizeoptions").val("A4").attr("selected","selected");
 
     $("input:radio[name='copydate']:radio[value='인쇄함']").prop("checked",false);
@@ -196,11 +191,21 @@ function resetData(){
     copyRatioCheck();
     eReSetFont();
 
-    paper_setting("reset",test);
+    //용지방향 설정 초기화
+    paper_setting("reset");
+    //매수인쇄 초기화
     $(".countPage").remove();
+    //출력일 인쇄 초기화
     $(".timePage").remove();
+    //머리글 초기화
     $(".PageHeader").remove();
+    //꼬리글 초기화
     $(".PageFooter").remove();
+    //머리글 입력창, 셀렉트박스 초기화
+    extra_header_using_check();
+    //꼬리글 입력창, 셀렉트박스 초기화
+    extra_tail_using_check();
+
 };
 /******************************************************************
  기능 : 모달창 닫기 - 데이터값 초기화 밑 기본값 세팅 처리

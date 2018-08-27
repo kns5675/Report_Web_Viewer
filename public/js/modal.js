@@ -31,18 +31,26 @@ $(document).ready(function(){
     hakjoons();
 });
 
-//학준 추가
+/******************************************************************
+ 기능 : 각 기능별 이벤트 시작점.
+ 만든이 : hagdung-i
+ ******************************************************************/
 function hakjoons(){
-    //용지 크기 선택(A4,B4 등)
+    /******************************************************************
+     기능 : 용지 크기 선택(A4,B4 등)
+     만든이 : hagdung-i
+     ******************************************************************/
     $("#pagesizeoptions").on("change", function () {
         pagesizeselect($(this).val());
     });
-    // paper_setting();
     $(".direction").on("change",function () {
         paper_setting();
     });
 
-    //출력일 인쇄 기능
+    /******************************************************************
+     기능 : 출력일 인쇄 기능
+     만든이 : hagdung-i
+     ******************************************************************/
     $(".copydate").on("change",function () {
         var print = $('input[id="copydate_id"]:checked').val();
         console.log("print : ",print);
@@ -52,7 +60,10 @@ function hakjoons(){
             $(".timePage").remove();
         }
     });
-    //매수 인쇄
+    /******************************************************************
+     기능 : 매수 인쇄
+     만든이 : hagdung-i
+     ******************************************************************/
     $(".copycount").on("change", function () {
         var count = $('input[id="copycount_id"]:checked').val();
         console.log("count : ",count);
@@ -62,22 +73,27 @@ function hakjoons(){
             $(".countPage").remove();
         }
     });
-    //머리글
+    /******************************************************************
+     기능 : 머리글 체크 값별 이벤트
+     만든이 : hagdung-i
+     ******************************************************************/
     $("#extra_header_using_check").on("click", function () {
-        var checked = $("#extra_header_using_check").is(":checked");
-        console.log(checked);
-        if(checked){
-            $("#extraheadoptions").removeAttr("disabled");
-            $("#extrahead").removeAttr("disabled").removeAttr("readonly");
-            var value = 0.1;
-            header_test(value);
-        }else{
-            $("#extraheadoptions").attr("disabled", true).attr("readonly",false);
-            $("#extrahead").attr("disabled", true).attr("readonly",true);
-            $(".PageHeader").remove();
-        }
+        extra_header_using_check();
     });
+
+    /******************************************************************
+     기능 : 꼬리글 체크 값별 이벤트
+     만든이 : hagdung-i
+     ******************************************************************/
+    $("#extra_tail_using_check").on("click", function () {
+        extra_tail_using_check();
+    });
+
     //머리글, 꼬리글 입력 값으로 뿌려주기.
+    /******************************************************************
+     기능 : 용지 크기 선택(A4,B4 등)
+     만든이 : hagdung-i
+     ******************************************************************/
     $("#extrahead").on("keyup",function () {
         var input_value = $("#extrahead").val();
         header_location(input_value);
@@ -86,23 +102,11 @@ function hakjoons(){
         var input_value = $("#extratail").val();
         footer_location(input_value);
     });
-    //꼬리글
-    $("#extra_tail_using_check").on("click", function () {
-        var checked = $("#extra_tail_using_check").is(":checked");
-        console.log(checked);
-        if(checked){
-            $("#extratailoptions").removeAttr("disabled");
-            $("#extratail").removeAttr("disabled").removeAttr("readonly");
-            var value = 0.1;
-            footer_test(value);
-        }else{
-            $("#extratailoptions").attr("disabled", true).attr("readonly",false);
-            $("#extratail").attr("disabled", true).attr("readonly",true);
-            $(".PageFooter").remove();
-        }
-    });
 
-    //머리글, 꼬리글 셀렉트 박스 선택시
+    /******************************************************************
+     기능 : 머리글, 꼬리글 셀렉트 박스 선택시
+     만든이 : hagdung-i
+     ******************************************************************/
     $("#extraheadoptions").on("change", function () {
         var input_value = $("#extrahead").val();
         header_location(input_value);
@@ -114,25 +118,24 @@ function hakjoons(){
 
 }
 
-function paper_setting(setting,test3) {
-    //용지방향 설정
-    var test = $('input:radio[name="direction"]').is(":checked");
-    var test2 = $('input:radio[name="direction"]').val();
-
-    console.log("paper_setting : ", test);
+/******************************************************************
+ 기능 : 용지방향 설정 함수.
+ 만든이 : hagdung-i
+ ******************************************************************/
+function paper_setting(setting) {
+    //용지방향 설정 가로와 세로를 서로 뒤바꿔주는 식의 형태인데, 가로에 해당하는 라디오 박스가 선택 되어 있을 때만 초기화시 세로로 되돌림.
+    var test = $('input:radio[name="direction"]').prop("checked");
+    console.log("test : ", test);
     console.log("setting : ", setting);
-    console.log("test2 : ", test2);
-    console.log("test3 : ",test3);
-    if(test){
-        if(setting){
-            if(test2 === "가로"){
-                paperDirection();
-                $("input:radio[name='direction']:radio[value='세로']").prop("checked",true);
-                $("input:radio[name='direction']:radio[value='가로']").prop("checked",false);
-            }
-        }else{
+    if(setting){
+        if(!test){
             paperDirection();
+            $("input:radio[name='direction']:radio[value='세로']").prop("checked",true);
+            $("input:radio[name='direction']:radio[value='가로']").prop("checked",false);
         }
+    }else{
+        console.log("test : ",test);
+        paperDirection();
     }
 }
 

@@ -444,7 +444,10 @@ function setPageDirection(report) {
     page.css('height','100%');
 }
 
-//학준추가.
+/******************************************************************
+ 기능 : 용지 크기 설정 함수.
+ 만든이 : hagdung-i
+ ******************************************************************/
 function pagesizeselect(paper) {
     var pageForCopyRatio = $('.page');
     if(paper === "Letter"){
@@ -480,13 +483,59 @@ function pagesizeselect(paper) {
         pageForCopyRatio.css('height', 971.3385826772 + 'px');
     }
 }
+
+/******************************************************************
+ 기능 : 머리글 입력창, 셀렉트박스 함수.
+ 만든이 : hagdung-i
+ ******************************************************************/
+function extra_header_using_check() {
+    var checked = $("#extra_header_using_check").is(":checked");
+    if(checked){
+        $("#extraheadoptions").removeAttr("disabled");
+        $("#extrahead").removeAttr("disabled").removeAttr("readonly");
+        var value = 0.1;
+        header_test(value);
+    }else{
+        $("#extraheadoptions").attr("disabled", true).attr("readonly",false);
+        $("#extrahead").attr("disabled", true).attr("readonly",true);
+        $(".PageHeader").remove();
+    }
+}
+
+/******************************************************************
+ 기능 : 꼬리글 입력창, 셀렉트박스 함수.
+ 만든이 : hagdung-i
+ ******************************************************************/
+function extra_tail_using_check() {
+    var checked = $("#extra_tail_using_check").is(":checked");
+    if(checked){
+        $("#extratailoptions").removeAttr("disabled");
+        $("#extratail").removeAttr("disabled").removeAttr("readonly");
+        var value = 0.1;
+        footer_test(value);
+    }else{
+        $("#extratailoptions").attr("disabled", true).attr("readonly",false);
+        $("#extratail").attr("disabled", true).attr("readonly",true);
+        $(".PageFooter").remove();
+    }
+}
+
+/******************************************************************
+ 기능 : 용지방향 함수.
+ 만든이 : hagdung-i
+ ******************************************************************/
 function paperDirection() {
-    $(".page").each(function (i, e) {
+    $(".pageforcopyratio").each(function (i, e) {
         var temp = e.style.width;
         e.style.width = e.style.height;
         e.style.height = temp;
     });
 }
+
+/******************************************************************
+ 기능 : 날짜 그리는 함수.
+ 만든이 : hagdung-i
+ ******************************************************************/
 function datePrinting() {
     const date = new Date();
     const year = date.getFullYear();
@@ -534,6 +583,10 @@ function datePrinting() {
 
 }
 
+/******************************************************************
+ 기능 : 페이징 그려주는 함수.
+ 만든이 : hagdung-i
+ ******************************************************************/
 function countPrinting() {
 
     $(".page").each(function (i,e) {
@@ -570,26 +623,23 @@ function countPrinting() {
     });
 }
 
-//머리글 그리는 함수.
+/******************************************************************
+ 기능 : 머리글 그리는 함수.
+ 만든이 : hagdung-i
+ ******************************************************************/
 function header_test(value, input_value) {
     $(".page").each(function (i,e) {
-        // 페이지 좌표 계산.
-        // if($(".PageHeader")){
-        //     $(".PageHeader").remove();
-        // }
         var not_input;
-        console.log("input_value : ",input_value);
         if(input_value != undefined){
             not_input = input_value;
         }else{
             not_input = " ";
         }
-        console.log("not_input : ",not_input);
+        // 페이지 좌표 계산.
         const row_interval = e.style.width.replace(/[^-\.0-9]/g,"")*value;
         const col_interval = e.style.height.replace(/[^-\.0-9]/g,"")*0.01;
         //영역 잡고, 그려줌.
         const PageHeader = document.createElement("div");
-        const totalpage = $(".page").length;
         PageHeader.id = "PageHeader" + e.id.replace(/[^0-9]/g, "");
         PageHeader.className = "PageHeader";
         PageHeader.style.position = "absolute";
@@ -618,7 +668,10 @@ function header_test(value, input_value) {
     });
 }
 
-//머리글 영역 변경 함수
+/******************************************************************
+ 기능 : 머리글 영역 변경 함수
+ 만든이 : hagdung-i
+ ******************************************************************/
 function header_location(input_value){
     console.log($("#extraheadoptions").val());
     if($("#extraheadoptions").val() ==="상단좌측"){
@@ -648,13 +701,11 @@ function header_location(input_value){
     }
 }
 
-//꼬리글 그리는 함수.
+/******************************************************************
+ 기능 : 꼬리글 그리는 함수.
+ 만든이 : hagdung-i
+ ******************************************************************/
 function footer_test(value, input_value) {
-    // console.log("value : ",value);
-    // console.log($("#PageFooter").val());
-    // if($("#PageFooter").val()){
-    //     $("#PageFooter").remove();
-    // }
     var not_input;
     console.log("input_value : ",input_value);
     if(input_value != undefined){
@@ -664,9 +715,6 @@ function footer_test(value, input_value) {
     }
     $(".page").each(function (i,e) {
         // 페이지 좌표 계산.
-        // if($(".PageFooter")){
-        //     $(".PageFooter").remove();
-        // }
         const row_interval = e.style.width.replace(/[^-\.0-9]/g,"")*value;
         const col_interval = e.style.height.replace(/[^-\.0-9]/g,"")*0.97;
         //영역 잡고, 그려줌.
@@ -698,7 +746,10 @@ function footer_test(value, input_value) {
         document.getElementById(footer_Packing.id).appendChild(footer_tag);
     });
 }
-//꼬리글 영역 변경 함수
+/******************************************************************
+ 기능 : 꼬리글 영역 변경 함수
+ 만든이 : hagdung-i
+ ******************************************************************/
 function footer_location(input_value){
     console.log($("#extratailoptions").val());
     if($("#extratailoptions").val() ==="하단좌측"){
