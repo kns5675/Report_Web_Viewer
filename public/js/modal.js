@@ -252,13 +252,13 @@ function eCopyRatio(eCopyRate, idnum){
             eCopyRatioContent.style.zoom = ecopyratio;
         }
         else {
-            // $(eCopyRatioContent).css('-webkit-transform','scale(' + (ecopyratio) + ')');
-            // $(eCopyRatioContent).css('-webkit-transform-origin','0 0');
-            // $(eCopyRatioContent).css('-moz-transform','scale(' + (ecopyratio) + ')');
-            // $(eCopyRatioContent).css('-moz-transform-origin','0 0');
-            // $(eCopyRatioContent).css('-o-transform','scale(' + (ecopyratio) + ')');
-            // $(eCopyRatioContent).css('-o-transform-origin','0 0');
-            // $(eCopyRatioContent).css('transform','scale('+(ecopyratio)+')');
+             $(eCopyRatioContent).css('-webkit-transform','scale(' + (ecopyratio) + ')');
+             $(eCopyRatioContent).css('-webkit-transform-origin','0 0');
+             $(eCopyRatioContent).css('-moz-transform','scale(' + (ecopyratio) + ')');
+             $(eCopyRatioContent).css('-moz-transform-origin','0 0');
+             $(eCopyRatioContent).css('-o-transform','scale(' + (ecopyratio) + ')');
+             $(eCopyRatioContent).css('-o-transform-origin','0 0');
+             $(eCopyRatioContent).css('transform','scale('+(ecopyratio)+')');
         }
     }
     catch(e) {

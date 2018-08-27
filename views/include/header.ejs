@@ -6,28 +6,34 @@
     <script>
         $(function(){
             $('#print').click(function(){
-                pagePrint();
+                pagePrint();//지연 추가 인쇄버튼 클릭시 페이지 비율 100%배율로 고정하여 인쇄 페이지 이동
             });
             $('#txtZoom').on("change",function(){
-                test();
+                test();//지연 추가 기존의 zoomIn,zoomOut변경 값을 받아와 scale값 조정
             });
             $("#copyOptions").on("change",function(){
-                copyoptions();
+                copyoptions();  //지연추가 인쇄버튼 또는 고급인쇄창 옵션을 결정하는 function
+            });
+            $("#saveAsImage").on("change",function(){
+                imageOptions();  //지연추가 이미지 타입 결정하여 화면을 저장하는 function
             });
             $("#btnZoomIn").click(function(){
-               zoomIn();
+               zoomIn();  //지연추가 화면 zoomIn하는 function
             });
             $("#btnZoomOut").click(function(){
-                zoomOut();
+                zoomOut();  //지연추가 화면 zoomOut하는 function
             });
             $("#showpages").click(function(){
                 $("#showPages").show();
             });
             $("div.room").mouseover(function(){
-               $(this).css("background-color","#CADFFF");
+               $(this).css("background-color","#CADFFF");  //지연추가 여러페이지보기 front개발중 개발 보류
             });
             $("div.room").mouseleave(function(){
-                $(this).css("background-color","white");
+                $(this).css("background-color","white");  //지연추가 여러페이지보기 front개발중 개발 보류
+            });
+            $(".saveAsPdf").on("click", function(){
+                makePdf();  //지연 화면을 pdf로 만드는 function()
             });
         });
     </script>
@@ -51,7 +57,7 @@
         <ul class="submenu">
           <li><a href="#">엑셀 내보내기</a></li>
           <li><a href="#">이미지 내보내기</a></li>
-          <li><a href="#">PDF 내보내기</a></li>
+          <li class="saveAsPdf" style="cursor: pointer;">PDF 내보내기</li>
           <li><a href="#">HTML 내보내기</a></li>
           <li><a href="#" class="image_upload_button">이미지 추가</a></li>
           <li><a href="#">항목 선택</a></li>
@@ -87,7 +93,6 @@
       <option id="print" value="copy">인쇄</option>
       <option id="enhancedcopy" value="ecopy">고급인쇄설정</option>
     </select>
-
   </li>
   <li><input type="button" value="DRD"></li>
   <li><input type="button" value="첫 페이지" id="FirstPage"></li>
@@ -138,13 +143,23 @@
   </li>
   <li><input type="button" id="btnZoomIn" value="+"></li>
   <li><input type="button" id="btnZoomOut" value="-"></li>
-  <li><input type="button" value="PDF"></li>
+  <li><input type="button" value="PDF"class="saveAsPdf"></li>
   <li><input type="button" value="엑셀"></li>
   <li><input type="button" value="셀"></li>
   <li><input type="button" value="HWP"></li>
-  <li><input type="button" value="이미지"></li>
+  <li>
+    <select id="saveAsImage">
+      <option id="saveAsDefault"selected disabled hidden>--이미지--</option>
+      <option id="saveAsPng" value="PNG">PNG</option>
+      <option id="saveAsJpg" value="JPG">JPG</option>
+      <option id="saveAsBmp" value="BMP">BMP</option>
+      <option id="saveAsTiff" value="TIFF">TIFF</option>
+      <option id="saveAsGif" value="GIF">GIF</option>
+    </select>
+  </li>
   <li><input type="button" value="HTML"></li>
-  <li><input type="button" value="이미지 추가" class="image_upload_button"></li>
+  <li><input type="button" value="이미지 추가" class="image_upload_button">
+  </li>
   <li><input type="button" value="항목 선택"></li>
 </ul>
 </div>

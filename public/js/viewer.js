@@ -4,8 +4,7 @@
  ******************************************************************/
 function copyoptions(){
     try{
-        if ($("#copyOptions").val() == 'ecopy')
-        {
+        if ($("#copyOptions").val() == 'ecopy'){
             $('#myModal').show();
         }else if($("#copyOptions").val() == 'copy'){
             $('#myModal').css('display','none');
@@ -218,6 +217,64 @@ function close_pop2(){
 }
 function close_pop3(){
     $('#modalcase').hide();
+}
+/******************************************************************
+ 기능 : DR Viewer 이미지 내보내기 메뉴 선택하기 (select option value 받아와서
+        이미지 타입 정의 모달창 띄우기)
+ author : 하지연
+ ******************************************************************/
+function imageOptions(){
+    try{
+        if ($("#saveAsImage").val() == 'PNG'){
+            alert("png누름");
+        }else if($("#saveAsImage").val() == 'JPG'){
+            alert("jpg누름");
+        }else if($("#saveAsImage").val() == 'BMP'){
+            alert("bmp 누름");
+        }else if($("#saveAsImage").val() == 'TIFF'){
+            alert("tiff누름");
+        }else if($("#saveAsImage").val() == 'GIF'){
+            alert("gif누름");
+        }else{
+            console.log("인식못했음");
+        }
+    }catch(e){
+        console.log(e.message);
+    }
+}
+/******************************************************************
+ 기능 : 화면을 pdf로 만드는 기능
+ author : 하지연
+ ******************************************************************/
+function makePdf() {
+
+
+}
+/******************************************************************
+ 기능 : 화면을 pdf로 만드는 기능
+ author : 하지연
+ ******************************************************************/
+function testtest(){
+    $("#cmd").on("click",function () {
+        alert("눌렀음");
+       var doc = new jsPDF();
+       var specialElementHandlers = {
+           '#editor':function (element, renderer) {
+               return true;
+           }
+       }
+       html2canvas($("#testpdf"),{
+         useCORS:ture,
+           allowTaint:true,
+           onrendered:function(canvas){
+             var imgData = canvas.toDataURL('image/jpeg');
+             var doc = new jsPDF("p","mm");
+             console.log(imgData);
+             doc.addImage(imgData,'JPEG',0,0);
+             doc.save("test.pdf");
+           }
+       });
+    });
 }
 
 
