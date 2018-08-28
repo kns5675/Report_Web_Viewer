@@ -24,6 +24,7 @@
     <script src="js/createBand.js"></script>
     <script src="js/print.js"></script>
     <script src="js/viewer_header01.js"></script>
+    <script src="js/viewer_header02.js"></script>
     <script src="js/viewer.js"></script>
     <script src="js/drawingBand.js"></script>
     <script src="js/label.js"></script>
@@ -39,6 +40,7 @@
         $(document).ready(function () {
             $("#header").load("/include/header.ejs");
             $("#myModal").load("/include/modal.ejs");
+            $('#modalTableChoice').load("/include/modalTableChoice.ejs");
 
             makeReportTemplate(data);
 
@@ -83,6 +85,8 @@
 <body>
 <div id="header"></div>
 <div id="myModal" class="modal"></div>
+
+<div id="modalTableChoice" class="modal"></div>
 
 <div id="Image_Modal">
     <div id="modalLayer">

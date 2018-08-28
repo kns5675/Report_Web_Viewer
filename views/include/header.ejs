@@ -160,7 +160,7 @@
   <li><input type="button" value="HTML"></li>
   <li><input type="button" value="이미지 추가" class="image_upload_button">
   </li>
-  <li><input type="button" value="항목 선택"></li>
+  <li><input type="button" value="항목 선택" id="tableChoice"></li>
 </ul>
 </div>
   </body>
@@ -176,6 +176,7 @@
         LastPage(pagecount);
         HeaderFixAndPageScroll(pagecount);
         image_upload();
+        tableChoice();
         $("#h1 > .test").val();
     });
 
