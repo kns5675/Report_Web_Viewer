@@ -13,6 +13,16 @@ var bandNum = 1;
 function drawBand(bands, layerName, reportHeight){
     bands.forEach(function (band) { // 밴드 갯수만큼 반복문 돌음
 
+        // 페이지 헤더 밴드의 속성 '첫 페이지 출력 생략(PageOutputSkip)' 속성값이 'true'면 출력X
+        if(band.attributes["xsi:type"] === "BandPageHeader" && band.pageOutputSkip === "true"){
+            return;
+        }
+
+        // 타이틀 밴드 - 첫 페이지가 아니면 출력X
+        if(band.attributes["xsi:type"] === "BandTitle" && reportPageCnt > 1) {
+            return;
+        }
+
         if(band.childHeaderBands !== null){ // 자식헤더밴드에서 재호출
             drawBand(band.childHeaderBands, layerName, reportHeight);
         }
@@ -25,7 +35,7 @@ function drawBand(bands, layerName, reportHeight){
         // 밴드 div를 그려주고 CSS 입힘
         var div_id = 'band' + (bandNum++);
         $('#' + layerName).append("<div id='" + div_id + "' class='Band " + band.attributes["xsi:type"] + "'>" + band.name + "</div>");
-        
+
         if (band.attributes["xsi:type"] == 'BandData') {
             var dataBandHeight = getBandHeight(bands, reportHeight);
             $('#' + div_id).css({
@@ -41,7 +51,7 @@ function drawBand(bands, layerName, reportHeight){
             });
         }
 
-        if(band.childFooterBands !== null){ // 자식풋터밴드에서 재호출
+        if(band.childFooterBands !== null){ // 자식 풋터 밴드에서 재호출
             drawBand(band.childFooterBands, layerName, reportHeight);
         }
 

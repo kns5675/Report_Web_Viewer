@@ -21,6 +21,7 @@ function makeReportTemplate(data) {
  기능 : make report in function makeReportTemplate
  author : powerku
  ******************************************************************/
+var reportPageCnt = 1;
 function makeReport(report) {
     var dt = Object.values(dataTable.DataSetName)[0];
 
@@ -32,9 +33,11 @@ function makeReport(report) {
     //현재 찍힌 데이터 로우 행이 전체 데이터 보다 작을 경우 재귀함수
     //클 경우 함수 종료 후 다음 리포트 생성
     if (curDatarow < dt.length) {
+        reportPageCnt++;
         makeReport(report);
     }else{
-        return
+        reportPageCnt = 1;
+        return;
     }
 }
 
@@ -263,7 +266,6 @@ function setForeGroundLayerDirection(report) {
  author : powerku
  ******************************************************************/
 function setReport(report) {
-
     $(('#page' + pageNum)).append('<div id="forcopyratio' + reportNum + '"class = forcopyratio' + '></div>');//지연
     //지연 - 인쇄배율 조정을 위한 div 하나 더 생성.
     $(('#forcopyratio' + reportNum)).append('<div id="report' + reportNum + '"class = report' + '></div>');//지연
@@ -272,7 +274,7 @@ function setReport(report) {
     setReportDirection(report);
 
     var reportInPage = $('#report' + reportNum);
-    reportInPage.css("position", "absolute");
+    $('#forcopyratio' + reportNum).css("position", "absolute");
 
     /*reportInPage.css({
         'margin-top': report.margin.x + 'px',

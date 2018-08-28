@@ -146,6 +146,7 @@ function judgementLabel(data, divId) {
  From 전형준
  ******************************************************************/
 function drawingDynamicTable(table, tableLabel, divId) {
+    console.log(table, tableLabel);
     var div = $('#' + divId);
     div.append('<div id = "Table' + tableNum + '"></div>');
 
