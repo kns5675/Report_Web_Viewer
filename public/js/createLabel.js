@@ -168,101 +168,18 @@ function drawingDynamicTable(table, tableLabel, divId) {
     });
 
     tableId.append('<tr id = "dynamicTitleLabel' + dynamicTitleLabelNum + '"></tr>');
-    // tableId.append('<tr id = "dynamicValueLabel' + dynamicValueLabelNum + '"></tr>');
-
-    var titleTrId = $('#dynamicTitleLabel' + dynamicTitleLabelNum);
 
     var numOfData = getNumOfDataInOnePage(tableLabel, divId); //한 페이지에 들어갈 데이터 개수
-    row = (pageNum-1) * numOfData; //한 페이지 출력 해야할 시작 row
-    var rowLength = row + numOfData; //한 페이지에 마지막으로 출력해야할 row
     var dt = Object.values(dataTable.DataSetName)[0];
-
 
     if (Array.isArray(tableLabel)) {
         tableLabel.forEach(function (label) {
             switch (label._attributes) {
                 case "DynamicTableTitleLabel" :
-                    var temp = Object.keys(dt[0]);
-                    temp.forEach(function(titleName){
-                        if(label.text == titleName){
-                            titleArray.push(titleName);
-                            titleTrId.append('<th id = "' + titleName + thNum + '"></th>');
-                            titleTrId.css({
-                                'width': label.rectangle.width,
-                                'height': label.rectangle.height,
-                                'font-size': label.fontSize,
-                                'font-family': label.fontFamily,
-                                'font-weight': label.fontStyle,
-                                'font-color' : label.textColor,
-                                'background-color' : label.backGroundColor
-                            });
-                            var thId = $('#' + titleName + thNum);
-                            thId.css('border', '1px solid black');
-                            thId.append(titleName);
-                            thId.addClass('Label');
-                            thId.addClass(label._attributes);
-                        }
-                    });
+                    drawingDynamicTableTitleLabel(label, dt);
                     break;
-                    //수정사항
-                    // 수정 180822 YeSol
-                case "DynamicTableValueLabel" :
-                    if(groupFieldArray != undefined) {
-                        for (curDatarow = row; curDatarow < rowLength; curDatarow++) {
-
-                            var data = dt[curDatarow];
-                            var valueTrId = $('#dynamicValueLabel' + curDatarow);
-                            if(valueTrId.length < 1)
-                            tableId.append('<tr id = "dynamicValueLabel' + curDatarow + '"></tr>');
-
-                            for (key in data) {
-                                if (label.fieldName == key) {
-                                    var valueTrId = $('#dynamicValueLabel' + curDatarow);
-                                    valueTrId.append(
-                                        '<td class="Label ' + label._attributes + ' ' + label.dataType + '">' + data[key]._text + '</td>'
-                                    );
-                                    valueTrId.css({
-                                        'width': label.rectangle.width,
-                                        'height': label.rectangle.height,
-                                        'font-size': label.fontSize,
-                                        'font-family': label.fontFamily,
-                                        'font-weight': label.fontStyle,
-                                        'background-color': label.backGroundColor
-                                    });
-                                    var td = $('td');
-                                    td.css('border', '1px solid black');
-                                }
-                            }
-                        }
-                    }else {
-                            for (var j = row; j < rowLength; j++) {
-                                var data = groupFieldArray[groupFieldNum];
-                                tableId.append('<tr id = "dynamicValueLabel' + j + '"></tr>');
-                                for (key in data[j]) {
-                                    var valueTrId = $('#dynamicValueLabel' + j);
-                                    if (label.fieldName == key) {
-                                        valueTrId.append('<td>' + data[j][key]._text + '</td>');
-                                        valueTrId.css({
-                                            'width': label.rectangle.width,
-                                            'height': label.rectangle.height,
-                                            'font-size': label.fontSize,
-                                            'font-family': label.fontFamily,
-                                            'font-weight': label.fontStyle,
-                                            'background-color' : label.backGroundColor
-                                        });
-                                        var td = $('td');
-                                        td.css('border', '1px solid black');
-                                    }
-                                    // if(j + 1 == data.length){
-                                    //     console.log('여기');
-                                    //     groupFieldNum++;
-                                    //     // row = 0;
-                                    //     // rowLength = numOfData;
-                                    //     // j = 0;
-                                    // }
-                                }
-                            }
-                        }
+              case "DynamicTableValueLabel" :
+                    drawingDynamicTableValueLabel(label, dt, tableId, numOfData);
                     break;
             }
         });
@@ -278,6 +195,101 @@ function drawingDynamicTable(table, tableLabel, divId) {
         dynamicTitleLabelNum++;
         dynamicValueLabelNum++;
     }
+}
+/******************************************************************
+ 기능 : DynamicTableValueLabel(동적 테이블 밸류 라벨)을 화면에 그려주는 함수를 만든다.
+ 만든이 : 구영준
+ *******************************************************************/
+function drawingDynamicTableValueLabel(label, dt, tableId, numOfData){
+    row = (pageNum-1) * numOfData; //한 페이지 출력 해야할 시작 row
+    var rowLength = row + numOfData; //한 페이지에 마지막으로 출력해야할 row
+
+    if(groupFieldArray != undefined) {
+        for (curDatarow = row; curDatarow < rowLength; curDatarow++) {
+
+            var data = dt[curDatarow];
+            var valueTrId = $('#dynamicValueLabel' + curDatarow);
+            if(valueTrId.length < 1)
+                tableId.append('<tr id = "dynamicValueLabel' + curDatarow + '"></tr>');
+
+            for (key in data) {
+                if (label.fieldName == key) {
+                    var valueTrId = $('#dynamicValueLabel' + curDatarow);
+                    valueTrId.append(
+                        '<td class="Label ' + label._attributes + ' ' + label.dataType + '">' + data[key]._text + '</td>'
+                    );
+                    valueTrId.css({
+                        'width': label.rectangle.width,
+                        'height': label.rectangle.height,
+                        'font-size': label.fontSize,
+                        'font-family': label.fontFamily,
+                        'font-weight': label.fontStyle,
+                        'background-color': label.backGroundColor
+                    });
+                    var td = $('td');
+                    td.css('border', '1px solid black');
+                }
+            }
+        }
+    }else {
+        for (var j = row; j < rowLength; j++) {
+            var data = groupFieldArray[groupFieldNum];
+            tableId.append('<tr id = "dynamicValueLabel' + j + '"></tr>');
+            for (key in data[j]) {
+                var valueTrId = $('#dynamicValueLabel' + j);
+                if (label.fieldName == key) {
+                    valueTrId.append('<td>' + data[j][key]._text + '</td>');
+                    valueTrId.css({
+                        'width': label.rectangle.width,
+                        'height': label.rectangle.height,
+                        'font-size': label.fontSize,
+                        'font-family': label.fontFamily,
+                        'font-weight': label.fontStyle,
+                        'background-color' : label.backGroundColor
+                    });
+                    var td = $('td');
+                    td.css('border', '1px solid black');
+                }
+                // if(j + 1 == data.length){
+                //     console.log('여기');
+                //     groupFieldNum++;
+                //     // row = 0;
+                //     // rowLength = numOfData;
+                //     // j = 0;
+                // }
+            }
+        }
+    }
+}
+
+/******************************************************************
+ 기능 : DynamicTableTitleLabel(동적 테이블 타이틀 라벨)을 화면에 그려주는 함수를 만든다.
+ 만든이 : 구영준
+ *******************************************************************/
+function drawingDynamicTableTitleLabel(label, dt){
+    var temp = Object.keys(dt[0]);
+    var titleTrId = $('#dynamicTitleLabel' + dynamicTitleLabelNum);
+
+    temp.forEach(function(titleName){
+        if(label.text == titleName){
+            titleArray.push(titleName);
+            titleTrId.append('<th id = "' + titleName + thNum + '"></th>');
+            titleTrId.css({
+                'width': label.rectangle.width,
+                'height': label.rectangle.height,
+                'font-size': label.fontSize,
+                'font-family': label.fontFamily,
+                'font-weight': label.fontStyle,
+                'font-color' : label.textColor,
+                'background-color' : label.backGroundColor
+            });
+            var thId = $('#' + titleName + thNum);
+            thId.css('border', '1px solid black');
+            thId.append(titleName);
+            thId.addClass('Label');
+            thId.addClass(label._attributes);
+        }
+    });
 }
 
 
