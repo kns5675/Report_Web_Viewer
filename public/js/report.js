@@ -22,7 +22,7 @@ function makeReportTemplate(data) {
  author : powerku
  ******************************************************************/
 function makeReport(report) {
-    dt = Object.values(dataTable.DataSetName)[0];
+    var dt = Object.values(dataTable.DataSetName)[0];
 
     setPage(report);
     setReport(report);
