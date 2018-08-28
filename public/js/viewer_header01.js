@@ -463,3 +463,11 @@ $(function() {
         readURL(this);
     });
 });
+
+function DRD_button() {
+    $("#DRD_Start").on("click", function () {
+        console.log("DRD_Start click");
+
+        // shell.echo('hello world');
+    });
+}

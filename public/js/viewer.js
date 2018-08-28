@@ -2,6 +2,7 @@
  기능 : DR Viewer 인쇄 메뉴 선택하기 (select option value받아와서 메뉴 인식 후 모달창 띄우기)
  author : 하지연
  ******************************************************************/
+
 function copyoptions(){
     try{
         if ($("#copyOptions").val() == 'ecopy'){
@@ -205,7 +206,8 @@ function resetData(){
     extra_header_using_check();
     //꼬리글 입력창, 셀렉트박스 초기화
     extra_tail_using_check();
-
+    //페이지 사이즈 조정 초기화
+    pagesizeselect("A4");
 };
 /******************************************************************
  기능 : 모달창 닫기 - 데이터값 초기화 밑 기본값 세팅 처리
@@ -257,8 +259,33 @@ function imageOptions(){
  author : 하지연
  ******************************************************************/
 function makePdf() {
+    console.log("왔음");
+    // html2canvas(document.getElementById("pageForCopyRatio1").then((canvas) => {
+    //     document.body.appendChild(canvas);
+    // });
+    // html2canvas(document.getElementById('reportTemplate')).then((canvas) => {
+    //     console.log("reportTemplate : ",document.getElementById('reportTemplate'));
+    //     console.log("canvas : ",canvas);
+    //     var img = canvas.toDataURL("image/png");
+    //     console.log('img : ',img);
+    //     window.open().document.write('<img src="' + img + '" />');
+    // });
 
-
+    html2canvas(document.querySelector("#pageForCopyRatio1")).then(canvas => {
+        document.body.appendChild(canvas);
+        var img = canvas.toDataURL("image/png");
+        window.open().document.write('<img src="' + img + '" />');
+    });
+    // ,{
+    //     onrendered:function (canvas) {
+    //         console.log("sefsef");
+    //         var imgData = canvas.toDataURL('umage/png');
+    //         console.log('Reort Image URL : ' + imgData);
+    //         var doc = new jsPDF('p','mm',[297,210]);
+    //         doc.addImage(imgData,'PNG',10,10,190,95);
+    //         doc.save('sample-file.pdf');
+    //     }
+    // });
 }
 /******************************************************************
  기능 : 화면을 pdf로 만드는 기능
@@ -300,4 +327,75 @@ jQuery.browser = {}; //jQuery.browser.msie 사용 위함.
 
 function howmanyPages(thisvalue){
     alert("this value : " + thisvalue);
+}
+
+function band_dbclick_event() {
+var temporary_label_id;
+    $(".NormalLabel_scope").on({
+        "dblclick": function () {
+            var this_id = this.children[0].id;
+            var current = this.id;
+            var current_width = this.style.width;
+            var current_height = this.style.height;
+            var this_text = $("#" + this_id)[0].innerText;
+
+            if ($("#text_area")[0] === undefined) {
+                var text_div = document.createElement("div");
+                text_div.id = "text_div";
+
+                var text_area = document.createElement('textarea');
+                text_area.id = "text_area";
+                text_area.value = this_text;
+                text_area.style.width = current_width;
+                text_area.style.height = current_height;
+                text_area.zIndex = 999;
+
+                this.style.borderWidth = "3px";
+                this.style.borderColor = "blue";
+                this.style.borderStyle = "dotted solid";
+
+                document.getElementById(current).appendChild(text_div);
+                document.getElementById(text_div.id).appendChild(text_area);
+
+                document.getElementById(text_area.id).focus();
+            }
+        },
+        "click": function () {
+            console.log("test");
+            console.log("this : ",this);
+            if(temporary_label_id == this.children[0].id){
+
+            }else{
+                temporary_label_id = this.children[0].id;
+                this.style.borderWidth = "1px";
+                this.style.borderColor = "black";
+                this.style.borderStyle = "solid";
+            }
+        },
+        "keydown": function (key) {
+            if (key.keyCode === 13) {
+                if(!key.shiftKey){
+                    var insert_text = $("#text_area").val();
+                    var text_convert = insert_text.replace(/(?:\r\n|\r|\n)/g, '<br />'); // html 문법으로 변환.
+                    var this_id = this.children[0].id;
+                    $("#"+this_id)[0].innerHTML = text_convert;
+                    $("#text_area").remove();
+                    this.style.borderWidth = "1px";
+                    this.style.borderColor = "black";
+                    this.style.borderStyle = "solid";
+                }
+            }else if (key.keyCode === 27){
+                $("#text_area").remove();
+                this.style.borderWidth = "1px";
+                this.style.borderColor = "black";
+                this.style.borderStyle = "solid";
+            }
+            if(temporary_label_id == this.children[0].id){
+
+            }else{
+                temporary_label_id = this.children[0].id;
+
+            }
+        }
+    });
 }

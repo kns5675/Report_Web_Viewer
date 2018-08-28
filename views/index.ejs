@@ -31,7 +31,7 @@
     <script src="js/createLabel.js"></script>
     <script src="js/drawCurrPageNTotalPage.js"></script>
     <!--<script src="https://code.jquery.com/jquery-1.12.4.js"></script>-->
-    <!--<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>-->
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
 
         var data = <%-data%>;  //xml json 데이터
@@ -47,29 +47,9 @@
             drawPageNumberNTotalPageLabel();
             drawTotalPageLabel();
             drawPageNumberLabel();
+            band_dbclick_event();
 
             image_setting();
-
-           /* $("#cmd").on("click",function () {
-                alert("눌렀음");
-                var doc = new jsPDF();
-                var specialElementHandlers = {
-                    '#editor':function (element, renderer) {
-                        return true;
-                    }
-                }
-                html2canvas($("#testpdf"),{
-                    useCORS:true,
-                    allowTaint:true,
-                    onrendered:function(canvas){
-                        var imgData = canvas.toDataURL('image/jpeg');
-                        var doc = new jsPDF("p","mm");
-                        console.log(imgData);
-                        doc.addImage(imgData,'JPEG',0,0);
-                        doc.save("test.pdf");
-                    }
-                });
-            });*/
 
         });
     </script>
@@ -89,18 +69,17 @@
 <div id="modalTableChoice" class="modal"></div>
 
 <div id="Image_Modal">
+<div id="reportTemplate" style="background-color:lightyellow;"></div>
+<div id="Image_Modal"><!--이미지 추가 모달창-->
     <div id="modalLayer">
         <div class="modalContent">
-            <!--<form class="modelform" action="header.ejs" method="post">-->
-                <input id="image_insert" type="file" multiple accept="image/*"><br/>
-                <button id="upload_button" type="submit" value="">확인</button>
-                <button id="upload_cancel" type="button">취소</button>
-            <!--</form>-->
+            <input id="image_insert" type="file" multiple accept="image/*"><br/>
+            <button id="upload_button" type="submit" value="">확인</button>
+            <button id="upload_cancel" type="button">취소</button>
         </div>
     </div>
 </div>
-<div id="reportTemplate" style="background-color:lightyellow;"></div>
-<div id="Image_Modal2">
+<div id="Image_Modal2"><!--이미지 추가 상세 모달창-->
     <div id="image_dialog" title="이미지 속성">
         <div id="dialog">
             <p>이미지 속성 변경</p>
@@ -109,13 +88,6 @@
             </div>
         </div>
     </div>
-
-    <!---->
-   <!-- <textarea name="testpdf" id="testpdf" style="margin:0px; height:333px; width:661px;"></textarea>
-    <div id="editor"></div>
-    <button id="cmd">PDF</button>-->
-
-    <!---->
 </div>
 </body>
 </html>

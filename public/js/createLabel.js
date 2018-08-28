@@ -144,24 +144,39 @@ function judgementLabel(data, divId) {
  수정 : DynamicTable의 th, td tag에 클래스 추가
  Date : 2018-08-24
  From 전형준
+
+ 수정 : 테이블의 크기 조정 & 위치 이동 추가.
+ Date : 2018-08-27
+ From hagdung-i
  ******************************************************************/
 function drawingDynamicTable(table, tableLabel, divId) {
     var div = $('#' + divId);
     div.append('<div id = "Table' + tableNum + '"></div>');
 
     var divIdTable = $('#Table' + tableNum);
-    divIdTable.append('<table id="dynamicTable' + dynamicTableNum + '"></table>');
+    divIdTable.append('<div id="dynamicTable_resizing_div_packing'+dynamicTableNum + '"></div>');
+    var dynamicTable_resizing_div_packing = $("#dynamicTable_resizing_div_packing"+dynamicTableNum);
+    dynamicTable_resizing_div_packing.append('<div id="dynamicTable_resizing_div'+dynamicTableNum + '"></div>');
 
+    var dynamicTable_resizing_div = $("#dynamicTable_resizing_div"+dynamicTableNum);
+    dynamicTable_resizing_div.append('<table id="dynamicTable' + dynamicTableNum + '"></table>');
+    // divIdTable.append('<table id="dynamicTable' + dynamicTableNum + '"></table>');
+    dynamicTable_resizing_div.addClass("NormalLabel_scope");
     div.css('position', 'relative');
 
-    divIdTable.css({
+    dynamicTable_resizing_div.css({
         'position': 'absolute',
         'left': table.rectangle.x + 'px',
         'top': table.rectangle.y + 'px'
     });
 
     var tableId = $('#dynamicTable' + dynamicTableNum);
-
+    dynamicTable_resizing_div.draggable({containment:"#"+div[0].id, zIndex: 999});
+    tableId.resizable({containment:"#"+div[0].id, autoHide: true,
+        resize: function(event, ui) {   //테이블사이즈는 가로만 조정 가능하도록.
+            ui.size.height = ui.originalSize.height;
+        }
+    });
     tableId.css({
         'width': table.rectangle.width + 'px',
         'height': table.rectangle.height + 'px'
@@ -364,6 +379,10 @@ function drawingFixedTable(table, tableLabel, divId) {
  수정 : Label에 'Label', 각자의 DataType 클래스 추가
  Date : 2018-08-24
  From 전형준
+
+ 수정 : 라벨의 크기 조정 & 위치 이동 추가.
+ Date : 2018-08-27
+ From hagdung-i
  ******************************************************************/
 function drawingSystemLabel(data, divId) {
     var div = $('#' + divId);
@@ -372,7 +391,7 @@ function drawingSystemLabel(data, divId) {
     div.append('<div id = "SystemLabel' + systemLabelNum + '"></div>');
 
     var systemLabelId = $('#SystemLabel' + systemLabelNum);
-
+    systemLabelId.addClass("NormalLabel_scope");
     systemLabelId.css({
         'width': data.rectangle.width,
         'height': data.rectangle.height,
@@ -383,7 +402,8 @@ function drawingSystemLabel(data, divId) {
         'border': '1px solid black',
         'background-color' : data.backGroundColor
     });
-
+    systemLabelId.draggable({containment:"#"+div[0].id, zIndex: 999});
+    systemLabelId.resizable({containment:"#"+div[0].id, autoHide: true});
     var date = new Date();
     switch (data.systemFieldName) {
         case 'Date' :
@@ -509,6 +529,10 @@ function drawingSystemLabel(data, divId) {
  수정 : Label에 'Label', 각자의 DataType 클래스 추가
  Date : 2018-08-24
  From 전형준
+
+ 수정 : SummaryLabel의 크기 조정 & 위치 이동 추가.
+ Date : 2018-08-27
+ From hagdung-i
  ******************************************************************/
 function drawingSummaryLabel(data, divId) {
     var div = $('#' + divId);
@@ -516,7 +540,7 @@ function drawingSummaryLabel(data, divId) {
     div.append('<div id = "SummaryLabel' + summaryLabelNum + '">SummaryLabel</div>');
 
     var summaryLabelId = $('#SummaryLabel' + summaryLabelNum);
-
+    summaryLabelId.addClass("NormalLabel_scope");
     summaryLabelId.css({
         'width': data.rectangle.width,
         'height': data.rectangle.height,
@@ -529,7 +553,8 @@ function drawingSummaryLabel(data, divId) {
     });
 
     summaryLabelId.append('<p id = "PSummaryLabel' + summaryLabelNum + '"></p>');
-
+    summaryLabelId.draggable({containment:"#"+div[0].id, zIndex: 999});
+    summaryLabelId.resizable({containment:"#"+div[0].id, autoHide: true});
     var pId = $('#PSummaryLabel' + summaryLabelNum);
 
     pId.css({
@@ -553,6 +578,10 @@ function drawingSummaryLabel(data, divId) {
  수정 : Label에 'Label', 각자의 DataType 클래스 추가
  Date : 2018-08-24
  From 전형준
+
+ 수정 : DataLabel의 크기 조정 & 위치 이동 추가.
+ Date : 2018-08-27
+ From hagdung-i
  ******************************************************************/
 function drawingDataLabel(data, divId) {
     var div = $('#' + divId);
@@ -560,7 +589,7 @@ function drawingDataLabel(data, divId) {
     div.append('<div id = "DataLabel' + dataLabelNum + '"></div>');
 
     var dataLabelId = $('#DataLabel' + dataLabelNum);
-
+    dataLabelId.addClass("NormalLabel_scope");
     dataLabelId.css({
         'width': data.rectangle.width,
         'height': data.rectangle.height,
@@ -573,7 +602,8 @@ function drawingDataLabel(data, divId) {
     });
 
     dataLabelId.append('<p id = "PDataLabel' + dataLabelNum + '"></p>');
-
+    dataLabelId.draggable({containment:"#"+div[0].id, zIndex: 999});
+    dataLabelId.resizable({containment:"#"+div[0].id, autoHide: true});
     var pId = $('#PDataLabel' + dataLabelNum);
 
     pId.css({
@@ -604,6 +634,10 @@ function drawingDataLabel(data, divId) {
  수정 : Label에 'Label', 각자의 DataType 클래스 추가
  Date : 2018-08-24
  From 전형준
+
+ 수정 : NormalLabel의 크기 조정 & 위치 이동 추가.
+ Date : 2018-08-27
+ From hagdung-i
  ******************************************************************/
 function drawingNormalLabel(data, divId) {
     var div = $('#' + divId);
@@ -612,6 +646,9 @@ function drawingNormalLabel(data, divId) {
 
     var normalLabelId = $('#NormalLabel' + normalLabelNum);
 
+    normalLabelId.addClass("NormalLabel_scope");
+
+    // console.log("div[0].id : ",div[0].id);
     normalLabelId.css({
         'width': data.rectangle.width,
         'height': data.rectangle.height,
@@ -622,11 +659,12 @@ function drawingNormalLabel(data, divId) {
         'border': '1px solid black',
         'white-space': 'nowrap',
         'overflow': 'visible',
-        'background-color' : data.backGroundColor
+        'background-color' : data.backGroundColor,
+        'zIndex' : 999
     });
-
     normalLabelId.append('<p id = "PNormalLabel' + normalLabelNum + '"></p>');
-
+    normalLabelId.draggable({containment:"#"+div[0].id, zIndex: 999});
+    normalLabelId.resizable({containment:"#"+div[0].id, autoHide: true});
     var pId = $('#PNormalLabel' + normalLabelNum);
 
     pId.css({
@@ -637,6 +675,7 @@ function drawingNormalLabel(data, divId) {
     toStringFn(data.text, "PNormalLabel" + normalLabelNum);
     // textEqualDivision(data.text, "PNormalLabel" + normalLabelNum);
 
+
     verticalCenter('PNormalLabel' + normalLabelNum); // 텍스트 수직 정렬이 중간인 경우
     // verticalTop('PNormalLabel' + normalLabelNum); // 텍스트 수직 정렬이 위쪽인 경우
     // verticalBottom('PNormalLabel' + normalLabelNum); // 텍스트 수직 정렬이 아래쪽인 경우
@@ -644,7 +683,6 @@ function drawingNormalLabel(data, divId) {
 
     pId.addClass('Label');
     pId.addClass('NormalLabel');
-
     normalLabelNum++;
 }
 
@@ -655,6 +693,10 @@ function drawingNormalLabel(data, divId) {
  수정 : Label에 'Label', 각자의 DataType 클래스 추가
  Date : 2018-08-24
  From 전형준
+
+ 수정 : 수식 라벨의 크기 조정 & 위치 이동 추가.
+ Date : 2018-08-27
+ From hagdung-i
  ******************************************************************/
 function drawingExpression(data, divId) {
     var div = $('#' + divId);
@@ -662,7 +704,7 @@ function drawingExpression(data, divId) {
     div.append('<div id = "Expression' + expressionNum + '">Expression</div>');
 
     var expressionId = $('#Expression' + expressionNum);
-
+    expressionId.addClass("NormalLabel_scope");
     expressionId.css({
         'width': data.rectangle.width,
         'height': data.rectangle.height,
@@ -675,7 +717,8 @@ function drawingExpression(data, divId) {
     });
 
     expressionId.append('<p id = "PExpression' + expressionNum + '"></p>');
-
+    expressionId.draggable({containment:"#"+div[0].id, zIndex: 999});
+    expressionId.resizable({containment:"#"+div[0].id, autoHide: true});
     var pId = $('#PExpression' + expressionNum);
 
     pId.css({
@@ -696,6 +739,10 @@ function drawingExpression(data, divId) {
 /******************************************************************
  기능 : GroupLabel(그룹 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 안예솔
+
+ 수정 : GroupLabel의 크기 조정 & 위치 이동 추가.
+ Date : 2018-08-27
+ From hagdung-i
  ******************************************************************/
 function drawingGroupLabel(data, divId) {
     var div = $('#' + divId);
@@ -703,7 +750,7 @@ function drawingGroupLabel(data, divId) {
     div.append('<div id = "GroupLabel' + groupLabelNum + '">GroupLabel</div>');
 
     var groupLabelId = $('#GroupLabel' + groupLabelNum);
-
+    groupLabelId.addClass("NormalLabel_scope");
     groupLabelId.css({
         'width': data.rectangle.width,
         'height': data.rectangle.height,
@@ -716,7 +763,9 @@ function drawingGroupLabel(data, divId) {
     });
 
     groupLabelId.append('<p id = "PGroupLabel' + groupLabelNum + '"></p>');
-
+    groupLabelId.draggable({containment:"#"+div[0].id, zIndex: 999});
+    $(".ui-resizable-handle ui-resizable-se ui-icon ui-icon-gripsmall-diagonal-se").hide();
+    groupLabelId.resizable({containment:"#"+div[0].id, autoHide: true});
     var pId = $('#PGroupLabel' + groupLabelNum);
 
     pId.css({
@@ -737,6 +786,10 @@ function drawingGroupLabel(data, divId) {
 /******************************************************************
  기능 : ParameterLabel(파라미터 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 안예솔
+
+ 수정 : ParameterLabel의 크기 조정 & 위치 이동 추가.
+ Date : 2018-08-27
+ From hagdung-i
  ******************************************************************/
 function drawingParameterLabel(data, divId) {
     var div = $('#' + divId);
@@ -744,7 +797,7 @@ function drawingParameterLabel(data, divId) {
     div.append('<div id = "ParameterLabel' + parameterLabelNum + '">ParameterLabel</div>');
 
     var parameterLabelId = $('#ParameterLabel' + parameterLabelNum);
-
+    parameterLabelId.addClass("NormalLabel_scope");
     parameterLabelId.css({
         'width': data.rectangle.width,
         'height': data.rectangle.height,
@@ -757,7 +810,8 @@ function drawingParameterLabel(data, divId) {
     });
 
     parameterLabelId.append('<p id = "PParameterLabel' + parameterLabelNum + '"></p>');
-
+    parameterLabelId.draggable({containment:"#"+div[0].id, zIndex: 999});
+    parameterLabelId.resizable({containment:"#"+div[0].id, autoHide: true});
     var pId = $('#PParameterLabel' + parameterLabelNum);
 
     pId.css({
