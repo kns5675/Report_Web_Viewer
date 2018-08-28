@@ -147,7 +147,10 @@ function BandGroupHeader(band){
     groupFieldArray = new Array();
     groupFieldName = band.GroupFiledName._text;
     var i = 0;
-    dataTable.DataSetName.dt.forEach(function (data) {
+
+    var dt = Object.values(dataTable.DataSetName)[0];
+
+    dt.forEach(function (data) {
         var comparison = groupFieldArray.some(function (arr) {
             if (arr[0] == data[groupFieldName]._text) {
                 arr.push(data);

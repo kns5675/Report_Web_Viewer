@@ -180,7 +180,7 @@ function drawingDynamicTable(table, tableLabel, divId) {
         tableLabel.forEach(function (label) {
             switch (label._attributes) {
                 case "DynamicTableTitleLabel" :
-                    var temp = Object.keys(dataTable.DataSetName.dt[0]);
+                    var temp = Object.keys(dt[0]);
                     temp.forEach(function(titleName){
                         if(label.text == titleName){
                             titleArray.push(titleName);
@@ -208,7 +208,7 @@ function drawingDynamicTable(table, tableLabel, divId) {
                     if(groupFieldArray != undefined) {
                         for (curDatarow = row; curDatarow < rowLength; curDatarow++) {
 
-                            var data = dataTable.DataSetName.dt[curDatarow];
+                            var data = dt[curDatarow];
                             var valueTrId = $('#dynamicValueLabel' + curDatarow);
                             if(valueTrId.length < 1)
                             tableId.append('<tr id = "dynamicValueLabel' + curDatarow + '"></tr>');
