@@ -314,18 +314,27 @@ function makePdf() {
         }
     });*/
 
-    html2canvas(document.querySelector("#pageForCopyRatio1")).then(canvas => {
+    $(".page").each(function (i, e) {
+        var pageForCopyRatioNum = e.id.replace(/[^0-9]/g,'');
+
+        makePdf2(pageForCopyRatioNum);//인쇄배율 변경 펑션
+    });
+}
+function makePdf2(pageForCopyRatioNum){
+    console.log("pageForCopyRatioNum : " + pageForCopyRatioNum);
+
+    html2canvas(document.querySelector("#pageForCopyRatio"+pageForCopyRatioNum)).then(canvas => {
         var img = canvas.toDataURL("image/png");
         var doc= new jsPDF('p','mm',[297,210]);
         doc.addImage(img,'PNG',10,10,190,95);
-        doc.save('saveaspdf.pdf');
 
-
+    });
+    doc.save('saveaspdf.pdf');
        /* //document.body.appendChild(canvas); //바디에 캔버스 appendchild로 붙이는거.
         var img = canvas.toDataURL("image/png");
         window.open().document.write('<img src="' + img + '" />');*/
-    });
-}
+    }
+
 
 function example(){
       var doc = new jsPDF();
