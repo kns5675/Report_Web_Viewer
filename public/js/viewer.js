@@ -2,6 +2,8 @@
  기능 : DR Viewer 인쇄 메뉴 선택하기 (select option value받아와서 메뉴 인식 후 모달창 띄우기)
  author : 하지연
  ******************************************************************/
+//import html2canvas from "html2canvas";
+
 function copyoptions(){
     try{
         if ($("#copyOptions").val() == 'ecopy'){
@@ -185,7 +187,7 @@ function resetData(){
 
     $("input:checkbox[name='extra']").prop("checked",false);
 
-    $("#extraheadoptions").val("상단좌측").attr("selected","selected"); 
+    $("#extraheadoptions").val("상단좌측").attr("selected","selected");
     $("#extrahead").val('');
 
     $("#extratailoptions").val("하단좌측").attr("selected","selected");
@@ -230,16 +232,27 @@ function close_pop3(){
  ******************************************************************/
 function imageOptions(){
     try{
-        if ($("#saveAsImage").val() == 'PNG'){
-            alert("png누름");
-        }else if($("#saveAsImage").val() == 'JPG'){
-            alert("jpg누름");
-        }else if($("#saveAsImage").val() == 'BMP'){
-            alert("bmp 누름");
-        }else if($("#saveAsImage").val() == 'TIFF'){
-            alert("tiff누름");
-        }else if($("#saveAsImage").val() == 'GIF'){
-            alert("gif누름");
+        if ($("#saveAsImage").val() == 'png'){
+
+            var typeofimages = $("#saveAsImage").val();
+            alert(typeofimages);
+            saveImages(typeofimages);
+        }else if($("#saveAsImage").val() == 'jpeg'){
+            var typeofimages = $("#saveAsImage").val();
+            alert(typeofimages);
+            saveImages(typeofimages);
+        }else if($("#saveAsImage").val() == 'bmp'){
+            var typeofimages = $("#saveAsImage").val();
+            alert(typeofimages);
+            saveImages(typeofimages);
+        }else if($("#saveAsImage").val() == 'tiff'){
+            var typeofimages = $("#saveAsImage").val();
+            alert(typeofimages);
+            saveImages(typeofimages);
+        }else if($("#saveAsImage").val() == 'gif'){
+            var typeofimages = $("#saveAsImage").val();
+            alert(typeofimages);
+            saveImages(typeofimages);
         }else{
             console.log("인식못했음");
         }
@@ -248,38 +261,170 @@ function imageOptions(){
     }
 }
 /******************************************************************
- 기능 : 화면을 pdf로 만드는 기능
+ 기능 : select box에서 이미지 타입을 받아 해당타입의 이미지로 저장하는 기능
  author : 하지연
  ******************************************************************/
-function makePdf() {
+function saveImages(typeofimages){
+    alert(typeofimages);
 
 
+    /*var eCopyRate = $("#copyratio").val();
+    $(".page").each(function (i, e) {
+        // console.log("e : ", e.id);
+        var idnum = e.id.replace(/[^0-9]/g,'');
+
+        eSetFont();
+        eCopyRatio(eCopyRate, idnum);//인쇄배율 변경 펑션
+    });*/
+
+
+
+    html2canvas(document.querySelector("#pageForCopyRatio1")).then(canvas => {
+        document.body.appendChild(canvas);
+        console.log("typeofimages : "+ typeofimages);
+        var thisdata = ("image/"+ typeofimages);
+        console.log(typeof typeofimages); //string
+        console.log("this data : " + thisdata); //this data : image/jpg,png이런식으로 나옴.
+        var img = canvas.toDataURL("image/"+ typeofimages);
+        window.open().document.write('<img src="' + img + '" />');
+    });
+
+
+    $("#saveAsImage").val("--이미지--").attr("selected","selected");
 }
 /******************************************************************
  기능 : 화면을 pdf로 만드는 기능
  author : 하지연
  ******************************************************************/
-function testtest(){
-    $("#cmd").on("click",function () {
-        alert("눌렀음");
-       var doc = new jsPDF();
+function makePdf() {
+   /* console.log("왔음");
+    html2canvas(document.getElementById("forcopyratio1"),{
+        onrendered:function (canvas) {
+            var imgData = canvas.toDataURL('image/png');
+            console.log("imgData : " + imgData );
+            var dataUrl = canvas.toDataURL();
+            var doc = new jsPDF('p','mm',[297,210]);
+            console.log('doc : ' + doc);
+            doc.addImage(imgData,'PNG',10,10,190,95);
+            doc.save('sample-file.pdf');
+        }
+    });*/
+
+    html2canvas(document.querySelector("#pageForCopyRatio1")).then(canvas => {
+        var img = canvas.toDataURL("image/png");
+        var doc= new jsPDF('p','mm',[297,210]);
+        doc.addImage(img,'PNG',10,10,190,95);
+        doc.save('saveaspdf.pdf');
+
+
+       /* //document.body.appendChild(canvas); //바디에 캔버스 appendchild로 붙이는거.
+        var img = canvas.toDataURL("image/png");
+        window.open().document.write('<img src="' + img + '" />');*/
+    });
+}
+
+function example(){
+      var doc = new jsPDF();
        var specialElementHandlers = {
-           '#editor':function (element, renderer) {
+           '#editor':function(element,renderer){
                return true;
            }
        }
+       //html2canvas안에 첫번쨰 인자는 캡쳐하고싶은 element적는거임.
+       //onrendered는 html2canvas가 캡쳐한 후 canvas개체가 사용될준비가 되면 실행되는 것이다.
        html2canvas($("#testpdf"),{
-         useCORS:ture,
-           allowTaint:true,
+           useCORS:false,
+           allowTaint:false,
            onrendered:function(canvas){
-             var imgData = canvas.toDataURL('image/jpeg');
-             var doc = new jsPDF("p","mm");
-             console.log(imgData);
-             doc.addImage(imgData,'JPEG',0,0);
-             doc.save("test.pdf");
+               var imgData = canvas.toDataURL('image/jpeg');
+               //var imgData = canvas.getContext("2d");
+               //var img = new Image();
+               //img.src = ctx.toDataURL('image/png');
+               //ctx.drawImage(img,297,210);
+
+               var doc = new jsPDF("p","mm",[297,210]);
+               console.log(imgData);
+               doc.addImage(imgData,'JPEG',5,5,210,297);
+               doc.save('test.pdf');
            }
        });
+}
+
+function getScreenshot(){
+    html2canvas(document.getElementById('text'),{
+        onrendered: function(canvas){
+            console.log("1");
+            $('#box1').html("");
+            console.log("2");
+            $('#box1').append(canvas);
+            console.log("3");
+        }
     });
+}
+function genScreenshot() {
+
+    html2canvas(document.body, {
+        onrendered: function(canvas) {
+            console.log($('#text').html());
+            $('#box1').html("");
+            $('#box1').append(canvas);
+
+            if (navigator.userAgent.indexOf("MSIE ") > 0 ||
+                navigator.userAgent.match(/Trident.*rv\:11\./))
+            {
+                console.log("if들오옴");
+                var blob = canvas.msToBlob();
+                window.navigator.msSaveBlob(blob,'Test_file.png');
+            }
+            else {
+                console.log("else들오엄");
+                $('#ttest').attr('href', canvas.toDataURL("image/png"));
+                $('#ttest').attr('download','Test_file.png');
+                $('#ttest')[0].click();
+            }
+
+
+        }
+    });
+}
+/*function genPDF(){
+   // var htmlToImage = require('html-to-image');
+
+    var node = document.getElementById('testDiv');
+    htmlToImage.toPng(node)
+        .then(function (dataUrl) {
+            var img = new Image();
+            document.body.appendChild(img);
+        })
+        .catch(function(error){
+           console.log('opps... something went wrong....',error);
+        });
+}*/
+/******************************************************************
+ 기능 : 화면을 pdf로 만드는 기능
+ author : 하지연
+ ******************************************************************/
+function testtest(){
+    //import {html2canvas} from 'html2canvas';
+    $("#cmd").on("click",function () {
+        alert("눌렀음");
+        var doc = new jsPDF();
+        alert("doc : " + doc);
+        var pdfHandlers = {
+            '#editor': function (element, renderer) {
+                return true;
+            }
+        };
+        html2canvas(document.getElementById("testpdf"),{
+            onrendered:function(canvas){
+                var imgData = canvas.toDataURL('image/png');
+                var doc = new jsPDF("p","mm",[297,210]);
+                doc.addImage(imgData,'PNG',10,10,190,95);
+                doc.save('test.pdf');
+            }
+        });
+    });
+
 }
 
 

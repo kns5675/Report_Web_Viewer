@@ -10,9 +10,6 @@
     <link rel="stylesheet" href="css/main.css"/>
     <link rel="stylesheet" href="css/index.css"/>
     <link rel="stylesheet" href="css/print.css"/>
-    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/0.9.0rc1/jspdf.min.js"></script>jspdf lib 추가-->
-    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.min.js"></script>html2canvas lib 추가-->
-
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"
           rel = "stylesheet">
@@ -24,13 +21,46 @@
     <script src="js/createBand.js"></script>
     <script src="js/print.js"></script>
     <script src="js/viewer_header01.js"></script>
-    <script src="js/viewer.js"></script>
     <script src="js/drawingBand.js"></script>
     <script src="js/label.js"></script>
     <script src="js/createLabel.js"></script>
     <script src="js/drawCurrPageNTotalPage.js"></script>
-    <!--<script src="https://code.jquery.com/jquery-1.12.4.js"></script>-->
-    <!--<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>-->
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+
+    <script type="text/javascript" src="https://unpkg.com/jspdf@latest/dist/jspdf.min.js"></script><!--얘랑-->
+    <script type="text/javascript">
+        function genPDF() {
+            html2canvas(document.getElementById("testDiv"), {
+                useCORS: true,
+                allowTaint: false,
+                onrendered: function (canvas) {
+                    var img = canvas.toDataURL("image/png");//캔버스를 이미지로 변환
+
+                    var imgwidth = 210;
+                    var pageheight = imgwidth * 1.414;
+                    var imgheight = canvas.height * imgwidth / canvas.width;
+                    var heightleft = imgheight;
+
+                    var doc = new jsPDF('p', 'mm');
+                    var position = 0;
+
+                    while (heightleft >= 20) {
+                        position = heightleft - imgheight;
+                        doc.addImage(img, 'PNG', 0, position, imgwidth, imgheight);
+                        heightleft -= pageheight;
+                    }
+
+                    doc.save('sample_A4.pdf');
+                }
+            });
+        }
+    </script>
+    <script src="js/viewer.js"></script>
+
+
+
     <script>
 
         var data = <%-data%>;  //xml json 데이터
@@ -47,28 +77,6 @@
             drawPageNumberLabel();
 
             image_setting();
-
-           /* $("#cmd").on("click",function () {
-                alert("눌렀음");
-                var doc = new jsPDF();
-                var specialElementHandlers = {
-                    '#editor':function (element, renderer) {
-                        return true;
-                    }
-                }
-                html2canvas($("#testpdf"),{
-                    useCORS:true,
-                    allowTaint:true,
-                    onrendered:function(canvas){
-                        var imgData = canvas.toDataURL('image/jpeg');
-                        var doc = new jsPDF("p","mm");
-                        console.log(imgData);
-                        doc.addImage(imgData,'JPEG',0,0);
-                        doc.save("test.pdf");
-                    }
-                });
-            });*/
-
         });
     </script>
     <style>
@@ -78,11 +86,34 @@
         .backGroundLayer, .foreGroundLayer{
             visibility : hidden;
         }
+        canvas{
+            max-width: 100%;
+            max-height: 100%;
+        }
     </style>
 </head>
 <body>
 <div id="header"></div>
 <div id="myModal" class="modal"></div>
+
+
+
+<!--ONLY ONLY ONLY sdfsdf-->
+<h1>jsPDF Demos</h1>
+
+<a href="javascript:genPDF()">Doonload PDF</a>
+
+<div id="testDiv">
+    <h1>Example Header</h1>
+    <input type="text"/>
+    <input type="submit" value="button"/>
+    <br><br>
+    <img src="image/test.png" width="600" height="400"/>
+</div>
+<!--ONLY ONLY ONLY sdfsdf-->
+
+
+
 
 <div id="Image_Modal">
     <div id="modalLayer">
@@ -95,7 +126,33 @@
         </div>
     </div>
 </div>
-<div id="reportTemplate" style="background-color:lightyellow;"></div>
+<div id="reportTemplate" style="background-color:lightyellow;">
+    <textarea name="testpdf" id="testpdf" style="margin:0px; height:333px; width:661px;"></textarea>
+    <div id="editor"></div>
+    <button id="cmd" onclick="example();">PDF</button>
+
+    <!---->
+    <a href="javascript:genScreenshot()"> Get Screenshot</a>
+    <a id="ttest"></a>
+    <div id="text">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras in enim metus.
+        Mauris lobortis non sem eu porta. Etiam ante lacus, viverra euismod neque ut,
+        pretium volutpat lacus. Aenean ipsum elit, feugiat quis metus vitae, vehicula
+        sodales arcu. Suspendisse id neque vitae erat pellentesque viverra in in eros.
+        Nam sagittis vitae enim ut laoreet. Aliquam erat volutpat. Etiam rhoncus, elit
+        id efficitur convallis, mi nisl blandit ipsum, sed scelerisque odio elit vel est.
+        Nunc velit urna, dignissim at varius non, luctus vel libero. Fusce cursus pharetra
+        laoreet. Curabitur placerat neque sed justo fringilla, sit amet semper dui accumsan.
+        Nam posuere quam sit amet nunc porttitor consequat. Nulla facilisi. Quisque viverra
+        massa eget dolor finibus maximus.
+
+    </div>
+    <br>
+    <div id="box1" style="width:400px;
+  height:300px; border:solid 2px black;">
+    </div>
+    <!---->
+</div>
 <div id="Image_Modal2">
     <div id="image_dialog" title="이미지 속성">
         <div id="dialog">
@@ -106,12 +163,6 @@
         </div>
     </div>
 
-    <!---->
-   <!-- <textarea name="testpdf" id="testpdf" style="margin:0px; height:333px; width:661px;"></textarea>
-    <div id="editor"></div>
-    <button id="cmd">PDF</button>-->
-
-    <!---->
 </div>
 </body>
 </html>

@@ -3,44 +3,54 @@
 <head>
   <meta charset="utf-8">
   <title>resizable</title>
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css">
-  <style type="text/css">
-    .page {
-      width: 500px;
-      margin:20px auto;
-    }
-    .box {
-      border:2px solid red;
-      width: 200px;
-      height: 200px;
-      -webkit-transition-duration: 2s;
-      -moz-transition-duration: 2s;
-      -ms-transition-duration: 2s;
-      -o-transition-duration: 2s;
-      transition-duration: 2s;
 
-      -webkit-transform: scale(1.0);
-      -moz-transform: scale(1.0);
-      -ms-transform: scale(1.0);
-      -o-transform: scale(1.0);
-      transform: scale(1.0);
-    }
-
-    .box:hover {
-      -webkit-transform: scale(0.5);
-      -moz-transform: scale(0.5);
-      -ms-transform: scale(0.5);
-      -o-transform: scale(0.5);
-      transform: scale(0.5);
-    }
-  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0/jquery.js"></script>
 </head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js"></script>
 <body>
+<form method="POST" enctype="multipart/form-data" action="https://www.google.com/save" id="myForm">
+  <input type="hidden" name="img_val" id="img_val" value="" />
+</form>
 
-<div class="page">
-  <div class="box"><img src="https://placeimg.com/200/200/tech" id="img" alt="" /></div>
+<div id="more">
+  <h1 style='color: red'> hello </h1>
+  <iframe src="https://tags.mli.me/12751">
+  </iframe>
+  <button onclick="take()"> take </button>
 </div>
 
+<script>
+    window.take = function() {
+        console.log("asdfasdfasf");
+        html2canvas(document.getElementById("more"), {
+            onrendered: function (canvas) {
+                document.getElementById('img_val').value = canvas.toDataURL("image/png");
+                //document.getElementById("myForm").submit();
+                postToImgur()
+            }
+        })
+    }
+    window.postToImgur = function postToImgur() {
+        var formData = new FormData();
+        formData.append("image", document.getElementById("img_val").value);
+        $.ajax({
+            url: 'https://api.imgur.com/3/image',
+            method: 'POST',
+            headers: {
+                "Authorization": "Client-ID " + clientId,
+                Accept: 'application/json'
+            },
+            data: {
+                image: document.getElementById("img_val").value.replace("data:image/png;base64,", ""),
+                type: 'base64'
+            },
+            success: function(result) {
+                var id = result.data.id;
+                alert('https://imgur.com/gallery/' + id);
+            }
+        });
 
+    }
+</script>
 </body>
 </html>

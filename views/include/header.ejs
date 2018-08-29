@@ -3,6 +3,10 @@
   <head>
     <meta charset="utf-8">
     <link rel="stylesheet" href="css/header.css"/>
+    <script src="js/viewer.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
     <script>
         $(function(){
             $('#print').click(function(){
@@ -34,6 +38,7 @@
             });
             $(".saveAsPdf").on("click", function(){
                 makePdf();  //지연 화면을 pdf로 만드는 function()
+
             });
         });
     </script>
@@ -150,11 +155,11 @@
   <li>
     <select id="saveAsImage">
       <option id="saveAsDefault"selected disabled hidden>--이미지--</option>
-      <option id="saveAsPng" value="PNG">PNG</option>
-      <option id="saveAsJpg" value="JPG">JPG</option>
-      <option id="saveAsBmp" value="BMP">BMP</option>
-      <option id="saveAsTiff" value="TIFF">TIFF</option>
-      <option id="saveAsGif" value="GIF">GIF</option>
+      <option id="saveAsPng" value="png">PNG</option>
+      <option id="saveAsJpg" value="jpeg">JPEG</option>
+      <option id="saveAsBmp" value="bmp">BMP</option>
+      <option id="saveAsTiff" value="tiff">TIFF</option>
+      <option id="saveAsGif" value="gif">GIF</option>
     </select>
   </li>
   <li><input type="button" value="HTML"></li>

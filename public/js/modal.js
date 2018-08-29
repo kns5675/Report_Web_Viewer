@@ -191,11 +191,11 @@ function beforeSubmit(){
         eCopyRate = (Number(eCopyRate))/100;
 
         $(".page").each(function (i, e) {
-           // console.log("e : ", e.id);
-           var idnum = e.id.replace(/[^0-9]/g,'');
+            // console.log("e : ", e.id);
+            var idnum = e.id.replace(/[^0-9]/g,'');
 
-           eSetFont();
-           eCopyRatio(eCopyRate, idnum);//인쇄배율 변경 펑션
+            eSetFont();
+            eCopyRatio(eCopyRate, idnum);//인쇄배율 변경 펑션
         });
         close_pop1();
         //alert("인쇄 배율 : "+copyRatio.val() + " %");
