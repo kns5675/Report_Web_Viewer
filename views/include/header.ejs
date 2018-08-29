@@ -6,6 +6,7 @@
     <script src="js/viewer.js"></script>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/jspdf@latest/dist/jspdf.min.js"></script>
 
     <script>
         $(function(){
@@ -36,8 +37,13 @@
             $("div.room").mouseleave(function(){
                 $(this).css("background-color","white");  //지연추가 여러페이지보기 front개발중 개발 보류
             });
-            $(".saveAsPdf").on("click", function(){
+            $(".saveAsPdf").on("mouseover", function(){
+                // saving();
                 makePdf();  //지연 화면을 pdf로 만드는 function()
+            });
+            $(".saveAsPdf").on("click", function(){
+                saving();
+                // makePdf();  //지연 화면을 pdf로 만드는 function()
             });
         });
     </script>

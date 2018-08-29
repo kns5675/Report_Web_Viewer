@@ -1,3 +1,4 @@
+var doc = new jsPDF('p','mm',[297,210]);
 /******************************************************************
  기능 : DR Viewer 인쇄 메뉴 선택하기 (select option value받아와서 메뉴 인식 후 모달창 띄우기)
  author : 하지연
@@ -299,10 +300,8 @@ function saveImages(typeofimages){
 /******************************************************************
  기능 : 화면을 pdf로 만드는 기능
  author : 하지연
- ******************************************************************/
-function makePdf() {
-   /* console.log("왔음");
-    html2canvas(document.getElementById("forcopyratio1"),{
+ /* console.log("왔음");
+ html2canvas(document.getElementById("forcopyratio1"),{
         onrendered:function (canvas) {
             var imgData = canvas.toDataURL('image/png');
             console.log("imgData : " + imgData );
@@ -312,29 +311,52 @@ function makePdf() {
             doc.addImage(imgData,'PNG',10,10,190,95);
             doc.save('sample-file.pdf');
         }
-    });*/
+    });
+ ******************************************************************/
+function makePdf() {
+    return new Promise(function (resolve) {
 
-    $(".page").each(function (i, e) {
-        var pageForCopyRatioNum = e.id.replace(/[^0-9]/g,'');
-
-        makePdf2(pageForCopyRatioNum);//인쇄배율 변경 펑션
+        $(".page").each(function (i, e) {
+            var pageForCopyRatioNum = e.id.replace(/[^0-9]/g,'');
+            console.log("pageForCopyRatioNum : " + pageForCopyRatioNum);
+            html2canvas(document.querySelector("#pageForCopyRatio"+pageForCopyRatioNum)).then(canvas => {
+                console.log("들어왔는강");
+                var img = canvas.toDataURL("image/png");
+                doc.addPage().addImage(img,'PNG',0,0,210,297);
+            });
+        });
+        console.log("doc : ",doc);
+        resolve(doc);
     });
 }
-function makePdf2(pageForCopyRatioNum){
-    console.log("pageForCopyRatioNum : " + pageForCopyRatioNum);
+function saving (){
+    // makePdf().then(function(doc){
+        console.log("들어왔어욤1");
 
-    html2canvas(document.querySelector("#pageForCopyRatio"+pageForCopyRatioNum)).then(canvas => {
-        var img = canvas.toDataURL("image/png");
-        var doc= new jsPDF('p','mm',[297,210]);
-        doc.addImage(img,'PNG',10,10,190,95);
+        doc.save('pdfpdf.pdf');
+        // console.log("들어왔어욤2");
+    //     throw new Error("Error in then()");
+    // }).catch(function(err){
+    //     console.log('then error : ' ,err);
+    // });
+}
 
+
+/*
+promise 예제
+function pre(){
+    return new Promise(function (resolve, reject) {
+        var data11 = 100;
+        resolve(data11);
+
+        console.log("100이전에!!")
     });
-    doc.save('saveaspdf.pdf');
-       /* //document.body.appendChild(canvas); //바디에 캔버스 appendchild로 붙이는거.
-        var img = canvas.toDataURL("image/png");
-        window.open().document.write('<img src="' + img + '" />');*/
-    }
+};
 
+
+pre().then(function(resolvedData){
+    console.log("############## : "+resolvedData);//100찍힘.
+});*/
 
 function example(){
       var doc = new jsPDF();

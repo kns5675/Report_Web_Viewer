@@ -291,7 +291,7 @@ function drawingDynamicTableTitleLabel(label, dt){
     temp.forEach(function(titleName){
         if(label.text == titleName){
             titleArray.push(titleName);
-            console.log("header_Name_Number : ",header_Name_Number);
+            //console.log("header_Name_Number : ",header_Name_Number);
             titleTrId.append('<th id = "DynamicTableTitleLabel'+ header_Name_Number +'_View_Page_Number'+ thNum + '"></th>');
             titleTrId.css({
                 'width': label.rectangle.width,
