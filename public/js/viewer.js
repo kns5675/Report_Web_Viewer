@@ -330,11 +330,13 @@ function howmanyPages(thisvalue){
 }
 
 function band_dbclick_event() {
-var temporary_label_id;
     $(".NormalLabel_scope").on({
         "dblclick": function () {
             var this_id = this.children[0].id;
             var current = this.id;
+            console.log("this : ",this);
+            console.log("this_id : ",this_id);
+            console.log("current : ",current);
             var current_width = this.style.width;
             var current_height = this.style.height;
             var this_text = $("#" + this_id)[0].innerText;
@@ -360,18 +362,6 @@ var temporary_label_id;
                 document.getElementById(text_area.id).focus();
             }
         },
-        "click": function () {
-            console.log("test");
-            console.log("this : ",this);
-            if(temporary_label_id == this.children[0].id){
-
-            }else{
-                temporary_label_id = this.children[0].id;
-                this.style.borderWidth = "1px";
-                this.style.borderColor = "black";
-                this.style.borderStyle = "solid";
-            }
-        },
         "keydown": function (key) {
             if (key.keyCode === 13) {
                 if(!key.shiftKey){
@@ -379,22 +369,65 @@ var temporary_label_id;
                     var text_convert = insert_text.replace(/(?:\r\n|\r|\n)/g, '<br />'); // html 문법으로 변환.
                     var this_id = this.children[0].id;
                     $("#"+this_id)[0].innerHTML = text_convert;
-                    $("#text_area").remove();
+                    $("#text_div").remove();
                     this.style.borderWidth = "1px";
                     this.style.borderColor = "black";
                     this.style.borderStyle = "solid";
                 }
             }else if (key.keyCode === 27){
-                $("#text_area").remove();
+                $("#text_div").remove();
                 this.style.borderWidth = "1px";
                 this.style.borderColor = "black";
                 this.style.borderStyle = "solid";
             }
-            if(temporary_label_id == this.children[0].id){
+        }
+    });
+    $(".DynamicTableHeader").on({
+        "dblclick": function () {
+        var current = this.id;
+        console.log("this : ",this);
+        console.log("current : ",current);
+        var current_width = this.style.width;
+        var current_height = this.style.height;
+        var this_text = $("#" + current)[0].innerText;
 
-            }else{
-                temporary_label_id = this.children[0].id;
+        if ($("#text_area")[0] === undefined) {
+            var text_div = document.createElement("div");
+            text_div.id = "text_div";
 
+            var text_area = document.createElement('textarea');
+            text_area.id = "text_area";
+            text_area.value = this_text;
+            text_area.style.width = current_width;
+            text_area.style.height = current_height;
+            text_area.zIndex = 999;
+
+            this.style.borderWidth = "3px";
+            this.style.borderColor = "blue";
+            this.style.borderStyle = "dotted solid";
+
+            document.getElementById(current).appendChild(text_div);
+            document.getElementById(text_div.id).appendChild(text_area);
+
+            document.getElementById(text_area.id).focus();
+        }
+    },
+        "keydown": function (key) {
+            if (key.keyCode === 13) {
+                if(!key.shiftKey){
+                    var insert_text = $("#text_area").val();
+                    var text_convert = insert_text.replace(/(?:\r\n|\r|\n)/g, '<br />'); // html 문법으로 변환.
+                    $("#"+this.id)[0].innerHTML = text_convert;
+                    $("#text_div").remove();
+                    this.style.borderWidth = "1px";
+                    this.style.borderColor = "black";
+                    this.style.borderStyle = "solid";
+                }
+            }else if (key.keyCode === 27){
+                $("#text_div").remove();
+                this.style.borderWidth = "1px";
+                this.style.borderColor = "black";
+                this.style.borderStyle = "solid";
             }
         }
     });

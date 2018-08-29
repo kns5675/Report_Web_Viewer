@@ -145,7 +145,7 @@ function judgementLabel(data, divId) {
  Date : 2018-08-24
  From 전형준
 
- 수정 : 테이블의 크기 조정 & 위치 이동 추가.
+ 수정 : 테이블의 크기 조정, 위치 이동, 내용 수정 추가.
  Date : 2018-08-27
  From hagdung-i
  ******************************************************************/
@@ -160,8 +160,7 @@ function drawingDynamicTable(table, tableLabel, divId) {
 
     var dynamicTable_resizing_div = $("#dynamicTable_resizing_div"+dynamicTableNum);
     dynamicTable_resizing_div.append('<table id="dynamicTable' + dynamicTableNum + '"></table>');
-    // divIdTable.append('<table id="dynamicTable' + dynamicTableNum + '"></table>');
-    dynamicTable_resizing_div.addClass("NormalLabel_scope");
+    // dynamicTable_resizing_div.addClass("NormalLabel_scope");
     div.css('position', 'relative');
 
     dynamicTable_resizing_div.css({
@@ -280,15 +279,20 @@ function drawingDynamicTableValueLabel(label, dt, tableId, numOfData){
 /******************************************************************
  기능 : DynamicTableTitleLabel(동적 테이블 타이틀 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 구영준
+
+ 수정 : 테이블 id 값 한글 생성되는 부분 수정.
+ Date : 2018-08-28
+ From hagdung-i
  *******************************************************************/
 function drawingDynamicTableTitleLabel(label, dt){
     var temp = Object.keys(dt[0]);
     var titleTrId = $('#dynamicTitleLabel' + dynamicTitleLabelNum);
-
+    var header_Name_Number = 1;
     temp.forEach(function(titleName){
         if(label.text == titleName){
             titleArray.push(titleName);
-            titleTrId.append('<th id = "' + titleName + thNum + '"></th>');
+            console.log("header_Name_Number : ",header_Name_Number);
+            titleTrId.append('<th id = "DynamicTableTitleLabel'+ header_Name_Number +'_View_Page_Number'+ thNum + '"></th>');
             titleTrId.css({
                 'width': label.rectangle.width,
                 'height': label.rectangle.height,
@@ -298,12 +302,13 @@ function drawingDynamicTableTitleLabel(label, dt){
                 'font-color' : label.textColor,
                 'background-color' : label.backGroundColor
             });
-            var thId = $('#' + titleName + thNum);
+            var thId = $('#DynamicTableTitleLabel' + header_Name_Number +"_View_Page_Number"+ thNum);
             thId.css('border', '1px solid black');
             thId.append(titleName);
-            thId.addClass('Label');
+            thId.addClass('Label DynamicTableHeader');
             thId.addClass(label._attributes);
         }
+        header_Name_Number++;
     });
 }
 
@@ -380,7 +385,7 @@ function drawingFixedTable(table, tableLabel, divId) {
  Date : 2018-08-24
  From 전형준
 
- 수정 : 라벨의 크기 조정 & 위치 이동 추가.
+ 수정 : 라벨의 크기 조정, 위치 이동, 내용 수정 추가.
  Date : 2018-08-27
  From hagdung-i
  ******************************************************************/
@@ -530,7 +535,7 @@ function drawingSystemLabel(data, divId) {
  Date : 2018-08-24
  From 전형준
 
- 수정 : SummaryLabel의 크기 조정 & 위치 이동 추가.
+ 수정 : SummaryLabel의 크기 조정, 위치 이동, 내용 수정 추가.
  Date : 2018-08-27
  From hagdung-i
  ******************************************************************/
@@ -579,7 +584,7 @@ function drawingSummaryLabel(data, divId) {
  Date : 2018-08-24
  From 전형준
 
- 수정 : DataLabel의 크기 조정 & 위치 이동 추가.
+ 수정 : DataLabel의 크기 조정, 위치 이동, 내용 수정 추가.
  Date : 2018-08-27
  From hagdung-i
  ******************************************************************/
@@ -589,7 +594,6 @@ function drawingDataLabel(data, divId) {
     div.append('<div id = "DataLabel' + dataLabelNum + '"></div>');
 
     var dataLabelId = $('#DataLabel' + dataLabelNum);
-    dataLabelId.addClass("NormalLabel_scope");
     dataLabelId.css({
         'width': data.rectangle.width,
         'height': data.rectangle.height,
@@ -635,7 +639,7 @@ function drawingDataLabel(data, divId) {
  Date : 2018-08-24
  From 전형준
 
- 수정 : NormalLabel의 크기 조정 & 위치 이동 추가.
+ 수정 : NormalLabel의 크기 조정, 위치 이동, 내용 수정 추가.
  Date : 2018-08-27
  From hagdung-i
  ******************************************************************/
@@ -694,7 +698,7 @@ function drawingNormalLabel(data, divId) {
  Date : 2018-08-24
  From 전형준
 
- 수정 : 수식 라벨의 크기 조정 & 위치 이동 추가.
+ 수정 : 수식 라벨의 크기 조정, 위치 이동, 내용 수정 추가.
  Date : 2018-08-27
  From hagdung-i
  ******************************************************************/
@@ -740,7 +744,7 @@ function drawingExpression(data, divId) {
  기능 : GroupLabel(그룹 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 안예솔
 
- 수정 : GroupLabel의 크기 조정 & 위치 이동 추가.
+ 수정 : GroupLabel의 크기 조정, 위치 이동, 내용 수정 추가.
  Date : 2018-08-27
  From hagdung-i
  ******************************************************************/
@@ -787,7 +791,7 @@ function drawingGroupLabel(data, divId) {
  기능 : ParameterLabel(파라미터 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 안예솔
 
- 수정 : ParameterLabel의 크기 조정 & 위치 이동 추가.
+ 수정 : ParameterLabel의 크기 조정, 위치 이동, 내용 수정 추가.
  Date : 2018-08-27
  From hagdung-i
  ******************************************************************/

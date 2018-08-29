@@ -3,6 +3,8 @@
   <head>
     <meta charset="utf-8">
     <link rel="stylesheet" href="css/header.css"/>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script>
         $(function(){
             $('#print').click(function(){
@@ -94,7 +96,7 @@
       <option id="enhancedcopy" value="ecopy">고급인쇄설정</option>
     </select>
   </li>
-  <li><input type="button" value="DRD"></li>
+  <li><input type="button" value="DRD" id="DRD_Start"></li>
   <li><input type="button" value="첫 페이지" id="FirstPage"></li>
   <li><input type="button" value="이전 페이지" id="PreviousPage"></li>
   <li><input type="text" value=1 id="NowPage"> /</li>
@@ -176,6 +178,7 @@
         LastPage(pagecount);
         HeaderFixAndPageScroll(pagecount);
         image_upload();
+        DRD_button();
         tableChoice();
         $("#h1 > .test").val();
     });
