@@ -12,7 +12,6 @@ var bandNum = 1;
  * *********************************************************/
 function drawBand(bands, layerName, reportHeight){
     bands.forEach(function (band) { // 밴드 갯수만큼 반복문 돌음
-
         // 페이지 헤더 밴드의 속성 '첫 페이지 출력 생략(PageOutputSkip)' 속성값이 'true'면 출력X
         if(band.attributes["xsi:type"] === "BandPageHeader" && band.pageOutputSkip === "true"){
             return;
@@ -51,11 +50,21 @@ function drawBand(bands, layerName, reportHeight){
             });
         }
 
+        judgementControlList(band, div_id); // 라벨을 그려줌
+
+        if(band.attributes["xsi:type"] === "BandGroupHeader") {
+            groupDataRow = 0;
+        }
+        if(band.attributes["xsi:type"] === "BandGroupFooter") {
+            curDatarow += (groupFieldArray[groupFieldNum].length-1);
+            groupFieldNum++;
+        }
+
+
+
         if(band.childFooterBands !== null){ // 자식 풋터 밴드에서 재호출
             drawBand(band.childFooterBands, layerName, reportHeight);
         }
-
-        judgementControlList(band, div_id); // 라벨을 그려줌
 
     });
 }

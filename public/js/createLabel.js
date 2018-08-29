@@ -185,7 +185,6 @@ function drawingDynamicTable(table, tableLabel, divId) {
 
     var numOfData = getNumOfDataInOnePage(tableLabel, divId); //한 페이지에 들어갈 데이터 개수
     var dt = Object.values(dataTable.DataSetName)[0];
-
     if (Array.isArray(tableLabel)) {
         tableLabel.forEach(function (label) {
             switch (label._attributes) {
@@ -215,17 +214,16 @@ function drawingDynamicTable(table, tableLabel, divId) {
  만든이 : 구영준
  *******************************************************************/
 function drawingDynamicTableValueLabel(label, dt, tableId, numOfData){
-    row = (pageNum-1) * numOfData; //한 페이지 출력 해야할 시작 row
-    var rowLength = row + numOfData; //한 페이지에 마지막으로 출력해야할 row
+    if(groupFieldArray == undefined) {
+        row = (pageNum-1) * numOfData; //한 페이지 출력 해야할 시작 row
+        var rowLength = row + numOfData; //한 페이지에 마지막으로 출력해야할 row
 
-    if(groupFieldArray != undefined) {
         for (curDatarow = row; curDatarow < rowLength; curDatarow++) {
 
             var data = dt[curDatarow];
             var valueTrId = $('#dynamicValueLabel' + curDatarow);
             if(valueTrId.length < 1)
                 tableId.append('<tr id = "dynamicValueLabel' + curDatarow + '"></tr>');
-
             for (key in data) {
                 if (label.fieldName == key) {
                     var valueTrId = $('#dynamicValueLabel' + curDatarow);
@@ -246,11 +244,14 @@ function drawingDynamicTableValueLabel(label, dt, tableId, numOfData){
             }
         }
     }else {
-        for (var j = row; j < rowLength; j++) {
+        for (var j = groupDataRow; j < groupFieldArray[groupFieldNum].length; j++) {
             var data = groupFieldArray[groupFieldNum];
-            tableId.append('<tr id = "dynamicValueLabel' + j + '"></tr>');
+            var rowNum = curDatarow+j;
+            var valueTrId = $('#dynamicValueLabel' + rowNum);
+            if(valueTrId.length < 1)
+                tableId.append('<tr id =   "dynamicValueLabel' + rowNum + '"></tr>');
             for (key in data[j]) {
-                var valueTrId = $('#dynamicValueLabel' + j);
+                var valueTrId = $('#dynamicValueLabel' + rowNum);
                 if (label.fieldName == key) {
                     valueTrId.append('<td>' + data[j][key]._text + '</td>');
                     valueTrId.css({
@@ -264,15 +265,9 @@ function drawingDynamicTableValueLabel(label, dt, tableId, numOfData){
                     var td = $('td');
                     td.css('border', '1px solid black');
                 }
-                // if(j + 1 == data.length){
-                //     console.log('여기');
-                //     groupFieldNum++;
-                //     // row = 0;
-                //     // rowLength = numOfData;
-                //     // j = 0;
-                // }
             }
         }
+
     }
 }
 
@@ -291,7 +286,6 @@ function drawingDynamicTableTitleLabel(label, dt){
     temp.forEach(function(titleName){
         if(label.text == titleName){
             titleArray.push(titleName);
-            console.log("header_Name_Number : ",header_Name_Number);
             titleTrId.append('<th id = "DynamicTableTitleLabel'+ header_Name_Number +'_View_Page_Number'+ thNum + '"></th>');
             titleTrId.css({
                 'width': label.rectangle.width,

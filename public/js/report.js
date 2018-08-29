@@ -22,6 +22,9 @@ function makeReportTemplate(data) {
 var reportPageCnt = 1;
 function makeReport(report) {
     var dt = Object.values(dataTable.DataSetName)[0];
+    if(pageNum == 1){
+
+    }
 
     setPage(report);
     setReport(report);
