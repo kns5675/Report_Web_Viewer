@@ -80,14 +80,25 @@ function getNumOfPage(report) {
     }
 }
 
+function getBandHeightWithGroupField(band) {
+
+    var dataCount = groupFieldArray[groupFieldNum].length;
+    var labels = band.controlList.anyType.Labels.TableLabel;
+
+    var titleHeight = Number(labels[0].Rectangle.Height._text);
+    var valueHeight = Number(labels[labels.length - 1].Rectangle.Height._text);
+
+    return valueHeight * dataCount;
+}
 /***********************************************************
  기능 : 밴드 길이 계산
  1. 데이터 밴드를 제외한 밴드 높이 계산
  2. Report Rectangle height - 데이터 밴드를 제외한 밴드높이 = dataBand 길이
  만든이 : 구영준
  * *********************************************************/
-function getBandHeight(bands, reportHeight) {
-    var bandHeightWithoutBandData = 0;
+function getBandHeight(band, reportHeight) {
+
+     var bandHeightWithoutBandData = 0;
     var bandDataHeight = 0;
 
     bands.forEach(function (band) {
@@ -110,9 +121,7 @@ function getBandHeight(bands, reportHeight) {
             bandDataHeight = Number(reportHeight - bandHeightWithoutBandData)
         }
     });
-
     return bandDataHeight;
-
 }
 /***********************************************************
  기능 : 한 페이지에 들어갈 데이터 개수 구하기
