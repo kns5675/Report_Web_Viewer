@@ -35,14 +35,23 @@ function drawBand(bands, layerName, reportHeight){
         var div_id = 'band' + (bandNum++);
         $('#' + layerName).append("<div id='" + div_id + "' class='Band " + band.attributes["xsi:type"] + "'>" + band.name + "</div>");
 
+
+
+        judgementControlList(band, div_id); // 라벨을 그려줌
+
         if (band.attributes["xsi:type"] == 'BandData') {
-            var dataBandHeight = getBandHeight(bands, reportHeight);
+            var dataBandHeight = getBandHeightWithGroupField(band, reportHeight);
             $('#' + div_id).css({
                 'width': band.rectangle.width,
                 'height': dataBandHeight,
                 'border-bottom': "1px solid red"
             });
-        } else {
+        }else if(band.attributes["xsi:type"] === "BandPageFooter"){
+            $('#' + div_id).css({
+                'position' : 'absolute',
+                'bottom' : 0 + "px"
+            });
+        }else {
             $('#' + div_id).css({
                 'width': band.rectangle.width,
                 'height': band.rectangle.height,
@@ -50,7 +59,6 @@ function drawBand(bands, layerName, reportHeight){
             });
         }
 
-        judgementControlList(band, div_id); // 라벨을 그려줌
 
         if(band.attributes["xsi:type"] === "BandGroupHeader") {
             groupDataRow = 0;
