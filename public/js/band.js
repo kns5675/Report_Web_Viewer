@@ -59,6 +59,7 @@ function BandForeGround(band){
 // 페이지 헤더 밴드
 function BandPageHeader(band){
     Band.apply(this, arguments);
+
     this.pageOutputSkip = band.PageOutputSkip._text; // 첫 페이지 출력 생략
     this.isApprovalBase = band.IsApprovalBase._text; // 결재란 기준 밴드
     // 인쇄 미리보기 화면에서,
@@ -147,7 +148,10 @@ function BandGroupHeader(band){
     groupFieldArray = new Array();
     groupFieldName = band.GroupFiledName._text;
     var i = 0;
-    dataTable.DataSetName.dt.forEach(function (data) {
+
+    var dt = Object.values(dataTable.DataSetName)[0];
+
+    dt.forEach(function (data) {
         var comparison = groupFieldArray.some(function (arr) {
             if (arr[0] == data[groupFieldName]._text) {
                 arr.push(data);

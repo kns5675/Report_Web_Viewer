@@ -2,8 +2,6 @@
  기능 : DR Viewer 인쇄 메뉴 선택하기 (select option value받아와서 메뉴 인식 후 모달창 띄우기)
  author : 하지연
  ******************************************************************/
-//import html2canvas from "html2canvas";
-
 function copyoptions(){
     try{
         if ($("#copyOptions").val() == 'ecopy'){
@@ -172,11 +170,6 @@ function resetData(){
 
     $("input:checkbox[name='fontandtilt']").prop("checked",false);
 
-    $("input:radio[name='direction']:radio[value='세로']").prop("checked",true);
-    $("input:radio[name='direction']:radio[value='가로']").prop("checked",false);
-
-    var test = $('input:radio[name="direction"]').val();
-
     $("#pagesizeoptions").val("A4").attr("selected","selected");
 
     $("input:radio[name='copydate']:radio[value='인쇄함']").prop("checked",false);
@@ -198,11 +191,22 @@ function resetData(){
     copyRatioCheck();
     eReSetFont();
 
-    paper_setting("reset",test);
+    //용지방향 설정 초기화
+    paper_setting("reset");
+    //매수인쇄 초기화
     $(".countPage").remove();
+    //출력일 인쇄 초기화
     $(".timePage").remove();
+    //머리글 초기화
     $(".PageHeader").remove();
+    //꼬리글 초기화
     $(".PageFooter").remove();
+    //머리글 입력창, 셀렉트박스 초기화
+    extra_header_using_check();
+    //꼬리글 입력창, 셀렉트박스 초기화
+    extra_tail_using_check();
+    //페이지 사이즈 조정 초기화
+    pagesizeselect("A4");
 };
 /******************************************************************
  기능 : 모달창 닫기 - 데이터값 초기화 밑 기본값 세팅 처리
@@ -405,7 +409,6 @@ function genScreenshot() {
  author : 하지연
  ******************************************************************/
 function testtest(){
-    //import {html2canvas} from 'html2canvas';
     $("#cmd").on("click",function () {
         alert("눌렀음");
         var doc = new jsPDF();
@@ -424,7 +427,6 @@ function testtest(){
             }
         });
     });
-
 }
 
 
@@ -440,4 +442,108 @@ jQuery.browser = {}; //jQuery.browser.msie 사용 위함.
 
 function howmanyPages(thisvalue){
     alert("this value : " + thisvalue);
+}
+
+function band_dbclick_event() {
+    $(".NormalLabel_scope").on({
+        "dblclick": function () {
+            var this_id = this.children[0].id;
+            var current = this.id;
+            console.log("this : ",this);
+            console.log("this_id : ",this_id);
+            console.log("current : ",current);
+            var current_width = this.style.width;
+            var current_height = this.style.height;
+            var this_text = $("#" + this_id)[0].innerText;
+
+            if ($("#text_area")[0] === undefined) {
+                var text_div = document.createElement("div");
+                text_div.id = "text_div";
+
+                var text_area = document.createElement('textarea');
+                text_area.id = "text_area";
+                text_area.value = this_text;
+                text_area.style.width = current_width;
+                text_area.style.height = current_height;
+                text_area.zIndex = 999;
+
+                this.style.borderWidth = "3px";
+                this.style.borderColor = "blue";
+                this.style.borderStyle = "dotted solid";
+
+                document.getElementById(current).appendChild(text_div);
+                document.getElementById(text_div.id).appendChild(text_area);
+
+                document.getElementById(text_area.id).focus();
+            }
+        },
+        "keydown": function (key) {
+            if (key.keyCode === 13) {
+                if(!key.shiftKey){
+                    var insert_text = $("#text_area").val();
+                    var text_convert = insert_text.replace(/(?:\r\n|\r|\n)/g, '<br />'); // html 문법으로 변환.
+                    var this_id = this.children[0].id;
+                    $("#"+this_id)[0].innerHTML = text_convert;
+                    $("#text_div").remove();
+                    this.style.borderWidth = "1px";
+                    this.style.borderColor = "black";
+                    this.style.borderStyle = "solid";
+                }
+            }else if (key.keyCode === 27){
+                $("#text_div").remove();
+                this.style.borderWidth = "1px";
+                this.style.borderColor = "black";
+                this.style.borderStyle = "solid";
+            }
+        }
+    });
+    $(".DynamicTableHeader").on({
+        "dblclick": function () {
+        var current = this.id;
+        console.log("this : ",this);
+        console.log("current : ",current);
+        var current_width = this.style.width;
+        var current_height = this.style.height;
+        var this_text = $("#" + current)[0].innerText;
+
+        if ($("#text_area")[0] === undefined) {
+            var text_div = document.createElement("div");
+            text_div.id = "text_div";
+
+            var text_area = document.createElement('textarea');
+            text_area.id = "text_area";
+            text_area.value = this_text;
+            text_area.style.width = current_width;
+            text_area.style.height = current_height;
+            text_area.zIndex = 999;
+
+            this.style.borderWidth = "3px";
+            this.style.borderColor = "blue";
+            this.style.borderStyle = "dotted solid";
+
+            document.getElementById(current).appendChild(text_div);
+            document.getElementById(text_div.id).appendChild(text_area);
+
+            document.getElementById(text_area.id).focus();
+        }
+    },
+        "keydown": function (key) {
+            if (key.keyCode === 13) {
+                if(!key.shiftKey){
+                    var insert_text = $("#text_area").val();
+                    var text_convert = insert_text.replace(/(?:\r\n|\r|\n)/g, '<br />'); // html 문법으로 변환.
+                    $("#"+this.id)[0].innerHTML = text_convert;
+                    $("#text_div").remove();
+                    this.style.borderWidth = "1px";
+                    this.style.borderColor = "black";
+                    this.style.borderStyle = "solid";
+                }
+            }else if (key.keyCode === 27){
+                $("#text_div").remove();
+                this.style.borderWidth = "1px";
+                this.style.borderColor = "black";
+                this.style.borderStyle = "solid";
+            }
+        }
+    });
 }

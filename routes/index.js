@@ -3,7 +3,6 @@ var router = express.Router();
 
 var convert = require('xml-js');
 var fs = require('fs');
-// var xml = fs.readFileSync('xml/TestSample.xml', 'utf-8');
 var xml = fs.readFileSync('xml/Sample01.xml', 'utf-8');
 // var inspect = require('util').inspect;
 var json_origin = convert.xml2json(xml, {compact : true});

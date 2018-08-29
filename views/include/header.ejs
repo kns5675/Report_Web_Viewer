@@ -38,7 +38,6 @@
             });
             $(".saveAsPdf").on("click", function(){
                 makePdf();  //지연 화면을 pdf로 만드는 function()
-
             });
         });
     </script>
@@ -99,7 +98,7 @@
       <option id="enhancedcopy" value="ecopy">고급인쇄설정</option>
     </select>
   </li>
-  <li><input type="button" value="DRD"></li>
+  <li><input type="button" value="DRD" id="DRD_Start"></li>
   <li><input type="button" value="첫 페이지" id="FirstPage"></li>
   <li><input type="button" value="이전 페이지" id="PreviousPage"></li>
   <li><input type="text" value=1 id="NowPage"> /</li>
@@ -165,7 +164,7 @@
   <li><input type="button" value="HTML"></li>
   <li><input type="button" value="이미지 추가" class="image_upload_button">
   </li>
-  <li><input type="button" value="항목 선택"></li>
+  <li><input type="button" value="항목 선택" id="tableChoice"></li>
 </ul>
 </div>
   </body>
@@ -181,6 +180,8 @@
         LastPage(pagecount);
         HeaderFixAndPageScroll(pagecount);
         image_upload();
+        DRD_button();
+        tableChoice();
         $("#h1 > .test").val();
     });
 
