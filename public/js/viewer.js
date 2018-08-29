@@ -453,14 +453,13 @@ function howmanyPages(thisvalue){
     alert("this value : " + thisvalue);
 }
 
+
+//학준 추가
 function band_dbclick_event() {
     $(".NormalLabel_scope").on({
         "dblclick": function () {
             var this_id = this.children[0].id;
             var current = this.id;
-            console.log("this : ",this);
-            console.log("this_id : ",this_id);
-            console.log("current : ",current);
             var current_width = this.style.width;
             var current_height = this.style.height;
             var this_text = $("#" + this_id)[0].innerText;
@@ -487,8 +486,8 @@ function band_dbclick_event() {
             }
         },
         "keydown": function (key) {
-            if (key.keyCode === 13) {
-                if(!key.shiftKey){
+            if (key.keyCode === 13) { //enter 처리
+                if(!key.shiftKey){  //shift + enter 처리
                     var insert_text = $("#text_area").val();
                     var text_convert = insert_text.replace(/(?:\r\n|\r|\n)/g, '<br />'); // html 문법으로 변환.
                     var this_id = this.children[0].id;
@@ -498,7 +497,7 @@ function band_dbclick_event() {
                     this.style.borderColor = "black";
                     this.style.borderStyle = "solid";
                 }
-            }else if (key.keyCode === 27){
+            }else if (key.keyCode === 27){ //esc 처리
                 $("#text_div").remove();
                 this.style.borderWidth = "1px";
                 this.style.borderColor = "black";

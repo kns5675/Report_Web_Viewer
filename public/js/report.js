@@ -33,13 +33,13 @@ function makeReport(report) {
 
     //현재 찍힌 데이터 로우 행이 전체 데이터 보다 작을 경우 재귀함수
     //클 경우 함수 종료 후 다음 리포트 생성
-    if (curDatarow < dt.length) {
-        reportPageCnt++;
-        makeReport(report);
-    }else{
-        reportPageCnt = 1;
-        return;
-    }
+    // if (curDatarow < dt.length) {
+    //     reportPageCnt++;
+    //     makeReport(report);
+    // }else{
+    //     reportPageCnt = 1;
+    //     return;
+    // }
 }
 /***********************************************************
  기능 : 페이지 계산
@@ -384,7 +384,6 @@ function setPage(report) {
     });
     $("#row_direction").on("click",function () {
         var test = $("#row_direction").val();
-        console.log("test : ",test);
         // if(){
         //
         // }

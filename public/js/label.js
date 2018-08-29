@@ -18,6 +18,7 @@ function Label(data){
     };
 
     this.name = data.Name._text;
+    this.Lock = data.Lock;
     this.dataType = (data.DataType === undefined ? 0 : data.DataType._text); // 데이터 형태
     this.imageTransparent = (data.ImageTransparent === undefined ? 0 : data.ImageTransparent._text); // 이미지 투명도
     this.zOrder = (data.ZOrder === undefined ? 0 : data.ZOrder._text);
@@ -137,6 +138,7 @@ function Table(data){ // ControlList 밑에 anyType이 ControlFixedTable, Contro
         height : data.Rectangle.Height._text
     };
     this.name = data.Name._text;
+    this.Lock = data.Lock;
 
     this.isShowAtColumnSelect = data.IsShowAtColumnSelect._text; // 뷰어 항목 선택 표시 여부
     // 인쇄 미리보기에서 항목선택을 하는 경우 원하는 컬럼을 추가 및 제거할 수 있다.
@@ -153,6 +155,8 @@ function Table(data){ // ControlList 밑에 anyType이 ControlFixedTable, Contro
     this.annexReportName = data.AnnextReportName === undefined ? undefined : data.AnnextReportName._text; // 별지 리포트 명
     this.isFirstPagePrint = data.IsFirstPagePrint === undefined ? undefined : data.IsFirstPagePrint._text; // 첫 페이지만 출력, 결재란 여부가 예 일때 결재란을 첫페이지에만 출력할것인지, 전체 페이지에 출력할것인지 판단하는 값
     this.IsdynamicBinding = data.IsdynamicBinding === undefined ? undefined : data.IsdynamicBinding._text; // 결재란의 컬럼을 동적으로 (수정 못하니까 신경 안써도 됨)
+
+    this.formatType = data.FormatType === undefined ? undefined : data.FormatType._text; // 소수점 자릿수
 }
 
 
