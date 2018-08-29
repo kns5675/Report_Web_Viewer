@@ -53,7 +53,6 @@ function hakjoons(){
     $(".direction").on("change",function () {
         paper_setting();
     });
-
     /******************************************************************
      기능 : 출력일 인쇄 이벤트
      만든이 : hagdung-i
@@ -90,7 +89,6 @@ function hakjoons(){
     $("#extra_header_using_check").on("click", function () {
         extra_header_using_check();
     });
-
     /******************************************************************
      기능 : 꼬리글 체크 값별 이벤트
      만든이 : hagdung-i
@@ -128,9 +126,7 @@ function hakjoons(){
         var input_value = $("#extratail").val();
         footer_location(input_value);
     });
-
 }
-
 /******************************************************************
  기능 : 용지방향 설정 함수.
  만든이 : hagdung-i
@@ -152,8 +148,6 @@ function paper_setting(setting) {
         paperDirection();
     }
 }
-
-
 /******************************************************************
  기능 : 용지 크기 설정 함수.
  만든이 : hagdung-i
@@ -215,7 +209,6 @@ function extra_header_using_check() {
         $(".PageHeader").remove();
     }
 }
-
 /******************************************************************
  기능 : 꼬리글 입력창, 셀렉트박스 함수.
  만든이 : hagdung-i
@@ -235,7 +228,6 @@ function extra_tail_using_check() {
         $(".PageFooter").remove();
     }
 }
-
 /******************************************************************
  기능 : 용지방향 함수.
  만든이 : hagdung-i
@@ -249,7 +241,6 @@ function paperDirection() {
         e.style.height = temp;
     });
 }
-
 /******************************************************************
  기능 : 날짜 그리는 함수.
  만든이 : hagdung-i
@@ -302,7 +293,6 @@ function datePrinting() {
     });
 
 }
-
 /******************************************************************
  기능 : 페이징 그려주는 함수.
  만든이 : hagdung-i
@@ -344,7 +334,6 @@ function countPrinting() {
         document.getElementById(count_Packing.id).appendChild(count_tag);
     });
 }
-
 /******************************************************************
  기능 : 머리글 그리는 함수.
  만든이 : hagdung-i
@@ -426,7 +415,6 @@ function header_location(input_value){
         }
     }
 }
-
 /******************************************************************
  기능 : 꼬리글 그리는 함수.
  만든이 : hagdung-i
@@ -508,7 +496,6 @@ function footer_location(input_value){
         }
     }
 }
-
 /******************************************************************
  기능 : 고급인쇄 -  결재란 칸수 지정 데이터 유효성 검증
  author : 하지연

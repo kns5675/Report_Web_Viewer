@@ -14,9 +14,7 @@ function makeReportTemplate(data) {
         var report = reportTemplate.reportList[i];
         makeReport(report);
     });
-
 }
-
 /******************************************************************
  기능 : make report in function makeReportTemplate
  author : powerku
@@ -39,8 +37,7 @@ function makeReport(report) {
         reportPageCnt = 1;
         return;
     }
-}
-
+}ㄴ
 /***********************************************************
  기능 : 페이지 계산
  전체 데이터 / 한페이지 데이터 = 페이지 개수
@@ -114,7 +111,6 @@ function getBandHeight(bands, reportHeight) {
     return bandDataHeight;
 
 }
-
 /***********************************************************
  기능 : 한 페이지에 들어갈 데이터 개수 구하기
  : (밴드 길이 - 첫 행 높이) / 데이터 라벨 높이 => 한페이지에 들어가야할 밴드 개수
@@ -131,7 +127,6 @@ function getNumOfDataInOnePage(tableLabel, divId) {
     var dataLine = Number(tableLabel[tableLabel.length - 1].rectangle.height);
     return Math.floor((bandDataHeight - firstLine) / dataLine);
 }
-
 /******************************************************************
  기능 : 디자인 레이어 세팅
  author : powerku
@@ -153,7 +148,6 @@ function setDesignLayer(report) {
     var reportHeight = report.rectangle.height;
     drawBand(report.layers.designLayer.bands, layerName, reportHeight); // 추가 - 전형준
 }
-
 /******************************************************************
  기능 : 디자인 레이어 방향 세팅
  author : powerku
@@ -172,9 +166,6 @@ function setDesignLayerDirection(report) {
         });
     }
 }
-
-
-
 /******************************************************************
  기능 : 백그라운드레이어 세팅
  author : powerku
@@ -195,9 +186,7 @@ function setBackGroundLayer(report) {
 
     var layerName = "backGroundLayer" + pageNum;
     drawBand(report.layers.backGroundLayer.bands, layerName); // 추가 - 전형준
-
 }
-
 /******************************************************************
  기능 : 백그라운드레이어 방향 설정에 따른 크기 세팅
  author : powerku
@@ -217,8 +206,6 @@ function setBackGroundLayerDirection(report) {
         });
     }
 }
-
-
 /******************************************************************
  기능 : 포그라운드 레이어 크기 세팅
  author : powerku
@@ -240,7 +227,6 @@ function setForeGroundLayer(report) {
     var layerName = "foreGroundLayer" + pageNum;
     drawBand(report.layers.foreGroundLayer.bands, layerName); // 추가 - 전형준
 }
-
 /******************************************************************
  기능 : 포그라운드 레이어 방향 설정에 따른 크기 세팅
  author : powerku

@@ -348,7 +348,7 @@ function example(){
 
                var doc = new jsPDF("p","mm",[297,210]);
                console.log(imgData);
-               doc.addImage(imgData,'JPEG',5,5,210,297);
+               doc.addImage(imgData,'JPEG',0,15,210,297);
                doc.save('test.pdf');
            }
        });
