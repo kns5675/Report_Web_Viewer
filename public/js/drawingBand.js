@@ -12,7 +12,6 @@ var bandNum = 1;
  * *********************************************************/
 function drawBand(bands, layerName, reportHeight){
     bands.forEach(function (band) { // 밴드 갯수만큼 반복문 돌음
-
         // 페이지 헤더 밴드의 속성 '첫 페이지 출력 생략(PageOutputSkip)' 속성값이 'true'면 출력X
         if(band.attributes["xsi:type"] === "BandPageHeader" && band.pageOutputSkip === "true"){
             return;
@@ -36,14 +35,23 @@ function drawBand(bands, layerName, reportHeight){
         var div_id = 'band' + (bandNum++);
         $('#' + layerName).append("<div id='" + div_id + "' class='Band " + band.attributes["xsi:type"] + "'>" + band.name + "</div>");
 
+
+
+        judgementControlList(band, div_id); // 라벨을 그려줌
+
         if (band.attributes["xsi:type"] == 'BandData') {
-            var dataBandHeight = getBandHeight(bands, reportHeight);
+            var dataBandHeight = getBandHeightWithGroupField(band, reportHeight);
             $('#' + div_id).css({
                 'width': band.rectangle.width,
                 'height': dataBandHeight,
                 'border-bottom': "1px solid red"
             });
-        } else {
+        }else if(band.attributes["xsi:type"] === "BandPageFooter"){
+            $('#' + div_id).css({
+                'position' : 'absolute',
+                'bottom' : 0 + "px"
+            });
+        }else {
             $('#' + div_id).css({
                 'width': band.rectangle.width,
                 'height': band.rectangle.height,
@@ -51,11 +59,20 @@ function drawBand(bands, layerName, reportHeight){
             });
         }
 
+
+        if(band.attributes["xsi:type"] === "BandGroupHeader") {
+            groupDataRow = 0;
+        }
+        if(band.attributes["xsi:type"] === "BandGroupFooter") {
+            curDatarow += (groupFieldArray[groupFieldNum].length-1);
+            groupFieldNum++;
+        }
+
+
+
         if(band.childFooterBands !== null){ // 자식 풋터 밴드에서 재호출
             drawBand(band.childFooterBands, layerName, reportHeight);
         }
-
-        judgementControlList(band, div_id); // 라벨을 그려줌
 
     });
 }
