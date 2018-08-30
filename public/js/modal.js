@@ -135,8 +135,6 @@ function hakjoons(){
 function paper_setting(setting) {
     //용지방향 설정 가로와 세로를 서로 뒤바꿔주는 식의 형태인데, 가로에 해당하는 라디오 박스가 선택 되어 있을 때만 초기화시 세로로 되돌림.
     var test = $('input:radio[name="direction"]').prop("checked");
-    console.log("test : ", test);
-    console.log("setting : ", setting);
     if(setting){
         if(!test){
             paperDirection();
@@ -144,7 +142,6 @@ function paper_setting(setting) {
             $("input:radio[name='direction']:radio[value='가로']").prop("checked",false);
         }
     }else{
-        console.log("test : ",test);
         paperDirection();
     }
 }

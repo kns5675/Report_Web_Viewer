@@ -1,3 +1,99 @@
+var docheight; //297
+var docwidth; //210
+var doc;// = new jsPDF('p','mm',[297,210]);
+/******************************************************************
+ 기능 : 화면을 pdf로 만드는 기능
+ author : 하지연
+ /* console.log("왔음");
+ html2canvas(document.getElementById("forcopyratio1"),{
+        onrendered:function (canvas) {
+            var imgData = canvas.toDataURL('image/png');
+            console.log("imgData : " + imgData );
+            var dataUrl = canvas.toDataURL();
+            var doc = new jsPDF('p','mm',[297,210]);
+            console.log('doc : ' + doc);
+            doc.addImage(imgData,'PNG',10,10,190,95);
+            doc.save('sample-file.pdf');
+        }
+    });
+ ******************************************************************/
+function makePdf() {
+    //도큐먼트 내의 #pageForCopyRatio1의 width, height값 가져옴.(px -> mm & String -> Number)
+    var docwidth1 = Number(($("#page1").css("width")).replace(/[^0-9]/g,''));
+    var docheight1 = Number(($("#page1").css("height")).replace(/[^0-9]/g,''));
+
+    docwidth1=((docwidth1/96)*25.4).toFixed(1);
+    docheight1=((docheight1/96)*0.254).toFixed(1);
+
+    docwidth1 = Math.floor(Number(docwidth1))-1;
+    docheight1 = Math.floor(Number(docheight1))-1;
+
+    var pHeight = Number(297);
+    var pWidth = Number(210);
+
+
+    console.log("this width : " + docwidth1 + " type : " + typeof docwidth1); //페이지 세로일 때 210 //페이지 가로일떄 297
+    console.log("this height : " + docheight1 + " type : " + typeof docheight1); //페이지 세로일때 297 //페이지 세로일때 210
+
+    //Dr Viewer의 고급인쇄에서 용지방향을 바꿨을 경우 pdf orientation값 변경 처리
+    var pageOrientation;
+
+    if(docwidth1==210){
+        pageOrientation='p';
+        docwidth1 = Number(210);
+        docheight1 = Number(297);
+        beforeSaving(pageOrientation,docwidth1,docheight1);
+        console.log("세로일때 page orientation : "+pageOrientation);
+
+    }else {
+        docwidth1 = Number(297);
+        docheight1 = Number(210);
+        pageOrientation='l';
+        beforeSaving(pageOrientation,docwidth1,docheight1);
+        console.log("가로일때 page orientation : "+pageOrientation);
+    }
+
+    function beforeSaving(pageOrientation,docwidth1,docheight1){
+        if(pageOrientation =='p'){
+            console.log("세로 before saving 들어왔음");
+            createPdf(pageOrientation,docwidth1,docheight1);
+        }else if(pageOrientation == 'l'){
+            console.log("가로 before saving 들어왔음");
+            createPdf(pageOrientation,docwidth1,docheight1);
+        }
+
+        function createPdf(pageOrientation){
+            doc = new jsPDF(pageOrientation,'mm',[docheight1,docwidth1]);
+            console.log("docheight1 : "+docheight1 + " docwidth1 : "+docwidth1);
+
+            $(".pageforcopyratio").each(function (i, e, pageOrientation) {
+                //console.log("PAGE ORIENTATION : " + pageOrientation);
+                docheight = (e.style.height).replace(/[^0-9]/g,'');
+                docheight = (((Number(docheight))/96)*2.54).toFixed(1);
+                docheight = Math.floor(Number(docheight))-1;
+
+                docwidth = (e.style.width).replace(/[^0-9]/g,'');
+                docwidth = (((Number(docwidth))/96)*25.4).toFixed(1);
+                docwidth = Math.floor(Number(docwidth))-1;
+
+                var pageForCopyRatioNum = e.id.replace(/[^0-9]/g,'');
+                console.log("pageForCopyRatioNum : " + pageForCopyRatioNum);
+                html2canvas(document.querySelector("#pageForCopyRatio"+pageForCopyRatioNum)).then(canvas => {
+                    console.log("들어왔는강" + " docwidth1 : "+docwidth1 + " " + typeof docwidth1 + " docheight1 : "+ docheight1 + " " + typeof docheight1);
+                    var img = canvas.toDataURL("image/png");
+                    doc.addPage().addImage(img,'PNG',0,0,docwidth1,docheight1);
+                });
+            });
+
+        }
+            console.log("doc : ", doc);
+    }
+}
+function saving (){
+    console.log("들어왔어욤1");
+    doc.deletePage(1);  //더미 페이지 삭제
+    doc.save('saveAsPdf.pdf');
+}
 /******************************************************************
  기능 : DR Viewer 인쇄 메뉴 선택하기 (select option value받아와서 메뉴 인식 후 모달창 띄우기)
  author : 하지연
@@ -239,23 +335,23 @@ function imageOptions(){
         if ($("#saveAsImage").val() == 'png'){
 
             var typeofimages = $("#saveAsImage").val();
-            alert(typeofimages);
+            console.log("type of images : "+ typeofimages);
             saveImages(typeofimages);
         }else if($("#saveAsImage").val() == 'jpeg'){
             var typeofimages = $("#saveAsImage").val();
-            alert(typeofimages);
+            console.log("type of images : "+ typeofimages);
             saveImages(typeofimages);
         }else if($("#saveAsImage").val() == 'bmp'){
             var typeofimages = $("#saveAsImage").val();
-            alert(typeofimages);
+            console.log("type of images : "+ typeofimages);
             saveImages(typeofimages);
         }else if($("#saveAsImage").val() == 'tiff'){
             var typeofimages = $("#saveAsImage").val();
-            alert(typeofimages);
+            console.log("type of images : "+ typeofimages);
             saveImages(typeofimages);
         }else if($("#saveAsImage").val() == 'gif'){
             var typeofimages = $("#saveAsImage").val();
-            alert(typeofimages);
+            console.log("type of images : "+ typeofimages);
             saveImages(typeofimages);
         }else{
             console.log("인식못했음");
@@ -296,45 +392,23 @@ function saveImages(typeofimages){
 
     $("#saveAsImage").val("--이미지--").attr("selected","selected");
 }
-/******************************************************************
- 기능 : 화면을 pdf로 만드는 기능
- author : 하지연
- ******************************************************************/
-function makePdf() {
-   /* console.log("왔음");
-    html2canvas(document.getElementById("forcopyratio1"),{
-        onrendered:function (canvas) {
-            var imgData = canvas.toDataURL('image/png');
-            console.log("imgData : " + imgData );
-            var dataUrl = canvas.toDataURL();
-            var doc = new jsPDF('p','mm',[297,210]);
-            console.log('doc : ' + doc);
-            doc.addImage(imgData,'PNG',10,10,190,95);
-            doc.save('sample-file.pdf');
-        }
-    });*/
 
-    $(".page").each(function (i, e) {
-        var pageForCopyRatioNum = e.id.replace(/[^0-9]/g,'');
 
-        makePdf2(pageForCopyRatioNum);//인쇄배율 변경 펑션
+/*
+promise 예제
+function pre(){
+    return new Promise(function (resolve, reject) {
+        var data11 = 100;
+        resolve(data11);
+
+        console.log("100이전에!!")
     });
-}
-function makePdf2(pageForCopyRatioNum){
-    console.log("pageForCopyRatioNum : " + pageForCopyRatioNum);
+};
 
-    html2canvas(document.querySelector("#pageForCopyRatio"+pageForCopyRatioNum)).then(canvas => {
-        var img = canvas.toDataURL("image/png");
-        var doc= new jsPDF('p','mm',[297,210]);
-        doc.addImage(img,'PNG',10,10,190,95);
 
-    });
-    doc.save('saveaspdf.pdf');
-       /* //document.body.appendChild(canvas); //바디에 캔버스 appendchild로 붙이는거.
-        var img = canvas.toDataURL("image/png");
-        window.open().document.write('<img src="' + img + '" />');*/
-    }
-
+pre().then(function(resolvedData){
+    console.log("############## : "+resolvedData);//100찍힘.
+});*/
 
 function example(){
       var doc = new jsPDF();
@@ -453,14 +527,13 @@ function howmanyPages(thisvalue){
     alert("this value : " + thisvalue);
 }
 
+
+//학준 추가
 function band_dbclick_event() {
     $(".NormalLabel_scope").on({
         "dblclick": function () {
             var this_id = this.children[0].id;
             var current = this.id;
-            console.log("this : ",this);
-            console.log("this_id : ",this_id);
-            console.log("current : ",current);
             var current_width = this.style.width;
             var current_height = this.style.height;
             var this_text = $("#" + this_id)[0].innerText;
@@ -487,8 +560,8 @@ function band_dbclick_event() {
             }
         },
         "keydown": function (key) {
-            if (key.keyCode === 13) {
-                if(!key.shiftKey){
+            if (key.keyCode === 13) { //enter 처리
+                if(!key.shiftKey){  //shift + enter 처리
                     var insert_text = $("#text_area").val();
                     var text_convert = insert_text.replace(/(?:\r\n|\r|\n)/g, '<br />'); // html 문법으로 변환.
                     var this_id = this.children[0].id;
@@ -498,7 +571,7 @@ function band_dbclick_event() {
                     this.style.borderColor = "black";
                     this.style.borderStyle = "solid";
                 }
-            }else if (key.keyCode === 27){
+            }else if (key.keyCode === 27){ //esc 처리
                 $("#text_div").remove();
                 this.style.borderWidth = "1px";
                 this.style.borderColor = "black";

@@ -37,7 +37,6 @@ function judgementControlList(band, divId) {
     }
     if (!(band.controlList.anyType === undefined)) { // ControlList 태그 안에 뭔가가 있을 때
         var controlList = band.controlList.anyType;
-
         if (Array.isArray(controlList)) {
             controlList.forEach(function (list) {
                 judgementLabel(list, divId);
@@ -152,7 +151,6 @@ function judgementLabel(data, divId) {
 function drawingDynamicTable(table, tableLabel, divId) {
     var div = $('#' + divId);
     div.append('<div id = "Table' + tableNum + '"></div>');
-
     var divIdTable = $('#Table' + tableNum);
     divIdTable.append('<div id="dynamicTable_resizing_div_packing'+dynamicTableNum + '"></div>');
     var dynamicTable_resizing_div_packing = $("#dynamicTable_resizing_div_packing"+dynamicTableNum);
@@ -168,14 +166,9 @@ function drawingDynamicTable(table, tableLabel, divId) {
         'left': table.rectangle.x + 'px',
         'top': table.rectangle.y + 'px'
     });
-
     var tableId = $('#dynamicTable' + dynamicTableNum);
-    dynamicTable_resizing_div.draggable({containment:"#"+div[0].id, zIndex: 999});
-    tableId.resizable({containment:"#"+div[0].id, autoHide: true,
-        resize: function(event, ui) {   //테이블사이즈는 가로만 조정 가능하도록.
-            ui.size.height = ui.originalSize.height;
-        }
-    });
+    Lock_Check_Table(table, dynamicTable_resizing_div, tableId, div);
+    // table_format_check(table, dynamicTable_resizing_div, tableId, div);
     tableId.css({
         'width': table.rectangle.width + 'px',
         'height': table.rectangle.height + 'px'
@@ -192,7 +185,7 @@ function drawingDynamicTable(table, tableLabel, divId) {
                     drawingDynamicTableTitleLabel(label, dt);
                     break;
               case "DynamicTableValueLabel" :
-                    drawingDynamicTableValueLabel(label, dt, tableId, numOfData);
+                    drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table);
                     break;
             }
         });
@@ -227,8 +220,10 @@ function drawingDynamicTableValueLabel(label, dt, tableId, numOfData){
             for (key in data) {
                 if (label.fieldName == key) {
                     var valueTrId = $('#dynamicValueLabel' + curDatarow);
+                    var key_data = data[key]._text;
+                    var table_reform = table_format_check(data, valueTrId, key_data, table);
                     valueTrId.append(
-                        '<td class="Label ' + label._attributes + ' ' + label.dataType + '">' + data[key]._text + '</td>'
+                        '<td class="Label ' + label._attributes + ' ' + label.dataType + '">' + table_reform + '</td>'
                     );
                     valueTrId.css({
                         'width': label.rectangle.width,
@@ -253,7 +248,7 @@ function drawingDynamicTableValueLabel(label, dt, tableId, numOfData){
             for (key in data[j]) {
                 var valueTrId = $('#dynamicValueLabel' + rowNum);
                 if (label.fieldName == key) {
-                    valueTrId.append('<td>' + data[j][key]._text + '</td>');
+                    valueTrId.append('<td class="Label ' + label._attributes + ' ' + label.dataType + '">' + data[j][key]._text + '</td>');
                     valueTrId.css({
                         'width': label.rectangle.width,
                         'height': label.rectangle.height,
@@ -267,7 +262,6 @@ function drawingDynamicTableValueLabel(label, dt, tableId, numOfData){
                 }
             }
         }
-
     }
 }
 
@@ -301,6 +295,7 @@ function drawingDynamicTableTitleLabel(label, dt){
             thId.append(titleName);
             thId.addClass('Label DynamicTableHeader');
             thId.addClass(label._attributes);
+            table_column_controller(thId, titleTrId);
         }
         header_Name_Number++;
     });
@@ -401,8 +396,7 @@ function drawingSystemLabel(data, divId) {
         'border': '1px solid black',
         'background-color' : data.backGroundColor
     });
-    systemLabelId.draggable({containment:"#"+div[0].id, zIndex: 999});
-    systemLabelId.resizable({containment:"#"+div[0].id, autoHide: true});
+    Lock_check(data, systemLabelId, div);
     var date = new Date();
     switch (data.systemFieldName) {
         case 'Date' :
@@ -537,7 +531,6 @@ function drawingSummaryLabel(data, divId) {
     var div = $('#' + divId);
     div.css('position', 'relative');
     div.append('<div id = "SummaryLabel' + summaryLabelNum + '">SummaryLabel</div>');
-
     var summaryLabelId = $('#SummaryLabel' + summaryLabelNum);
     summaryLabelId.addClass("NormalLabel_scope");
     summaryLabelId.css({
@@ -552,8 +545,7 @@ function drawingSummaryLabel(data, divId) {
     });
 
     summaryLabelId.append('<p id = "PSummaryLabel' + summaryLabelNum + '"></p>');
-    summaryLabelId.draggable({containment:"#"+div[0].id, zIndex: 999});
-    summaryLabelId.resizable({containment:"#"+div[0].id, autoHide: true});
+    Lock_check(data, summaryLabelId, div);
     var pId = $('#PSummaryLabel' + summaryLabelNum);
 
     pId.css({
@@ -581,12 +573,15 @@ function drawingSummaryLabel(data, divId) {
  수정 : DataLabel의 크기 조정, 위치 이동, 내용 수정 추가.
  Date : 2018-08-27
  From hagdung-i
+
+ 수정 : DataLabel의 크기 조정, 위치 이동이 lock 속성이 있을 경우 수정 불가한 로직 추가.
+ Date : 2018-08-28
+ From hagdung-i
  ******************************************************************/
 function drawingDataLabel(data, divId) {
     var div = $('#' + divId);
     div.css('position', 'relative');
     div.append('<div id = "DataLabel' + dataLabelNum + '"></div>');
-
     var dataLabelId = $('#DataLabel' + dataLabelNum);
     dataLabelId.css({
         'width': data.rectangle.width,
@@ -598,10 +593,9 @@ function drawingDataLabel(data, divId) {
         'border': '1px solid black',
         'background-color' : data.backGroundColor
     });
-
     dataLabelId.append('<p id = "PDataLabel' + dataLabelNum + '"></p>');
-    dataLabelId.draggable({containment:"#"+div[0].id, zIndex: 999});
-    dataLabelId.resizable({containment:"#"+div[0].id, autoHide: true});
+    Lock_check(data, dataLabelId, div);
+
     var pId = $('#PDataLabel' + dataLabelNum);
 
     pId.css({
@@ -624,7 +618,6 @@ function drawingDataLabel(data, divId) {
 
     dataLabelNum++;
 }
-
 /******************************************************************
  기능 : NormalLabel(일반 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 안예솔
@@ -636,12 +629,15 @@ function drawingDataLabel(data, divId) {
  수정 : NormalLabel의 크기 조정, 위치 이동, 내용 수정 추가.
  Date : 2018-08-27
  From hagdung-i
+
+ 수정 : 크기 조정, 위치 이동, 내용 수정 추가 기능 함수화 및 p 태그 내부 데이터 넣는 방식 변경.
+ Date : 2018-08-28
+ From hagdung-i
  ******************************************************************/
 function drawingNormalLabel(data, divId) {
     var div = $('#' + divId);
     div.css('position', 'relative');
     div.append('<div id = "NormalLabel' + normalLabelNum + '"></div>');
-
     var normalLabelId = $('#NormalLabel' + normalLabelNum);
 
     normalLabelId.addClass("NormalLabel_scope");
@@ -660,9 +656,10 @@ function drawingNormalLabel(data, divId) {
         'background-color' : data.backGroundColor,
         'zIndex' : 999
     });
-    normalLabelId.append('<p id = "PNormalLabel' + normalLabelNum + '"></p>');
-    normalLabelId.draggable({containment:"#"+div[0].id, zIndex: 999});
-    normalLabelId.resizable({containment:"#"+div[0].id, autoHide: true});
+    normalLabelId.append('<p id = "PNormalLabel' + normalLabelNum + '">'+format_check(data)+'</p>');
+
+    Lock_check(data, normalLabelId, div);
+
     var pId = $('#PNormalLabel' + normalLabelNum);
 
     pId.css({
@@ -670,9 +667,8 @@ function drawingNormalLabel(data, divId) {
         'font-family' : data.fontFamily,
         'font-weight' : data.fontStyle
     });
-    toStringFn(data.text, "PNormalLabel" + normalLabelNum);
+    // toStringFn(data.text, "PNormalLabel" + normalLabelNum);
     // textEqualDivision(data.text, "PNormalLabel" + normalLabelNum);
-
 
     verticalCenter('PNormalLabel' + normalLabelNum); // 텍스트 수직 정렬이 중간인 경우
     // verticalTop('PNormalLabel' + normalLabelNum); // 텍스트 수직 정렬이 위쪽인 경우
@@ -683,7 +679,6 @@ function drawingNormalLabel(data, divId) {
     pId.addClass('NormalLabel');
     normalLabelNum++;
 }
-
 /******************************************************************
  기능 : Expression(수식 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 안예솔
@@ -700,7 +695,6 @@ function drawingExpression(data, divId) {
     var div = $('#' + divId);
     div.css('position', 'relative');
     div.append('<div id = "Expression' + expressionNum + '">Expression</div>');
-
     var expressionId = $('#Expression' + expressionNum);
     expressionId.addClass("NormalLabel_scope");
     expressionId.css({
@@ -713,10 +707,8 @@ function drawingExpression(data, divId) {
         'border': '1px solid black',
         'background-color' : data.backGroundColor
     });
-
     expressionId.append('<p id = "PExpression' + expressionNum + '"></p>');
-    expressionId.draggable({containment:"#"+div[0].id, zIndex: 999});
-    expressionId.resizable({containment:"#"+div[0].id, autoHide: true});
+    Lock_check(data, expressionId, div);
     var pId = $('#PExpression' + expressionNum);
 
     pId.css({
@@ -733,7 +725,6 @@ function drawingExpression(data, divId) {
 
     expressionNum++;
 }
-
 /******************************************************************
  기능 : GroupLabel(그룹 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 안예솔
@@ -759,11 +750,8 @@ function drawingGroupLabel(data, divId) {
         'border': '1px solid black',
         'background-color' : data.backGroundColor
     });
-
     groupLabelId.append('<p id = "PGroupLabel' + groupLabelNum + '"></p>');
-    groupLabelId.draggable({containment:"#"+div[0].id, zIndex: 999});
-    $(".ui-resizable-handle ui-resizable-se ui-icon ui-icon-gripsmall-diagonal-se").hide();
-    groupLabelId.resizable({containment:"#"+div[0].id, autoHide: true});
+    Lock_check(data, groupLabelId, div);
     var pId = $('#PGroupLabel' + groupLabelNum);
 
     pId.css({
@@ -780,7 +768,6 @@ function drawingGroupLabel(data, divId) {
 
     groupLabelNum++;
 }
-
 /******************************************************************
  기능 : ParameterLabel(파라미터 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 안예솔
@@ -806,10 +793,8 @@ function drawingParameterLabel(data, divId) {
         'border': '1px solid black',
         'background-color' : data.backGroundColor
     });
-
     parameterLabelId.append('<p id = "PParameterLabel' + parameterLabelNum + '"></p>');
-    parameterLabelId.draggable({containment:"#"+div[0].id, zIndex: 999});
-    parameterLabelId.resizable({containment:"#"+div[0].id, autoHide: true});
+    Lock_check(data, parameterLabelId, div);
     var pId = $('#PParameterLabel' + parameterLabelNum);
 
     pId.css({
@@ -826,8 +811,6 @@ function drawingParameterLabel(data, divId) {
 
     parameterLabelNum++;
 }
-
-
 /******************************************************************
  기능 : 시간 또는 날짜를 출력할 때 한 자리 숫자일 경우 0을 붙여줘서 두 자리 숫자로 출력 해주는 함수를 만든다.
  만든이 : 안예솔
@@ -839,7 +822,6 @@ function plusZero(data) {
     }
     return data;
 }
-
 /******************************************************************
  기능 : 한 글자씩 출력하는 함수를 만든다.
  만든이 : 안예솔
@@ -853,7 +835,6 @@ function toStringFn(text, pTagId) {
     }
     tag.append(appendStr);
 }
-
 /******************************************************************
  기능 : 텍스트 수평 정렬이 균등분할인 속성을 구현한다.
  만든이 : 안예솔
@@ -881,7 +862,6 @@ function textEqualDivision(text, pTagId) {
     var spacing = (parentWidth[0] - fontsize[0] * num) / (num - 1);
     tag.append('<p style = "letter-spacing : ' + spacing + 'px; margin:0px;">' + appendStr + '</p>');
 }
-
 /******************************************************************
  기능 : 텍스트 수직 정렬이 가운데인 속성을 구현한다.
  만든이 : 안예솔
@@ -905,8 +885,6 @@ function verticalCenter(pTagId) {
         'margin-bottom' : mid + 'px'
     });
 }
-
-
 /******************************************************************
  기능 : 텍스트 수직 정렬이 위쪽인 속성을 구현한다.
  만든이 : 안예솔
@@ -918,7 +896,6 @@ function verticalTop(pTagId) {
         'margin-top' : '0px'
     });
 }
-
 /******************************************************************
  기능 : 텍스트 수직 정렬이 아래쪽인 속성을 구현한다.
  만든이 : 안예솔
@@ -942,7 +919,6 @@ function verticalBottom(pTagId) {
         'margin-bottom' : '0px'
     });
 }
-
 /******************************************************************
  기능 : 텍스트 수직 정렬이 균등분할인 속성을 구현한다.
  만든이 : 안예솔
@@ -977,3 +953,91 @@ function verticalCenterEqualDivision(pTagId) {
         divBr.remove();
     }
 }
+/******************************************************************
+ 기능 : 각각의 형태의 Label id와 데이터를 받아서 lock이 걸려있는 라벨을 제외한 라벨들의 위치 이동, 크기 조정 기능 추가.
+ Date : 2018-08-24
+ 만든이 : hagdung-i
+ ******************************************************************/
+function Lock_check(data, Label_id, div) { //라벨 데이터, 드래그 리사이즈 영역, 벗어나면 안되는 영역
+    var Lock_check;
+    if(data.Lock === undefined){
+        Lock_check = data.Lock;
+    }else{
+        Lock_check = data.Lock._text;
+    }
+    if(!Lock_check) {
+        Label_id.draggable({containment: "#" + div[0].id, zIndex: 999});
+        Label_id.resizable({containment: "#" + div[0].id, autoHide: true});
+    }
+}
+/******************************************************************
+ 기능 : 각각의 형태의 테이블의 id와 데이터를 받아서 lock이 걸려있는 라벨을 제외한 라벨들의 위치 이동, 크기 조정 기능 추가.
+ Date : 2018-08-24
+ 만든이 : hagdung-i
+ ******************************************************************/
+function Lock_Check_Table(data, drag, resize, div) { //테이블 데이터, 드래거블 지정할 영역, 리사이즈 영역, 위치 이동시 벗어나면 안되는 영역
+    var Lock_check;
+    if(data.Lock === undefined){
+        Lock_check = data.Lock;
+    }else{
+        Lock_check = data.Lock._text;
+    }
+    if(!Lock_check) {
+        drag.draggable({containment: "#" + div[0].id, zIndex: 999});
+        resize.resizable({
+            containment: "#" + div[0].id, autoHide: true,
+            resize: function (event, ui) {   //테이블사이즈는 가로만 조정 가능하도록.
+                ui.size.height = ui.originalSize.height;
+            }
+        });
+    }
+}
+/******************************************************************
+ 기능 : 라벨 데이터 포맷을 확인해서 소수점 자릿수 설정 값에 따라 해당 형태로 변경 로직 추가.
+ Date : 2018-08-24
+ 만든이 : hagdung-i
+ ******************************************************************/
+function format_check(data) {
+    var test = data.formatType;
+    var num_check = data.text.replace(/[^0-9]/g,""); //데이터에서 숫자만 추출.
+    var data_text = data.text;
+    // console.log("test: ",test);
+    if(test == "AmountSosu"){   //추후, 다른 7가지의 속성을 알게되면 else if로 추가해야함.
+        if(num_check != ""){ //해당 데이터가 숫자인 경우내려
+            console.log("num_check : ",num_check);
+            data_text = num_check.replace(/\B(?=(\d{3})+(?!\d))/g, ","); //천단위로 콤마를 찍어줌.
+        }
+        return data_text;
+    }else{
+        return data_text;
+    }
+}
+/******************************************************************
+ 기능 : 테이블 안의 데이터 포맷을 확인해서 소수점 자릿수 설정 값에 따라 해당 형태로 변경 로직 추가.
+ Date : 2018-08-24
+ 만든이 : hagdung-i
+ ******************************************************************/
+function table_format_check(data, Label_id, key, table) {
+    var test = table.formatType;
+    if(test == "AmountSosu"){
+        if(key != NaN){ //해당 데이터가 숫자일 경우
+            var data_text = key.replace(/\B(?=(\d{3})+(?!\d))/g, ","); //천단위로 콤마를 찍어줌.
+        }
+        return data_text;
+    }else{
+        return key;
+    }
+}
+/******************************************************************
+ 기능 : 테이블 항목별 크기조정 기능
+ Date : 2018-08-30
+ 만든이 : hagdung-i
+ ******************************************************************/
+function table_column_controller(resize_area, Unalterable_area){
+    resize_area.resizable({
+        containment: "#" + Unalterable_area[0].id, autoHide: true,
+        resize: function (event, ui) {   //테이블사이즈는 가로만 조정 가능하도록.
+            ui.size.height = ui.originalSize.height;
+        }
+    });
+};
