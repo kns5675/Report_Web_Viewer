@@ -80,6 +80,12 @@ function getNumOfPage(report) {
     }
 }
 
+/***********************************************************
+ 기능 : 그룹 헤더/풋터 일 경우 데이터 밴드 길이 계산 
+ 1. 그룹 헤더/풋터 일 경우 그룹 데이터의 길이 만큼의 데이터 길이
+ 2. th 길이 + td길이 * 데이터 개수
+ 만든이 : 구영준
+ * *********************************************************/
 function getBandHeightWithGroupField(band) {
 
     var dataCount = groupFieldArray[groupFieldNum].length;
@@ -88,17 +94,18 @@ function getBandHeightWithGroupField(band) {
     var titleHeight = Number(labels[0].Rectangle.Height._text);
     var valueHeight = Number(labels[labels.length - 1].Rectangle.Height._text);
 
-    return valueHeight * dataCount;
+    return titleHeight + valueHeight * dataCount;
 }
+
 /***********************************************************
- 기능 : 밴드 길이 계산
+ 기능 : 데이터 밴드 길이 계산
  1. 데이터 밴드를 제외한 밴드 높이 계산
  2. Report Rectangle height - 데이터 밴드를 제외한 밴드높이 = dataBand 길이
  만든이 : 구영준
  * *********************************************************/
 function getBandHeight(band, reportHeight) {
 
-     var bandHeightWithoutBandData = 0;
+    var bandHeightWithoutBandData = 0;
     var bandDataHeight = 0;
 
     bands.forEach(function (band) {
