@@ -295,6 +295,7 @@ function drawingDynamicTableTitleLabel(label, dt){
             thId.append(titleName);
             thId.addClass('Label DynamicTableHeader');
             thId.addClass(label._attributes);
+            table_column_controller(thId, titleTrId);
         }
         header_Name_Number++;
     });
@@ -976,7 +977,7 @@ function verticalCenterEqualDivision(pTagId) {
  Date : 2018-08-24
  만든이 : hagdung-i
  ******************************************************************/
-function Lock_check(data, Label_id, div) {
+function Lock_check(data, Label_id, div) { //라벨 데이터, 드래그 리사이즈 영역, 벗어나면 안되는 영역
     var Lock_check;
     if(data.Lock === undefined){
         Lock_check = data.Lock;
@@ -994,7 +995,7 @@ function Lock_check(data, Label_id, div) {
  Date : 2018-08-24
  만든이 : hagdung-i
  ******************************************************************/
-function Lock_Check_Table(data, drag, resize, div) {
+function Lock_Check_Table(data, drag, resize, div) { //테이블 데이터, 드래거블 지정할 영역, 리사이즈 영역, 위치 이동시 벗어나면 안되는 영역
     var Lock_check;
     if(data.Lock === undefined){
         Lock_check = data.Lock;
@@ -1009,6 +1010,28 @@ function Lock_Check_Table(data, drag, resize, div) {
                 ui.size.height = ui.originalSize.height;
             }
         });
+    }
+}
+
+
+/******************************************************************
+ 기능 : 라벨 데이터 포맷을 확인해서 소수점 자릿수 설정 값에 따라 해당 형태로 변경 로직 추가.
+ Date : 2018-08-24
+ 만든이 : hagdung-i
+ ******************************************************************/
+function format_check(data) {
+    var test = data.formatType;
+    var num_check = data.text.replace(/[^0-9]/g,""); //데이터에서 숫자만 추출.
+    var data_text = data.text;
+    console.log("test: ",test);
+    if(test == "AmountSosu"){   //추후, 다른 7가지의 속성을 알게되면 else if로 추가해야함.
+        if(num_check != ""){ //해당 데이터가 숫자인 경우내려
+            console.log("num_check : ",num_check);
+            data_text = num_check.replace(/\B(?=(\d{3})+(?!\d))/g, ","); //천단위로 콤마를 찍어줌.
+        }
+        return data_text;
+    }else{
+        return data_text;
     }
 }
 
@@ -1029,23 +1052,19 @@ function table_format_check(data, Label_id, key, table) {
     }
 }
 
+
 /******************************************************************
- 기능 : 라벨 데이터 포맷을 확인해서 소수점 자릿수 설정 값에 따라 해당 형태로 변경 로직 추가.
- Date : 2018-08-24
+ 기능 : 테이블 항목별 크기조정 기능
+ Date : 2018-08-30
  만든이 : hagdung-i
  ******************************************************************/
-function format_check(data) {
-    var test = data.formatType;
-    var num_check = data.text.replace(/[^0-9]/g,""); //데이터에서 숫자만 추출.
-    var data_text = data.text;
-    console.log("test: ",test);
-    if(test == "AmountSosu"){   //추후, 다른 7가지의 속성을 알게되면 else if로 추가해야함.
-        if(num_check != ""){ //해당 데이터가 숫자인 경우
-            console.log("num_check : ",num_check);
-            data_text = num_check.replace(/\B(?=(\d{3})+(?!\d))/g, ","); //천단위로 콤마를 찍어줌.
+function table_column_controller(resize_area, Unalterable_area){
+    resize_area.resizable({
+        containment: "#" + Unalterable_area[0].id, autoHide: true,
+        resize: function (event, ui) {   //테이블사이즈는 가로만 조정 가능하도록.
+            ui.size.height = ui.originalSize.height;
         }
-        return data_text;
-    }else{
-        return data_text;
-    }
-}
+    });
+};
+
+
