@@ -184,7 +184,7 @@ function drawingDynamicTable(table, tableLabel, divId) {
                 case "DynamicTableTitleLabel" :
                     drawingDynamicTableTitleLabel(label, dt);
                     break;
-              case "DynamicTableValueLabel" :
+                case "DynamicTableValueLabel" :
                     drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table);
                     break;
             }
@@ -484,11 +484,11 @@ function drawingSystemLabel(data, divId) {
 
             pId = $('#' + PTotalPage + totalPageNum);
 
-                pId.css({
-                    'font-size': data.fontSize,
-                    'font-family': data.fontFamily,
-                    'font-weight': data.fontStyle
-                });
+            pId.css({
+                'font-size': data.fontSize,
+                'font-family': data.fontFamily,
+                'font-weight': data.fontStyle
+            });
 
             verticalCenter(PTotalPage + totalPageNum);
             totalPageNum++;

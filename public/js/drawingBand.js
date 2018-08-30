@@ -14,6 +14,10 @@ function getMinGroupBandDataHeight(band) {
     var tableTitleHeight = Number(tableLabel[0].Rectangle.Height._text);
     var tableValueHeight = Number(tableLabel[tableLabel.length - 1].Rectangle.Height._text);
 
+    console.log('bandGroupHeaderHeight : ' + bandGroupHeaderHeight);
+    console.log('tableTitleHeight : ' + tableTitleHeight);
+    console.log('tableValueHeight : ' + tableValueHeight)
+
     minGroupBandDataHeight = bandGroupHeaderHeight + tableTitleHeight + tableValueHeight;
 }
 
@@ -42,7 +46,7 @@ function getFooterHeight(bands) {
  * BandData일 경우 페이지 크기에 맞게 BandData Height 변경
  * from 구영준
  * *********************************************************/
-function drawBand(bands, layerName, reportHeight, dataBand) {
+function drawBand(bands, layerName, reportHeight, parentBand) {
 
     bands.forEach(function (band) { // 밴드 갯수만큼 반복문 돌음
         // 페이지 헤더 밴드의 속성 '첫 페이지 출력 생략(PageOutputSkip)' 속성값이 'true'면 출력X
@@ -107,27 +111,27 @@ function drawBand(bands, layerName, reportHeight, dataBand) {
         var dt = Object.values(dataTable.DataSetName)[0];
         /**************************************************************************************
          * 그룹 풋터 일 경우
-         * 
+         *
          * 페이지 넘기기가 true 면 그룹 풋터 밴드가 그려지고 페이지가 끝
          *                 false면 데이터 밴드가 다시 그려짐
-         *                 
+         *
          * 데이터 밴드가 다시 그려질 때,
          * 현재 페이지에서 여유 공간 = 리포트 길이 = 그룹 풋터 밴드 상위의 밴드 길이 - 풋터 밴들 길이
-         * 
+         *
          * 최소 그룹데이터 길이 = 그룹헤더길이 + 동적테이블 title Height  + 동적테이블 value Height 길이
-         * 
+         *
          * 여유 공간이 최소 그룹데이터 길이보다 클 경우
          * 다시 데이터 밴드 그림
          *
          * 만든 사람 : 구영준...
-         * 
+         *
          **************************************************************************************/
         if (band.attributes["xsi:type"] === "BandGroupFooter") {
             curDatarow += (groupFieldArray[groupFieldNum].length - 1);
             groupFieldNum++;
 
             if(curDatarow < dt.length){
-                if (band.forceNewPage) {
+                if (!band.forceNewPage) {
 
                 } else {
                     var siblings = $('#' + div_id).siblings();
@@ -136,15 +140,16 @@ function drawBand(bands, layerName, reportHeight, dataBand) {
                     for (var i = 0; i < siblings.length; i++) {
                         curr_height += parseInt(siblings.eq(i).css('height').substring(0, siblings.eq(i).css('height').length - 2));
                     }
-                    avaHegiht = reportHeight - curr_height - footer_height;
+                    //ToDo -4 지워야함 아마 밴드에 픽셀 때문에 화면이 겹쳐서 강제로 해줌
+                    avaHegiht = reportHeight - curr_height - footer_height - 4;
 
                     if (avaHegiht > minGroupBandDataHeight) {
-                        dataBand = (function (arg) {
+                        parentBand = (function (arg) {
                             var band = new Array();
                             band.push(arg);
                             return band;
-                        })(dataBand);
-                        drawBand(dataBand, layerName, reportHeight);
+                        })(parentBand);
+                        drawBand(parentBand, layerName, reportHeight);
                     }
                 }
             }
