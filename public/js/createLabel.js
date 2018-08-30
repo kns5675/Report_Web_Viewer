@@ -618,7 +618,6 @@ function drawingDataLabel(data, divId) {
 
     dataLabelNum++;
 }
-
 /******************************************************************
  기능 : NormalLabel(일반 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 안예솔
@@ -671,7 +670,6 @@ function drawingNormalLabel(data, divId) {
     // toStringFn(data.text, "PNormalLabel" + normalLabelNum);
     // textEqualDivision(data.text, "PNormalLabel" + normalLabelNum);
 
-
     verticalCenter('PNormalLabel' + normalLabelNum); // 텍스트 수직 정렬이 중간인 경우
     // verticalTop('PNormalLabel' + normalLabelNum); // 텍스트 수직 정렬이 위쪽인 경우
     // verticalBottom('PNormalLabel' + normalLabelNum); // 텍스트 수직 정렬이 아래쪽인 경우
@@ -681,7 +679,6 @@ function drawingNormalLabel(data, divId) {
     pId.addClass('NormalLabel');
     normalLabelNum++;
 }
-
 /******************************************************************
  기능 : Expression(수식 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 안예솔
@@ -698,7 +695,6 @@ function drawingExpression(data, divId) {
     var div = $('#' + divId);
     div.css('position', 'relative');
     div.append('<div id = "Expression' + expressionNum + '">Expression</div>');
-
     var expressionId = $('#Expression' + expressionNum);
     expressionId.addClass("NormalLabel_scope");
     expressionId.css({
@@ -711,7 +707,6 @@ function drawingExpression(data, divId) {
         'border': '1px solid black',
         'background-color' : data.backGroundColor
     });
-
     expressionId.append('<p id = "PExpression' + expressionNum + '"></p>');
     Lock_check(data, expressionId, div);
     var pId = $('#PExpression' + expressionNum);
@@ -730,7 +725,6 @@ function drawingExpression(data, divId) {
 
     expressionNum++;
 }
-
 /******************************************************************
  기능 : GroupLabel(그룹 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 안예솔
@@ -756,7 +750,6 @@ function drawingGroupLabel(data, divId) {
         'border': '1px solid black',
         'background-color' : data.backGroundColor
     });
-
     groupLabelId.append('<p id = "PGroupLabel' + groupLabelNum + '"></p>');
     Lock_check(data, groupLabelId, div);
     var pId = $('#PGroupLabel' + groupLabelNum);
@@ -775,7 +768,6 @@ function drawingGroupLabel(data, divId) {
 
     groupLabelNum++;
 }
-
 /******************************************************************
  기능 : ParameterLabel(파라미터 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 안예솔
@@ -801,7 +793,6 @@ function drawingParameterLabel(data, divId) {
         'border': '1px solid black',
         'background-color' : data.backGroundColor
     });
-
     parameterLabelId.append('<p id = "PParameterLabel' + parameterLabelNum + '"></p>');
     Lock_check(data, parameterLabelId, div);
     var pId = $('#PParameterLabel' + parameterLabelNum);
@@ -820,8 +811,6 @@ function drawingParameterLabel(data, divId) {
 
     parameterLabelNum++;
 }
-
-
 /******************************************************************
  기능 : 시간 또는 날짜를 출력할 때 한 자리 숫자일 경우 0을 붙여줘서 두 자리 숫자로 출력 해주는 함수를 만든다.
  만든이 : 안예솔
@@ -833,7 +822,6 @@ function plusZero(data) {
     }
     return data;
 }
-
 /******************************************************************
  기능 : 한 글자씩 출력하는 함수를 만든다.
  만든이 : 안예솔
@@ -847,7 +835,6 @@ function toStringFn(text, pTagId) {
     }
     tag.append(appendStr);
 }
-
 /******************************************************************
  기능 : 텍스트 수평 정렬이 균등분할인 속성을 구현한다.
  만든이 : 안예솔
@@ -875,7 +862,6 @@ function textEqualDivision(text, pTagId) {
     var spacing = (parentWidth[0] - fontsize[0] * num) / (num - 1);
     tag.append('<p style = "letter-spacing : ' + spacing + 'px; margin:0px;">' + appendStr + '</p>');
 }
-
 /******************************************************************
  기능 : 텍스트 수직 정렬이 가운데인 속성을 구현한다.
  만든이 : 안예솔
@@ -899,8 +885,6 @@ function verticalCenter(pTagId) {
         'margin-bottom' : mid + 'px'
     });
 }
-
-
 /******************************************************************
  기능 : 텍스트 수직 정렬이 위쪽인 속성을 구현한다.
  만든이 : 안예솔
@@ -912,7 +896,6 @@ function verticalTop(pTagId) {
         'margin-top' : '0px'
     });
 }
-
 /******************************************************************
  기능 : 텍스트 수직 정렬이 아래쪽인 속성을 구현한다.
  만든이 : 안예솔
@@ -936,7 +919,6 @@ function verticalBottom(pTagId) {
         'margin-bottom' : '0px'
     });
 }
-
 /******************************************************************
  기능 : 텍스트 수직 정렬이 균등분할인 속성을 구현한다.
  만든이 : 안예솔
@@ -971,7 +953,6 @@ function verticalCenterEqualDivision(pTagId) {
         divBr.remove();
     }
 }
-
 /******************************************************************
  기능 : 각각의 형태의 Label id와 데이터를 받아서 lock이 걸려있는 라벨을 제외한 라벨들의 위치 이동, 크기 조정 기능 추가.
  Date : 2018-08-24
@@ -989,7 +970,6 @@ function Lock_check(data, Label_id, div) { //라벨 데이터, 드래그 리사�
         Label_id.resizable({containment: "#" + div[0].id, autoHide: true});
     }
 }
-
 /******************************************************************
  기능 : 각각의 형태의 테이블의 id와 데이터를 받아서 lock이 걸려있는 라벨을 제외한 라벨들의 위치 이동, 크기 조정 기능 추가.
  Date : 2018-08-24
@@ -1012,8 +992,6 @@ function Lock_Check_Table(data, drag, resize, div) { //테이블 데이터, 드�
         });
     }
 }
-
-
 /******************************************************************
  기능 : 라벨 데이터 포맷을 확인해서 소수점 자릿수 설정 값에 따라 해당 형태로 변경 로직 추가.
  Date : 2018-08-24
@@ -1023,7 +1001,7 @@ function format_check(data) {
     var test = data.formatType;
     var num_check = data.text.replace(/[^0-9]/g,""); //데이터에서 숫자만 추출.
     var data_text = data.text;
-    console.log("test: ",test);
+    // console.log("test: ",test);
     if(test == "AmountSosu"){   //추후, 다른 7가지의 속성을 알게되면 else if로 추가해야함.
         if(num_check != ""){ //해당 데이터가 숫자인 경우내려
             console.log("num_check : ",num_check);
@@ -1034,7 +1012,6 @@ function format_check(data) {
         return data_text;
     }
 }
-
 /******************************************************************
  기능 : 테이블 안의 데이터 포맷을 확인해서 소수점 자릿수 설정 값에 따라 해당 형태로 변경 로직 추가.
  Date : 2018-08-24
@@ -1051,8 +1028,6 @@ function table_format_check(data, Label_id, key, table) {
         return key;
     }
 }
-
-
 /******************************************************************
  기능 : 테이블 항목별 크기조정 기능
  Date : 2018-08-30
@@ -1066,5 +1041,3 @@ function table_column_controller(resize_area, Unalterable_area){
         }
     });
 };
-
-

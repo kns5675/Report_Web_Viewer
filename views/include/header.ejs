@@ -11,39 +11,38 @@
     <script>
         $(function(){
             $('#print').click(function(){
-                pagePrint();//지연 추가 인쇄버튼 클릭시 페이지 비율 100%배율로 고정하여 인쇄 페이지 이동
+                pagePrint();//지연 - 페이지 비율을 100%로 고정하여 인쇄 페이지 이동
             });
             $('#txtZoom').on("change",function(){
-                test();//지연 추가 기존의 zoomIn,zoomOut변경 값을 받아와 scale값 조정
+                test();//지연 - 기존 zoomIn,zoomOut 값을 받아와 scale 조정
             });
             $("#copyOptions").on("change",function(){
-                copyoptions();  //지연추가 인쇄버튼 또는 고급인쇄창 옵션을 결정하는 function
+                copyoptions();  //지연 - 인쇄버튼 또는 고급인쇄창 옵션을 결정하는 function
             });
             $("#saveAsImage").on("change",function(){
-                imageOptions();  //지연추가 이미지 타입 결정하여 화면을 저장하는 function
+                imageOptions();  //지연 - 이미지 타입 결정하여 화면을 저장 function
             });
             $("#btnZoomIn").click(function(){
-               zoomIn();  //지연추가 화면 zoomIn하는 function
+               zoomIn();  //지연 - 화면 zoomIn function
             });
             $("#btnZoomOut").click(function(){
-                zoomOut();  //지연추가 화면 zoomOut하는 function
+                zoomOut();  //지연 - 화면 zoomOut function
             });
             $("#showpages").click(function(){
-                $("#showPages").show();
+                $("#showPages").show(); //지연 - 여러페이지보기 - 개발보류
             });
             $("div.room").mouseover(function(){
-               $(this).css("background-color","#CADFFF");  //지연추가 여러페이지보기 front개발중 개발 보류
+               $(this).css("background-color","#CADFFF");  //지연 - 여러페이지보기 front개발중 개발 보류
             });
             $("div.room").mouseleave(function(){
-                $(this).css("background-color","white");  //지연추가 여러페이지보기 front개발중 개발 보류
+                $(this).css("background-color","white");  //지연 - 여러페이지보기 front개발중 개발 보류
             });
             $(".saveAsPdf").on("mouseover", function(){
-                // saving();
-                makePdf();  //지연 화면을 pdf로 만드는 function()
+                makePdf();  //지연 - 화면을 pdf로 만드는 function()
             });
             $(".saveAsPdf").on("click", function(){
                 saving();
-                // makePdf();  //지연 화면을 pdf로 만드는 function()
+                // makePdf();  //지연 - 화면을 pdf로 만든 후 저장하는 function()
             });
         });
     </script>

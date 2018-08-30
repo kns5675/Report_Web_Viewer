@@ -53,7 +53,7 @@ function makePdf() {
         console.log("가로일때 page orientation : "+pageOrientation);
     }
 
-    function beforeSaving(pageOrientation){
+    function beforeSaving(pageOrientation,docwidth1,docheight1){
         if(pageOrientation =='p'){
             console.log("세로 before saving 들어왔음");
             createPdf(pageOrientation,docwidth1,docheight1);
@@ -88,20 +88,12 @@ function makePdf() {
         }
             console.log("doc : ", doc);
     }
-
 }
 function saving (){
-    // makePdf().then(function(doc){
     console.log("들어왔어욤1");
-
-    doc.save('pdfpdf.pdf');
-    // console.log("들어왔어욤2");
-    //     throw new Error("Error in then()");
-    // }).catch(function(err){
-    //     console.log('then error : ' ,err);
-    // });
+    doc.deletePage(1);  //더미 페이지 삭제
+    doc.save('saveAsPdf.pdf');
 }
-
 /******************************************************************
  기능 : DR Viewer 인쇄 메뉴 선택하기 (select option value받아와서 메뉴 인식 후 모달창 띄우기)
  author : 하지연
@@ -343,23 +335,23 @@ function imageOptions(){
         if ($("#saveAsImage").val() == 'png'){
 
             var typeofimages = $("#saveAsImage").val();
-            alert(typeofimages);
+            console.log("type of images : "+ typeofimages);
             saveImages(typeofimages);
         }else if($("#saveAsImage").val() == 'jpeg'){
             var typeofimages = $("#saveAsImage").val();
-            alert(typeofimages);
+            console.log("type of images : "+ typeofimages);
             saveImages(typeofimages);
         }else if($("#saveAsImage").val() == 'bmp'){
             var typeofimages = $("#saveAsImage").val();
-            alert(typeofimages);
+            console.log("type of images : "+ typeofimages);
             saveImages(typeofimages);
         }else if($("#saveAsImage").val() == 'tiff'){
             var typeofimages = $("#saveAsImage").val();
-            alert(typeofimages);
+            console.log("type of images : "+ typeofimages);
             saveImages(typeofimages);
         }else if($("#saveAsImage").val() == 'gif'){
             var typeofimages = $("#saveAsImage").val();
-            alert(typeofimages);
+            console.log("type of images : "+ typeofimages);
             saveImages(typeofimages);
         }else{
             console.log("인식못했음");
