@@ -248,7 +248,7 @@ function drawingDynamicTableValueLabel(label, dt, tableId, numOfData){
             for (key in data[j]) {
                 var valueTrId = $('#dynamicValueLabel' + rowNum);
                 if (label.fieldName == key) {
-                    valueTrId.append('<td>' + data[j][key]._text + '</td>');
+                    valueTrId.append('<td class="Label ' + label._attributes + ' ' + label.dataType + '">' + data[j][key]._text + '</td>');
                     valueTrId.css({
                         'width': label.rectangle.width,
                         'height': label.rectangle.height,
