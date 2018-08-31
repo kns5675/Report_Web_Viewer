@@ -31,7 +31,7 @@ var dynamicTableValueNum = 0;
  기능 : ControlList의 유무를 판단하는 함수를 만든다.
  만든이 : 안예솔
  ******************************************************************/
-function judgementControlList(band, divId) {
+function judgementControlList(band, divId, numOfData) {
     if (band.groupFieldArray !== undefined) {
         groupFieldArray = band.groupFieldArray;
     }
@@ -39,10 +39,10 @@ function judgementControlList(band, divId) {
         var controlList = band.controlList.anyType;
         if (Array.isArray(controlList)) {
             controlList.forEach(function (list) {
-                judgementLabel(list, divId);
+                judgementLabel(list, divId, numOfData);
             });
         } else {
-            judgementLabel(controlList, divId);
+            judgementLabel(controlList, divId, numOfData);
         }
     } else {
     }
@@ -52,7 +52,7 @@ function judgementControlList(band, divId) {
  기능 : 어떤 Label인지를 판단하여 객체를 생성해주는 함수를 만든다.
  만든이 : 안예솔
  ******************************************************************/
-function judgementLabel(data, divId) {
+function judgementLabel(data, divId, numOfData) {
     var attr = data._attributes["xsi:type"];
     if (attr == "ControlDynamicTable") { // 동적 테이블
         var controlDynamicTable = new Table(data);
@@ -66,7 +66,7 @@ function judgementLabel(data, divId) {
                 tableLabelList.push(tableLabel);
             }
         });
-        drawingDynamicTable(controlDynamicTable, tableLabelList, divId);
+        drawingDynamicTable(controlDynamicTable, tableLabelList, divId, numOfData);
 
     } else if (attr == "ControlFixedTable") { // 고정 테이블
 
@@ -148,7 +148,9 @@ function judgementLabel(data, divId) {
  Date : 2018-08-27
  From hagdung-i
  ******************************************************************/
-function drawingDynamicTable(table, tableLabel, divId) {
+function drawingDynamicTable(table, tableLabel, divId, numOfData) {
+
+
     var div = $('#' + divId);
     div.append('<div id = "Table' + tableNum + '"></div>');
     var divIdTable = $('#Table' + tableNum);
@@ -176,7 +178,9 @@ function drawingDynamicTable(table, tableLabel, divId) {
 
     tableId.append('<tr id = "dynamicTitleLabel' + dynamicTitleLabelNum + '"></tr>');
 
-    var numOfData = getNumOfDataInOnePage(tableLabel, divId); //한 페이지에 들어갈 데이터 개수
+    if(groupFieldArray == undefined) {
+        numOfData = getNumOfDataInOnePage(tableLabel, divId); //한 페이지에 들어갈 데이터 개수
+    }
     var dt = Object.values(dataTable.DataSetName)[0];
     if (Array.isArray(tableLabel)) {
         tableLabel.forEach(function (label) {
@@ -239,7 +243,7 @@ function drawingDynamicTableValueLabel(label, dt, tableId, numOfData){
             }
         }
     }else {
-        for (var j = groupDataRow; j < groupFieldArray[groupFieldNum].length; j++) {
+        for (var j = groupDataRow; j < numOfData; j++) {
             var data = groupFieldArray[groupFieldNum];
             var rowNum = curDatarow+j;
             var valueTrId = $('#dynamicValueLabel' + rowNum);
