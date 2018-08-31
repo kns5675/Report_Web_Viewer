@@ -636,3 +636,8 @@ function howmanyPages(thisvalue){
             }
         });
     }
+
+function print_test() {
+
+    console.log("test");
+}
