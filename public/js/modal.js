@@ -36,7 +36,11 @@ $(document).ready(function(){
  만든이 : hagdung-i
  날짜 : 2018 - 08 - 27
  ******************************************************************/
-function hakjoons(){
+var import_data;
+function hakjoons(data){
+    if(data){
+        import_data = data;
+    }
     /******************************************************************
      기능 : 용지 크기 선택(A4,B4 등) 이벤트, 셀렉트 박스 선택 값에 따라 페이지 리사이징 함수에 전달.
      만든이 : hagdung-i
@@ -51,7 +55,7 @@ function hakjoons(){
      날짜 : 2018 - 08 - 27
      ******************************************************************/
     $(".direction").on("change",function () {
-        paper_setting();
+        paper_setting("reload",import_data);
     });
     /******************************************************************
      기능 : 출력일 인쇄 이벤트
@@ -132,12 +136,13 @@ function hakjoons(){
  만든이 : hagdung-i
  날짜 : 2018 - 08 - 27
  ******************************************************************/
-function paper_setting(setting) {
+function paper_setting(setting, data) {
+    console.log("data : ",data);
     //용지방향 설정 가로와 세로를 서로 뒤바꿔주는 식의 형태인데, 가로에 해당하는 라디오 박스가 선택 되어 있을 때만 초기화시 세로로 되돌림.
     var test = $('input:radio[name="direction"]').prop("checked");
     if(setting){
         if(!test){
-            paperDirection();
+            paperDirection(data);
             $("input:radio[name='direction']:radio[value='세로']").prop("checked",true);
             $("input:radio[name='direction']:radio[value='가로']").prop("checked",false);
         }
@@ -231,12 +236,20 @@ function extra_tail_using_check() {
  날짜 : 2018 - 08 - 27
  내용 : 페이지 세로/가로 값을 반전 시키는 함수.
  ******************************************************************/
-function paperDirection() {
-    $(".pageforcopyratio").each(function (i, e) {
-        var temp = e.style.width;
-        e.style.width = e.style.height;
-        e.style.height = temp;
-    });
+function paperDirection(data) {
+    var width = $("#pageForCopyRatio1")[0].style.width;
+    var height = $("#pageForCopyRatio1")[0].style.height;
+    var temp = width;
+    height = width;
+    width = temp;
+    console.log("width : ",width);
+    console.log("height : ",height);
+    console.log("data : ",data);
+    // width = height;
+    //     e.style.width = e.style.height;
+    //     e.style.height = temp;
+    removePage(data, width, height);
+
 }
 /******************************************************************
  기능 : 날짜 그리는 함수.

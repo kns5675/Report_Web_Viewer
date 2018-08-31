@@ -409,6 +409,40 @@ function pre(){
 pre().then(function(resolvedData){
     console.log("############## : "+resolvedData);//100찍힘.
 });*/
+/******************************************************************
+ 기능 : 화면을 pdf로 만드는 기능
+ author : 하지연
+ ******************************************************************/
+function makePdf() {
+    var doc= new jsPDF('p','mm',[297,210]);
+
+    $(".page").each(function (i, e) {
+        var pageForCopyRatioNum = e.id.replace(/[^0-9]/g,'');
+        var page_width = $("#pageForCopyRatio"+pageForCopyRatioNum)[0].style.width;
+        var page_height = $("#pageForCopyRatio"+pageForCopyRatioNum)[0].style.height;
+        var page_width2 =  211;
+        var page_height2 = 299;
+        html2canvas(document.querySelector("#pageForCopyRatio"+pageForCopyRatioNum)).then(canvas => {
+            var img = canvas.toDataURL("image/png");
+            var convert_img = Canvas2Image.convertToBMP(canvas);
+            Canvas2Image.saveAsImage(canvas);
+            console.log("page_width : ",page_width2);
+            console.log("page_height : ",page_height2);
+            doc.addPage().addImage(img,'PNG',0,0, page_width2, page_height2);
+            doc.save('saveaspdf.pdf');
+
+        });
+        // makePdf2(doc);//인쇄배율 변경 펑션
+    });
+}
+
+
+function makePdf2(doc){
+    console.log("doc : " + doc);
+
+    doc.save('saveaspdf.pdf');
+}
+
 
 function example(){
       var doc = new jsPDF();
@@ -628,4 +662,9 @@ function band_dbclick_event() {
             }
         }
     });
+}
+
+function print_test() {
+
+    console.log("test");
 }

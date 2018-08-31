@@ -12,7 +12,7 @@ function makeReportTemplate(data) {
 
     reportTemplate.reportList.forEach(function (value, i) {
         var report = reportTemplate.reportList[i];
-        makeReport(report);
+        makeReport(report, width, height);
     });
 }
 /******************************************************************
@@ -20,13 +20,13 @@ function makeReportTemplate(data) {
  author : powerku
  ******************************************************************/
 var reportPageCnt = 1;
-function makeReport(report) {
+function makeReport(report, width, height) {
     var dt = Object.values(dataTable.DataSetName)[0];
     if(pageNum == 1){
 
     }
 
-    setPage(report);
+    setPage(report, width, height);
     setReport(report);
 
     pageNum++;
@@ -81,7 +81,7 @@ function getNumOfPage(report) {
 }
 
 /***********************************************************
- 기능 : 그룹 헤더/풋터 일 경우 데이터 밴드 길이 계산 
+ 기능 : 그룹 헤더/풋터 일 경우 데이터 밴드 길이 계산
  1. 그룹 헤더/풋터 일 경우 그룹 데이터의 길이 만큼의 데이터 길이
  2. th 길이 + td길이 * 데이터 개수
  만든이 : 구영준
@@ -381,13 +381,16 @@ function setForCopyRatioDirection(report) {  //지연 추가
 
  수정 : 김학준
  날짜 : 2018 - 08 27
- 내용 : 페이지 셋팅시 페이지 사이지
+ 내용 : 페이지 셋팅시 페이지 사이즈 변경.
  ******************************************************************/
-function setPage(report) {
+function setPage(report, width, height) {
 
     var paperType = report.paperType;
-
     $('#reportTemplate').append('<div id="pageForCopyRatio' + pageNum + '" class="pageforcopyratio paperType-' + paperType + '"></div>');//지연 수정
+    if(width){
+        console.log("setPage width : ",width);
+
+    }
     $('#pageForCopyRatio' + pageNum).append('<div id="page' + pageNum + '" class="page paperType-' + paperType + '"></div>');//지연 수정
     // $(('#forcopyratio' + reportNum)).append('<div id="report' + reportNum + '"class = report' +'></div>');
 
@@ -408,11 +411,21 @@ function setPage(report) {
     var page = $('#page' + pageNum);
     page.css('border', 'solid green');
     page.css('background-color', 'transparent');
+    page.css('width',width);
+    page.css('height',height);
+    // page.css('position', 'absolute');
 
     var pageForCopyRatio = $('#pageForCopyRatio' + pageNum);
     pageForCopyRatio.css('border', 'solid red');
     pageForCopyRatio.css('background-color', 'lightgreen');
 
+}
+
+function removePage(data, width, height) {
+    if($(".pageforcopyratio")){
+        $(".pageforcopyratio").remove();
+    }
+    return makeReportTemplate(data, width, height);
 }
 
 /******************************************************************
