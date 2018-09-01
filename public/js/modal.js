@@ -142,7 +142,7 @@ function paper_setting(setting, data) {
     var test = $('input:radio[name="direction"]').prop("checked");
     if(setting){
         if(!test){
-            paperDirection(data);
+            paperDirection();
             $("input:radio[name='direction']:radio[value='세로']").prop("checked",true);
             $("input:radio[name='direction']:radio[value='가로']").prop("checked",false);
         }
@@ -236,7 +236,7 @@ function extra_tail_using_check() {
  날짜 : 2018 - 08 - 27
  내용 : 페이지 세로/가로 값을 반전 시키는 함수.
  ******************************************************************/
-function paperDirection(data) {
+function paperDirection() {
     var width = $("#pageForCopyRatio1")[0].style.width;
     var height = $("#pageForCopyRatio1")[0].style.height;
     var temp = width;
@@ -244,11 +244,11 @@ function paperDirection(data) {
     width = temp;
     console.log("width : ",width);
     console.log("height : ",height);
-    console.log("data : ",data);
+    // console.log("data : ",data);
     // width = height;
     //     e.style.width = e.style.height;
     //     e.style.height = temp;
-    removePage(data, width, height);
+    // removePage(data, width, height);
 
 }
 /******************************************************************

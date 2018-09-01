@@ -12,7 +12,7 @@ function makeReportTemplate(data) {
 
     reportTemplate.reportList.forEach(function (value, i) {
         var report = reportTemplate.reportList[i];
-        makeReport(report, width, height);
+        makeReport(report);
     });
 }
 /******************************************************************
@@ -20,13 +20,13 @@ function makeReportTemplate(data) {
  author : powerku
  ******************************************************************/
 var reportPageCnt = 1;
-function makeReport(report, width, height) {
+function makeReport(report) {
     var dt = Object.values(dataTable.DataSetName)[0];
     if(pageNum == 1){
 
     }
 
-    setPage(report, width, height);
+    setPage(report);
     setReport(report);
 
     pageNum++;
@@ -411,8 +411,8 @@ function setPage(report, width, height) {
     var page = $('#page' + pageNum);
     page.css('border', 'solid green');
     page.css('background-color', 'transparent');
-    page.css('width',width);
-    page.css('height',height);
+    // page.css('width',width);
+    // page.css('height',height);
     // page.css('position', 'absolute');
 
     var pageForCopyRatio = $('#pageForCopyRatio' + pageNum);
