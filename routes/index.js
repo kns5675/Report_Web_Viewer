@@ -12,8 +12,8 @@ var tempData = fs.readFileSync('xml/db_TestSample.xml', 'utf-8');
 // var tempData = fs.readFileSync('xml/TestSample.xml', 'utf-8');
 var dataTable = convert.xml2json(tempData, {compact : true});
 
-var bmp = require("bmp-js");
-var Printer = require('node-printer');
+// var bmp = require("bmp-js");
+// var Printer = require('node-printer');
 
 var options = {
     media: 'Custom.200x600mm',
