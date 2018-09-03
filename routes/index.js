@@ -3,7 +3,7 @@ var router = express.Router();
 
 var convert = require('xml-js');
 var fs = require('fs');
-var xml = fs.readFileSync('xml/Attribute02.xml', 'utf-8');
+var xml = fs.readFileSync('xml/TestSample.xml', 'utf-8');
 // var inspect = require('util').inspect;
 var json_origin = convert.xml2json(xml, {compact : true});
 var json = json_origin.replace(/\\r/gi, '<br/>'); // 엔터키(\r)를 <br/>로 치환

@@ -10,6 +10,7 @@ var numofData = 0;
  * 만든이 : 구영준
  * *********************************************************/
 function getMinGroupBandDataHeight(band) {
+    console.log(band);
     var bandGroupHeaderHeight = Number(band.childHeaderBands[0].rectangle.height);
     var tableLabel = band.controlList.anyType.Labels.TableLabel;
     var tableTitleHeight = Number(tableLabel[0].Rectangle.Height._text);
@@ -90,7 +91,7 @@ function getNumOfDataWithGroupField(band, avaHeight) {
  *
  * 수정 : 2018-08-31
  * 그룹 헤더 밴드 구현
- * fro 구영준
+ * from 구영준
  * *********************************************************/
 function drawBand(bands, layerName, reportHeight, parentBand) {
 
@@ -137,9 +138,7 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
             if(bands.length > 1){
                 getFooterHeight(bands);
             }
-            console.log(bands.childHeaderBands);
-
-            if(bands.childHeaderBands != null){
+            if(groupFieldArray.length > 0) {
                 getMinGroupBandDataHeight(band);
                 avaHeight = getAvaHeight(div_id, reportHeight);
                 numofData = getNumOfDataWithGroupField(band, avaHeight);
@@ -149,9 +148,10 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
 
         if (band.attributes["xsi:type"] == 'BandData') {
             var dataBandHeight = 0;
-            if(remainData){
-                dataBandHeight = getBandHeightWithGroupField(band, numofData-groupDataRow);
-            }else{
+            if(groupFieldArray.length > 0) {
+                if (remainData) {
+                dataBandHeight = getBandHeightWithGroupField(band, numofData - groupDataRow);
+            } else {
                 dataBandHeight = getBandHeightWithGroupField(band, numofData);
             }
             $('#' + div_id).css({
@@ -159,15 +159,21 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                 'height': dataBandHeight,
                 'border-bottom': "1px solid red"
             });
-
-            if(groupFieldArray[groupFieldNum].length > numofData){
-                curDatarow += numofData;
-                remainData = true;
-                groupDataRow += numofData;
-            }else{
-                curDatarow += (groupFieldArray[groupFieldNum].length - 1);
-                groupFieldNum++;
-                remainData = false;
+                if (groupFieldArray[groupFieldNum].length > numofData) {
+                    curDatarow += numofData;
+                    remainData = true;
+                    groupDataRow += numofData;
+                } else {
+                    curDatarow += (groupFieldArray[groupFieldNum].length - 1);
+                    groupFieldNum++;
+                    remainData = false;
+                }
+            }else {
+                $('#' + div_id).css({
+                    'width': band.rectangle.width,
+                    'height': band.rectangle.height,
+                    'border-bottom': "1px solid red"
+                });
             }
 
         } else if (band.attributes["xsi:type"] === "BandPageFooter") {

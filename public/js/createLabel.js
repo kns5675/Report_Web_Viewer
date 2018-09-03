@@ -72,7 +72,7 @@ function judgementLabel(data, divId, numOfData) {
     } else if (attr == "ControlFixedTable") { // 고정 테이블
 
         /*
-        To Do : 하나의 페이지에 고정테이블이 2개 이상 있을 경우 fixTableLabelList에 겹침
+        ToDo : 하나의 페이지에 고정테이블이 2개 이상 있을 경우 fixTableLabelList에 겹침
          */
         var controlFixedTable = new Table(data);
         tableList.push(controlFixedTable);
@@ -279,7 +279,12 @@ function drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table){
                 if (label.fieldName == key) {
                     var key_data = data[j][key]._text;
                     var table_reform = table_format_check(data, valueTrId, key_data, label);
-                    valueTrId.append('<td>' + table_reform + '</td>');
+
+                    if(label.labelTextType == 'Number' && label.format != 'undefined'){
+                        valueTrId.append('<td class="MoneySosu">' + table_reform + '</td>');
+                    }else{
+                        valueTrId.append('<td>' + table_reform + '</td>');
+                    }
                     valueTrId.css({
                         'width': label.rectangle.width,
                         'height': label.rectangle.height,
@@ -1425,7 +1430,7 @@ function drawingNormalLabel(data, divId) {
     // console.log("div[0].id : ",div[0].id);
 
     //// 추가 부분 18.08.28 YeSol
-    if (data.noBorder == true) {
+    // if (data.noBorder == true) {
         // visible 속성
         if (data.visible == 'false') {
             normalLabelId.css('display', 'none');
@@ -1637,7 +1642,7 @@ function drawingNormalLabel(data, divId) {
         pId.addClass('Label');
         pId.addClass('NormalLabel');
         normalLabelNum++;
-    }
+    // }
 }
 
 /******************************************************************
