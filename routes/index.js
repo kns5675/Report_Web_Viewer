@@ -21,7 +21,7 @@ var options = {
 };
 
 // Get available printers list
-Printer.list();
+// Printer.list();
 // Create a new Pinter from available devices
 // var printer = new Printer('Microsoft Print to PDF');
 //
