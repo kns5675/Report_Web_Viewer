@@ -1,34 +1,6 @@
 $(document).ready(function(){
-    $("#mymodal2").click(function(){
-        $("#modalcase").css("display","block");
-    });
-    $("#closebtn").click(function(){
-        close_pop();
-    });
-    $("#closebtn3").click(function(){
-        close_pop2();
-    });
-    $("#closebtn4").click(function(){
-        close_pop3();
-    });
-    $("#sign").on('keyup',function(){
-        dataValidity2();    //고급인쇄 - 결재란 칸수 지정 데이터 유효성 검증
-    });
-    $("#copyratio").on({
-        keydown: function(){
-            onlyNumber(event);  //고급인쇄 - 인쇄배율 input박스 내에 숫자만 받도록 제어
-        },
-        keyup: function () {
-            removeChar();   //고급인쇄 - 인쇄배율 input박스 내에 글자입력시 삭제하도록 제어
-        },
-        change: function(){
-            copyRatioCheck();   //고급인쇄 - 인쇄배율 -> input 박스 내에 범위 지정 & 예외처리 & 입력된 배율값 적용
-        }
-    });
-    $(".fontform,.fontcontent").on("change",function(){ //고급인쇄 - 폰트설정 - 폰트내용, 폰트서식 변경
-        eSetFont();
-    });
     hakjoons();
+    jiyeons();
 });
 
 /******************************************************************
@@ -36,11 +8,7 @@ $(document).ready(function(){
  만든이 : hagdung-i
  날짜 : 2018 - 08 - 27
  ******************************************************************/
-var import_data;
-function hakjoons(data){
-    if(data){
-        import_data = data;
-    }
+function hakjoons(){
     /******************************************************************
      기능 : 용지 크기 선택(A4,B4 등) 이벤트, 셀렉트 박스 선택 값에 따라 페이지 리사이징 함수에 전달.
      만든이 : hagdung-i
@@ -55,7 +23,7 @@ function hakjoons(data){
      날짜 : 2018 - 08 - 27
      ******************************************************************/
     $(".direction").on("change",function () {
-        paper_setting("reload",import_data);
+        paper_setting();
     });
     /******************************************************************
      기능 : 출력일 인쇄 이벤트
@@ -132,17 +100,78 @@ function hakjoons(data){
     });
 }
 /******************************************************************
+ 기능 : 각 기능별 이벤트 시작점.
+ 만든이 : 하지연
+ 날짜 : 2018 - 09 - 03
+ ******************************************************************/
+function jiyeons() {
+    /******************************************************************
+     기능 : 고급인쇄설정 - 결재란 설정 - 결재란 등록 모달창 닫기
+     만든이 : 하지연
+     ******************************************************************/
+    $("#mymodal2").click(function () {
+        $("#modalcase").css("display", "block");
+    });
+    $("#closebtn").click(function () {
+        close_pop();
+    });
+    $("#closebtn3").click(function () {
+        close_pop2();
+    });
+    $("#closebtn4").click(function () {
+        close_pop3();
+    });
+    /******************************************************************
+     기능 : 고급인쇄설정 - 결재란 설정 - 결재란 칸수 지정 데이터 유효성 검증
+     만든이 : 하지연
+     ******************************************************************/
+    $("#sign").on('keyup', function () {
+        dataValidity2();
+    });
+    /******************************************************************
+     기능 : 1. 고급인쇄설정 - 인쇄배율 input 박스 내에 숫자만 받도록 제어
+     2. 고급인쇄설정 - 인쇄배율 input박스 내에 글자입력시 삭제하도록 제어
+     3. 고급인쇄설정 - 인쇄배율 input 박스 내에 범위 지정 & 예외처리 & 입력된 배율값 적용
+     만든이 : 하지연
+     ******************************************************************/
+    $("#copyratio").on({
+        keydown: function () {
+            onlyNumber(event);
+        },
+        keyup: function () {
+            removeChar();
+        },
+        change: function () {
+            copyRatioCheck();
+        }
+    });
+    /******************************************************************
+     기능 : 고급인쇄설정 - 폰트설정 - 폰트내용, 폰트 서식 변경 함수
+     만든이 : 하지연
+     ******************************************************************/
+    $(".fontform,.fontcontent").on("change", function () { //고급인쇄 - 폰트설정 - 폰트내용, 폰트서식 변경
+        eSetFont();
+    });
+    /******************************************************************
+     기능 : 고급인쇄설정 - 폰트설정 - 금액 기울임꼴 표시 변경 함수
+     만든이 : 하지연
+     ******************************************************************/
+    $("input:checkbox[name='pricetilt']").on("change",function () {
+        tiltPrice();
+    });
+}
+
+/******************************************************************
  기능 : 용지방향 설정 함수.
  만든이 : hagdung-i
  날짜 : 2018 - 08 - 27
  ******************************************************************/
-function paper_setting(setting, data) {
-    console.log("data : ",data);
+function paper_setting(setting) {
     //용지방향 설정 가로와 세로를 서로 뒤바꿔주는 식의 형태인데, 가로에 해당하는 라디오 박스가 선택 되어 있을 때만 초기화시 세로로 되돌림.
     var test = $('input:radio[name="direction"]').prop("checked");
     if(setting){
         if(!test){
-            paperDirection(data);
+            paperDirection();
             $("input:radio[name='direction']:radio[value='세로']").prop("checked",true);
             $("input:radio[name='direction']:radio[value='가로']").prop("checked",false);
         }
@@ -191,7 +220,6 @@ function pagesizeselect(paper) {
         pageForCopyRatio.css('height', 971.3385826772 + 'px');
     }
 }
-
 /******************************************************************
  기능 : 머리글 입력창, 셀렉트박스 함수.
  만든이 : hagdung-i
@@ -236,20 +264,12 @@ function extra_tail_using_check() {
  날짜 : 2018 - 08 - 27
  내용 : 페이지 세로/가로 값을 반전 시키는 함수.
  ******************************************************************/
-function paperDirection(data) {
-    var width = $("#pageForCopyRatio1")[0].style.width;
-    var height = $("#pageForCopyRatio1")[0].style.height;
-    var temp = width;
-    height = width;
-    width = temp;
-    console.log("width : ",width);
-    console.log("height : ",height);
-    console.log("data : ",data);
-    // width = height;
-    //     e.style.width = e.style.height;
-    //     e.style.height = temp;
-    removePage(data, width, height);
-
+function paperDirection() {
+    $(".pageforcopyratio").each(function (i, e) {
+        var temp = e.style.width;
+        e.style.width = e.style.height;
+        e.style.height = temp;
+    });
 }
 /******************************************************************
  기능 : 날짜 그리는 함수.
@@ -301,7 +321,6 @@ function datePrinting() {
         document.getElementById(time_area.id).appendChild(time);
         document.getElementById(time.id).appendChild(time_tag);
     });
-
 }
 /******************************************************************
  기능 : 페이징 그려주는 함수.
@@ -390,7 +409,6 @@ function header_test(value, input_value) {
         document.getElementById(header_Packing.id).appendChild(header_tag);
     });
 }
-
 /******************************************************************
  기능 : 머리글 영역 변경 함수
  만든이 : hagdung-i
@@ -508,7 +526,7 @@ function footer_location(input_value){
 }
 /******************************************************************
  기능 : 고급인쇄 -  결재란 칸수 지정 데이터 유효성 검증
- author : 하지연
+ 만든이 : 하지연
  ******************************************************************/
 function dataValidity2(){
     try{
@@ -528,7 +546,7 @@ function dataValidity2(){
 }
 /******************************************************************
  기능 : 고급인쇄설정 - 결재란 설정 - 결재란 등록 모달창 - 결재란 칸수 지정시
-        결재라인 css 변경 함수
+        결재라인 css 자동 변경 함수
  author : 하지연
  ******************************************************************/
 function changeColor(tds){
@@ -568,7 +586,6 @@ function beforeSubmit(){
             eCopyRatio(eCopyRate, idnum);//인쇄배율 변경 펑션
         });
         close_pop1();
-        //alert("인쇄 배율 : "+copyRatio.val() + " %");
         return true;
     }
 }
@@ -605,7 +622,6 @@ function eSetFont(){
 
     var checkedFontContent = $("input[type=radio][name=fontcontent]:checked").val();
     $('.Label.DataLabel').css('font-family', checkedFontContent);
-
 }
 /******************************************************************
  기능 : 고급인쇄설정 - 폰트설정 - 폰트서식, 폰트내용의 폼에 설정값을
@@ -670,9 +686,10 @@ function onlyNumber(event){
     }
 }
 /******************************************************************
- 기능 : 고급인쇄설정 - 인쇄설정 - 인쇄배율 기능에서 input 태그 내에 숫자만 허용하게 했으며,
- 숫자 외 다른 키가 눌렸을 경우 공백으로 대체하는 함수
- author : 하지연
+ 기능 : 고급인쇄설정 - 인쇄설정 - 인쇄배율 기능에서 input 태그 내에
+        숫자만 허용하게 했으며, 숫자 외 다른 키가 눌렸을 경우 공백으로
+        대체하는 함수
+ 만든이 : 하지연
  ******************************************************************/
 function removeChar(event) {
     event = event || window.event;
@@ -680,12 +697,33 @@ function removeChar(event) {
     if ( keyID == 8 || keyID == 46 || keyID == 37 || keyID == 39 ){
         $("#warning").text("");
         return true;
-    }
-    else{
+    } else{
         event.target.value = event.target.value.replace(/[^0-9]/g, "");
     }
 }
+/******************************************************************
+ 기능 : 고급인쇄 - 금액 기울임꼴표시 변경 함수
+ 만든이 : 하지연
+ ******************************************************************/
+function tiltPrice(){
+    console.log("들어왔음 tilt Pirce");
+    if ($("input:checkbox[name='pricetilt']").prop("checked")) {
+        console.log("check되있음");
+    } else {
+        console.log("check안되있음");
+    }
 
+    /*
+    var checkedFontForm = $("input[type=radio][name=fontform]:checked").val();
+    $('.Label:not(".DataLabel")').css('font-family', checkedFontForm);
+
+    var checkedFontContent = $("input[type=radio][name=fontcontent]:checked").val();
+    $('.Label.DataLabel').css('font-family', checkedFontContent);
+
+
+     font-style: italic;
+    */
+}
 jQuery.browser = {}; //jQuery.browser.msie 사용 위함.
 (function () {
     jQuery.browser.msie = false;

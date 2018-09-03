@@ -43,14 +43,14 @@ function makePdf() {
         docwidth1 = Number(210);
         docheight1 = Number(297);
         beforeSaving(pageOrientation,docwidth1,docheight1);
-        console.log("세로일때 page orientation : "+pageOrientation);
+        console.log("세로일때 page orientation : "+ pageOrientation);
 
     }else {
         docwidth1 = Number(297);
         docheight1 = Number(210);
         pageOrientation='l';
         beforeSaving(pageOrientation,docwidth1,docheight1);
-        console.log("가로일때 page orientation : "+pageOrientation);
+        console.log("가로일때 page orientation : "+ pageOrientation);
     }
 
     function beforeSaving(pageOrientation,docwidth1,docheight1){
@@ -94,6 +94,24 @@ function saving (){
     doc.deletePage(1);  //더미 페이지 삭제
     doc.save('saveAsPdf.pdf');
 }
+/******************************************************************
+ 기능 : 리포트 리스트의 리포트들을 하나의 HTML 파일로 저장.
+ 작성자 : 하지연
+ ******************************************************************/
+function makeHTML(){
+    var thistext = $("#reportTemplate").html().toString();
+    var pom = document.getElementById("saveAsHTML");
+    pom.setAttribute('href','data:text/plain;charset=utf-8,' + encodeURIComponent(thistext));
+    pom.setAttribute('download','saveAsHTML.html');
+
+    /*if(document.createEvent){
+        var event = document.createEvent('MouseEvents');
+        event.initEvent('click',true,true);
+        pom.dispatchEvent(event);
+    }else{
+        pom.click();
+    }*/
+};
 /******************************************************************
  기능 : DR Viewer 인쇄 메뉴 선택하기 (select option value받아와서 메뉴 인식 후 모달창 띄우기)
  author : 하지연
@@ -241,7 +259,6 @@ function close_pop() {
 
     resetData();//데이터값 초기화 밑 기본값 세팅처리
 
-
 };
 /******************************************************************
  기능 : 고급인쇄 모달창의 데이터값 초기화 밑 기본값 세팅처리
@@ -317,6 +334,7 @@ function close_pop2(){
     //데이터 초기화
     $("#sign").val('');
     $("input:checkbox[name='rangesetting']").prop("checked",false);
+    $("input:checkbox[name='pricetilt']").prop("checked",false);
     $("#range1").val('');
     $("#range2").val('');
 

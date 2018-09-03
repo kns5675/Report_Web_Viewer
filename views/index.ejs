@@ -25,7 +25,6 @@
     <script src="js/viewer.js"></script>
     <script src="js/drawingBand.js"></script>
     <script src="js/label.js"></script>
-    <script src="js/modal.js"></script>
     <script src="js/createLabel.js"></script>
     <script src="js/drawCurrPageNTotalPage.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
@@ -68,8 +67,6 @@
 
             makeReportTemplate(data);
 
-            hakjoons(data);
-
             drawPageNumberNTotalPageLabel();
             drawTotalPageLabel();
             drawPageNumberLabel();
@@ -91,13 +88,13 @@
         }
     </style>
 </head>
-<body>
+<body id="bodybody">
 <div id="header"></div>
 <div id="myModal" class="modal"></div>
 
 <div id="modalTableChoice" class="modal"></div>
 <!--ONLY ONLY ONLY sdfsdf-->
-<h1>jsPDF Demos</h1>
+<!--<h1>jsPDF Demos</h1>
 
 <a href="javascript:genPDF()">Doonload PDF</a>
 
@@ -107,16 +104,16 @@
     <input type="submit" value="button!!" onclick="genPDF1()"/>
     <br><br>
     <img src="image/test.png" width="600" height="400"/>
-</div>
+</div>-->
 <!--ONLY ONLY ONLY sdfsdf-->
 
-<textarea name="testpdf" id="testpdf" style="margin:0px; height:333px; width:661px;"></textarea>
+<!--<textarea name="testpdf" id="testpdf" style="margin:0px; height:333px; width:661px;"></textarea>
 <div id="editor"></div>
-<!--<button id="cmd" onclick="example();">PDF</button>-->
-<button id="cmd" onclick="testtest()">PDF</button>
+&lt;!&ndash;<button id="cmd" onclick="example();">PDF</button>&ndash;&gt;
+<button id="cmd" onclick="testtest()">PDF</button>-->
 
 <!---->
-<a href="javascript:genScreenshot()"> Get Screenshot</a>
+<!--<a href="javascript:genScreenshot()"> Get Screenshot</a>
 <a id="ttest"></a>
 <div id="text">
     Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras in enim metus.
@@ -127,7 +124,7 @@
 <br>
 <div id="box1" style="width:400px;
   height:300px; border:solid 2px red;">
-</div>
+</div>-->
 <!---->
 
 <div id="reportTemplate" style="background-color:lightyellow;"></div>
