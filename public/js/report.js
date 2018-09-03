@@ -86,15 +86,15 @@ function getNumOfPage(report) {
  2. th 길이 + td길이 * 데이터 개수
  만든이 : 구영준
  * *********************************************************/
-function getBandHeightWithGroupField(band) {
+function getBandHeightWithGroupField(band, numOfData) {
 
-    var dataCount = groupFieldArray[groupFieldNum].length;
+    // var dataCount = groupFieldArray[groupFieldNum].length;
     var labels = band.controlList.anyType.Labels.TableLabel;
 
     var titleHeight = Number(labels[0].Rectangle.Height._text);
     var valueHeight = Number(labels[labels.length - 1].Rectangle.Height._text);
 
-    return titleHeight + valueHeight * dataCount;
+    return titleHeight + valueHeight * numOfData;
 }
 
 /***********************************************************
@@ -408,7 +408,7 @@ function setForCopyRatioDirection(report) {  //추가 - 하지연
 
  수정 : 김학준
  날짜 : 2018 - 08 27
- 내용 : 페이지 셋팅시 페이지 사이지
+ 내용 : 페이지 셋팅시 페이지 사이즈 변경.
  ******************************************************************/
 function setPage(report) {
 

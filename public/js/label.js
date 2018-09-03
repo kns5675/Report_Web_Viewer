@@ -24,11 +24,25 @@ function Label(data){
     this.zOrder = (data.ZOrder === undefined ? 0 : data.ZOrder._text);
 
     this.borderThickness = (data.BorderThickness === undefined ? undefined : { // 테두리 두께 (있을 수도 있고 없을 수도 있는 속성)
-        left : (data.BorderThickness.Left === undefined ? 0 : data.BorderThickness.Left._text),
-        top : (data.BorderThickness.Top === undefined ? 0 : data.BorderThickness.Top._text),
-        right : (data.BorderThickness.Right === undefined ? 0 : data.BorderThickness.Right._text),
-        bottom : (data.BorderThickness.Bottom === undefined ? 0 : data.BorderThickness.Bottom._text)
+        left : (data.BorderThickness.Left === undefined ? 1 : data.BorderThickness.Left._text),
+        top : (data.BorderThickness.Top === undefined ? 1 : data.BorderThickness.Top._text),
+        right : (data.BorderThickness.Right === undefined ? 1 : data.BorderThickness.Right._text),
+        bottom : (data.BorderThickness.Bottom === undefined ? 1 : data.BorderThickness.Bottom._text)
     });
+
+    this.leftBorderColor = data.LeftBorderColor === undefined ? 'black' : data.LeftBorderColor._text; // 왼쪽 테두리 색
+    this.rightBorderColor = data.RightBorderColor === undefined ? 'black' : data.RightBorderColor._text; // 오른쪽 테두리 색
+    this.topBorderColor = data.TopBorderColor === undefined ? 'black' : data.TopBorderColor._text; // 위쪽 테두리 색
+    this.bottomBorderColor = data.BottomBorderColor === undefined ? 'black' : data.BottomBorderColor._text; // 아래쪽 테두리 색
+
+    this.borderDottedLines = { // 아마도 모든 라벨에 항상 있는 것 같음
+        leftDashStyle : (data.BorderDottedLines.LeftDashStyle === undefined ? 'Solid' : data.BorderDottedLines.LeftDashStyle._text),
+        rightDashStyle : (data.BorderDottedLines.RightDashStyle === undefined ? 'Solid' : data.BorderDottedLines.RightDashStyle._text),
+        topDashStyle : (data.BorderDottedLines.TopDashStyle === undefined ? 'Solid' : data.BorderDottedLines.TopDashStyle._text),
+        bottomDashStyle : (data.BorderDottedLines.BottomDashStyle === undefined ? 'Solid' : data.BorderDottedLines.BottomDashStyle._text),
+    } // 테두리 점선
+
+    this.noBorder = data.NoBorder === undefined ? false : data.NoBorder._text; // 테두리 없음
 
     this.enableBorder = (data.EnableBorder === undefined ? undefined : { // boolean이라는 태그 이름으로 총 4개가 들어가있어서 어떻게 해야할지 모르겠담..
         boolean1 : data.EnableBorder.boolean[0]._text,
@@ -40,32 +54,46 @@ function Label(data){
     if(data.Font === undefined){
         this.fontFamily = '굴림';
         this.fontSize = '10pt';
+        this.fontWeight = 'normal';
         this.fontStyle = 'normal';
     } else {
         Font = (data.Font._text).split(','); // 굴림, 10pt(, style=bold)로 되어있어서 잘라야함
         this.fontFamily = Font[0];
         this.fontSize = (Font[1]).trim(); // 공백 제거
         if(Font.length == 3){ // ex) 굴림, 10pt, style=bold일 때
-            this.fontStyle = (Font[2]).trim(); // 공백 제거
+            Font[2] = Font[2].split('='); // fontWeight
+            this.fontWeight = (Font[2][1]).trim(); // 공백 제거
+        } else if(Font.length == 4) {
+            this.fontStyle = Font[3].trim();
         } else {
+            this.fontWeight = 'normal';
             this.fontStyle = 'normal';
         }
     }
-    this.borderDottedLines = data.EnableBorder === undefined ? undefined : data.BorderDottedLines._text; // 테두리 점선 left, right, top, bottom있는 것 같음
-    this.indentLB = data.IndentLB === undefined ? undefined : data.IndentLB._text; // 들여쓰기
-    this.interMargin = data.InterMargin === undefined ? undefined : data.InterMargin._text; // 내부 여백
+    this.isDrawUnderLine = data.IsDrawUnderLine === undefined ? false : data.IsDrawUnderLine._text; // 밑줄
+    this.isDrawStrikeOutLine = data.IsDrawStrikeOutLine === undefined ? false : data.IsDrawStrikeOutLine._text; // 중간줄
 
-    this.lbRec = (data.LbRec === undefined ? undefined : {
-        x : (data.GradientLB.LbRec.X === undefined ? 0 : data.GradientLB.LbRec.X._text),
-        y : (data.GradientLB.LbRec.Y === undefined ? 0 : data.GradientLB.LbRec.Y._text),
-        width : (data.GradientLB.LbRec.Width === undefined ? 0 : data.GradientLB.LbRec.Width._text),
-        height : (data.GradientLB.LbRec.Height === undefined ? 0 : data.GradientLB.LbRec.Height._text)
+    // 내부 여백
+    this.interMargin = data.InterMargin === undefined ? undefined : {
+        left : (data.InterMargin.Left === undefined ? 0 : data.InterMargin.Left._text),
+        right : (data.InterMargin.Right === undefined ? 0 : data.InterMargin.Right._text),
+        top : (data.InterMargin.Top === undefined ? 0 : data.InterMargin.Top._text),
+        bottom : (data.InterMargin.Bottom === undefined ? 0 : data.InterMargin.Bottom._text)
+    }
+    // this.indentLB = data.IndentLB === undefined ? undefined : data.IndentLB._text; // 들여쓰기 (작동 안함)
+
+    this.gradientLB = (data.GradientLB === undefined ? undefined : {
+        isUseGradient : (data.GradientLB.IsUseGradient === undefined ? false : data.GradientLB.IsUseGradient._text), // 그라데이션 사용 여부
+        startGradientDirection : (data.GradientLB.StartGradientDirection === undefined ? 'Forward' : data.GradientLB.StartGradientDirection._text), // 그라데이션 시작 방향
+        gradientDirection : (data.GradientLB.GradientDerection === undefined ? 'Horizontal' : data.GradientLB.GradientDerection._text), // 그라데이션 방향
+        gradientColor : (data.GradientLB.GradientColor === undefined ? 'blue' : data.GradientLB.GradientColor._text), // 그라데이션 색
+        lbRec: (data.GradientLB.LbRec === undefined ? undefined : {
+            x: (data.GradientLB.LbRec.X === undefined ? 0 : data.GradientLB.LbRec.X._text),
+            y: (data.GradientLB.LbRec.Y === undefined ? 0 : data.GradientLB.LbRec.Y._text),
+            width: (data.GradientLB.LbRec.Width === undefined ? 0 : data.GradientLB.LbRec.Width._text),
+            height: (data.GradientLB.LbRec.Height === undefined ? 0 : data.GradientLB.LbRec.Height._text)
+        })
     });
-
-    this.isUseGradient = data.IsUseGradient === undefined ? false : data.IsUseGradient._text; // 그라데이션 사용 여부
-    this.gradientColor = data.GradientColor === undefined ? undefined : data.GradientColor._text; // 그라데이션 색
-    this.startGradientDirection = data.StartGradientDirection === undefined ? undefined : data.StartGradientDirection._text; // 그라데이션 시작 방향
-    this.gradientDerection = data.GradientDerection === undefined ? undefined : data.GradientDerection._text; // 그라데이션 방향
 
     this.indexUnderLine = (data.IndexUnderLine === undefined ? undefined : { // 이중 밑줄
         isUse : (data.IndexUnderLine.IsUse === undefined ? 0 : data.IndexUnderLine.IsUse._text), // 사용 여부
@@ -90,37 +118,59 @@ function Label(data){
     this.drawingType = data.DrawingType === undefined ? undefined : data.DrawingType._text; // 그리기 형태
     this.isSaveImage = data.IsSaveImage === undefined ? undefined : data.IsSaveImage._text; // 이미지 저장
     this.labelTypeForSetFont = data.LabelTypeForSetFont === undefined ? undefined : data.LabelTypeForSetFont._text; // 폰트 지정 타입
-    this.autosize = data.Autosize === undefined ? undefined : data.Autosize._text; // 자동 높이 조정
+    this.autosize = data.Autosize === undefined ? false : data.Autosize._text; // 자동 높이 조정 (default값 : false)
     this.isVectorCharacter = data.IsVectorCharacter === undefined ? undefined : data.IsVectorCharacter._text; // 장평 조정 설정
     this.vectorValue = data.VectorValue === undefined ? undefined : data.VectorValue._text; // 수동 장평 조절
     this.autoFontType = data.AutoFontType === undefined ? undefined : data.AutoFontType._text; // 폰트 크기 자동 조절
-    this.wordWrap = data.WordWrap === undefined ? undefined : data.WordWrap._text; // 자동 줄바꾸기
+    this.wordWrap = data.WordWrap === undefined ? false : data.WordWrap._text; // 자동 줄바꾸기
     this.formatType = data.FormatType === undefined ? undefined : data.FormatType._text; // 소수점 자릿수
     this.showZeroState = data.ShowZeroState === undefined ? undefined : data.ShowZeroState._text; // 0값 표시 여부
-    this.visible = data.Visible === undefined ? undefined : data.Visible._text; // VISIBLE
-    this.numberToTextType = data.NumberToTextType === undefined ? undefined : data.NumberToTextType._text; // 금액 표시 방법
-    this.isSameWidth = data.IsSameWidth === undefined ? undefined : data.IsSameWidth._text; // 글자 크기 동일 여부
+    this.visible = data.Visible === undefined ? true : data.Visible._text; // VISIBLE Default : true
+    this.numberToTextType = data.NumberToTextType === undefined ? false : data.NumberToTextType._text; // 금액 표시 방법
+    this.isSameWidth = data.IsSameWidth === undefined ? false : data.IsSameWidth._text; // 글자 크기 동일 여부
     this.editable = data.Editable === undefined ? undefined : data.Editable._text; // 편집 가능
-    this.backGroundColor = data.BackGroundColor === undefined ? 'white' : data.BackGroundColor._text; // 바탕색
-    this.clipping = data.Clipping === undefined ? undefined : data.Clipping._text; // 클립핑
+
+    this.backGroundColor = data.BackgGoundColor === undefined ? 'white' : data.BackgGoundColor._text; // 바탕색
+    this.clipping = data.Clipping === undefined ? false : data.Clipping._text; // 클립핑 default : false
+    // true일 때 -> 텍스트의 길이가 라벨의 너비보다 긴 경우 라벨의 너비에 맞춰 넘어가는 글자들은 제거하고 출력하는 옵션
     this.borderLineLocation = data.BorderLineLocation === undefined ? undefined : data.BorderLineLocation._text; // 테두리 라인 위치
     this.textColor = data.TextColor === undefined ? 'black' : data.TextColor._text; // 글꼴 색
-    this.textDirection = data.TextDirection === undefined ? undefined : data.TextDirection._text; // 텍스트 방향
-    this.verticalTextAlignment = data.VerticalTextAlignment === undefined ? undefined : data.VerticalTextAlignment._text;
-    this.characterSpacing = data.CharacterSpacing === undefined ? 0 : data.CharacterSpacing._text; // 자간
+
+
+
+    /***************************************
+     * 자간, 줄 간격 Default 값 주기
+     ***************************************/
+    this.characterSpacing = data.CharacterSpacing === undefined ? undefined : data.CharacterSpacing._text; // 자간
     this.lineSpacing = data.LineSpacing === undefined ? undefined : data.LineSpacing._text; // 줄 간격
+
     this.isUseBasicInnerMargin = data.IsUseBasicInnerMargin === undefined ? true : data.IsUseBasicInnerMargin._text; // 기본 여백 사용 기본 값이 true 인 듯
-    this.labelShape = data.LabelShape === undefined ? undefined : data.LabelShape._text; // 라벨 형태
-    this.circleLineColor = data.CircleLineColor === undefined ? undefined : data.CircleLineColor._text; // 원 테두리 색
+    this.labelShape = data.LabelShape === undefined ? 'rectangle' : data.LabelShape._text; // 라벨 형태
+    this.circleLineColor = data.CircleLineColor === undefined ? 'black' : data.CircleLineColor._text; // 원 테두리 색
+    this.circleLineThickness = data.CirCleLineThickness === undefined ? 1 : data.CirCleLineThickness._text; //원 테두리 두께
 
     this.detailWhere = data.DetailWhere === undefined ? undefined : data.DetailWhere._text; // 요약 라벨 조건절
     this.parameterName = data.ParameterName === undefined ? undefined : data.ParameterName._text; // 파라미터 이름
-    this.summaryType = data.SummaryType === undefined ? undefined : data.SummaryType._text; // 요약 타입
+    /***************************************
+     * SummaryType수정하기
+     ***************************************/
+    this.summaryType = data.SummaryType === undefined ? 'Sum' : data.SummaryType._text; // 요약 타입
     this.qrCodeEncodingType = data.QRCodeEncodingType === undefined ? undefined : data.QRCodeEncodingType._text; // QR 코드 인코딩 타입
     this.barcodeType = data.BarcodeType === undefined ? undefined : data.BarcodeType._text; // 바코드 타입
     this.priorLabel = data.PriorLabel === undefined ? undefined : data.PriorLabel._text; // 선행 라벨
     this.groupingRule = data.GroupingRule === undefined ? undefined : data.GroupingRule._text; // 그룹핑규칙
     this.imageSizeType = data.ImageSizeType === undefined ? undefined : data.ImageSizeType._text; //이미지 크기
+
+    this.lock = data.Lock === undefined ? false : data.Lock._text; // 잠김 속성 default : false
+    // true일 때 위치 이동, 크기 수정 불가
+
+    this._formatFieldAmountSosu = data._formatFieldAmountSosu === undefined ? undefined : data._formatFieldAmountSosu._text; // 소수점자리수 : 수량소숫점자리수 표시형식(Format)
+
+    this.horizontalTextAlignment = data.HorizontalTextAlignment === undefined ? 'Center' : data.HorizontalTextAlignment._text; // 텍스트 수평 정렬
+    this.verticalTextAlignment = data.VerticalTextAlignment === undefined ? 'Center' : data.VerticalTextAlignment._text; // 텍스트 수직 정렬
+    this.textDirection = data.TextDirection === undefined ? 'Horizontal' : data.TextDirection._text; // 텍스트 방향 아마도 default horizontal
+
+
 }
 
 
@@ -138,7 +188,6 @@ function Table(data){ // ControlList 밑에 anyType이 ControlFixedTable, Contro
         height : data.Rectangle.Height._text
     };
     this.name = data.Name._text;
-    this.Lock = data.Lock;
 
     this.isShowAtColumnSelect = data.IsShowAtColumnSelect._text; // 뷰어 항목 선택 표시 여부
     // 인쇄 미리보기에서 항목선택을 하는 경우 원하는 컬럼을 추가 및 제거할 수 있다.
@@ -156,7 +205,7 @@ function Table(data){ // ControlList 밑에 anyType이 ControlFixedTable, Contro
     this.isFirstPagePrint = data.IsFirstPagePrint === undefined ? undefined : data.IsFirstPagePrint._text; // 첫 페이지만 출력, 결재란 여부가 예 일때 결재란을 첫페이지에만 출력할것인지, 전체 페이지에 출력할것인지 판단하는 값
     this.IsdynamicBinding = data.IsdynamicBinding === undefined ? undefined : data.IsdynamicBinding._text; // 결재란의 컬럼을 동적으로 (수정 못하니까 신경 안써도 됨)
 
-    this.formatType = data.FormatType === undefined ? undefined : data.FormatType._text; // 소수점 자릿수
+    this.isPrintColumn = data.IsPrintColumn === undefined ? true : data.IsPrintColumn._text; // 테이블의 컬럼 출력 여부
 }
 
 
@@ -169,12 +218,8 @@ function FixedTableLabel(data, i){
     Label.apply(this, arguments);
 
     this._attributes = data._attributes["xsi:type"];
-    this.horizontalTextAlignment = data.HorizontalTextAlignment === undefined ? undefined : data.HorizontalTextAlignment._text; // 텍스트 수평 정렬
+
     this.selected = data.Selected._text; // 테이블 라벨에만 있는 것 같음
-    this.leftBorderColor = data.LeftBorderColor === undefined ? undefined : data.LeftBorderColor._text; // 고정 테이블에만 있는 것 같음? 왼쪽 테두리 색
-    this.rightBorderColor = data.RightBorderColor === undefined ? undefined : data.RightBorderColor._text; // 고정 테이블에만 있는 것 같음? 오른쪽 테두리 색
-    this.topBorderColor = data.TopBorderColor === undefined ? undefined : data.TopBorderColor._text; // 고정 테이블에만 있는 것 같음? 위쪽 테두리 색
-    this.bottomBorderColor = data.BottomBorderColor === undefined ? undefined : data.BottomBorderColor._text; // 고정 테이블에만 있는 것 같음? 아래쪽 테두리 색
 }
 
 
