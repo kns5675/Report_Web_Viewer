@@ -3,7 +3,7 @@ var router = express.Router();
 
 var convert = require('xml-js');
 var fs = require('fs');
-var xml = fs.readFileSync('xml/TestSample.xml', 'utf-8');
+var xml = fs.readFileSync('xml/Attribute02.xml', 'utf-8');
 // var inspect = require('util').inspect;
 var json_origin = convert.xml2json(xml, {compact : true});
 var json = json_origin.replace(/\\r/gi, '<br/>'); // 엔터키(\r)를 <br/>로 치환
@@ -12,8 +12,8 @@ var tempData = fs.readFileSync('xml/db_TestSample.xml', 'utf-8');
 // var tempData = fs.readFileSync('xml/TestSample.xml', 'utf-8');
 var dataTable = convert.xml2json(tempData, {compact : true});
 
-var bmp = require("bmp-js");
-var Printer = require('node-printer');
+// var bmp = require("bmp-js");
+// var Printer = require('node-printer');
 
 var options = {
     media: 'Custom.200x600mm',
@@ -21,7 +21,7 @@ var options = {
 };
 
 // Get available printers list
-Printer.list();
+// Printer.list();
 // Create a new Pinter from available devices
 // var printer = new Printer('Microsoft Print to PDF');
 //

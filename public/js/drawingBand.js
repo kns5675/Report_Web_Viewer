@@ -134,12 +134,16 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
         // 어디서 재귀호출해야 할 지 명확치 않아 우선 주석처리
 
         if (band.attributes["xsi:type"] === "BandData") {
-            if(bands.length > 1)
+            if(bands.length > 1){
                 getFooterHeight(bands);
-            getMinGroupBandDataHeight(band);
+            }
+            console.log(bands.childHeaderBands);
 
-            avaHeight = getAvaHeight(div_id, reportHeight);
-            numofData = getNumOfDataWithGroupField(band, avaHeight);
+            if(bands.childHeaderBands != null){
+                getMinGroupBandDataHeight(band);
+                avaHeight = getAvaHeight(div_id, reportHeight);
+                numofData = getNumOfDataWithGroupField(band, avaHeight);
+            }
         }
         judgementControlList(band, div_id, numofData); // 라벨을 그려줌
 

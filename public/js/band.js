@@ -116,8 +116,8 @@ function BandData(band){
     this.fixPriorGroupFooter = band.FixPriorGroupFooter._text; // 상위 그룹 풋터 고정
     this.autoSize = band.AutoSize._text; // 자동 높이 조정
     this.repeatNumber = band.RepeatNumber._text; // 반복 횟수
-    this.dziName = band.DziName._text; // 데이터 셋 이름
-    this.dataTableName = band.DataTableName._text; // 테이블 이름
+    this.dziName = band.DziName === undefined ? undefined : band.DziName._text; // 데이터 셋 이름
+    this.dataTableName = band.dataTableName === undefined ? undefined : band.dataTableName._text; // 데이터 셋 이름
     this.isContainTypeDynamicTable = band.IsContainTypeDynamicTable._text; // 동적테이블 보유 여부
     this.isContainTypeChart = band.IsContainTypeChart._text; // 차트 보유 여부
     this.isContainTypeCrossTable = band.IsContainTypeCrossTable._text; // 크로스탭 테이블 보유 여부
