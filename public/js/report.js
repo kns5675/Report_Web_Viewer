@@ -410,7 +410,7 @@ function setForCopyRatioDirection(report) {  //추가 - 하지연
  날짜 : 2018 - 08 27
  내용 : 페이지 셋팅시 페이지 사이즈 변경.
  ******************************************************************/
-function setPage(report) {
+function setPage(report, width, height) {
 
     var paperType = report.paperType;
 

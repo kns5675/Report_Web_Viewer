@@ -280,7 +280,7 @@ function drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table){
                     var key_data = data[j][key]._text;
                     var table_reform = table_format_check(data, valueTrId, key_data, label);
 
-                    if(label.labelTextType == 'Number' && label.format != 'undefined'){
+                    if(label.labelTextType == 'Number' && label.format != undefined){
                         valueTrId.append('<td class="MoneySosu">' + table_reform + '</td>');
                     }else{
                         valueTrId.append('<td>' + table_reform + '</td>');
