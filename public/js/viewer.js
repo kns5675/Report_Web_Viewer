@@ -2,7 +2,7 @@ var docheight; //297
 var docwidth; //210
 var doc;// = new jsPDF('p','mm',[297,210]);
 /******************************************************************
- 기능 : 화면을 pdf로 만드는 기능
+ 기능 : 리포트 리스트의 리포트들을 하나의 pdf 파일로 저장.
  author : 하지연
  /* console.log("왔음");
  html2canvas(document.getElementById("forcopyratio1"),{
@@ -43,14 +43,14 @@ function makePdf() {
         docwidth1 = Number(210);
         docheight1 = Number(297);
         beforeSaving(pageOrientation,docwidth1,docheight1);
-        console.log("세로일때 page orientation : "+pageOrientation);
+        console.log("세로일때 page orientation : "+ pageOrientation);
 
     }else {
         docwidth1 = Number(297);
         docheight1 = Number(210);
         pageOrientation='l';
         beforeSaving(pageOrientation,docwidth1,docheight1);
-        console.log("가로일때 page orientation : "+pageOrientation);
+        console.log("가로일때 page orientation : "+ pageOrientation);
     }
 
     function beforeSaving(pageOrientation,docwidth1,docheight1){
@@ -62,7 +62,7 @@ function makePdf() {
             createPdf(pageOrientation,docwidth1,docheight1);
         }
 
-        function createPdf(pageOrientation){
+        function createPdf(pageOrientation,docwidth1,docheight1){
             doc = new jsPDF(pageOrientation,'mm',[docheight1,docwidth1]);
             console.log("docheight1 : "+docheight1 + " docwidth1 : "+docwidth1);
 
@@ -94,6 +94,24 @@ function saving (){
     doc.deletePage(1);  //더미 페이지 삭제
     doc.save('saveAsPdf.pdf');
 }
+/******************************************************************
+ 기능 : 리포트 리스트의 리포트들을 하나의 HTML 파일로 저장.
+ 작성자 : 하지연
+ ******************************************************************/
+function makeHTML(){
+    var thistext = $("#reportTemplate").html().toString();
+    var pom = document.getElementById("saveAsHTML");
+    pom.setAttribute('href','data:text/plain;charset=utf-8,' + encodeURIComponent(thistext));
+    pom.setAttribute('download','saveAsHTML.html');
+
+    /*if(document.createEvent){
+        var event = document.createEvent('MouseEvents');
+        event.initEvent('click',true,true);
+        pom.dispatchEvent(event);
+    }else{
+        pom.click();
+    }*/
+};
 /******************************************************************
  기능 : DR Viewer 인쇄 메뉴 선택하기 (select option value받아와서 메뉴 인식 후 모달창 띄우기)
  author : 하지연
@@ -241,7 +259,6 @@ function close_pop() {
 
     resetData();//데이터값 초기화 밑 기본값 세팅처리
 
-
 };
 /******************************************************************
  기능 : 고급인쇄 모달창의 데이터값 초기화 밑 기본값 세팅처리
@@ -317,6 +334,7 @@ function close_pop2(){
     //데이터 초기화
     $("#sign").val('');
     $("input:checkbox[name='rangesetting']").prop("checked",false);
+    $("input:checkbox[name='pricetilt']").prop("checked",false);
     $("#range1").val('');
     $("#range2").val('');
 
@@ -330,26 +348,19 @@ function close_pop3(){
         이미지 타입 정의 모달창 띄우기)
  author : 하지연
  ******************************************************************/
+var index = 1;
 function imageOptions(){
     try{
         if ($("#saveAsImage").val() == 'png'){
+            var typeofimages = $("#saveAsImage").val();
+            console.log("type of images : "+ typeofimages);
+            var SIndex = index;
+            var iterator = saveImages(typeofimages, SIndex);
+            var firstIteration = iterator.next();
 
-            var typeofimages = $("#saveAsImage").val();
-            console.log("type of images : "+ typeofimages);
-            saveImages(typeofimages);
+            console.log("firstIteration : ", firstIteration);
+            // saveImages(typeofimages);
         }else if($("#saveAsImage").val() == 'jpeg'){
-            var typeofimages = $("#saveAsImage").val();
-            console.log("type of images : "+ typeofimages);
-            saveImages(typeofimages);
-        }else if($("#saveAsImage").val() == 'bmp'){
-            var typeofimages = $("#saveAsImage").val();
-            console.log("type of images : "+ typeofimages);
-            saveImages(typeofimages);
-        }else if($("#saveAsImage").val() == 'tiff'){
-            var typeofimages = $("#saveAsImage").val();
-            console.log("type of images : "+ typeofimages);
-            saveImages(typeofimages);
-        }else if($("#saveAsImage").val() == 'gif'){
             var typeofimages = $("#saveAsImage").val();
             console.log("type of images : "+ typeofimages);
             saveImages(typeofimages);
@@ -360,90 +371,6 @@ function imageOptions(){
         console.log(e.message);
     }
 }
-/******************************************************************
- 기능 : select box에서 이미지 타입을 받아 해당타입의 이미지로 저장하는 기능
- author : 하지연
- ******************************************************************/
-function saveImages(typeofimages){
-    alert(typeofimages);
-
-
-    /*var eCopyRate = $("#copyratio").val();
-    $(".page").each(function (i, e) {
-        // console.log("e : ", e.id);
-        var idnum = e.id.replace(/[^0-9]/g,'');
-
-        eSetFont();
-        eCopyRatio(eCopyRate, idnum);//인쇄배율 변경 펑션
-    });*/
-
-
-
-    html2canvas(document.querySelector("#pageForCopyRatio1")).then(canvas => {
-        document.body.appendChild(canvas);
-        console.log("typeofimages : "+ typeofimages);
-        var thisdata = ("image/"+ typeofimages);
-        console.log(typeof typeofimages); //string
-        console.log("this data : " + thisdata); //this data : image/jpg,png이런식으로 나옴.
-        var img = canvas.toDataURL("image/"+ typeofimages);
-        window.open().document.write('<img src="' + img + '" />');
-    });
-
-
-    $("#saveAsImage").val("--이미지--").attr("selected","selected");
-}
-
-
-/*
-promise 예제
-function pre(){
-    return new Promise(function (resolve, reject) {
-        var data11 = 100;
-        resolve(data11);
-
-        console.log("100이전에!!")
-    });
-};
-
-
-pre().then(function(resolvedData){
-    console.log("############## : "+resolvedData);//100찍힘.
-});*/
-/******************************************************************
- 기능 : 화면을 pdf로 만드는 기능
- author : 하지연
- ******************************************************************/
-function makePdf() {
-    var doc= new jsPDF('p','mm',[297,210]);
-
-    $(".page").each(function (i, e) {
-        var pageForCopyRatioNum = e.id.replace(/[^0-9]/g,'');
-        var page_width = $("#pageForCopyRatio"+pageForCopyRatioNum)[0].style.width;
-        var page_height = $("#pageForCopyRatio"+pageForCopyRatioNum)[0].style.height;
-        var page_width2 =  211;
-        var page_height2 = 299;
-        html2canvas(document.querySelector("#pageForCopyRatio"+pageForCopyRatioNum)).then(canvas => {
-            var img = canvas.toDataURL("image/png");
-            var convert_img = Canvas2Image.convertToBMP(canvas);
-            Canvas2Image.saveAsImage(canvas);
-            console.log("page_width : ",page_width2);
-            console.log("page_height : ",page_height2);
-            doc.addPage().addImage(img,'PNG',0,0, page_width2, page_height2);
-            doc.save('saveaspdf.pdf');
-
-        });
-        // makePdf2(doc);//인쇄배율 변경 펑션
-    });
-}
-
-
-function makePdf2(doc){
-    console.log("doc : " + doc);
-
-    doc.save('saveaspdf.pdf');
-}
-
-
 function example(){
       var doc = new jsPDF();
        var specialElementHandlers = {
@@ -451,22 +378,20 @@ function example(){
                return true;
            }
        }
-       //html2canvas안에 첫번쨰 인자는 캡쳐하고싶은 element적는거임.
-       //onrendered는 html2canvas가 캡쳐한 후 canvas개체가 사용될준비가 되면 실행되는 것이다.
        html2canvas($("#testpdf"),{
            useCORS:false,
            allowTaint:false,
            onrendered:function(canvas){
                var imgData = canvas.toDataURL('image/jpeg');
-               //var imgData = canvas.getContext("2d");
-               //var img = new Image();
-               //img.src = ctx.toDataURL('image/png');
-               //ctx.drawImage(img,297,210);
+               var imgData = canvas.getContext("2d");
+               var img = new Image();
+               img.src = ctx.toDataURL('image/png');
+               ctx.drawImage(img,297,210);
 
-               var doc = new jsPDF("p","mm",[297,210]);
-               console.log(imgData);
-               doc.addImage(imgData,'JPEG',0,15,210,297);
-               doc.save('test.pdf');
+               //var doc = new jsPDF("p","mm",[297,210]);
+               //console.log(imgData);
+               //doc.addImage(imgData,'JPEG',0,15,210,297);
+               //doc.save('test.pdf');
            }
        });
 }
@@ -482,10 +407,83 @@ function getScreenshot(){
         }
     });
 }
+/******************************************************************
+ 기능 : select box에서 이미지 타입을 받아 해당타입의 이미지로 저장하는 기능
+ author : 하지연
+ ******************************************************************/
+function saveImages(typeofimages, currentindex){
+    console.log("받아오는 이미지 타입 : " + typeofimages);
+    var pageForCopyRatioNum = $(".pageforcopyratio").length;
+    console.log("총 페이지 수 : " + pageForCopyRatioNum);
+
+
+    var values = [1,2,3,4,5,6,7,8,9,10];
+    // var currentindex ;
+
+   return {
+       next: function(){
+           html2canvas(document.querySelector("#pageForCopyRatio"+currentindex)).then(canvas => {
+               console.log("html2canvas 까지 들어왔음 : " + currentindex);
+               document.body.appendChild(canvas);
+               var img = canvas.toDataURL("image/"+ typeofimages).replace("image/"+ typeofimages,"image/octet-stream");
+               window.open().document.write('<img src="' + img + '" />');
+               setTimeout(function(){
+                   saveSaveSave(canvas);
+               },2000);
+
+           });
+
+           // var done = (currentindex =$(".pageforcopyratio").length);
+
+           var iteration = {
+               value:values[currentindex]
+               // done: done
+           }
+
+               // currentindex++;
+               return iteration;
+
+       }
+   }
+}
+// var iterator = saveImages(typeofimages);
+//
+// var firstIteration = iterator.next();
+// var secondIteration = iterator.next();
+// var thirdIteration = iterator.next();
+// var thirdIteration2 = iterator.next();
+// var thirdIteration3= iterator.next();
+// var thirdIteration4 = iterator.next();
+// var thirdIteration5 = iterator.next();
+// var thirdIteration6 = iterator.next();
+// var thirdIteration7 = iterator.next();
+// var thirdIteration8 = iterator.next();
+//
+// console.log(firstIteration);
+
+function saveSaveSave(canvas){
+    return Canvas2Image.saveAsPNG(canvas);
+}
+
+$("#saveAsImage").val("--이미지--").attr("selected","selected");
 function genScreenshot() {
 
-    html2canvas(document.body, {
-        onrendered: function(canvas) {
+    //지우장
+    /*html2canvas(document.querySelector("#pageForCopyRatio"+pageForCopyRatioNum)).then(canvas => {
+        document.body.appendChild(canvas);
+        console.log("typeofimages : "+ typeofimages);
+        var thisdata = ("image/"+ typeofimages);
+        console.log(typeof typeofimages); //string
+        console.log("this data : " + thisdata); //this data : image/jpg,png이런식으로 나옴.
+        //var img = canvas.toDataURL("image/"+ typeofimages);
+        var img = canvas.toDataURL("image/"+ typeofimages).replace("image/"+ typeofimages,"image/octet-stream");
+        window.location.href=img;
+
+        saveImages( "saveAs"+typeofimages+pageForCopyRatioNum+"."+typeofimages,"images/"+typeofimages);
+    });*/
+    //지우장
+
+    html2canvas(document.querySelector("#pageForCopyRatio1")).then(canvas => {
             console.log($('#text').html());
             $('#box1').html("");
             $('#box1').append(canvas);
@@ -503,12 +501,9 @@ function genScreenshot() {
                 $('#ttest').attr('download','Test_file.png');
                 $('#ttest')[0].click();
             }
-
-
-        }
     });
 }
-/*function genPDF(){
+function genPDF1(){
    // var htmlToImage = require('html-to-image');
 
     var node = document.getElementById('testDiv');
@@ -520,14 +515,13 @@ function genScreenshot() {
         .catch(function(error){
            console.log('opps... something went wrong....',error);
         });
-}*/
+}
 /******************************************************************
  기능 : 화면을 pdf로 만드는 기능
  author : 하지연
  ******************************************************************/
-function testtest(){
-    $("#cmd").on("click",function () {
-        alert("눌렀음");
+function testtest() {
+    console.log("testtest 들어왔음");
         var doc = new jsPDF();
         alert("doc : " + doc);
         var pdfHandlers = {
@@ -535,15 +529,12 @@ function testtest(){
                 return true;
             }
         };
-        html2canvas(document.getElementById("testpdf"),{
-            onrendered:function(canvas){
-                var imgData = canvas.toDataURL('image/png');
-                var doc = new jsPDF("p","mm",[297,210]);
-                doc.addImage(imgData,'PNG',10,10,190,95);
-                doc.save('test.pdf');
-            }
+        html2canvas(document.querySelector("#testpdf")).then(canvas => {
+            var imgData = canvas.toDataURL('image/png');
+            var doc = new jsPDF("p", "mm", [297, 210]);
+            doc.addImage(imgData, 'PNG', 10, 10, 190, 95);
+            doc.save('test.png');
         });
-    });
 }
 
 
@@ -563,106 +554,106 @@ function howmanyPages(thisvalue){
 
 
 //학준 추가
-function band_dbclick_event() {
-    $(".NormalLabel_scope").on({
-        "dblclick": function () {
-            var this_id = this.children[0].id;
-            var current = this.id;
-            var current_width = this.style.width;
-            var current_height = this.style.height;
-            var this_text = $("#" + this_id)[0].innerText;
+    function band_dbclick_event() {
+        $(".NormalLabel_scope").on({
+            "dblclick": function () {
+                var this_id = this.children[0].id;
+                var current = this.id;
+                var current_width = this.style.width;
+                var current_height = this.style.height;
+                var this_text = $("#" + this_id)[0].innerText;
 
-            if ($("#text_area")[0] === undefined) {
-                var text_div = document.createElement("div");
-                text_div.id = "text_div";
+                if ($("#text_area")[0] === undefined) {
+                    var text_div = document.createElement("div");
+                    text_div.id = "text_div";
 
-                var text_area = document.createElement('textarea');
-                text_area.id = "text_area";
-                text_area.value = this_text;
-                text_area.style.width = current_width;
-                text_area.style.height = current_height;
-                text_area.zIndex = 999;
+                    var text_area = document.createElement('textarea');
+                    text_area.id = "text_area";
+                    text_area.value = this_text;
+                    text_area.style.width = current_width;
+                    text_area.style.height = current_height;
+                    text_area.zIndex = 999;
 
-                this.style.borderWidth = "3px";
-                this.style.borderColor = "blue";
-                this.style.borderStyle = "dotted solid";
+                    this.style.borderWidth = "3px";
+                    this.style.borderColor = "blue";
+                    this.style.borderStyle = "dotted solid";
 
-                document.getElementById(current).appendChild(text_div);
-                document.getElementById(text_div.id).appendChild(text_area);
+                    document.getElementById(current).appendChild(text_div);
+                    document.getElementById(text_div.id).appendChild(text_area);
 
-                document.getElementById(text_area.id).focus();
-            }
-        },
-        "keydown": function (key) {
-            if (key.keyCode === 13) { //enter 처리
-                if(!key.shiftKey){  //shift + enter 처리
-                    var insert_text = $("#text_area").val();
-                    var text_convert = insert_text.replace(/(?:\r\n|\r|\n)/g, '<br />'); // html 문법으로 변환.
-                    var this_id = this.children[0].id;
-                    $("#"+this_id)[0].innerHTML = text_convert;
+                    document.getElementById(text_area.id).focus();
+                }
+            },
+            "keydown": function (key) {
+                if (key.keyCode === 13) { //enter 처리
+                    if(!key.shiftKey){  //shift + enter 처리
+                        var insert_text = $("#text_area").val();
+                        var text_convert = insert_text.replace(/(?:\r\n|\r|\n)/g, '<br />'); // html 문법으로 변환.
+                        var this_id = this.children[0].id;
+                        $("#"+this_id)[0].innerHTML = text_convert;
+                        $("#text_div").remove();
+                        this.style.borderWidth = "1px";
+                        this.style.borderColor = "black";
+                        this.style.borderStyle = "solid";
+                    }
+                }else if (key.keyCode === 27){ //esc 처리
                     $("#text_div").remove();
                     this.style.borderWidth = "1px";
                     this.style.borderColor = "black";
                     this.style.borderStyle = "solid";
                 }
-            }else if (key.keyCode === 27){ //esc 처리
-                $("#text_div").remove();
-                this.style.borderWidth = "1px";
-                this.style.borderColor = "black";
-                this.style.borderStyle = "solid";
             }
-        }
-    });
-    $(".DynamicTableHeader").on({
-        "dblclick": function () {
-        var current = this.id;
-        console.log("this : ",this);
-        console.log("current : ",current);
-        var current_width = this.style.width;
-        var current_height = this.style.height;
-        var this_text = $("#" + current)[0].innerText;
+        });
+        $(".DynamicTableHeader").on({
+            "dblclick": function () {
+                var current = this.id;
+                console.log("this : ",this);
+                console.log("current : ",current);
+                var current_width = this.style.width;
+                var current_height = this.style.height;
+                var this_text = $("#" + current)[0].innerText;
 
-        if ($("#text_area")[0] === undefined) {
-            var text_div = document.createElement("div");
-            text_div.id = "text_div";
+                if ($("#text_area")[0] === undefined) {
+                    var text_div = document.createElement("div");
+                    text_div.id = "text_div";
 
-            var text_area = document.createElement('textarea');
-            text_area.id = "text_area";
-            text_area.value = this_text;
-            text_area.style.width = current_width;
-            text_area.style.height = current_height;
-            text_area.zIndex = 999;
+                    var text_area = document.createElement('textarea');
+                    text_area.id = "text_area";
+                    text_area.value = this_text;
+                    text_area.style.width = current_width;
+                    text_area.style.height = current_height;
+                    text_area.zIndex = 999;
 
-            this.style.borderWidth = "3px";
-            this.style.borderColor = "blue";
-            this.style.borderStyle = "dotted solid";
+                    this.style.borderWidth = "3px";
+                    this.style.borderColor = "blue";
+                    this.style.borderStyle = "dotted solid";
 
-            document.getElementById(current).appendChild(text_div);
-            document.getElementById(text_div.id).appendChild(text_area);
+                    document.getElementById(current).appendChild(text_div);
+                    document.getElementById(text_div.id).appendChild(text_area);
 
-            document.getElementById(text_area.id).focus();
-        }
-    },
-        "keydown": function (key) {
-            if (key.keyCode === 13) {
-                if(!key.shiftKey){
-                    var insert_text = $("#text_area").val();
-                    var text_convert = insert_text.replace(/(?:\r\n|\r|\n)/g, '<br />'); // html 문법으로 변환.
-                    $("#"+this.id)[0].innerHTML = text_convert;
+                    document.getElementById(text_area.id).focus();
+                }
+            },
+            "keydown": function (key) {
+                if (key.keyCode === 13) {
+                    if(!key.shiftKey){
+                        var insert_text = $("#text_area").val();
+                        var text_convert = insert_text.replace(/(?:\r\n|\r|\n)/g, '<br />'); // html 문법으로 변환.
+                        $("#"+this.id)[0].innerHTML = text_convert;
+                        $("#text_div").remove();
+                        this.style.borderWidth = "1px";
+                        this.style.borderColor = "black";
+                        this.style.borderStyle = "solid";
+                    }
+                }else if (key.keyCode === 27){
                     $("#text_div").remove();
                     this.style.borderWidth = "1px";
                     this.style.borderColor = "black";
                     this.style.borderStyle = "solid";
                 }
-            }else if (key.keyCode === 27){
-                $("#text_div").remove();
-                this.style.borderWidth = "1px";
-                this.style.borderColor = "black";
-                this.style.borderStyle = "solid";
             }
-        }
-    });
-}
+        });
+    }
 
 function print_test() {
 

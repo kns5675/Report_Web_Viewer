@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "body-parser": "^1.18.3",
+    "canvas2image": "^1.0.5",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "ejs": "^2.6.1",
@@ -22,6 +23,7 @@
     "jspdf": "^1.4.1",
     "morgan": "~1.9.0",
     "pug": "2.0.0-beta11",
+    "thread-sleep": "^2.1.0",
     "util": "^0.11.0",
     "xml-js": "^1.6.7",
     "xml-parser": "^1.2.1"

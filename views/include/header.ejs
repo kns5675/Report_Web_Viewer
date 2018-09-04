@@ -6,8 +6,8 @@
     <script src="js/viewer.js"></script>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
-    <script type="text/javascript" src="https://unpkg.com/jspdf@latest/dist/jspdf.min.js"></script><!--얘랑-->
-    <script src="js/lib/canvas2image.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/jspdf@latest/dist/jspdf.min.js"></script>
+    <script src="js/lib/canvas2image.js"/>
 
     <script>
         $(function(){
@@ -38,66 +38,73 @@
             $("div.room").mouseleave(function(){
                 $(this).css("background-color","white");  //지연 - 여러페이지보기 front개발중 개발 보류
             });
-            $(".saveAsPdf").on({
-                "click": function(){
-                    saving();
-                    // makePdf();  //지연 - 화면을 pdf로 만든 후 저장하는 function()
-            },
-                "mouseover": function () {
-                    // makePdf2();
-                }
+            $(".saveAsPdf").on("mouseover", function(){
+                makePdf();  //지연 - 화면을 pdf로 만드는 function()
+            });
+            $(".saveAsPdf").on("click", function(){
+                saving();
+                // makePdf();  //지연 - 화면을 pdf로 만든 후 저장하는 function()
             });
             $("#showpages").on("click", function () {
                 print_test();
             });
+            $("#saveAsHTML").on("mouseup",function(){
+                makeHTML();
+            });
+
 
         });
     </script>
+    <style>
+      a:visited{
+        text-decoration:none;
+      }
+    </style>
     <title></title>
   </head>
   <body>
 <div class="menubar">
-  <!--<ul id="menu">-->
-    <!--<li style="display:inline;"><a href="#">파일</a>-->
-      <!--<ul class="submenu">-->
-        <!--<li><a href="#" onclick="test()">디자이너 실행</a></li>-->
-        <!--<li><a href="#">열기</a></li>-->
-        <!--<li><a href="#">저장</a></li>-->
-        <!--<li><a href="#">인쇄</a></li>-->
-        <!--<li><a href="#">고급인쇄 설정</a></li>-->
-        <!--<li><a href="#">닫기</a></li>-->
-      <!--</ul>-->
-    <!--</li>-->
+  <ul id="menu">
+    <li style="display:inline;"><a href="#">파일</a>
+      <ul class="submenu">
+        <li><a href="#" onclick="test()">디자이너 실행</a></li>
+        <li><a href="#">열기</a></li>
+        <li><a href="#">저장</a></li>
+        <li><a href="#">인쇄</a></li>
+        <li><a href="#">고급인쇄 설정</a></li>
+        <li><a href="#">닫기</a></li>
+      </ul>
+    </li>
 
-    <!--<li style="display:inline;"><a href="#">서식</a>-->
-        <!--<ul class="submenu">-->
-          <!--<li><a href="#">엑셀 내보내기</a></li>-->
-          <!--<li><a href="#">이미지 내보내기</a></li>-->
-          <!--<li class="saveAsPdf" style="cursor: pointer;">PDF 내보내기</li>-->
-          <!--<li><a href="#">HTML 내보내기</a></li>-->
-          <!--<li><a href="#" class="image_upload_button">이미지 추가</a></li>-->
-          <!--<li><a href="#">항목 선택</a></li>-->
-      <!--</ul>-->
-    <!--</li>-->
+    <li style="display:inline;"><a href="#">서식</a>
+        <ul class="submenu">
+          <li><a href="#">엑셀 내보내기</a></li>
+          <li><a href="#">이미지 내보내기</a></li>
+          <li class="saveAsPdf" style="cursor: pointer;">PDF 내보내기</li>
+          <li><a href="#">HTML 내보내기</a></li>
+          <li><a href="#" class="image_upload_button">이미지 추가</a></li>
+          <li><a href="#">항목 선택</a></li>
+      </ul>
+    </li>
 
-    <!--<li style="display:inline;"><a href="#">페이지</a>-->
-        <!--<ul class="submenu">-->
-          <!--<li><a href="#">이전 페이지</a></li>-->
-          <!--<li><a href="#">다음 페이지</a></li>-->
-          <!--<li><a href="#">첫 페이지</a></li>-->
-          <!--<li><a href="#">마지막 페이지</a></li>-->
-      <!--</ul>-->
-    <!--</li>-->
+    <li style="display:inline;"><a href="#">페이지</a>
+        <ul class="submenu">
+          <li><a href="#">이전 페이지</a></li>
+          <li><a href="#">다음 페이지</a></li>
+          <li><a href="#">첫 페이지</a></li>
+          <li><a href="#">마지막 페이지</a></li>
+      </ul>
+    </li>
 
-    <!--<li style="display:inline;"><a href="#">보기</a>-->
-        <!--<ul class="submenu">-->
-          <!--<li><a href="#">한 페이지</a></li>-->
-          <!--<li><a href="#">여러 페이지</a></li>-->
-          <!--<li><a href="#">확대/축소</a></li>-->
-      <!--</ul>-->
-    <!--</li>-->
+    <li style="display:inline;"><a href="#">보기</a>
+        <ul class="submenu">
+          <li><a href="#">한 페이지</a></li>
+          <li><a href="#">여러 페이지</a></li>
+          <li><a href="#">확대/축소</a></li>
+      </ul>
+    </li>
 
-  <!--</ul>-->
+  </ul>
 </div>
 <div class="topMenu">
 <ul>
@@ -173,7 +180,7 @@
       <option id="saveAsGif" value="gif">GIF</option>
     </select>
   </li>
-  <li><input type="button" value="HTML"></li>
+  <li><button><a id="saveAsHTML" type="button" style="text-decoration: none;">HTML</a></button></li>
   <li><input type="button" value="이미지 추가" class="image_upload_button">
   </li>
   <li><input type="button" value="항목 선택" id="tableChoice"></li>
