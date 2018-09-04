@@ -149,6 +149,10 @@ function getNumOfDataInOnePage(tableLabel, divId) {
 /******************************************************************
  기능 : 디자인 레이어 세팅
  author : powerku
+
+ 수정 : 하지연
+ 날짜 : 2018 - 09 - 03
+ 내용 : 디자인 레이어에 position지정
  ******************************************************************/
 function setDesignLayer(report) {
     $(('#page' + pageNum)).append('<div id="designLayer' + pageNum + '"class = designLayer></div>');
@@ -161,7 +165,8 @@ function setDesignLayer(report) {
         'margin-bottom': report.margin.y + 'px',
         'margin-right': report.margin.height + 'px',
         'margin-left': report.margin.width + 'px',
-    });
+        'position' : 'absolute',
+    });//추가 - 하지연
 
     var layerName = "designLayer" + pageNum;
     var reportHeight = report.rectangle.height;
@@ -188,6 +193,10 @@ function setDesignLayerDirection(report) {
 /******************************************************************
  기능 : 백그라운드레이어 세팅
  author : powerku
+
+ 수정 : 하지연
+ 날짜 : 2018 - 09 - 03
+ 내용 : 백그라운드 레이어에 position 지정
  ******************************************************************/
 function setBackGroundLayer(report) {
     $(('#page' + pageNum)).append('<div id="backGroundLayer' + pageNum + '"class = backGroundLayer></div>');
@@ -201,7 +210,8 @@ function setBackGroundLayer(report) {
         'margin-bottom': report.margin.y + 'px',
         'margin-right': report.margin.height + 'px',
         'margin-left': report.margin.width + 'px',
-    });
+        'position' : 'absolute',
+    });// 추가 - 하지연
 
     var layerName = "backGroundLayer" + pageNum;
     drawBand(report.layers.backGroundLayer.bands, layerName); // 추가 - 전형준
@@ -228,6 +238,10 @@ function setBackGroundLayerDirection(report) {
 /******************************************************************
  기능 : 포그라운드 레이어 크기 세팅
  author : powerku
+
+ 수정 : 하지연
+ 날짜 : 2018 - 09 - 03
+ 내용 : 포그라운드 레이어에 position지정
  ******************************************************************/
 function setForeGroundLayer(report) {
     $(('#page' + pageNum)).append('<div id="foreGroundLayer' + pageNum + '"class = foreGroundLayer></div>');
@@ -241,7 +255,8 @@ function setForeGroundLayer(report) {
         'margin-bottom': report.margin.y + 'px',
         'margin-right': report.margin.height + 'px',
         'margin-left': report.margin.width + 'px',
-    });
+        'position' : 'absolute',
+    });// 수정, 추가 - 하지연
 
     var layerName = "foreGroundLayer" + pageNum;
     drawBand(report.layers.foreGroundLayer.bands, layerName); // 추가 - 전형준
@@ -269,13 +284,17 @@ function setForeGroundLayerDirection(report) {
 /******************************************************************
  기능 : 페이지안의 리포트를 만듬
  author : powerku
+
+ 수정 : 하지연
+ 날짜 : 2018 - 09 - 03
+ 내용 : #page 하위에 forcopyratio라는 인쇄배율 조정을 위한 div를 생성하고
+        forcopyratio라는 클래스 부여 & 스타일 생성
  ******************************************************************/
 function setReport(report) {
-    $(('#page' + pageNum)).append('<div id="forcopyratio' + reportNum + '"class = forcopyratio' + '></div>');//지연
-    //지연 - 인쇄배율 조정을 위한 div 하나 더 생성.
-    $(('#forcopyratio' + reportNum)).append('<div id="report' + reportNum + '"class = report' + '></div>');//지연
+    $(('#page' + pageNum)).append('<div id="forcopyratio' + reportNum + '"class = forcopyratio' + '></div>');//추가 - 하지연
+    $(('#forcopyratio' + reportNum)).append('<div id="report' + reportNum + '"class = report' + '></div>');//추가 - 하지연
 
-    setForCopyRatioDirection(report);//추가 - 지연
+    setForCopyRatioDirection(report);//추가 - 하지연
     setReportDirection(report);
 
     var reportInPage = $('#report' + reportNum);
@@ -288,11 +307,13 @@ function setReport(report) {
         'margin-left': report.margin.width + 'px',
     });*/
 
-    //  지연 수정
+    //  추가 - 하지연
     $('#forcopyratio' + reportNum).css('margin-top', report.margin.x + 'px');
     $('#forcopyratio' + reportNum).css('margin-bottom', report.margin.y + 'px');
     $('#forcopyratio' + reportNum).css('margin-right', report.margin.height + 'px');
     $('#forcopyratio' + reportNum).css('margin-left', report.margin.width + 'px');
+    $('#forcopyratio' + reportNum).css('position','absolute');
+
 
     setBackGroundLayer(report);
     setDesignLayer(report);
@@ -340,16 +361,20 @@ function makeTableByData() {
 /******************************************************************
  기능 : 페이지안의 리포트 방향 설정
  author : powerku
+
+ 수정 : 하지연
+ 내용 : page의 가로, 세로 값을 100%로 지정해, 부모의 변경값에
+        유동적으로 변하도록 설정.
  ******************************************************************/
 function setReportDirection(report) {
 
     var reportInPage = $('#report' + reportNum);
-    if (report.paperDirection) {// 지연 수정
+    if (report.paperDirection) {//수정 - 하지연
         reportInPage.css({
             'width': '100%',
             'height': '100%'
         });
-    } else {//지연 수정
+    } else {//수정 - 하지연
         reportInPage.css({
             'height': $('#forcopyratio' + reportNum).width,
             'width': $('#forcopyratio' + reportNum).height
@@ -359,10 +384,11 @@ function setReportDirection(report) {
     reportInPage.css('text-align', 'center'); // 추가 : 안예솔
 }
 /******************************************************************
- 기능 : 리포트 div의 부모 div인 forcopyratio div를 만든후 report의 크기로 지정하고, 방향지정.
+ 기능 : 리포트 div의 부모 div인 forcopyratio div를 만든후 report의
+        크기로 지정하고, 방향지정.
  author : 하지연
  ******************************************************************/
-function setForCopyRatioDirection(report) {  //지연 추가
+function setForCopyRatioDirection(report) {  //추가 - 하지연
     if (report.paperDirection) {
         $('#forcopyratio' + reportNum).css('width', report.rectangle.width + 'px');
         $('#forcopyratio' + reportNum).css('height', report.rectangle.height + 'px');
@@ -376,8 +402,9 @@ function setForCopyRatioDirection(report) {  //지연 추가
  author : powerku
 
  수정 : 하지연
- 날짜 : 2018 - 08 23
- 내용 : reportTemplate 자식 pageForCopyRatio를 만들고 그 아래 자식으로 page div 생성.
+ 날짜 : 2018 - 08 - 23
+ 내용 : - reportTemplate 자식 pageForCopyRatio를 만들고 그 아래 자식page div 생성.
+        - page의 position을 relative로 설정.
 
  수정 : 김학준
  날짜 : 2018 - 08 27
@@ -386,16 +413,13 @@ function setForCopyRatioDirection(report) {  //지연 추가
 function setPage(report, width, height) {
 
     var paperType = report.paperType;
-    $('#reportTemplate').append('<div id="pageForCopyRatio' + pageNum + '" class="pageforcopyratio paperType-' + paperType + '"></div>');//지연 수정
-    if(width){
-        console.log("setPage width : ",width);
 
-    }
-    $('#pageForCopyRatio' + pageNum).append('<div id="page' + pageNum + '" class="page paperType-' + paperType + '"></div>');//지연 수정
+    $('#reportTemplate').append('<div id="pageForCopyRatio' + pageNum + '" class="pageforcopyratio paperType-' + paperType + '"></div>');//수정 - 하지연
+    $('#pageForCopyRatio' + pageNum).append('<div id="page' + pageNum + '" class="page paperType-' + paperType + '"></div>');//수정 - 하지연
     // $(('#forcopyratio' + reportNum)).append('<div id="report' + reportNum + '"class = report' +'></div>');
 
     setPageDirection(report);
-    setPageForCopyRatioDirection(report);//지연추가
+    setPageForCopyRatioDirection(report);//추가 - 하지연
 
     //학준추가.
     $("#pagesizeoptions").on("change", function () {
@@ -403,29 +427,17 @@ function setPage(report, width, height) {
     });
     $("#row_direction").on("click",function () {
         var test = $("#row_direction").val();
-        // if(){
-        //
-        // }
     });
 
     var page = $('#page' + pageNum);
     page.css('border', 'solid green');
     page.css('background-color', 'transparent');
-    // page.css('width',width);
-    // page.css('height',height);
-    // page.css('position', 'absolute');
+    page.css('position','relative');//추가 - 하지연
 
     var pageForCopyRatio = $('#pageForCopyRatio' + pageNum);
     pageForCopyRatio.css('border', 'solid red');
     pageForCopyRatio.css('background-color', 'lightgreen');
 
-}
-
-function removePage(data, width, height) {
-    if($(".pageforcopyratio")){
-        $(".pageforcopyratio").remove();
-    }
-    return makeReportTemplate(data, width, height);
 }
 
 /******************************************************************
@@ -450,21 +462,13 @@ function setPageForCopyRatioDirection(report) {
 
  수정 : 하지연
  날짜 : 2018 - 08 - 23
- 내용 : page의 width, height값을 page의 부모인 pageForCopyRatio의 width, height값의 100%로 지정하고,
- 방향 설정
+ 내용 : page의 width, height값을 page의 부모인 pageForCopyRatio의 width,
+        height값의 100%로 지정하고, 방향 설정
  ******************************************************************/
 function setPageDirection(report) {
     var page = $('#page' + pageNum);
     var pageForCopyRatio = $('#pageForCopyRatio' + pageNum);
 
-    /*if (report.paperDirection) { //세로
-        page.css('width', '100%');
-        page.css('height', '100%');
-    } else { //가로
-        page.css('width', $('#pageForCopyRatio' + pageNum).height);
-        page.css('height', $('#pageForCopyRatio' + pageNum).width);
-        page.css('height',$('#pageForCopyRatio' + pageNum).width);
-    }*/
     page.css('width', '100%');
     page.css('height','100%');
 }

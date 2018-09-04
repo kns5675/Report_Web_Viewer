@@ -90,7 +90,7 @@ function getNumOfDataWithGroupField(band, avaHeight) {
  *
  * 수정 : 2018-08-31
  * 그룹 헤더 밴드 구현
- * fro 구영준
+ * from 구영준
  * *********************************************************/
 function drawBand(bands, layerName, reportHeight, parentBand) {
 
@@ -164,24 +164,32 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                 // console.log("childHeaderBands 2 : ",band.childHeaderBands[0]);
             }
             var dataBandHeight = 0;
-            if (remainData) {
-                dataBandHeight = getBandHeightWithGroupField(band, numofData - groupDataRow);
-            } else {
-                dataBandHeight = getBandHeightWithGroupField(band, numofData);
-            }
+            if(groupFieldArray.length > 0) {
+               if (remainData) {
+                    dataBandHeight = getBandHeightWithGroupField(band, numofData - groupDataRow);
+               } else {
+                 dataBandHeight = getBandHeightWithGroupField(band, numofData);
+               }
             $('#' + div_id).css({
                 'width': band.rectangle.width,
                 'height': dataBandHeight,
                 'border-bottom': "1px solid red"
             });
-            if (groupFieldArray[groupFieldNum].length > numofData) {
-                curDatarow += numofData;
-                remainData = true;
-                groupDataRow += numofData;
-            } else {
-                curDatarow += (groupFieldArray[groupFieldNum].length - 1);
-                groupFieldNum++;
-                remainData = false;
+                if (groupFieldArray[groupFieldNum].length > numofData) {
+                    curDatarow += numofData;
+                    remainData = true;
+                    groupDataRow += numofData;
+                } else {
+                    curDatarow += (groupFieldArray[groupFieldNum].length - 1);
+                    groupFieldNum++;
+                    remainData = false;
+                }
+            }else {
+                $('#' + div_id).css({
+                    'width': band.rectangle.width,
+                    'height': band.rectangle.height,
+                    'border-bottom': "1px solid red"
+                });
             }
         } else if (band.attributes["xsi:type"] === "BandSubReport") {
             $('#' + div_id).css({

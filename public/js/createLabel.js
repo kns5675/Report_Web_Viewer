@@ -24,7 +24,6 @@ var thNum = 1;
 var dynamicValueLabelNum = 1;
 var groupFieldArray = new Array();
 var titleArray = new Array(); // 그룹으로 묶었을 경우 titleName으로만 접근이 가능해져서 그 titleName을 담을 배열
-var dynamicTableValueNum = 0;
 
 var row = 0;
 var verticalPNum = 0;
@@ -71,7 +70,7 @@ function judgementLabel(data, divId, numOfData) {
     } else if (attr == "ControlFixedTable") { // 고정 테이블
 
         /*
-        To Do : 하나의 페이지에 고정테이블이 2개 이상 있을 경우 fixTableLabelList에 겹침
+        ToDo : 하나의 페이지에 고정테이블이 2개 이상 있을 경우 fixTableLabelList에 겹침
          */
         var controlFixedTable = new Table(data);
         tableList.push(controlFixedTable);
@@ -151,11 +150,11 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData) {
     var div = $('#' + divId);
     div.append('<div id = "Table' + tableNum + '"></div>');
     var divIdTable = $('#Table' + tableNum);
-    divIdTable.append('<div id="dynamicTable_resizing_div_packing' + dynamicTableNum + '"></div>');
-    var dynamicTable_resizing_div_packing = $("#dynamicTable_resizing_div_packing" + dynamicTableNum);
-    dynamicTable_resizing_div_packing.append('<div id="dynamicTable_resizing_div' + dynamicTableNum + '"></div>');
+    divIdTable.append('<div id="dynamicTable_resizing_div_packing'+dynamicTableNum + '"></div>');
+    var dynamicTable_resizing_div_packing = $("#dynamicTable_resizing_div_packing"+dynamicTableNum);
+    dynamicTable_resizing_div_packing.append('<div id="dynamicTable_resizing_div'+dynamicTableNum + '"></div>');
 
-    var dynamicTable_resizing_div = $("#dynamicTable_resizing_div" + dynamicTableNum);
+    var dynamicTable_resizing_div = $("#dynamicTable_resizing_div"+dynamicTableNum);
     dynamicTable_resizing_div.append('<table id="dynamicTable' + dynamicTableNum + '"></table>');
     // dynamicTable_resizing_div.addClass("NormalLabel_scope");
     div.css('position', 'relative');
@@ -174,7 +173,7 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData) {
     });
     tableId.append('<tr id = "dynamicTitleLabel' + dynamicTitleLabelNum + '"></tr>');
 
-    if (groupFieldArray == undefined) {
+    if(groupFieldArray == undefined) {
         numOfData = getNumOfDataInOnePage(tableLabel, divId); //한 페이지에 들어갈 데이터 개수
     }
     var dt = Object.values(dataTable.DataSetName)[0];
@@ -218,16 +217,19 @@ function drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table) {
         for (curDatarow = row; curDatarow < rowLength; curDatarow++) {
             var data = dt[curDatarow];
             var valueTrId = $('#dynamicValueLabel' + curDatarow);
-            if (valueTrId.length < 1)
+            if(valueTrId.length < 1)
                 tableId.append('<tr id = "dynamicValueLabel' + curDatarow + '"></tr>');
             for (key in data) {
                 if (label.fieldName == key) {
                     var valueTrId = $('#dynamicValueLabel' + curDatarow);
                     var key_data = data[key]._text;
                     var table_reform = table_format_check(data, valueTrId, key_data, table);
-                    valueTrId.append(
-                        '<td class="Label ' + label._attributes + ' ' + label.dataType + '">' + table_reform + '</td>'
-                    );
+                    if(label.labelTextType == 'Number' && label.format != undefined){
+                        valueTrId.append('<td class="Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '">' + table_reform + '</td>');
+                    }else{
+                        valueTrId.append('<td class="Label ' + label._attributes + ' ' + label.dataType + '">' + table_reform + '</td>');
+                    }
+
                     valueTrId.css({
                         'width': label.rectangle.width,
                         'height': label.rectangle.height
@@ -274,7 +276,16 @@ function drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table) {
                 if (label.fieldName == key) {
                     var key_data = data[j][key]._text;
                     var table_reform = table_format_check(data, valueTrId, key_data, label);
-                    valueTrId.append('<td>' + table_reform + '</td>');
+
+                    if(label.labelTextType == 'Number' && label.format != undefined){
+                        valueTrId.append(
+                        '<td class="Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '">' + table_reform + '</td>'
+                        );
+                    }else{
+                        valueTrId.append(
+                        '<td class="Label ' + label._attributes + ' ' + label.dataType + '">' + table_reform + '</td>'
+                        );
+                    }
                     valueTrId.css({
                         'width': label.rectangle.width,
                         'height': label.rectangle.height,
@@ -1303,7 +1314,7 @@ function drawingDataLabel(data, divId) {
         });
         clipping(data.text, 'DataLabel' + dataLabelNum, 'PDataLabel' + dataLabelNum);
     }
-    console.log('center : ' + data.text);
+
     if (data.autosize == true) { // 자동 높이 조절
         autoSizeTrue('PDataLabel' + dataLabelNum);
     } else {

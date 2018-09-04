@@ -22,6 +22,7 @@ function FirstPage(){
  ******************************************************************/
 function NowPage(){
     $("#NowPage")[0].style.width ="50px";
+    console.log("test : ",test );
     $("#NowPage").on("keyup",function () {
         $(this).val($(this).val().replace(/[^0-9]/g,""));
         var inputpage = "page"+$(this).val();
