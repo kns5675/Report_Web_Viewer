@@ -119,8 +119,12 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
         }
 
         if (band.childHeaderBands !== null) { // 자식헤더밴드에서 재호출
-            if(!remainData){
+            if(!remainData){  //남은 데이터가 없는 경우
                 drawBand(band.childHeaderBands, layerName, reportHeight);
+            }else{
+                if(band.fixPriorGroupHeader){
+                    drawBand(band.childHeaderBands, layerName, reportHeight);
+                }
             }
         }
 
@@ -216,14 +220,7 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                 if (!band.forceNewPage) {
 
                 } else {
-                    var siblings = $('#' + div_id).siblings();
-                    var curr_height = parseInt($('#' + div_id).css('height').substring(0, $('#' + div_id).css('height').length - 2));
-
-                    for (var i = 0; i < siblings.length; i++) {
-                        curr_height += parseInt(siblings.eq(i).css('height').substring(0, siblings.eq(i).css('height').length - 2));
-                    }
-                    //ToDo -4 지워야함 Maybe 밴드에 픽셀 때문에 화면이 겹쳐서 강제로 해줌
-                    avaHeight = reportHeight - curr_height - footer_height - 4;
+                    avaHeight = getAvaHeight(div_id, reportHeight);
 
                     if (avaHeight > minGroupBandDataHeight) {
                         parentBand = (function (arg) {
@@ -239,10 +236,13 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
 
 
         if (band.childFooterBands !== null) { // 자식 풋터 밴드에서 재호출
-            if(!remainData){
+            if (!remainData) {
                 drawBand(band.childFooterBands, layerName, reportHeight, band);
+            } else {
+                if (band.fixPriorGroupFooter) {
+                    drawBand(band.childFooterBands, layerName, reportHeight);
+                }
             }
         }
-
     });
 }
