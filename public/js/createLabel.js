@@ -24,7 +24,6 @@ var thNum = 1;
 var dynamicValueLabelNum = 1;
 var groupFieldArray = new Array();
 var titleArray = new Array(); // 그룹으로 묶었을 경우 titleName으로만 접근이 가능해져서 그 titleName을 담을 배열
-var dynamicTableValueNum = 0;
 
 var row = 0;
 var verticalPNum = 0;
@@ -230,9 +229,16 @@ function drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table){
                     var valueTrId = $('#dynamicValueLabel' + curDatarow);
                     var key_data = data[key]._text;
                     var table_reform = table_format_check(data, valueTrId, key_data, table);
-                    valueTrId.append(
-                        '<td class="Label ' + label._attributes + ' ' + label.dataType + '">' + table_reform + '</td>'
-                    );
+                    if(label.labelTextType == 'Number' && label.format != undefined){
+                        valueTrId.append(
+                            '<td class="Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '">' + table_reform + '</td>'
+                        );
+                    }else{
+                        valueTrId.append(
+                            '<td class="Label ' + label._attributes + ' ' + label.dataType + '">' + table_reform + '</td>'
+                        );
+                    }
+
                     valueTrId.css({
                         'width': label.rectangle.width,
                         'height': label.rectangle.height
@@ -280,10 +286,14 @@ function drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table){
                     var key_data = data[j][key]._text;
                     var table_reform = table_format_check(data, valueTrId, key_data, label);
 
-                    if(label.labelTextType == 'Number' && label.format != 'undefined'){
-                        valueTrId.append('<td class="MoneySosu">' + table_reform + '</td>');
+                    if(label.labelTextType == 'Number' && label.format != undefined){
+                        valueTrId.append(
+                        '<td class="Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '">' + table_reform + '</td>'
+                        );
                     }else{
-                        valueTrId.append('<td>' + table_reform + '</td>');
+                        valueTrId.append(
+                        '<td class="Label ' + label._attributes + ' ' + label.dataType + '">' + table_reform + '</td>'
+                        );
                     }
                     valueTrId.css({
                         'width': label.rectangle.width,

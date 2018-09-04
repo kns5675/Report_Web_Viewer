@@ -10,7 +10,6 @@ var numofData = 0;
  * 만든이 : 구영준
  * *********************************************************/
 function getMinGroupBandDataHeight(band) {
-    console.log(band);
     var bandGroupHeaderHeight = Number(band.childHeaderBands[0].rectangle.height);
     var tableLabel = band.controlList.anyType.Labels.TableLabel;
     var tableTitleHeight = Number(tableLabel[0].Rectangle.Height._text);
