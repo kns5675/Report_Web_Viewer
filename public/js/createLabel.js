@@ -227,6 +227,7 @@ function drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table){
                     var valueTrId = $('#dynamicValueLabel' + curDatarow);
                     var key_data = data[key]._text;
                     var table_reform = table_format_check(data, valueTrId, key_data, table);
+                    console.log("여기 들어오지?");
                     valueTrId.append(
                         '<td class="Label ' + label._attributes + ' ' + label.dataType + '">' + table_reform + '</td>'
                     );
