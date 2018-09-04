@@ -68,7 +68,6 @@ function judgementLabel(data, divId, numOfData) {
             }
         });
         drawingDynamicTable(controlDynamicTable, tableLabelList, divId, numOfData);
-
     } else if (attr == "ControlFixedTable") { // 고정 테이블
 
         /*
@@ -85,7 +84,6 @@ function judgementLabel(data, divId, numOfData) {
             fixTableLabelList.push(fixtableLabel);
         });
         drawingFixedTable(controlFixedTable, fixTableLabelList, divId);
-
     } else if (attr == "ControlLabel") {
         if (!(data.DataType === undefined)) {
             switch (data.DataType._text) {
@@ -150,16 +148,14 @@ function judgementLabel(data, divId, numOfData) {
  From hagdung-i
  ******************************************************************/
 function drawingDynamicTable(table, tableLabel, divId, numOfData) {
-
-
     var div = $('#' + divId);
     div.append('<div id = "Table' + tableNum + '"></div>');
     var divIdTable = $('#Table' + tableNum);
-    divIdTable.append('<div id="dynamicTable_resizing_div_packing'+dynamicTableNum + '"></div>');
-    var dynamicTable_resizing_div_packing = $("#dynamicTable_resizing_div_packing"+dynamicTableNum);
-    dynamicTable_resizing_div_packing.append('<div id="dynamicTable_resizing_div'+dynamicTableNum + '"></div>');
+    divIdTable.append('<div id="dynamicTable_resizing_div_packing' + dynamicTableNum + '"></div>');
+    var dynamicTable_resizing_div_packing = $("#dynamicTable_resizing_div_packing" + dynamicTableNum);
+    dynamicTable_resizing_div_packing.append('<div id="dynamicTable_resizing_div' + dynamicTableNum + '"></div>');
 
-    var dynamicTable_resizing_div = $("#dynamicTable_resizing_div"+dynamicTableNum);
+    var dynamicTable_resizing_div = $("#dynamicTable_resizing_div" + dynamicTableNum);
     dynamicTable_resizing_div.append('<table id="dynamicTable' + dynamicTableNum + '"></table>');
     // dynamicTable_resizing_div.addClass("NormalLabel_scope");
     div.css('position', 'relative');
@@ -178,7 +174,7 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData) {
     });
     tableId.append('<tr id = "dynamicTitleLabel' + dynamicTitleLabelNum + '"></tr>');
 
-    if(groupFieldArray == undefined) {
+    if (groupFieldArray == undefined) {
         numOfData = getNumOfDataInOnePage(tableLabel, divId); //한 페이지에 들어갈 데이터 개수
     }
     var dt = Object.values(dataTable.DataSetName)[0];
@@ -215,15 +211,14 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData) {
  Date : 2018-08-29
  From hagdung-i
  *******************************************************************/
-function drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table){
-    if(groupFieldArray == undefined) {
-        row = (pageNum-1) * numOfData; //한 페이지 출력 해야할 시작 row
+function drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table) {
+    if (groupFieldArray == undefined || groupFieldArray.length == 0) {
+        row = (pageNum - 1) * numOfData; //한 페이지 출력 해야할 시작 row
         var rowLength = row + numOfData; //한 페이지에 마지막으로 출력해야할 row
         for (curDatarow = row; curDatarow < rowLength; curDatarow++) {
-
             var data = dt[curDatarow];
             var valueTrId = $('#dynamicValueLabel' + curDatarow);
-            if(valueTrId.length < 1)
+            if (valueTrId.length < 1)
                 tableId.append('<tr id = "dynamicValueLabel' + curDatarow + '"></tr>');
             for (key in data) {
                 if (label.fieldName == key) {
@@ -267,7 +262,7 @@ function drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table){
                 }
             }
         }
-    }else {
+    } else {
         for (var j = groupDataRow; j < numOfData; j++) {
             var data = groupFieldArray[groupFieldNum];
             var rowNum = curDatarow + j;
@@ -363,7 +358,6 @@ function drawingDynamicTableTitleLabel(label, dt) {
             }
 
             thId.css({
-                // 'border' : '1px solid black',
                 'background-color': label.backGroundColor,
                 'font-size': label.fontSize,
                 'font-family': label.fontFamily,
@@ -378,7 +372,6 @@ function drawingDynamicTableTitleLabel(label, dt) {
         header_Name_Number++;
     });
 }
-
 
 /******************************************************************
  기능 : FixedTable(고정 테이블)을 화면에 그려주는 함수를 만든다.
@@ -443,7 +436,6 @@ function drawingFixedTable(table, tableLabel, divId) {
     });
 }
 
-
 /******************************************************************
  기능 : SystemLabel(시스템 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 안예솔
@@ -507,7 +499,7 @@ function drawingSystemLabel(data, divId) {
         systemLabelId.css({
             'border-radius': '100%', // LabelShape가 원일 때
             'border': data.circleLineThickness + 'px solid ' + data.circleLineColor // 원 테두리 두께
-        })
+        });
     }
 
     // 그라데이션을 사용할 때
@@ -603,6 +595,7 @@ function drawingSystemLabel(data, divId) {
                     }
                 }
             }
+
             // 폰트크기 자동 줄어듦
             if (data.autoFontType == 'AutoSmall') {
                 fontSizeAutoSmall(dateStr, 'PDate' + dateNum);
@@ -737,7 +730,7 @@ function drawingSystemLabel(data, divId) {
                     'margin-right': data.interMargin.right + 'px',
                     'margin-top': data.interMargin.top + 'px',
                     'margin-bottom': data.interMargin.bottom + 'px',
-                })
+                });
             }
 
             // 중간 줄 그리기
@@ -857,7 +850,7 @@ function drawingSystemLabel(data, divId) {
                     'margin-right': data.interMargin.right + 'px',
                     'margin-top': data.interMargin.top + 'px',
                     'margin-bottom': data.interMargin.bottom + 'px',
-                })
+                });
             }
 
             // 중간 줄 그리기
@@ -907,7 +900,6 @@ function drawingSystemLabel(data, divId) {
             systemLabelId.append('<p id ="' + PTotalPage + totalPageNum + '" class="totalPage">1</p>');
 
             pId = $('#' + PTotalPage + totalPageNum);
-
 
             // fontSize의 단위를 통일하기위해
             var fontSizePt = changeFontUnit(data.fontSize);
@@ -965,12 +957,10 @@ function drawingSummaryLabel(data, divId) {
     div.append('<div id = "SummaryLabel' + summaryLabelNum + '">SummaryLabel</div>');
     var summaryLabelId = $('#SummaryLabel' + summaryLabelNum);
 
-
     // visible 속성
     if (data.visible == 'false') {
         summaryLabelId.css('display', 'none');
     }
-
 
     //// 추가 부분 18.08.28 YeSol
     if (data.noBorder == 'true') {
@@ -1010,7 +1000,7 @@ function drawingSummaryLabel(data, divId) {
         summaryLabelId.css({
             'border-radius': '100%', // LabelShape가 원일 때
             'border': data.circleLineThickness + 'px solid ' + data.circleLineColor // (원 테두리 두께) 속성이 뭔지 모르겠땀
-        })
+        });
     }
 
     // 그라데이션을 사용할 때
@@ -1053,14 +1043,11 @@ function drawingSummaryLabel(data, divId) {
     // // 금액 표시 방법 한글
     // if(data.numberToTextType == 'KOR') {
     //     var KOR = numberToKOR((data.text).replace(/[^0-9]/g, ""));
-    //     console.log(KOR);
-    //     console.log(numberToKOR('00012300456'));
     // }
     //
     // // 금액 표시 방법 한자
     // if(data.numberToTextType == 'CHN') {
     //     var CHN = numberToCHN((data.text).replace(/[^0-9]/g, ""));
-    //     console.log(CHN);
     // }
 
     // 0값 표시 여부가 NoShow(표시하지 않음) 이고 문자 형식이 숫자 일 때
@@ -1130,6 +1117,7 @@ function drawingSummaryLabel(data, divId) {
             }
         }
     }
+
     // 폰트크기 자동 줄어듦
     if (data.autoFontType == 'AutoSmall') {
         fontSizeAutoSmall(data.text, 'PSummaryLabel' + summaryLabelNum);
@@ -1142,7 +1130,7 @@ function drawingSummaryLabel(data, divId) {
             'margin-right': data.interMargin.right + 'px',
             'margin-top': data.interMargin.top + 'px',
             'margin-bottom': data.interMargin.bottom + 'px',
-        })
+        });
     }
 
     // 중간 줄 그리기
@@ -1238,7 +1226,7 @@ function drawingDataLabel(data, divId) {
         dataLabelId.css({
             'border-radius': '100%', // LabelShape가 원일 때
             'border': data.circleLineThickness + 'px solid ' + data.circleLineColor // (원 테두리 두께) 속성이 뭔지 모르겠땀
-        })
+        });
     }
 
     // 그라데이션을 사용할 때
@@ -1256,9 +1244,6 @@ function drawingDataLabel(data, divId) {
 
     var pId = $('#PDataLabel' + dataLabelNum);
 
-
-    //var fontSizePt = 0;
-
     // fontSize의 단위를 통일하기위해
     var fontSizePt = changeFontUnit(data.fontSize);
 
@@ -1271,15 +1256,20 @@ function drawingDataLabel(data, divId) {
     // // 금액 표시 방법 한글
     // if(data.numberToTextType == 'KOR') {
     //     var KOR = numberToKOR((data.text).replace(/[^0-9]/g, ""));
-    //     console.log(KOR);
-    //     console.log(numberToKOR('00012300456'));
     // }
     //
     // // 금액 표시 방법 한자
     // if(data.numberToTextType == 'CHN') {
     //     var CHN = numberToCHN((data.text).replace(/[^0-9]/g, ""));
-    //     console.log(CHN);
     // }
+
+    /********************************************
+     한 그룹의 데이터 출력이 끝나면 groupFieldNum++를 어디선가 해줘야함..어떻게해야하지..모르겠담
+     *******************************************/
+    if (groupFieldArray !== undefined) {
+        pId.append(groupFieldArray[groupFieldNum][0]);
+        data.text = pId.text();
+    }
 
     // 0값 표시 여부가 NoShow(표시하지 않음) 이고 문자 형식이 숫자 일 때
     if (data.showZeroState == 'NoShow' && data.labelTextType == 'Number') {
@@ -1293,13 +1283,6 @@ function drawingDataLabel(data, divId) {
     //         toStringFn(data.text, "PNormalLabel" + normalLabelNum); // 한 글자씩 찍기
     //     }
     // }
-
-    /********************************************
-     한 그룹의 데이터 출력이 끝나면 groupFieldNum++를 어디선가 해줘야함..어떻게해야하지..모르겠담
-     *******************************************/
-    if (groupFieldArray !== undefined) {
-        pId.append(groupFieldArray[groupFieldNum][0]);
-    }
     //fontSizeAutoLessen(groupFieldArray[groupFieldNum][0], '#DataLabel' + dataLabelNum);
 
     // 자간 속성
@@ -1320,7 +1303,7 @@ function drawingDataLabel(data, divId) {
         });
         clipping(data.text, 'DataLabel' + dataLabelNum, 'PDataLabel' + dataLabelNum);
     }
-
+    console.log('center : ' + data.text);
     if (data.autosize == true) { // 자동 높이 조절
         autoSizeTrue('PDataLabel' + dataLabelNum);
     } else {
@@ -1424,220 +1407,200 @@ function drawingNormalLabel(data, divId) {
 
     // console.log("div[0].id : ",div[0].id);
 
-    //// 추가 부분 18.08.28 YeSol
-    if (data.noBorder == true) {
-        // visible 속성
-        if (data.visible == 'false') {
-            normalLabelId.css('display', 'none');
-        }
-        // border 속성 관련
-        if (data.noBorder == 'true') {
-            normalLabelId.css('border', 'none');
-        } else {
-            if (data.borderThickness !== undefined) {
-                var leftBorder = borderDottedLine(data.borderDottedLines.leftDashStyle);
-                var rightBorder = borderDottedLine(data.borderDottedLines.rightDashStyle);
-                var bottomBorder = borderDottedLine(data.borderDottedLines.bottomDashStyle);
-                var topBorder = borderDottedLine(data.borderDottedLines.topDashStyle);
-                normalLabelId.css({
-                    'border-left': data.borderThickness.left + 'px ' + leftBorder + ' ' + data.leftBorderColor,
-                    'border-right': data.borderThickness.right + 'px ' + rightBorder + ' ' + data.rightBorderColor,
-                    'border-bottom': data.borderThickness.bottom + 'px ' + bottomBorder + ' ' + data.bottomBorderColor,
-                    'border-top': data.borderThickness.top + 'px ' + topBorder + ' ' + data.topBorderColor
-                });
-            } else {
-                normalLabelId.css('border', '1px solid black');
-            }
-        }
-        normalLabelId.css({
-            'width': data.rectangle.width,
-            'height': data.rectangle.height,
-            'position': 'absolute',
-            'left': data.rectangle.x + 'px',
-            'top': data.rectangle.y + 'px',
-            'text-align': 'center', // 텍스트 수평 정렬에 따라 center, right, left써주기!
-
-            'overflow': 'visible',
-            'background-color': data.backGroundColor,
-            'zIndex': 999,
-
-            'white-space': 'nowrap', // 줄바꿈 안되게하는거
-            'background-color': data.backGroundColor, // 배경색
-            'color': data.textColor // 글자 색
-
-        });
-
-        // 라벨 형태 -> 원
-        if (data.labelShape == 'Circle') {
-            normalLabelId.css({
-                'border-radius': '100%', // LabelShape가 원일 때
-                'border': data.circleLineThickness + 'px solid ' + data.circleLineColor // (원 테두리 두께) 속성이 뭔지 모르겠땀
-            })
-        }
-
-        // 그라데이션을 사용할 때
-        if (data.gradientLB.isUseGradient == 'true') {
-            gradientCase(data.gradientLB.startGradientDirection, data.gradientLB.gradientDirection, data.gradientLB.gradientColor, data.backGroundColor, 'NormalLabel' + normalLabelNum);
-        }
-
-        // 자동 줄바꾸기
-        if (data.wordWrap == 'true') {
-            normalLabelId.css('white-space', 'normal');
-        }
-
-        normalLabelId.append('<p id = "PNormalLabel' + normalLabelNum + '">' + format_check(data) + '</p>');
-
-        Lock_check(data, normalLabelId, div);
-
-        var pId = $('#PNormalLabel' + normalLabelNum);
-
-        // fontSize의 단위를 통일하기위해
-        var fontSizePt = changeFontUnit(data.fontSize);
-
-        pId.css({
-            'font-size': fontSizePt,
-            'font-family': data.fontFamily,
-            'font-weight': data.fontWeight,
-            'font-style': data.fontStyle
-        });
-
-        toStringFn(data.text, "PNormalLabel" + normalLabelNum);
-        // textEqualDivision(data.text, "PNormalLabel" + normalLabelNum);
-        // 자간 속성
-        if (data.characterSpacing !== undefined) {
-            characterSpacing(data.text, data.characterSpacing, "PNormalLabel" + normalLabelNum);
-        }
-
-
-        // 금액 표시 방법 한글
-        if (data.numberToTextType == 'KOR') {
-            var KOR = numberToKOR((data.text).replace(/[^0-9]/g, ""));
-            // console.log((data.text).replace(/[0-9]/gi, KOR));
-            var tempKOR = (data.text).match(/[0-9]/gi);
-            var toStringKOR = tempKOR[0];
-            for (var i = 1; i < tempKOR.length; i++) {
-                toStringKOR += tempKOR[i];
-            }
-            toStringKOR = toStringKOR.toString();
-
-            // console.log((data.text).indexOf(toStringKOR));
-            // console.log(toStringKOR);
-        }
-
-        // 금액 표시 방법 한자
-        if (data.numberToTextType == 'CHN') {
-            var CHN = numberToCHN((data.text).replace(/[^0-9]/g, ""));
-        }
-
-        // textEqualDivision(data.text, "PNormalLabel" + normalLabelNum); // 텍스트 수평 정렬이 균등 분할인 경우
-
-        // 0값 표시 여부가 NoShow(표시하지 않음) 이고 문자 형식이 숫자 일 때
-        if (data.showZeroState == 'NoShow' && data.labelTextType == 'Number') {
-            data.text = (data.text).replace(/(^0+)/, '');
-        }
-
-        if (data.text !== undefined) {
-            if (data.textDirection == 'Vertical') {
-                textAlignVertical(data.text, "PNormalLabel" + normalLabelNum); // 아직 구현 안함
-            } else if (data.textDirection == 'Horizontal') {
-                toStringFn(data.text, "PNormalLabel" + normalLabelNum); // 한 글자씩 찍기
-            }
-        }
-
-        // 자간 속성
-        if (data.characterSpacing !== undefined) {
-            characterSpacing(data.text, data.characterSpacing, "PNormalLabel" + normalLabelNum);
-        }
-
-        // 줄 간격 속성
-        if (data.lineSpacing !== undefined) {
-            lineSpacing(data.text, data.lineSpacing, "PNormalLabel" + normalLabelNum);
-        }
-
-        // Clipping 속성
-        if (data.clipping == 'true') {
-            normalLabelId.css({
-                'text-overflow': 'clip',
-                'overflow': 'hidden'
-            });
-            clipping(data.text, 'NormalLabel' + normalLabelNum, 'PNormalLabel' + normalLabelNum);
-        }
-
-        if (data.autosize == true) { // 자동 높이 조절
-            autoSizeTrue('PNormalLabel' + normalLabelNum);
-        } else {
-            if (data.text !== undefined) {
-                switch (data.horizontalTextAlignment) {
-                    case 'Center' :
-                        textAlignCenter(data.text, 'PNormalLabel' + normalLabelNum, data.wordWrap, data.textDirection);
-                        break;
-                    case 'Left' :
-                        pId.css('text-align', 'left');
-                        break;
-                    case 'Right' :
-                        pId.css('text-align', 'right');
-                        break;
-                    case 'Distributed' :
-                        pId.text('')
-                        textEqualDivision(data.text, "PNormalLabel" + normalLabelNum); // 텍스트 수평 정렬이 균등 분할인 경우
-                        break;
-                }
-                switch (data.verticalTextAlignment) {
-                    case 'Center' :
-                        verticalCenter('PNormalLabel' + normalLabelNum); // 텍스트 수직 정렬이 중간인 경우
-                        break;
-                    case 'Top' :
-                        verticalTop('PNormalLabel' + normalLabelNum); // 텍스트 수직 정렬이 위쪽인 경우
-                        break;
-                    case 'Bottom' :
-                        verticalBottom('PNormalLabel' + normalLabelNum); // 텍스트 수직 정렬이 아래쪽인 경우
-                        break;
-                    case 'Distributed' :
-                        verticalCenterEqualDivision(data.text, 'PNormalLabel' + normalLabelNum, data.textDirection); // 텍스트 수직 정렬이 균등 분할인 경우
-                        break;
-                }
-            }
-        }
-        // 폰트크기 자동 줄어듦
-        if (data.autoFontType == 'AutoSmall') {
-            fontSizeAutoSmall(data.text, 'PNormalLabel' + normalLabelNum);
-        }
-
-        // 기본 여백 미사용
-        if (data.isUseBasicInnerMargin == 'false') {
-            pId.css({
-                'margin-left': data.interMargin.left + 'px',
-                'margin-right': data.interMargin.right + 'px',
-                'margin-top': data.interMargin.top + 'px',
-                'margin-bottom': data.interMargin.bottom + 'px',
-            });
-        }
-
-        // 중간 줄 그리기
-        if (data.isDrawStrikeOutLine == 'true') {
-            pId.css('text-decoration', 'line-through');
-        }
-
-        // 밑줄 그리기
-        if (data.isDrawUnderLine == 'true') {
-            pId.css('text-decoration', 'underline');
-        }
-
-        // 중간 줄과 밑줄 모두 그릴 때
-        if (data.isDrawStrikeOutLine == 'true' && data.isDrawUnderLine == 'true') {
-            pId.css('text-decoration', 'line-through underline');
-        }
-
-        // 글자 크기 동일하게 하기
-        if (data.isSameWidth == 'true') {
-            var fontSize = (pId.css('font-size')).split('p');
-            pId.css('word-spacing', (fontSize[0] - 1.181) + 'px');
-        }
-
-        pId.addClass('Label');
-        pId.addClass('NormalLabel');
-        normalLabelNum++;
+    // visible 속성
+    if (data.visible == 'false') {
+        normalLabelId.css('display', 'none');
     }
+    // border 속성 관련
+    if (data.noBorder == 'true') {
+        normalLabelId.css('border', 'none');
+    } else {
+        if (data.borderThickness !== undefined) {
+            var leftBorder = borderDottedLine(data.borderDottedLines.leftDashStyle);
+            var rightBorder = borderDottedLine(data.borderDottedLines.rightDashStyle);
+            var bottomBorder = borderDottedLine(data.borderDottedLines.bottomDashStyle);
+            var topBorder = borderDottedLine(data.borderDottedLines.topDashStyle);
+            normalLabelId.css({
+                'border-left': data.borderThickness.left + 'px ' + leftBorder + ' ' + data.leftBorderColor,
+                'border-right': data.borderThickness.right + 'px ' + rightBorder + ' ' + data.rightBorderColor,
+                'border-bottom': data.borderThickness.bottom + 'px ' + bottomBorder + ' ' + data.bottomBorderColor,
+                'border-top': data.borderThickness.top + 'px ' + topBorder + ' ' + data.topBorderColor
+            });
+        } else {
+            normalLabelId.css('border', '1px solid black');
+        }
+    }
+    normalLabelId.css({
+        'width': data.rectangle.width,
+        'height': data.rectangle.height,
+        'position': 'absolute',
+        'left': data.rectangle.x + 'px',
+        'top': data.rectangle.y + 'px',
+        // 'text-align': 'center',
+        // 'overflow': 'visible',
+        'background-color': data.backGroundColor,
+        'zIndex': 999,
+        'white-space': 'nowrap', // 줄바꿈 안되게하는거
+        'background-color': data.backGroundColor, // 배경색
+        'color': data.textColor // 글자 색
+    });
+
+    // 라벨 형태 -> 원
+    if (data.labelShape == 'Circle') {
+        normalLabelId.css({
+            'border-radius': '100%', // LabelShape가 원일 때
+            'border': data.circleLineThickness + 'px solid ' + data.circleLineColor // (원 테두리 두께) 속성이 뭔지 모르겠땀
+        });
+    }
+
+    // 그라데이션을 사용할 때
+    if (data.gradientLB.isUseGradient == 'true') {
+        gradientCase(data.gradientLB.startGradientDirection, data.gradientLB.gradientDirection, data.gradientLB.gradientColor, data.backGroundColor, 'NormalLabel' + normalLabelNum);
+    }
+
+    // 자동 줄바꾸기
+    if (data.wordWrap == 'true') {
+        normalLabelId.css('white-space', 'normal');
+    }
+
+    normalLabelId.append('<p id = "PNormalLabel' + normalLabelNum + '"></p>');
+    Lock_check(data, normalLabelId, div);
+
+    var pId = $('#PNormalLabel' + normalLabelNum);
+
+    // fontSize의 단위를 통일하기위해
+    var fontSizePt = changeFontUnit(data.fontSize);
+
+    pId.css({
+        'font-size': fontSizePt,
+        'font-family': data.fontFamily,
+        'font-weight': data.fontWeight,
+        'font-style': data.fontStyle
+    });
+
+    // 금액 표시 방법 한글
+    // if (data.numberToTextType == 'KOR') {
+    //     var KOR = numberToKOR((data.text).replace(/[^0-9]/g, ""));
+    //     var tempKOR = (data.text).match(/[0-9]/gi);
+    //     var toStringKOR = tempKOR[0];
+    //     for (var i = 1; i < tempKOR.length; i++) {
+    //         toStringKOR += tempKOR[i];
+    //     }
+    //     toStringKOR = toStringKOR.toString();
+    // }
+    //
+    // // 금액 표시 방법 한자
+    // if (data.numberToTextType == 'CHN') {
+    //     var CHN = numberToCHN((data.text).replace(/[^0-9]/g, ""));
+    // }
+
+    // 0값 표시 여부가 NoShow(표시하지 않음) 이고 문자 형식이 숫자 일 때
+    if (data.showZeroState == 'NoShow' && data.labelTextType == 'Number') {
+        data.text = (data.text).replace(/(^0+)/, '');
+    }
+
+    if (data.text !== undefined) {
+        if (data.textDirection == 'Vertical') {
+            textAlignVertical(data.text, "PNormalLabel" + normalLabelNum);
+        } else if (data.textDirection == 'Horizontal') {
+            toStringFn(data.text, "PNormalLabel" + normalLabelNum);
+        }
+    }
+
+    // 자간 속성
+    if (data.characterSpacing !== undefined) {
+        characterSpacing(data.text, data.characterSpacing, "PNormalLabel" + normalLabelNum);
+    }
+
+    // 줄 간격 속성
+    if (data.lineSpacing !== undefined) {
+        lineSpacing(data.text, data.lineSpacing, "PNormalLabel" + normalLabelNum);
+    }
+    var test = $('#' + "PNormalLabel" + normalLabelNum + ' br');
+    // Clipping 속성
+    if (data.clipping == 'true') {
+        normalLabelId.css({
+            'text-overflow': 'clip',
+            'overflow': 'hidden'
+        });
+        clipping(data.text, 'NormalLabel' + normalLabelNum, 'PNormalLabel' + normalLabelNum);
+    }
+
+    if (data.autosize == true) { // 자동 높이 조절
+        autoSizeTrue('PNormalLabel' + normalLabelNum);
+    } else {
+        if (data.text !== undefined) {
+            switch (data.horizontalTextAlignment) {
+                case 'Center' :
+                    textAlignCenter(data.text, 'PNormalLabel' + normalLabelNum, data.wordWrap, data.textDirection);
+                    break;
+                case 'Left' :
+                    pId.css('text-align', 'left');
+                    break;
+                case 'Right' :
+                    pId.css('text-align', 'right');
+                    break;
+                case 'Distributed' :
+                    pId.text('')
+                    textEqualDivision(data.text, "PNormalLabel" + normalLabelNum); // 텍스트 수평 정렬이 균등 분할인 경우
+                    break;
+            }
+            switch (data.verticalTextAlignment) {
+                case 'Center' :
+                    verticalCenter('PNormalLabel' + normalLabelNum); // 텍스트 수직 정렬이 중간인 경우
+                    break;
+                case 'Top' :
+                    verticalTop('PNormalLabel' + normalLabelNum); // 텍스트 수직 정렬이 위쪽인 경우
+                    break;
+                case 'Bottom' :
+                    verticalBottom('PNormalLabel' + normalLabelNum); // 텍스트 수직 정렬이 아래쪽인 경우
+                    break;
+                case 'Distributed' :
+                    verticalCenterEqualDivision(data.text, 'PNormalLabel' + normalLabelNum, data.textDirection); // 텍스트 수직 정렬이 균등 분할인 경우
+                    break;
+            }
+        }
+    }
+    // 폰트크기 자동 줄어듦
+    if (data.autoFontType == 'AutoSmall') {
+        fontSizeAutoSmall(data.text, 'PNormalLabel' + normalLabelNum);
+    }
+
+    // 기본 여백 미사용
+    if (data.isUseBasicInnerMargin == 'false') {
+        pId.css({
+            'margin-left': data.interMargin.left + 'px',
+            'margin-right': data.interMargin.right + 'px',
+            'margin-top': data.interMargin.top + 'px',
+            'margin-bottom': data.interMargin.bottom + 'px',
+        });
+    }
+
+    // 중간 줄 그리기
+    if (data.isDrawStrikeOutLine == 'true') {
+        pId.css('text-decoration', 'line-through');
+    }
+
+    // 밑줄 그리기
+    if (data.isDrawUnderLine == 'true') {
+        pId.css('text-decoration', 'underline');
+    }
+
+    // 중간 줄과 밑줄 모두 그릴 때
+    if (data.isDrawStrikeOutLine == 'true' && data.isDrawUnderLine == 'true') {
+        pId.css('text-decoration', 'line-through underline');
+    }
+
+    // 글자 크기 동일하게 하기
+    if (data.isSameWidth == 'true') {
+        var fontSize = (pId.css('font-size')).split('p');
+        pId.css('word-spacing', (fontSize[0] - 1.181) + 'px');
+    }
+
+    pId.addClass('Label');
+    pId.addClass('NormalLabel');
+    normalLabelNum++;
+
 }
 
 /******************************************************************
@@ -1658,7 +1621,6 @@ function drawingExpression(data, divId) {
     div.append('<div id = "Expression' + expressionNum + '">Expression</div>');
     var expressionId = $('#Expression' + expressionNum);
     expressionId.addClass("NormalLabel_scope");
-
 
     // visible 속성
     if (data.visible == 'false') {
@@ -1730,14 +1692,11 @@ function drawingExpression(data, divId) {
     // // 금액 표시 방법 한글
     // if(data.numberToTextType == 'KOR') {
     //     var KOR = numberToKOR((data.text).replace(/[^0-9]/g, ""));
-    //     console.log(KOR);
-    //     console.log(numberToKOR('00012300456'));
     // }
     //
     // // 금액 표시 방법 한자
     // if(data.numberToTextType == 'CHN') {
     //     var CHN = numberToCHN((data.text).replace(/[^0-9]/g, ""));
-    //     console.log(CHN);
     // }
 
     // 0값 표시 여부가 NoShow(표시하지 않음) 이고 문자 형식이 숫자 일 때
@@ -1819,7 +1778,7 @@ function drawingExpression(data, divId) {
             'margin-right': data.interMargin.right + 'px',
             'margin-top': data.interMargin.top + 'px',
             'margin-bottom': data.interMargin.bottom + 'px',
-        })
+        });
     }
 
     // 중간 줄 그리기
@@ -1868,12 +1827,10 @@ function drawingGroupLabel(data, divId) {
     var groupLabelId = $('#GroupLabel' + groupLabelNum);
     groupLabelId.addClass("NormalLabel_scope");
 
-
     // visible 속성
     if (data.visible == 'false') {
         groupLabelId.css('display', 'none');
     }
-
 
     //// 추가 부분 18.08.28 YeSol
     if (data.noBorder == 'true') {
@@ -1907,7 +1864,6 @@ function drawingGroupLabel(data, divId) {
         'color': data.textColor // 글자 색
     });
 
-
     // 그라데이션을 사용할 때
     if (data.gradientLB.isUseGradient == 'true') {
         gradientCase(data.gradientLB.startGradientDirection, data.gradientLB.gradientDirection, data.gradientLB.gradientColor, data.backGroundColor, 'GroupLabel' + groupLabelNum);
@@ -1935,14 +1891,11 @@ function drawingGroupLabel(data, divId) {
     // // 금액 표시 방법 한글
     // if(data.numberToTextType == 'KOR') {
     //     var KOR = numberToKOR((data.text).replace(/[^0-9]/g, ""));
-    //     console.log(KOR);
-    //     console.log(numberToKOR('00012300456'));
     // }
     //
     // // 금액 표시 방법 한자
     // if(data.numberToTextType == 'CHN') {
     //     var CHN = numberToCHN((data.text).replace(/[^0-9]/g, ""));
-    //     console.log(CHN);
     // }
 
     // 자간 속성
@@ -2053,18 +2006,16 @@ function drawingGroupLabel(data, divId) {
 function drawingParameterLabel(data, divId) {
     var div = $('#' + divId);
     div.css('position', 'relative');
-    div.append('<div id = "ParameterLabel' + parameterLabelNum + '">ParameterLabel</div>');
+    div.append('<div id = "ParameterLabel' + parameterLabelNum + '"></div>');
 
     var parameterLabelId = $('#ParameterLabel' + parameterLabelNum);
 
-    groupLabelId.addClass("NormalLabel_scope");
-
+    parameterLabelId.addClass("NormalLabel_scope");
 
     // visible 속성
     if (data.visible == 'false') {
         parameterLabelId.css('display', 'none');
     }
-
 
     //// 추가 부분 18.08.28 YeSol
     if (data.noBorder == 'true') {
@@ -2098,7 +2049,6 @@ function drawingParameterLabel(data, divId) {
         'color': data.textColor // 글자 색
     });
 
-
     // 라벨 형태 -> 원
     if (data.labelShape == 'Circle') {
         parameterLabelId.css({
@@ -2117,7 +2067,6 @@ function drawingParameterLabel(data, divId) {
         parameterLabelId.css('white-space', 'normal');
     }
 
-
     parameterLabelId.append('<p id = "PParameterLabel' + parameterLabelNum + '"></p>');
     Lock_check(data, parameterLabelId, div);
     var pId = $('#PParameterLabel' + parameterLabelNum);
@@ -2135,15 +2084,18 @@ function drawingParameterLabel(data, divId) {
     // // 금액 표시 방법 한글
     // if(data.numberToTextType == 'KOR') {
     //     var KOR = numberToKOR((data.text).replace(/[^0-9]/g, ""));
-    //     console.log(KOR);
-    //     console.log(numberToKOR('00012300456'));
     // }
     //
     // // 금액 표시 방법 한자
     // if(data.numberToTextType == 'CHN') {
     //     var CHN = numberToCHN((data.text).replace(/[^0-9]/g, ""));
-    //     console.log(CHN);
     // }
+
+    paramTable.NewDataSet.Table1.forEach(function (paramData) {
+        if (data.parameterName == paramData.Key._text) {
+            data.text = paramData.Value._text;
+        }
+    });
 
     // 0값 표시 여부가 NoShow(표시하지 않음) 이고 문자 형식이 숫자 일 때
     if (data.showZeroState == 'NoShow' && data.labelTextType == 'Number') {
@@ -2288,37 +2240,49 @@ function toStringFn(text, pTagId) {
 function textAlignCenter(text, pTagId, wordWrap, textDirection) {
     var tag = $('#' + pTagId);
 
-    var fontSize = (tag.css('font-size')).split('p');
+    var fontSize = (tag.css('font-size')).split('px');
     if (wordWrap == false && textDirection == 'Horizontal') {
-        var parentWidth = (tag.parent().css('width')).split('p');
+        var parentWidth = (tag.parent().css('width')).split('px');
         var str = text.toString();
         var temp = str.split('<br/>');
 
         var space = temp[0].match(/\s/gi); // 공백 찾기
+        var eng = temp[0].match(/[a-z]/gi); // 영문 찾기
 
         var max = temp[0].length; // 한 줄에 있는 텍스트 길이 중 제일 긴 길이를 넣을 변수
         var maxExceptSpace; // 길이가 제일 긴 텍스트에서 공백을 제외한 길이를 넣을 변수
         if (space != null) {
             maxExceptSpace = max - space.length;
         }
-
+        if (eng != null) {
+            maxExceptSpace = maxExceptSpace - eng.length * 0.5;
+        }
         if (temp.length > 1) {
             for (var i = 1; i < temp.length; i++) {
                 temp[i] = temp[i].trim();
                 space = temp[i].match(/\s/gi); // 공백 찾기
+                eng = temp[i].match(/[a-z]/gi); // 영문 찾기
                 if (temp[i].length > max) {
                     if (space != null) {
                         max = temp[i].length;
-                        maxExceptSpace = temp[i].length - space.length;
+                        maxExceptSpace = max - space.length;
                     } else {
                         max = temp[i].length;
-                        maxExceptSpace = temp[i].length;
+                        maxExceptSpace = max;
+                    }
+                    if (eng != null) {
+                        maxExceptSpace = maxExceptSpace - eng.length * (0.5);
                     }
                 }
             }
         }
 
-        if ((maxExceptSpace * fontSize[0]) > parentWidth[0]) {
+        maxExceptSpace = parseInt(maxExceptSpace);
+
+        fontSize[0] = parseInt(fontSize[0]);
+        parentWidth[0] = parseInt(parentWidth[0]);
+
+        if (maxExceptSpace * fontSize[0] > parentWidth[0]) {
             var spacing = (parentWidth[0] - fontSize[0] * maxExceptSpace) / 2;
 
             tag.css({
@@ -2326,8 +2290,9 @@ function textAlignCenter(text, pTagId, wordWrap, textDirection) {
                 'right': spacing + 'px',
                 'position': 'absolute',
                 'overflow': 'visible',
-                'white-space': 'nowrap'
-            })
+                'white-space': 'nowrap',
+                'text-align': 'center'
+            });
         } else {
             tag.css('text-align', 'center');
         }
@@ -2338,7 +2303,7 @@ function textAlignCenter(text, pTagId, wordWrap, textDirection) {
         tag.children().css({
             'margin-top': margin + 'px',
             'margin-bottom': margin + 'px'
-        })
+        });
     } else {
         tag.css('text-align', 'center');
     }
@@ -2382,7 +2347,6 @@ function fontSizeAutoSmall(text, pTagId) {
 }
 
 /******************************************************************
- 포기 : 2018.08.27
  기능 : 텍스트 방향이 수직인 함수를 만든다.
  만든이 : 안예솔
  ******************************************************************/
@@ -2394,7 +2358,6 @@ function textAlignVertical(text, pTagId) {
         'width': parentWidth[0] + 'px',
         'height': parentHeight[0] + 'px'
     });
-    // console.log('위'+pTag.css('width'));
 
     var str = text.toString();
     var strSplitByBr = str.split('<br/>');
@@ -2413,7 +2376,6 @@ function textAlignVertical(text, pTagId) {
         var sonHeight = fontSize[0] * data.length;
 
         var sonTop = (parentHeight[0] - sonHeight) / 2;
-        // var sonLeft = (parentWidth[0] - fontSize[0] * strSplitByBr.length) / 2;
         var style = 'white-space : normal; float : left; height : ' + parentHeight[0] + 'px; width : ' + fontSize[0] + 'px;/* margin-top : ' + sonTop + 'px; margin-bottom : ' + sonTop + 'px;*/ line-height : ' + fontSize[0] + 'px;';
 
         pTag.append('<p style = "' + style + '">' + appendStr + '</p>');
@@ -2519,10 +2481,9 @@ function verticalCenterEqualDivision(text, pTagId, textDirection) {
         'margin-top': '0px',
         'margin-bottom': '0px',
     });
-    if (textDirection == 'Horizontal') {
+    if (textDirection == 'Horizontal') { // 글자가 가로 방향일 때
         var fontSize = (tag.css('font-size')).split('p');
         // 16pt 이런 식으로 값이 받아져서 p앞으로 끊어서 숫자만 받아오려고 한 문자열 자르기 작업
-
         var brTag = $('#' + pTagId + ' br');
         var brCount = brTag.length;
         // text중에서 <br/>의 개수를 구함
@@ -2532,7 +2493,6 @@ function verticalCenterEqualDivision(text, pTagId, textDirection) {
 
         if (brCount == 0) {
             var mid = (parentHeight[0] - fontSize[0] * (brCount + 1)) / 2 - brCount;
-
             tag.css({
                 'margin-top': mid + 'px',
                 'margin-bottom': mid + 'px'
@@ -2542,16 +2502,16 @@ function verticalCenterEqualDivision(text, pTagId, textDirection) {
             brTag.before('<p style = "height : ' + spacing + 'px; margin-top : 0px; margin-bottom : 0px;"></p>'); // <br/>이 나오기 전에 p태그를 삽입한 후 remove()로 삭제 (줄 바꿈을 위함)
             brTag.remove();
         }
-    } else {
+    } else { // 글자가 세로 방향일 때
         tag.text('');
         var str = text.toString();
         var fontSize = (tag.css('font-size')).split('p');
         // // 16pt 이런 식으로 값이 받아져서 p앞으로 끊어서 숫자만 받아오려고 한 문자열 자르기 작업
         var parentHeight = (tag.css('height')).split('p');
-        var temp = str.split('<br/>');
+        var temp = str.split('<br/>'); // <br/>태그를 중심으로 자름
         for (var i = 0; i < temp.length; i++) {
-            temp[i] = temp[i].trim();
-            var spacing = Math.ceil((parentHeight[0] - temp[i].length * fontSize[0]) / (temp[i].length - 1)) + 1;
+            temp[i] = temp[i].trim(); // 공백 제거
+            var spacing = Math.ceil((parentHeight[0] - temp[i].length * fontSize[0]) / (temp[i].length - 1)) + 1; //
             var appendStr = temp[i][0];
             appendStr += '<p style = "height : ' + spacing + 'px; width: ' + fontSize[0] + 'px; margin-top : 0px; margin-bottom : 0px;"></p>';
             for (var j = 1; j < temp[i].length; j++) {
@@ -2567,7 +2527,7 @@ function verticalCenterEqualDivision(text, pTagId, textDirection) {
                 'margin-top': '0px',
                 'margin-bottom': '0px'
             });
-            tag.append('<p id = "vertical' + verticalPNum + '" style = "width:' + fontSize[0] + 'px; height : ' + parentHeight[0] + 'px; margin-top:0px; margin-bottom:0px"></p>');
+            tag.append('<p id = "vertical' + verticalPNum + '" style = width:' + fontSize[0] + 'px; height : ' + parentHeight[0] + 'px; margin-top:0px; margin-bottom:0px"></p>');
             var verticalPId = $('#vertical' + verticalPNum);
             verticalPId.css({
                 'float': 'left',
@@ -2601,7 +2561,7 @@ function autoSizeTrue(pTagId) {
     tag.css({
         'margin-top': '0px',
         'margin-bottom': '0px'
-    })
+    });
 }
 
 /******************************************************************
@@ -2631,7 +2591,7 @@ function lineSpacing(text, spacing, pTagId) {
         tag.css({
             'margin-top': mid + 'px',
             'margin-bottom': mid + 'px'
-        })
+        });
         brTag.before('<p style = "height : ' + spacing + 'px; margin-top : 0px; margin-bottom : 0px;"></p>'); // <br/>이 나오기 전에 p태그를 삽입한 후 remove()로 삭제 (줄 바꿈을 위함)
         brTag.remove();
     }
@@ -2644,12 +2604,12 @@ function lineSpacing(text, spacing, pTagId) {
  ******************************************************************/
 function Lock_check(data, Label_id, div) { //라벨 데이터, 드래그 리사이즈 영역, 벗어나면 안되는 영역
     var Lock_check;
-    if(data.Lock === undefined){
+    if (data.Lock === undefined) {
         Lock_check = data.Lock;
-    }else{
+    } else {
         Lock_check = data.Lock._text;
     }
-    if(!Lock_check) {
+    if (!Lock_check) {
         Label_id.draggable({containment: "#" + div[0].id, zIndex: 999});
         Label_id.resizable({containment: "#" + div[0].id, autoHide: true});
     }
@@ -2662,12 +2622,12 @@ function Lock_check(data, Label_id, div) { //라벨 데이터, 드래그 리사�
  ******************************************************************/
 function Lock_Check_Table(data, drag, resize, div) { //테이블 데이터, 드래거블 지정할 영역, 리사이즈 영역, 위치 이동시 벗어나면 안되는 영역
     var Lock_check;
-    if(data.Lock === undefined){
+    if (data.Lock === undefined) {
         Lock_check = data.Lock;
-    }else{
+    } else {
         Lock_check = data.Lock._text;
     }
-    if(!Lock_check) {
+    if (!Lock_check) {
         drag.draggable({containment: "#" + div[0].id, zIndex: 999});
         resize.resizable({
             containment: "#" + div[0].id, autoHide: true,
@@ -2685,14 +2645,14 @@ function Lock_Check_Table(data, drag, resize, div) { //테이블 데이터, 드�
  ******************************************************************/
 function format_check(data) {
     var test = data.formatType;
-    var num_check = data.text.replace(/[^0-9]/g,""); //데이터에서 숫자만 추출.
+    var num_check = data.text.replace(/[^0-9]/g, ""); //데이터에서 숫자만 추출.
     var data_text = data.text;
-    if(test == "AmountSosu"){   //추후, 다른 7가지의 속성을 알게되면 else if로 추가해야함.
-        if(num_check != ""){ //해당 데이터가 숫자인 경우내려
+    if (test == "AmountSosu") {   //추후, 다른 7가지의 속성을 알게되면 else if로 추가해야함.
+        if (num_check != "") { //해당 데이터가 숫자인 경우내려
             data_text = num_check.replace(/\B(?=(\d{3})+(?!\d))/g, ","); //천단위로 콤마를 찍어줌.
         }
         return data_text;
-    }else{
+    } else {
         return data_text;
     }
 }
@@ -2705,31 +2665,31 @@ function format_check(data) {
 function table_format_check(data, Label_id, key, table) {
     var test = table.formatType;
     var data_text;
-    if(key != NaN){ //해당 데이터가 숫자일 경우
-        if(test === "AmountSosu" || test === "MoneySosu" || test === "MoneySosu"){   //수량, 금액 소숫점 자리수 ###,###
-            var parts=key.toString().split(".");
-            if(parts[1]){
+    if (key != NaN) { //해당 데이터가 숫자일 경우
+        if (test === "AmountSosu" || test === "MoneySosu" || test === "MoneySosu") {   //수량, 금액 소숫점 자리수 ###,###
+            var parts = key.toString().split(".");
+            if (parts[1]) {
                 var decimal_cutting = parts[1].substring(0, 2);
-                console.log("decimal_cutting : ",decimal_cutting);
-                return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") +"."+ decimal_cutting;
+                console.log("decimal_cutting : ", decimal_cutting);
+                return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "." + decimal_cutting;
             }
             // data_text = key.replace(/\B(?=(\d{3})+(?!\d))/g, ","); //천단위로 콤마를 찍어줌.
             // return data_text;
-        }else if (test === "WonHwaDangaSosu" || test === "ExchangeSosu" || test === "ExchangeRateSosu"){   //원화단가, 외화 소수점 자리수 ###,###.00
-            var parts=key.toString().split(".");
-            if(parts[1]){
+        } else if (test === "WonHwaDangaSosu" || test === "ExchangeSosu" || test === "ExchangeRateSosu") {   //원화단가, 외화 소수점 자리수 ###,###.00
+            var parts = key.toString().split(".");
+            if (parts[1]) {
                 var decimal_cutting = parts[1].substring(0, 2);
-                console.log("decimal_cutting : ",decimal_cutting);
+                console.log("decimal_cutting : ", decimal_cutting);
                 return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + (parts[1] ? "." + parts[1] : "");
             }
-        }else if (test === "ExchangeDangaSosu" || test === "BiyulSosu" || test === "ExchangeAmountSosu"){ //외화단가, 비율 소수점 자리수 ###,###.000
-            var parts=key.toString().split(".");
-            if(parts[1]){
+        } else if (test === "ExchangeDangaSosu" || test === "BiyulSosu" || test === "ExchangeAmountSosu") { //외화단가, 비율 소수점 자리수 ###,###.000
+            var parts = key.toString().split(".");
+            if (parts[1]) {
                 var decimal_cutting = parts[1].substring(0, 3);
-                console.log("decimal_cutting : ",decimal_cutting);
+                console.log("decimal_cutting : ", decimal_cutting);
                 return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + (parts[1] ? "." + parts[1] : "");
             }
-        }else{
+        } else {
             return key;
         }
     }
@@ -2741,7 +2701,7 @@ function table_format_check(data, Label_id, key, table) {
  Date : 2018-08-30
  만든이 : hagdung-i
  ******************************************************************/
-function table_column_controller(resize_area, Unalterable_area){
+function table_column_controller(resize_area, Unalterable_area) {
     resize_area.resizable({
         containment: "#" + Unalterable_area[0].id, autoHide: true,
         resize: function (event, ui) {   //테이블사이즈는 가로만 조정 가능하도록.
@@ -2749,7 +2709,6 @@ function table_column_controller(resize_area, Unalterable_area){
         }
     });
 };
-
 
 /******************************************************************
  기능 : 그라데이션의 시작방향, 방향 등을 판단하여 CSS 속성을 줄 함수를 만든다.
@@ -2800,9 +2759,8 @@ function clipping(text, divId, pTagId) {
     var div = $('#' + divId);
     var tag = $('#' + pTagId);
     var str = text.toString();
-    var fontSize = (div.css('font-size')).split('p');
-    var parentWidth = div.css('width').split('p');
-    // 16pt 이런 식으로 값이 받아져서 p앞으로 끊어서 숫자만 받아오려고 한 문자열 자르기 작업
+    var fontSize = (div.css('font-size')).split('pt');
+    var parentWidth = div.css('width').split('px');
     var temp = str.split('<br/>');
     var max = temp[0].length;
     var space = temp[0].match(/\s/gi);
@@ -2820,7 +2778,7 @@ function clipping(text, divId, pTagId) {
         'left': spacing + 'px',
         'right': spacing + 'px',
         'position': 'absolute'
-    })
+    });
 }
 
 /******************************************************************
@@ -2874,7 +2832,6 @@ function numberToCHN(num) {
     return result;
 }
 
-
 /******************************************************************
  기능 : borderStyle 을 css 문법에 맞게 수정하기 위한 함수이다.
  만든이 : 안예솔
@@ -2891,7 +2848,7 @@ function borderDottedLine(borderStyle) {
             return 'dotted';
             break;
         case 'DashDot' :
-            return 'dotted'; // css에 DashDot이라는 속성이 없음
+            return 'dashed'; // css에 DashDot이라는 속성이 없음
             break;
         case 'DashDotDot' : // css에 DashDotDot이라는 속성이 없음
             return 'dotted'
@@ -2901,7 +2858,6 @@ function borderDottedLine(borderStyle) {
             break;
     }
 }
-
 
 /******************************************************************
  기능 : font-size의 단위를 pt로 바꿔주는 함수를 만든다.
@@ -2917,7 +2873,7 @@ function changeFontUnit(fontSize) {
         temp = fontSize.split('px');
         fontSizePt = Math.round(temp[0] * 0.75) + 'pt';
     } else if (fontSize.indexOf('in') != -1) {
-        temp = data.fontSize.split('in');
+        temp = fontSize.split('in');
         fontSizePt = Math.round(temp[0] * 72) + 'pt';
     } else if (fontSize.indexOf('mm') != -1) {
         temp = fontSize.split('mm');
@@ -2937,29 +2893,32 @@ function changeFontUnit(fontSize) {
  만든이 : 안예솔
  ******************************************************************/
 function characterSpacing(text, spacing, pTagId) {
-    var tag = $('#' + pTagId);
-    var str = text.toString();
-    var strSplit = str.split('<br/>');
-    strSplit[0] = strSplit[0].trim();
-    var max = strSplit[0].length;
-    var parentWidthString = tag.parent().css('width');
-    var parentWidth = parentWidthString.split('p');
-    var fontSize = (tag.css('font-size')).split('p');
+    if (text != undefined) {
+        var tag = $('#' + pTagId);
+        var str = text.toString();
+        var strSplit = str.split('<br/>');
+        strSplit[0] = strSplit[0].trim();
+        var max = strSplit[0].length;
+        var parentWidthString = tag.parent().css('width');
+        var parentWidth = parentWidthString.split('p');
+        var fontSize = (tag.css('font-size')).split('pt');
 
-    if (strSplit.length > 1) {
-        for (var i = 1; i < strSplit.length; i++) {
-            strSplit[i] = strSplit[i].trim();
-            if (max < strSplit[i].length) {
-                max = strSplit[i].length;
+        if (strSplit.length > 1) {
+            for (var i = 1; i < strSplit.length; i++) {
+                strSplit[i] = strSplit[i].trim();
+                if (max < strSplit[i].length) {
+                    max = strSplit[i].length;
+                }
             }
         }
+
+        var mid = (parentWidth[0] - (fontSize[0] * max + spacing * (max - 1))) / 2;
+
+        tag.css({
+            'margin-left': mid + 'px',
+            'margin-right': mid + 'px',
+            'letter-spacing': spacing + 'px'
+        });
+    } else {
     }
-
-    var mid = (parentWidth[0] - (fontSize[0] * max + spacing * (max - 1))) / 2;
-
-    tag.css({
-        'margin-left': mid + 'px',
-        'margin-right': mid + 'px',
-        'letter-spacing': spacing + 'px'
-    });
 }

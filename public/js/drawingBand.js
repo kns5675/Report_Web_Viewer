@@ -119,9 +119,15 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
         }
 
         if (band.childHeaderBands !== null) { // 자식헤더밴드에서 재호출
-            if(!remainData){
-                drawBand(band.childHeaderBands, layerName, reportHeight);
-            }
+            // if(band.childHeaderBands.attributes["xsi:type"] === 'BandGroupHeader'){
+                if (!remainData) {
+                    drawBand(band.childHeaderBands, layerName, reportHeight);
+                }
+            // } else if(band.childHeaderBands.attributes["xsi:type"] === 'BandDataHeader'){
+            //     if(band.childHeaderBands.fixTitle == 'true') { // 데이터 헤더 밴드 고정 값이 예 일 때
+            //         // 구현하기!
+            //     }
+            // }
         }
 
         var div_id = 'band' + (bandNum++);
@@ -133,25 +139,34 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
         // childBands라는 애가 필요없는 애일 수 있고
         // 어디서 재귀호출해야 할 지 명확치 않아 우선 주석처리
 
+        // 수정 18.09.04 YeSol
         if (band.attributes["xsi:type"] === "BandData") {
-            if(bands.length > 1){
+            console.log('drawingBand');
+            console.log(bands);
+            if (bands.length > 1) { //밴드가 있을 경우
+                if (band.childFooterBands) {
+                    // console.log("childFooterBands 1 : ",band.childFooterBands[0]);
+                    // console.log("childHeaderBands 1 : ",band.childHeaderBands[0]);
+                }
                 getFooterHeight(bands);
-            }
-            console.log(bands.childHeaderBands);
-
-            if(bands.childHeaderBands != null){
                 getMinGroupBandDataHeight(band);
+
                 avaHeight = getAvaHeight(div_id, reportHeight);
                 numofData = getNumOfDataWithGroupField(band, avaHeight);
             }
+
         }
         judgementControlList(band, div_id, numofData); // 라벨을 그려줌
 
-        if (band.attributes["xsi:type"] == 'BandData') {
+        if (band.attributes["xsi:type"] === 'BandData') {
+            if (band.childFooterBands) {
+                // console.log("childFooterBands 2 : ",band.childFooterBands[0]);
+                // console.log("childHeaderBands 2 : ",band.childHeaderBands[0]);
+            }
             var dataBandHeight = 0;
-            if(remainData){
-                dataBandHeight = getBandHeightWithGroupField(band, numofData-groupDataRow);
-            }else{
+            if (remainData) {
+                dataBandHeight = getBandHeightWithGroupField(band, numofData - groupDataRow);
+            } else {
                 dataBandHeight = getBandHeightWithGroupField(band, numofData);
             }
             $('#' + div_id).css({
@@ -159,17 +174,20 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                 'height': dataBandHeight,
                 'border-bottom': "1px solid red"
             });
-
-            if(groupFieldArray[groupFieldNum].length > numofData){
+            if (groupFieldArray[groupFieldNum].length > numofData) {
                 curDatarow += numofData;
                 remainData = true;
                 groupDataRow += numofData;
-            }else{
+            } else {
                 curDatarow += (groupFieldArray[groupFieldNum].length - 1);
                 groupFieldNum++;
                 remainData = false;
             }
-
+        } else if (band.attributes["xsi:type"] === "BandSubReport") {
+            $('#' + div_id).css({
+                'width': band.rectangle.width,
+                'height': band.rectangle.height,
+            });
         } else if (band.attributes["xsi:type"] === "BandPageFooter") {
             $('#' + div_id).css({
                 'width': band.rectangle.width,
