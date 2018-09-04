@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var jquery = require('jquery');
+var fs = require('fs');
 
 var indexRouter = require('./routes/index');
 var jeon = require('./routes/jeon');
