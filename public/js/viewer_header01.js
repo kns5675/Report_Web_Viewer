@@ -1,6 +1,9 @@
 var page_offset = 97;
 var ImageNum = 1;
+var imgae_src;
+var CImageNum;
 var imageid;
+var count = 0;
 var imagedivid;
 var set_buttonid;
 var imagezIndex = 401;
@@ -22,7 +25,6 @@ function FirstPage(){
  ******************************************************************/
 function NowPage(){
     $("#NowPage")[0].style.width ="50px";
-    console.log("test : ",test );
     $("#NowPage").on("keyup",function () {
         $(this).val($(this).val().replace(/[^0-9]/g,""));
         var inputpage = "page"+$(this).val();
@@ -158,7 +160,7 @@ function image_upload() {
      기능 : 이미지 추가 모달창의 취소 버튼
      만든이 : hagdung-i
      ******************************************************************/
-    $("#upload_cancel").click(function(){
+    $(".upload_cancel").click(function(){
         modalLayer.fadeOut("slow");
         $("#"+imagedivid).remove();
     });
@@ -172,7 +174,10 @@ function readURL(input) {
     if($("#dialog_div"+ImageNum)[0]){
         $("#dialog_div"+ImageNum).remove();
     }
-    tag_Making(scope); //이미지 추가.
+    tag_Making(scope).then(function (resolve) {
+        console.log("data : ",resolve);
+        image_setting();
+    });
 
     /******************************************************************
      기능 : 실제 url 가져오는 기능.
@@ -191,9 +196,14 @@ function readURL(input) {
  기능 : 태그 생성 함수.
  만든이 : hagdung-i
  ******************************************************************/
-function tag_Making(scope, imgae_src, imgnum) {
+async function tag_Making(scope, imgae_src, imgnum) {
     var nowpagenum = $("#NowPage").val();
     if(imgnum){
+        var test = $("#image1")[0];
+        console.log("test : ",test);
+        if(test){
+            imgnum++;
+        }
         ImageNum = imgnum;
     }
     /******************************************************************
@@ -228,7 +238,7 @@ function tag_Making(scope, imgae_src, imgnum) {
     var setdiv = document.createElement("div");
     setdiv.id = "setdiv"+ImageNum;
     setdiv.style.position = "absolute";
-    setdiv.className  = "setting_button";
+    // setdiv.className  = "setting_button";
 
     var set_button = document.createElement("input");
     set_buttonid = "image_button"+ImageNum;
@@ -237,49 +247,6 @@ function tag_Making(scope, imgae_src, imgnum) {
     set_button.type = "button";
     set_button.value = "이미지 속성";
     set_button.style.visibility = "hidden";
-
-    var dialog_main_div = document.createElement("div");
-    dialog_main_div.id = "dialog_main_div"+ImageNum;
-    dialog_main_div.style.position = "absolute";
-    dialog_main_div.style.width = "0px";
-    dialog_main_div.style.height = "0px";
-
-    var dialog_div = document.createElement("div");
-    dialog_div.id = "dialog_div"+ImageNum;
-
-    var main_dialog = $("#dialog")[0].id;
-
-    var dialog = document.createElement("input");
-    dialog.id = "dialog"+ImageNum;
-    dialog.class = "image_dialog_delete";
-    dialog.value = "이미지 삭제";
-    dialog.type = "button";
-
-    var limit_fore_dialog = document.createElement("input");
-    limit_fore_dialog.id = "limit_fore_dialog"+ImageNum;
-    limit_fore_dialog.value = "이미지 맨 앞으로 보내기";
-    limit_fore_dialog.type = "button";
-
-    var fore_dialog = document.createElement("input");
-    fore_dialog.id = "fore_dialog"+ImageNum;
-    fore_dialog.value = "이미지 앞으로 보내기";
-    fore_dialog.type = "button";
-
-    var limit_back_dialog = document.createElement("input");
-    limit_back_dialog.id = "limit_back_dialog"+ImageNum;
-    limit_back_dialog.value = "이미지 맨 뒤로 보내기";
-    limit_back_dialog.type = "button";
-
-    var back_dialog = document.createElement("input");
-    back_dialog.id = "back_dialog"+ImageNum;
-    back_dialog.value = "이미지 뒤로 보내기";
-    back_dialog.type = "button";
-
-    var cancel_dialog = document.createElement("input");
-    cancel_dialog.id = "image_update_cancel"+ImageNum;
-    cancel_dialog.value = "취소";
-    cancel_dialog.type = "button";
-
     /******************************************************************
      기능 : 이미지 추가 기능 모달창 생성.
      만든이 : hagdung-i
@@ -297,37 +264,28 @@ function tag_Making(scope, imgae_src, imgnum) {
     document.getElementById(setdiv.id).appendChild(set_button);
 
     /******************************************************************
-     기능 : 이미지 수정 기능 모달창 생성.
-     만든이 : hagdung-i
-     ******************************************************************/
-    document.getElementById(main_dialog).appendChild(dialog_main_div);
-    document.getElementById(dialog_main_div.id).appendChild(dialog_div);
-    document.getElementById(dialog_div.id).appendChild(dialog);
-    document.getElementById(dialog_div.id).appendChild(limit_fore_dialog);
-    document.getElementById(dialog_div.id).appendChild(limit_back_dialog);
-    document.getElementById(dialog_div.id).appendChild(fore_dialog);
-    document.getElementById(dialog_div.id).appendChild(back_dialog);
-    document.getElementById(dialog_div.id).appendChild(cancel_dialog);
-
-    /******************************************************************
      기능 : 이미지 영역의 드래그 이동 & 크기 조정 기능.
      만든이 : hagdung-i
      ******************************************************************/
     $("#"+imagediv.id).draggable({ containment:"#backGroundLayer"+nowpagenum, zIndex:13}); //영역 나가지 못하게 하는 설정.
     $("#"+imagediv.id).resizable({});
 
-    image_setting(imagediv.id, set_buttonid, ImageNum); //이미지 영역의 id값 받아가기 위함.
+    return new Promise(function (resolve) {
+        var data = 100;
+        resolve(data);
+    });
 }
 
 /******************************************************************
  기능 : 이미지 모달창 닫기 기능.
  만든이 : hagdung-i
  ******************************************************************/
-function image_moal_fadeout(ImageNum) {
+function image_moal_fadeout() {
     var modalLayer = $("#image_dialog");
-    var dialog_div = $("#dialog_div"+ImageNum);
+    // var dialog_div = $("#dialog_div"+ImageNum);
     modalLayer.fadeOut("slow");
-    dialog_div.css({"visibility": "hidden"});
+    // dialog_div.css({"visibility": "hidden"});
+    // $("#image_update_cancel"+ImageNum).css({"visibility": "hidden"});
 }
 
 /******************************************************************
@@ -356,24 +314,25 @@ function image_level(level, ImageNum) {
  기능 : 이미지 삭제, 수정 기능.
  만든이 : hagdung-i
  ******************************************************************/
-function image_setting(id, btn, ImageNum){
+async function image_setting(){
 
     /******************************************************************
      기능 : 이미지에 마우스 올릴 시에만 이미지 속성 버튼이 나타남.
      만든이 : hagdung-i
      ******************************************************************/
-    $("#"+id).on("mouseover",function () {
-        var styles = $("#"+btn);
+    console.log("imagedivid : ",imagedivid);
+    $("#"+imagedivid).on("mouseover",function () {
+        var styles = $("#"+set_buttonid);
         styles[0].style.visibility = "visible";
     });
-    $("#"+id).on("mouseleave",function () {
-        var styles = $("#"+btn);
+    $("#"+imagedivid).on("mouseleave",function () {
+        var styles = $("#"+set_buttonid);
         styles[0].style.visibility = "hidden";
     });
 
     var modalLayer = $("#image_dialog");
     var dialog = $("#dialog");
-    var dialog_div = $("#dialog_div"+ImageNum);
+    var dialog_div = $("#dialog_div");
     dialog_div.css({"visibility": "hidden"});
     var marginLeft = dialog.outerWidth()/2;
     var marginTop = dialog.outerHeight()/2;
@@ -384,9 +343,10 @@ function image_setting(id, btn, ImageNum){
      ******************************************************************/
     $(".setting_button").on("click", function () {
         modalLayer.fadeIn("slow");
-        ImageNum = this.id.replace(/[^0-9]/g,'');
+        CImageNum = this.id.replace(/[^0-9]/g,'');
         dialog.css({"margin-top" : -marginTop, "margin-left" : -marginLeft});
-        $("#dialog_div"+ImageNum).css({"visibility": "visible"});
+        $("#dialog_div"+CImageNum).css({"visibility": "visible"});
+        $("#image_update_cancel"+CImageNum).css({"visibility": "visible"});
         $(this).blur();
         return false;
     });
@@ -394,61 +354,67 @@ function image_setting(id, btn, ImageNum){
      기능 : 이미지 속성 - 취소 버튼 클릭시 이벤트
      만든이 : hagdung-i
      ******************************************************************/
-    $("#image_update_cancel"+ImageNum).on("click",function () {
-        image_moal_fadeout(ImageNum);
+    $(".image_update_cancel").on("click",function () {
+        image_moal_fadeout();
     });
     /******************************************************************
      기능 : 이미지 속성 - 삭제 버튼 클릭시 이벤트
      만든이 : hagdung-i
      ******************************************************************/
-    $("#dialog"+ImageNum).on("click", function () {
-        $("#ImageDivPacking"+ImageNum).remove();
-        $("#dialog_div"+ImageNum).remove();
-        image_moal_fadeout(ImageNum);
+    $("#image_dialog_delete").on("click", function () {
+        console.log("CImageNum : ",CImageNum);
+        $("#ImageDivPacking"+CImageNum).remove();
+        image_moal_fadeout();
     });
 
     /******************************************************************
      기능 : 이미지 속성 - 이미지 맨 앞으로 보내기 버튼 클릭시 이벤트
      만든이 : hagdung-i
      ******************************************************************/
-    $("#limit_fore_dialog"+ImageNum).on("click", function () {
-        var imgae_src = $("#image"+ImageNum)[0].src;
-        $("#ImageDivPacking"+ImageNum).remove(); // 다른 레이어에 새로 그리려면 지워야지~
-        $("#dialog_div"+ImageNum).remove(); //이미지 모달 창의 버튼들도 새로 그려주기 때문에 지움.
+    $("#limit_fore_dialog").on("click", function () {
+        if($("#image"+CImageNum)[0]){
+            imgae_src = $("#image"+CImageNum)[0].src;
+            $("#ImageDivPacking"+CImageNum).remove();
+        }
+        count++;
+        console.log("remove_end count : ", count);
+        remove_end(CImageNum).then(function (resolveData) {
+            var scope = "foreGroundLayer";
 
-        var scope = "foreGroundLayer";
-        tag_Making(scope,imgae_src, ImageNum);
-        image_moal_fadeout(ImageNum);
+            tag_Making(scope,resolveData, CImageNum);
+        });
     });
 
     /******************************************************************
      기능 : 이미지 속성 - 이미지 맨 뒤로 보내기 버튼 클릭시 이벤트
      만든이 : hagdung-i
      ******************************************************************/
-    $("#limit_back_dialog"+ImageNum).on("click", function () {
-        var imgae_src = $("#image"+ImageNum)[0].src;
-        $("#ImageDivPacking"+ImageNum).remove();
-        $("#dialog_div"+ImageNum).remove();
-        var scope = "backGroundLayer";
-        tag_Making(scope, imgae_src, ImageNum);
-        image_moal_fadeout(ImageNum);
+    $("#limit_back_dialog").on("click", function () {
+        if($("#image"+CImageNum)[0]){
+            imgae_src = $("#image"+CImageNum)[0].src;
+            $("#ImageDivPacking"+CImageNum).remove();
+        }
+        remove_end(CImageNum).then(function (resolveData) {
+            var scope = "backGroundLayer";
+            tag_Making(scope,resolveData, CImageNum);
+        });
     });
 
     /******************************************************************
      기능 : 이미지 속성 - 이미지 앞으로 보내기 버튼 클릭시 이벤트
      만든이 : hagdung-i
      ******************************************************************/
-    $("#fore_dialog"+ImageNum).on("click", function () {
-        image_level("up",ImageNum);
-        image_moal_fadeout(ImageNum);
+    $("#fore_dialog").on("click", function () {
+        image_level("up",CImageNum);
+        image_moal_fadeout(CImageNum);
     });
     /******************************************************************
      기능 : 이미지 속성 - 이미지 뒤로 보내기 버튼 클릭시 이벤트
      만든이 : hagdung-i
      ******************************************************************/
-    $("#back_dialog"+ImageNum).on("click", function () {
-        image_level("down",ImageNum);
-        image_moal_fadeout(ImageNum);
+    $("#back_dialog").on("click", function () {
+        image_level("down",CImageNum);
+        image_moal_fadeout(CImageNum);
     });
 }
 
@@ -459,6 +425,7 @@ function image_setting(id, btn, ImageNum){
  ******************************************************************/
 $(function() {
     $('#image_insert').on("change", function () {
+        console.log("this : ",this);
         readURL(this);
     });
 });
@@ -468,5 +435,17 @@ function DRD_button() {
         console.log("DRD_Start click");
 
         // shell.echo('hello world');
+    });
+}
+
+/******************************************************************
+ 기능 : 이미지 순서 변경 시 포,백그라운드에 새로 그려주기 위해 디자인레이어의 이미지와 모달의 버튼들을 지우고 다시 그리는 것을 동기로 변경. 지운 후에 새로 그리기 위함.
+ 날짜 : 2018-09-04
+ 만든이 : hagdung-i
+ ******************************************************************/
+async function remove_end(CImageNum) {
+    return new Promise(function (resolve) {
+        image_moal_fadeout(CImageNum);
+        resolve(imgae_src);
     });
 }

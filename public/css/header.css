@@ -88,6 +88,51 @@ div.room{
     background-color:#CADFFF;
 }*/
 
+#modalLayer > .modal-content {
+    overflow:hidden;
+    background-color: #fefefe;
+    margin: 0px auto;
+    width: 300px;
+    height: 150px;
+    margin-top:150px;
+    border:2px solid #313e52;
+    padding: 0px;
+}
+
+#image_dialog > #dialog {
+    overflow:hidden;
+    background-color: #fefefe;
+    margin: 0px auto;
+    width: 290px;
+    height: 170px;
+    margin-top:150px;
+    border:2px solid #313e52;
+    padding: 0px;
+}
+
+#modalLayer > .modal-content > #image_add_area > span {
+    margin-top: 4px;
+    background-color: #313e52;
+    color: white;
+    font-size: 12px;
+}
+
+#image_dialog > #dialog > .image_add_area > span {
+    margin-top: 4px;
+    background-color: #313e52;
+    color: white;
+    font-size: 12px;
+}
+
+.image_add_area {
+    background-color: #313e52;
+}
+
+.image_insert_area {
+    margin : 14px;
+    text-align: center;
+}
+
 #extraheadoptions{
     readOnly : ture;
 }
