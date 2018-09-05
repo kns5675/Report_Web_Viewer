@@ -572,7 +572,7 @@ function changeColor(tds){
             $("table#modaltable tr:eq(1) td:eq(" + tdid + ")").css("background-color", "#E3E3E3");
         }
     });
-};
+}
 /******************************************************************
  기능 : 모달 '확인'버튼 누르기 전 데이터 유효성 검증
  author : 하지연
