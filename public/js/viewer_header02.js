@@ -207,42 +207,25 @@ function tableChoice() {
         unique_table_class_arr.forEach(function(table_class_name, table_class_index){ // 클래스만큼 반복
             var table_arr = $('.' + table_class_name);
 
+            // 유사 배열은 배열 메소드를 사용할 수 없으므로 call을 이용하여 사용
             Array.prototype.forEach.call(table_arr, function(one_table, one_table_index){ // 테이블 개수 만큼 반복
                 var tr_arr = $(one_table).find('tr');
 
-                Array.prototype.forEach.call(tr_arr, function(tr, tr_index){
+                Array.prototype.forEach.call(tr_arr, function(tr, tr_index){ // tr 개수 만큼 반복
                     var td_arr = $(tr).children();
                     $(one_table).append($(tr).clone());
+                    // 임시 tr을 테이블 끝에 만듦
                     var temp_table_tr = $(one_table).children().last();
 
-                    Array.prototype.forEach.call(td_arr, function(td, td_index){
+                    Array.prototype.forEach.call(td_arr, function(td, td_index){ // td 개수 만큼 반복
+                        // 임시 tr의 td를 바꾼 순서에 맞게 원래 tr에 하나씩 넣음
                         $(td).html(
                             $(temp_table_tr).children().eq(index_arr[table_class_index][td_index]).html()
                         );
                     });
-
-                    $(temp_table_tr).remove();
+                    $(temp_table_tr).remove(); // 임시 tr 삭제
                 });
-                // for(var j=0; j<one_table.length; j++){ // tr 개수 만큼 반복
-                //     var td_arr = one_table.eq(j).children();
-                //     var temp_table_tr = tr_arr.eq(tr_arr.length-1).next();
-                //     console.log(temp_table_tr);
-                //     // console.log(td_arr.length);
-                //     for(var k=0; k<td_arr.length; k++){ // td 개수 만큼 반복
-                //         // console.log(index_arr[table_class_index][k]);
-                //         console.log(temp_table_tr.children().eq(index_arr[table_class_index][k]));
-                //         // td_arr.eq(k).replaceAll(temp_table_tr.children().eq(index_arr[table_class_index][k]));
-                //     }
-                // }
-                // temp_table_tr.remove();
             });
-            // for(var i=0; i<table_arr.length; i++){ // 테이블 개수 만큼 반복
-            //     var one_table = table_arr.eq(i).find('tr');
-                // table_arr.eq(i).append(tr_arr.clone());
-                // temp_table_tr.css('display', 'none');
-
-
-            // }
         });
 
         // table_choice_bool_list 변수 값에 따라 display / none 시켜줌

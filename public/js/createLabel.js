@@ -276,7 +276,7 @@ function drawingDynamicTableValueLabelWithoutGropuFiedldArray(label, dt, tableId
 }
 /**************************************************************************************
  기능 : GroupFieldArray가 있을 경우
-        DynamicTableValueLabel(동적 테이블 밸류 라벨)을 화면에 그려주는 함수를 만든다.
+ DynamicTableValueLabel(동적 테이블 밸류 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 구영준
  **************************************************************************************/
 function drawingDynamicTableValueLabelWithGropuFiedldArray(label, dt, tableId, numOfData){
