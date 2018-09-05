@@ -7,7 +7,6 @@ var jquery = require('jquery');
 var fs = require('fs');
 
 var indexRouter = require('./routes/index');
-var jeon = require('./routes/jeon');
 
 var app = express();
 

@@ -39,8 +39,9 @@ function getFooterHeight(bands) {
  * 만든이 : 구영준
  * *********************************************************/
 function getAvaHeight(div_id, reportHeight) {
-    var siblings = $('#' + div_id).siblings();
-    var curr_height = parseInt($('#' + div_id).css('height').substring(0, $('#' + div_id).css('height').length - 2));
+    var $divId = '#' + div_id;
+    var siblings = $($divId).siblings();
+    var curr_height = parseInt($($divId).css('height').substring(0, $($divId).css('height').length - 2));
 
     for (var i = 0; i < siblings.length; i++) {
         curr_height += parseInt(siblings.eq(i).css('height').substring(0, siblings.eq(i).css('height').length - 2));
