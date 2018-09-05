@@ -38,7 +38,8 @@ function makePdf() {
     //Dr Viewer의 고급인쇄에서 용지방향을 바꿨을 경우 pdf orientation값 변경 처리
     var pageOrientation;
 
-    if(docwidth1==210){
+    /*if(docwidth1==210){*/
+    if(docwidth1<docheight1){
         pageOrientation='p';
         docwidth1 = Number(210);
         docheight1 = Number(297);
@@ -100,7 +101,6 @@ function saving (){
  ******************************************************************/
 function makeHTML(){
     var thistext = $("#reportTemplate").html().toString();
-    console.log("this text : " + thistext);
     var pom = document.getElementById("saveAsHTML");
     pom.setAttribute('href','data:text/plain;charset=utf-8,'+ encodeURIComponent(thistext));
     pom.setAttribute('download','saveAsHTML.html');
