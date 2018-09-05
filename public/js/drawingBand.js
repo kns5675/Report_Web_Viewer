@@ -186,8 +186,6 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                         curDatarow += numofData;
                         remainData = true;
                         groupDataRow += numofData;
-                        console.log('pageNum : ' + pageNum);
-                        console.log(groupDataRow);
                     } else {
                         curDatarow += (groupFieldArray[groupFieldNum].length - 1);
                         groupFieldNum++;
