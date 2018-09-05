@@ -8,7 +8,7 @@
 * 작성자 : 전형준
 ***********************************************************************/
 function CreateBandArray(data){
-    var band_list = new Array();
+    var band_list = [];
     var band = null;
     if(Array.isArray(data.anyType)){ // Layer의 Band 또는 ChildBands 배열일 때
         data.anyType.forEach(function(band){
