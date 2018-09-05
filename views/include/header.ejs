@@ -42,8 +42,7 @@
                 makePdf();  //지연 - 화면을 pdf로 만드는 function()
             });
             $(".saveAsPdf").on("click", function(){
-                saving();
-                // makePdf();  //지연 - 화면을 pdf로 만든 후 저장하는 function()
+                saving();  //지연 - 화면을 pdf로 만든 후 저장하는 function()
             });
             $("#showpages").on("click", function () {
                 print_test();
@@ -174,7 +173,7 @@
     <select id="saveAsImage">
       <option id="saveAsDefault"selected disabled hidden>--이미지--</option>
       <option id="saveAsPng" value="png">PNG</option>
-      <option id="saveAsJpg" value="jpeg">JPEG</option>
+      <option value="jpeg"><a id="saveAsJpg">JPEG</a></option>
       <option id="saveAsBmp" value="bmp">BMP</option>
       <option id="saveAsTiff" value="tiff">TIFF</option>
       <option id="saveAsGif" value="gif">GIF</option>

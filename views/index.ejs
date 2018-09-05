@@ -30,33 +30,6 @@
     <script src="js/drawCurrPageNTotalPage.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script type="text/javascript">
-       /*function genPDF() {
-            html2canvas(document.getElementById("testDiv"), {
-                useCORS: true,
-                allowTaint: false,
-                onrendered: function (canvas) {
-                    var img = canvas.toDataURL("image/png");//캔버스를 이미지로 변환
-
-                    var imgwidth = 210;
-                    var pageheight = imgwidth * 1.414;
-                    var imgheight = canvas.height * imgwidth / canvas.width;
-                    var heightleft = imgheight;
-
-                    var doc = new jsPDF('p', 'mm');
-                    var position = 0;
-
-                    while (heightleft >= 20) {
-                        position = heightleft - imgheight;
-                        doc.addImage(img, 'PNG', 0, position, imgwidth, imgheight);
-                        heightleft -= pageheight;
-                    }
-                    doc.save('sample_A4.pdf');
-                }
-            });
-        }*/
-    </script>
-
-    <script>
 
         var data = <%-data%>;  //xml json 데이터
         var dataTable = <%- dataTable %>; //임시 데이터 dataTable
@@ -96,40 +69,6 @@
 <div id="myModal" class="modal"></div>
 
 <div id="modalTableChoice" class="modal"></div>
-<!--ONLY ONLY ONLY sdfsdf-->
-<!--<h1>jsPDF Demos</h1>
-
-<a href="javascript:genPDF()">Doonload PDF</a>
-
-<div id="testDiv">
-    <h1>Example Header</h1>
-    <input type="text"/>
-    <input type="submit" value="button!!" onclick="genPDF1()"/>
-    <br><br>
-    <img src="image/test.png" width="600" height="400"/>
-</div>-->
-<!--ONLY ONLY ONLY sdfsdf-->
-
-<!--<textarea name="testpdf" id="testpdf" style="margin:0px; height:333px; width:661px;"></textarea>
-<div id="editor"></div>
-&lt;!&ndash;<button id="cmd" onclick="example();">PDF</button>&ndash;&gt;
-<button id="cmd" onclick="testtest()">PDF</button>-->
-
-<!---->
-<!--<a href="javascript:genScreenshot()"> Get Screenshot</a>
-<a id="ttest"></a>
-<div id="text">
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras in enim metus.
-    Mauris lobortis non sem eu porta. Etiam ante lacus, viverra euismod neque ut,
-    pretium volutpat lacus. Aenean ipsum elit, feugiat quis metus vitae, vehicula
-    sodales arcu. Suspendisse id neque vitae erat pellentesque viverra in in eros.
-</div>
-<br>
-<div id="box1" style="width:400px;
-  height:300px; border:solid 2px red;">
-</div>-->
-<!---->
-
 <div id="reportTemplate" style="background-color:lightyellow;"></div>
 <div id="Image_Modal"><!--이미지 추가 모달창-->
     <div id="modalLayer">
