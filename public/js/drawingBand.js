@@ -4,6 +4,8 @@ var footer_height = 0;
 var minGroupBandDataHeight = 0;
 var remainData = false;
 var numofData = 0;
+var groupDataRow = 0;
+
 /***********************************************************
  * 기능 : 최소 그룹 데이터 길이
  *  그룹 헤더길이 + 테이블 타이틀 길이 + 테이블 Value 길이
@@ -33,6 +35,7 @@ function getFooterHeight(bands) {
             footer_height += Number(bands[i].rectangle.height);
     }
 }
+
 /***********************************************************
  * 기능 : 데이터 밴드 밑의 풋터 길이를 제외한 여백을 구함
  * 만든이 : 구영준
@@ -119,62 +122,45 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
         }
 
         if (band.childHeaderBands !== null) { // 자식헤더밴드에서 재호출
-            // if(band.childHeaderBands.attributes["xsi:type"] === 'BandGroupHeader'){
-                if (!remainData) {
-                    drawBand(band.childHeaderBands, layerName, reportHeight);
-                }
-            // } else if(band.childHeaderBands.attributes["xsi:type"] === 'BandDataHeader'){
-            //     if(band.childHeaderBands.fixTitle == 'true') { // 데이터 헤더 밴드 고정 값이 예 일 때
-            //         // 구현하기!
-            //     }
-            // }
+            drawChildHeaderBand(band.childHeaderBands, layerName, reportHeight, band); // 자식 밴드를 그려주는 함수 호출
         }
 
         var div_id = 'band' + (bandNum++);
         $('#' + layerName).append("<div id='" + div_id + "' class='Band " + band.attributes["xsi:type"] + "'>" + band.name + "</div>");
 
-        // if(band.childBands !== null){
-        //     drawBand(band.childBands);
-        // }
-        // childBands라는 애가 필요없는 애일 수 있고
-        // 어디서 재귀호출해야 할 지 명확치 않아 우선 주석처리
-
         // 수정 18.09.04 YeSol
         if (band.attributes["xsi:type"] === "BandData") {
-            console.log('drawingBand');
-            console.log(bands);
-            if (bands.length > 1) { //밴드가 있을 경우
-                if (band.childFooterBands) {
-                    // console.log("childFooterBands 1 : ",band.childFooterBands[0]);
-                    // console.log("childHeaderBands 1 : ",band.childHeaderBands[0]);
-                }
+            if (bands.length > 1) {
                 getFooterHeight(bands);
+            }
+            if (groupFieldArray.length > 0 && band.childHeaderBands !== null) { // band.childHeaderBands !== null 추가
                 getMinGroupBandDataHeight(band);
-
                 avaHeight = getAvaHeight(div_id, reportHeight);
                 numofData = getNumOfDataWithGroupField(band, avaHeight);
             }
-
         }
         judgementControlList(band, div_id, numofData); // 라벨을 그려줌
 
         if (band.attributes["xsi:type"] === 'BandData') {
             if (band.childFooterBands) {
+                // console.log(band.childFooterBands);
                 // console.log("childFooterBands 2 : ",band.childFooterBands[0]);
                 // console.log("childHeaderBands 2 : ",band.childHeaderBands[0]);
             }
+
             var dataBandHeight = 0;
-            if(groupFieldArray.length > 0) {
-               if (remainData) {
+            if (groupFieldArray.length > 0 && band.childHeaderBands !== null) { // band.childHeaderBands !== null 추가
+                // childHeaderBands중에 BandGroupHeader가 있는 지 판단하기!
+                if (remainData) {
                     dataBandHeight = getBandHeightWithGroupField(band, numofData - groupDataRow);
-               } else {
-                 dataBandHeight = getBandHeightWithGroupField(band, numofData);
-               }
-            $('#' + div_id).css({
-                'width': band.rectangle.width,
-                'height': dataBandHeight,
-                'border-bottom': "1px solid red"
-            });
+                } else {
+                    dataBandHeight = getBandHeightWithGroupField(band, numofData);
+                }
+                $('#' + div_id).css({
+                    'width': band.rectangle.width,
+                    'height': dataBandHeight,
+                    'border-bottom': "1px solid red"
+                });
                 if (groupFieldArray[groupFieldNum].length > numofData) {
                     curDatarow += numofData;
                     remainData = true;
@@ -184,7 +170,7 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                     groupFieldNum++;
                     remainData = false;
                 }
-            }else {
+            } else {
                 $('#' + div_id).css({
                     'width': band.rectangle.width,
                     'height': band.rectangle.height,
@@ -252,6 +238,7 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                             band.push(arg);
                             return band;
                         })(parentBand);
+                        console.log(parentBand);
                         drawBand(parentBand, layerName, reportHeight);
                     }
                 }
@@ -260,10 +247,90 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
 
 
         if (band.childFooterBands !== null) { // 자식 풋터 밴드에서 재호출
-            if(!remainData){
+            if (!remainData) {
                 drawBand(band.childFooterBands, layerName, reportHeight, band);
             }
         }
 
     });
+}
+
+/***********************************************************
+ 기능 : 밴드들의 childHeaderBand를 그린다.
+ 만든이 : 안예솔
+ * *********************************************************/
+function drawChildHeaderBand(childBands, layerName, reportHeight, band) {
+    var childHeaderBandArray = new Array();
+    childBands.forEach(function (childBand) {
+        switch (childBand.attributes["xsi:type"]) {
+            case 'BandGroupHeader' :
+                if (!remainData) {
+                    childHeaderBandArray.push(childBand);
+                }
+                break;
+            case 'BandDataHeader' : // 데이터 헤더 밴드
+                if (band.fixTitle == 'true') { // 데이터 헤더 밴드 고정 값이 '예'일 때
+                    childHeaderBandArray.push(childBand); // 매 페이지마다 나와야 함
+                } else { // 데이터 헤더 밴드 고정 값이 '아니오'일 때
+                    if(reportPageCnt == 1) { // 첫 페이지만 나옴
+                        childHeaderBandArray.push(childBand);
+                    }
+                }
+                break;
+            case 'BandDummyHeader' :
+                var isGroupHeader = false;
+                childBands.forEach(function(childBand){
+                    if(childBand.attributes["xsi:type"] == 'BandGroupHeader') {
+                        isGroupHeader = true;
+                    }
+                });
+                if(isGroupHeader){ // 그룹 헤더가 있을 때는 그룹의 맨 처음에 출력
+                    if(groupDataRow == 0) {
+                        childHeaderBandArray.push(childBand);
+                    }
+                } else { // 그룹 헤더가 없을 때는 인쇄물의 첫 페이지에만 출력
+                    if(reportPageCnt == 1) {
+                        childHeaderBandArray.push(childBand);
+                    }
+                }
+                break;
+        }
+    });
+    drawBand(childHeaderBandArray, layerName, reportHeight, band);
+}
+
+///////////////////////// 헤더 해결한 다음에 할래요...
+/***********************************************************
+ 기능 : 밴드들의 childFooterBand를 그린다.
+ 만든이 : 안예솔
+ * *********************************************************/
+function drawChildFooterBand(childBands, layerName, reportHeight, band) {
+    var childFooterBandArray = new Array();
+    childBands.forEach(function (childBand) {
+        switch (childBand.attributes["xsi:type"]) {
+            case 'BandGroupFooter' :
+                if (!remainData) {
+                    childFooterBandArray.push(childBand);
+                }
+                break;
+            case 'BandDataFooter' : // 모든 데이터 출력이 끝난 후에 출력
+                break;
+            case 'BandDummyFooter' :
+                var isGroupHeader = false;
+                childBands.forEach(function(childBand){
+                    if(childBand.attributes["xsi:type"] == 'BandGroupHeader') {
+                        isGroupHeader = true;
+                    }
+                });
+                if(isGroupHeader){ // 그룹 헤더가 있을 때는 그룹의 맨 마지막에 출력
+                    if(!remainData) { // 출력할 그룹의 데이터가 남아있지 않을 때
+                        childFooterBandArray.push(childBand);
+                    }
+                } else { // 그룹 헤더가 없을 때는 인쇄물의 마지막 페이지에만 출력
+
+                }
+                break;
+        }
+    });
+    drawBand(childFooterBandArray, layerName, reportHeight, band);
 }

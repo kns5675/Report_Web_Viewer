@@ -1,4 +1,5 @@
 document.write("<script type='text/javascript' src='/js/label.js' ><" + "/script>");
+document.write("<script type='text/javascript' src='/js/figure.js' ><" + "/script>");
 
 var labelList = new Array();
 var tableLabelList = new Array();
@@ -122,6 +123,18 @@ function judgementLabel(data, divId, numOfData) {
             labelList.push(label);
             drawingNormalLabel(label, divId);
         }
+    } else if (attr == 'ControlRectangle') { // 사각형
+        var figure = new ControlRectangle(data);
+        drawingRectangle(figure, divId);
+    } else if (attr == 'ControlCircle') { // 원
+        var figure = new ControlCircle(data);
+        drawingCircle(figure, divId);
+    } else if (attr == 'ControlLine') { // 선
+        var figure = new ControlLine(data);
+        drawingLine(figure, divId);
+    } else if (attr == 'ControlArrrow') { // 화살표
+        var figure = new ControlArrow(data);
+        drawingArrow(figure, divId);
     }
 }
 
@@ -225,9 +238,9 @@ function drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table) {
                     var key_data = data[key]._text;
                     var table_reform = table_format_check(data, valueTrId, key_data, table);
                     if(label.labelTextType == 'Number' && label.format != undefined){
-                        valueTrId.append('<td class="Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '">' + table_reform + '</td>');
+                        valueTrId.append('<td id = "' + key + '" class="Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '">' + table_reform + '</td>');
                     }else{
-                        valueTrId.append('<td class="Label ' + label._attributes + ' ' + label.dataType + '">' + table_reform + '</td>');
+                        valueTrId.append('<td id = "' + key + '" class="Label ' + label._attributes + ' ' + label.dataType + '">' + table_reform + '</td>');
                     }
 
                     valueTrId.css({
@@ -279,11 +292,11 @@ function drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table) {
 
                     if(label.labelTextType == 'Number' && label.format != undefined){
                         valueTrId.append(
-                        '<td class="Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '">' + table_reform + '</td>'
+                        '<td id = "' + key + '" class="Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '">' + table_reform + '</td>'
                         );
                     }else{
                         valueTrId.append(
-                        '<td class="Label ' + label._attributes + ' ' + label.dataType + '">' + table_reform + '</td>'
+                        '<td id = "' + key + '" class="Label ' + label._attributes + ' ' + label.dataType + '">' + table_reform + '</td>'
                         );
                     }
                     valueTrId.css({
