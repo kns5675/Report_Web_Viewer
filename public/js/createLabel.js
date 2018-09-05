@@ -269,11 +269,12 @@ function drawingDynamicTableValueLabelWithGropuFiedldArray(label, dt, tableId, n
     for (var j = groupDataRow; j < numOfData; j++) {
         var data = groupFieldArray[groupFieldNum];
         var rowNum = curDatarow + j;
-        var valueTrId = $('#dynamicValueLabel' + rowNum);
+        var $trId = '#dynamicValueLabel' + rowNum;
+        var valueTrId = $($trId);
         if (valueTrId.length < 1)
             tableId.append('<tr id =   "dynamicValueLabel' + rowNum + '"></tr>');
         for (var key in data[j]) {
-            var valueTrId = $('#dynamicValueLabel' + rowNum);
+            valueTrId = $($trId);
             if (label.fieldName == key) {
                 var key_data = data[j][key]._text;
                 var table_reform = table_format_check(data, valueTrId, key_data, label);
