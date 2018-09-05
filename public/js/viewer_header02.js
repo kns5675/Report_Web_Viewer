@@ -39,7 +39,7 @@ $(document).ready(function(){
 /******************************************************************
  기능 : 항목선택 기능 구현
  만든이 : 구영준 & 전형준
- 최종 작성일 : 2018.08.31
+ 최종 작성일 : 2018.09.05
  ******************************************************************/
 function tableChoice() {
 
@@ -61,7 +61,8 @@ function tableChoice() {
                     temp_table_arr.push(element_classes[j]);
             }
          }
-
+        
+         // 중복 제거
         unique_table_class_arr = temp_table_arr.reduce(function(a,b){if(a.indexOf(b)<0)a.push(b);return a;},[]);
 
         // 항목선택의 표 리스트 세팅
@@ -71,7 +72,10 @@ function tableChoice() {
         $('#leftpart_modalTableChoice_header').html(li_list_str);
         // 1. 표 리스트 세팅 완료
 
-        // 2. table 중 display/none 상태인 것들을 변수로 세팅
+        // 2.
+        // - table 중 display/none 상태인 것들을 변수로 세팅(table_choice_bool_list)
+        // - table 중 컬럼의 위치를 세팅(table_choice_th_list)
+        // - talbe 중 인덱스 위치를 세팅(index_arr)
         table_choice_bool_list = new Array();
         table_choice_th_list = new Array();
         index_arr = new Array();
@@ -90,6 +94,7 @@ function tableChoice() {
             table_choice_th_list.push(temp_arr2);
             index_arr.push(temp_arr3);
         }
+
 
         // 3. 위의 변수를 기반으로 체크박스 표시
         $('#leftpart_modalTableChoice_header > li').on('click', function(){
@@ -117,10 +122,11 @@ function tableChoice() {
             }
             
             // 체크박스 클릭시 table_choice_bool_list 값을 바꿔 다른 탭에 갔다와도 변경값을 유지
-            $('.table_choice_th_checkBox').on('change, click', function(){
+            $('.table_choice_th_checkBox').on('change, click', function(event){
                 var selected_chkbox = $('.table_choice_th_checkBox').index(this);
                 table_choice_bool_list[selected_table_index][selected_chkbox]
                     = $(this).prop('checked');
+                event.stopPropagation(); // 라벨&체크박스 클릭시 부모li 클릭되는 것 방지
             });
 
             // 컬럼 li 클릭시 클래스 추가/삭제
@@ -139,61 +145,104 @@ function tableChoice() {
             });
         });
 
-        // 모달창 뜨면 표1 클릭 이벤트 강제 발생
+        // 모달창 뜨면 첫번째 표 클릭 이벤트 강제 발생
         $('#leftpart_modalTableChoice_header > li').eq(0).trigger('click');
     });
 
     /*************************************************************
      * 기능 : 닫기(X) 클릭시  모달창 사라짐
-     * 만든이 : 전형준
      *************************************************************/
     $("#closebtn_modalTableChoice").click(function(){
         modalLayer.hide();
     });
 
-    /*************************************************************
+
+    /******************************************************************
      * 기능 : '위로' 버튼 클릭시 현재 선택한 column의 자리를 바꾸고,
      *        변수 위치도 변환
      * 만든이 : 전형준
-     *************************************************************/
+     ******************************************************************/
     $("#tableChoice_up").click(function () {
         var selected_th = $('.selected_th');
         var prev_th = selected_th.prev();
-        var temp_str;
-        var temp_index;
+        var temp_val;
         if(selected_th.length > 0 && $('#labelListUl > li').index(selected_th) > 0) {
-            temp_str = prev_th.find('label').text();
-            temp_index = index_arr[selected_table_index][$('#labelListUl > li').index(prev_th)];
-            prev_th.find('label').text(selected_th.find('label').text());
+
+            // index 설정
+            temp_val = index_arr[selected_table_index][$('#labelListUl > li').index(prev_th)];
             index_arr[selected_table_index][$('#labelListUl > li').index(prev_th)]
                 = index_arr[selected_table_index][$('#labelListUl > li').index(selected_th)];
-            selected_th.find('label').text(temp_str);
-            index_arr[selected_table_index][$('#labelListUl > li').index(selected_th)] = temp_index;
-            selected_th.removeClass('selected_th');
-            prev_th.addClass('selected_th');
+            index_arr[selected_table_index][$('#labelListUl > li').index(selected_th)] = temp_val;
+
+            // 컬럼 이름 위치를 현재 보이는 위치와 같게 설정
+            temp_val =
+                table_choice_th_list[selected_table_index][$('#labelListUl > li').index(selected_th)];
+            table_choice_th_list[selected_table_index][$('#labelListUl > li').index(selected_th)] =
+                table_choice_th_list[selected_table_index][$('#labelListUl > li').index(selected_th)-1];
+            table_choice_th_list[selected_table_index][$('#labelListUl > li').index(selected_th)-1] =
+                temp_val;
+
+            // 컬럼의 display값(true, false)를 현재 보이는 값과 같게 설정
+            temp_val =
+                table_choice_bool_list[selected_table_index][$('#labelListUl > li').index(selected_th)];
+            table_choice_bool_list[selected_table_index][$('#labelListUl > li').index(selected_th)]
+                = table_choice_bool_list[selected_table_index][$('#labelListUl > li').index(selected_th)-1];
+            table_choice_bool_list[selected_table_index][$('#labelListUl > li').index(selected_th)-1]
+                = temp_val;
+
+            // 설정한 값과 같이 뿌려줌
+            for(var i=0; i<$('#labelListUl > li').length; i++){
+                $('#labelListUl > li > input[type="checkbox"]').eq(i).prop('checked', table_choice_bool_list[selected_table_index][i]);
+                $('#labelListUl > li > label').eq(i).text(table_choice_th_list[selected_table_index][i]);
+            }
+
+            selected_th.removeClass('selected_th'); // '위로'를 클릭했으니 현재 컬럼의 클래스 제거
+            prev_th.addClass('selected_th'); // 이전 컬럼에 클래스 추가
+
         }
     });
 
-    /*************************************************************
-     * 기능 : '아래로' 버튼 클릭시 현재 선택한 column의 자리를 바꿈,
-     *        변수 위치도 변환
+    /******************************************************************
+     * 기능 : '아래로' 버튼 클릭시 현재 선택한 column의 자리를 바꿈
      * 만든이 : 전형준
-     *************************************************************/
+     ******************************************************************/
     $("#tableChoice_down").click(function(){
         var selected_th = $('.selected_th');
         var next_th = selected_th.next();
-        var temp_str;
-        var temp_index;
+        var temp_val;
+
         if(selected_th.length > 0 && $('#labelListUl > li').index(selected_th) < $('#labelListUl > li').length-1) {
-            temp_str = next_th.find('label').text();
-            temp_index = index_arr[selected_table_index][$('#labelListUl > li').index(next_th)];
-            next_th.find('label').text(selected_th.find('label').text());
+            // index 설정
+            temp_val = index_arr[selected_table_index][$('#labelListUl > li').index(next_th)];
             index_arr[selected_table_index][$('#labelListUl > li').index(next_th)]
                 = index_arr[selected_table_index][$('#labelListUl > li').index(selected_th)];
-            selected_th.find('label').text(temp_str);
-            index_arr[selected_table_index][$('#labelListUl > li').index(selected_th)] = temp_index;
-            selected_th.removeClass('selected_th');
-            next_th.addClass('selected_th');
+            index_arr[selected_table_index][$('#labelListUl > li').index(selected_th)] = temp_val;
+
+            // 컬럼 이름 위치를 현재 보이는 위치와 같게 설정
+            temp_val =
+                table_choice_th_list[selected_table_index][$('#labelListUl > li').index(selected_th)];
+            table_choice_th_list[selected_table_index][$('#labelListUl > li').index(selected_th)] =
+                table_choice_th_list[selected_table_index][$('#labelListUl > li').index(selected_th)+1];
+            table_choice_th_list[selected_table_index][$('#labelListUl > li').index(selected_th)+1] =
+                temp_val;
+
+            // 컬럼의 display값(true, false)를 현재 보이는 값과 같게 설정
+            temp_val =
+                table_choice_bool_list[selected_table_index][$('#labelListUl > li').index(selected_th)];
+            table_choice_bool_list[selected_table_index][$('#labelListUl > li').index(selected_th)]
+                = table_choice_bool_list[selected_table_index][$('#labelListUl > li').index(selected_th)+1];
+            table_choice_bool_list[selected_table_index][$('#labelListUl > li').index(selected_th)+1]
+                = temp_val;
+
+            // 설정한 값과 같이 뿌려줌
+            for(var i=0; i<$('#labelListUl > li').length; i++){
+                $('#labelListUl > li > input[type="checkbox"]').eq(i).prop('checked', table_choice_bool_list[selected_table_index][i]);
+                $('#labelListUl > li > label').eq(i).text(table_choice_th_list[selected_table_index][i]);
+            }
+
+            selected_th.removeClass('selected_th'); // '아래로'를 클릭했으니 현재 컬럼의 클래스 제거
+            next_th.addClass('selected_th'); // 다음 컬럼에 클래스 추가
+
         }
     });
 
@@ -203,7 +252,7 @@ function tableChoice() {
      ***********************************************/
     $("#tableChoice_done").click(function(){
 
-        // 항목선택에서 지정한대로 순서를 바꿈(현재 무조건 실행됨)
+        /****************************** 컬럼 자리 변경 ******************************/
         unique_table_class_arr.forEach(function(table_class_name, table_class_index){ // 클래스만큼 반복
             var table_arr = $('.' + table_class_name);
 
@@ -227,7 +276,10 @@ function tableChoice() {
                 });
             });
         });
+        /****************************** 컬럼 자리 변경 완료 ******************************/
 
+
+        /****************************** 컬럼 display 여부 ******************************/
         // table_choice_bool_list 변수 값에 따라 display / none 시켜줌
         unique_table_class_arr.forEach(function(table_class_name, index){
             var tr_arr = $('.' + table_class_name).find('tr');
@@ -240,8 +292,9 @@ function tableChoice() {
                 }
             }
         });
+        /****************************** 컬럼 display 여부 완료 ******************************/
 
-        $('#labelListUl > li').removeClass('selected_th');
-        modalLayer.fadeOut("slow");
+        $('#labelListUl > li').removeClass('selected_th'); // 사용한 클래스 제거
+        modalLayer.fadeOut("slow"); // 창 닫기
     });
 }

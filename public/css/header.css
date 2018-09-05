@@ -140,9 +140,10 @@ div.room{
 /* 항목선택 CSS */
 ul#leftpart_modalTableChoice_header{
     padding : 0;
-    width : 300px;
-    overflow-x : scroll;
     display : block;
+    border-bottom : 1px solid black;
+    margin-top : 0px;
+    /*overflow : auto;*/
 }
 ul#leftpart_modalTableChoice_header > li{
     display: inline-block;
