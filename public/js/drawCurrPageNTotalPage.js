@@ -6,6 +6,13 @@
  *        Page가 모두 그려진 후 마지막에 함수를 실행하는 것이 바람직.
  ***********************************************************************/
 
+// 아래 함수들을 모두 실행
+function drawPageNumberInSystemLabel(){
+    drawPageNumberNTotalPageLabel();
+    drawTotalPageLabel();
+    drawPageNumberLabel();
+}
+
 function drawPageNumberNTotalPageLabel(){
     var allPageNumTotalPageTag = $('.pageNumberTotalPage');
     for(var i = 0; i< allPageNumTotalPageTag.length; i++){

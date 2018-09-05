@@ -25,13 +25,37 @@
     <script src="js/viewer.js"></script>
     <script src="js/drawingBand.js"></script>
     <script src="js/label.js"></script>
-    <script src="js/modal.js"></script>
-    <script src="js/figure.js"></script>
     <script src="js/createLabel.js"></script>
-    <script src="js/createFigure.js"></script>
     <script src="js/drawCurrPageNTotalPage.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script type="text/javascript">
+       /* function genPDF() {
+            html2canvas(document.getElementById("testDiv"), {
+                useCORS: true,
+                allowTaint: false,
+                onrendered: function (canvas) {
+                    var img = canvas.toDataURL("image/png");//캔버스를 이미지로 변환
+
+                    var imgwidth = 210;
+                    var pageheight = imgwidth * 1.414;
+                    var imgheight = canvas.height * imgwidth / canvas.width;
+                    var heightleft = imgheight;
+
+                    var doc = new jsPDF('p', 'mm');
+                    var position = 0;
+
+                    while (heightleft >= 20) {
+                        position = heightleft - imgheight;
+                        doc.addImage(img, 'PNG', 0, position, imgwidth, imgheight);
+                        heightleft -= pageheight;
+                    }
+                    doc.save('sample_A4.pdf');
+                }
+            });
+        }*/
+    </script>
+
+    <script>
 
         var data = <%-data%>;  //xml json 데이터
         var dataTable = <%- dataTable %>; //임시 데이터 dataTable
@@ -40,13 +64,10 @@
             $("#header").load("/include/header.ejs");
             $("#myModal").load("/include/modal.ejs");
             $('#modalTableChoice').load("/include/modalTableChoice.ejs");
+
             makeReportTemplate(data);
 
-            // hakjoons(data);
-
-            drawPageNumberNTotalPageLabel();
-            drawTotalPageLabel();
-            drawPageNumberLabel();
+            drawPageNumberInSystemLabel();
             band_dbclick_event();
 
             image_setting();
@@ -65,53 +86,29 @@
         }
     </style>
 </head>
-<body id="bodybody">
+<body>
 <div id="header"></div>
 <div id="myModal" class="modal"></div>
 
 <div id="modalTableChoice" class="modal"></div>
+
 <div id="reportTemplate" style="background-color:lightyellow;"></div>
 <div id="Image_Modal"><!--이미지 추가 모달창-->
-    <div id="modalLayer" class="modalLayer">
-        <div class="modalContent modal-content">
-            <div id="image_add_area" class="image_add_area">
-                <span>이미지 추가</span>
-                <span class="upload_cancel" style="cursor:pointer;float:right;margin-right:10px;">X</span>
-            </div>
-            <div>
-                <span style="font-weight: bold; font-size: 12px; margin-top: 4px; margin-left: 3px;">추가할 이미지 선택</span>
-            </div>
-            <div style="margin: 10px; margin-top: 0px; background-color: #f5f5f5; border: 1px solid gray; height: auto;">
-                <div class="image_insert_area">
-                    <input id="image_insert" type="file" multiple accept="image/*"><br/>
-                </div>
-            </div>
-            <div class="image_insert_button_area" style="float: right; margin-right: 10px;">
-                <button id="upload_button" type="submit" value="">확인</button>
-                <button id="upload_cancel" class="upload_cancel" type="button">취소</button>
-            </div>
+    <div id="modalLayer">
+        <div class="modalContent">
+            <input id="image_insert" type="file" multiple accept="image/*"><br/>
+            <button id="upload_button" type="submit" value="">확인</button>
+            <button id="upload_cancel" type="button">취소</button>
         </div>
     </div>
 </div>
+<div id="reportTemplate" style="background-color:lightyellow;"></div>
 <div id="Image_Modal2"><!--이미지 추가 상세 모달창-->
-    <div id="image_dialog" class="modalLayer" title="이미지 속성">
-        <div id="dialog" class="modal-content">
-            <div id="image_type_add_area" class="image_add_area">
-                <span>이미지 속성 변경</span>
-                <span class="image_update_cancel" style="cursor:pointer;float:right;margin-right:10px;">X</span>
-            </div>
-            <div>
-                <span style="font-weight: bold; font-size: 12px; margin-top: 4px; margin-left: 15px;">이미지 삭제</span>
-                <span style="font-weight: bold; font-size: 12px; margin-top: 4px; margin-left: 3px; margin-right: 125px; float: right">이미지 순서</span>
-            </div>
-            <div id="dialog_div" style="margin-left: 27px; margin-top: 0px; background-color: #f5f5f5; border: 1px solid gray; height: 35px; width: 60px; float: left;">
-                <input id="image_dialog_delete" class="image_dialog_delete" value="삭제" type="button" style="margin-top: 5px; margin-left: 10px;">
-            </div>
-            <div id="dialog_div_order" style="margin-right: 27px; margin-top: 0px; background-color: #f5f5f5; border: 1px solid gray; height: 114px; width: 141px; float: right">
-                <input id="limit_fore_dialog" class="limit_fore_dialog" value="맨 앞으로 보내기" type="button" style="margin-top: 8px; margin-left: 10px; width: 120px;">
-                <input id="limit_back_dialog" class="limit_back_dialog" value="맨 뒤로 보내기" type="button" style="margin-left: 10px; width: 120px;">
-                <input id="fore_dialog" class="fore_dialog" value="앞으로 보내기" type="button" style="margin-left: 10px; width: 120px;">
-                <input id="back_dialog" class="back_dialog" value="뒤로 보내기" type="button" style="margin-left: 10px; width: 120px;">
+    <div id="image_dialog" title="이미지 속성">
+        <div id="dialog">
+            <p>이미지 속성 변경</p>
+            <div id="dialog_parking">
+
             </div>
         </div>
     </div>

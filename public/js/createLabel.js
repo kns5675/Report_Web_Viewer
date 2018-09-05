@@ -168,7 +168,8 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData) {
     dynamicTable_resizing_div_packing.append('<div id="dynamicTable_resizing_div'+dynamicTableNum + '"></div>');
 
     var dynamicTable_resizing_div = $("#dynamicTable_resizing_div"+dynamicTableNum);
-    dynamicTable_resizing_div.append('<table id="dynamicTable' + dynamicTableNum + '"></table>');
+    var temp_table_class = table.id.substring(0, 4); // 임시로 table을 인식하기 위한 번호 - 전형준
+    dynamicTable_resizing_div.append('<table id="dynamicTable' + dynamicTableNum + '" class="table table-' + temp_table_class + '"></table>');
     // dynamicTable_resizing_div.addClass("NormalLabel_scope");
     div.css('position', 'relative');
 
