@@ -23,7 +23,7 @@ function hakjoons(){
      날짜 : 2018 - 08 - 27
      ******************************************************************/
     $(".direction").on("change",function () {
-        paper_setting("reload",import_data);
+        paper_setting();
     });
     /******************************************************************
      기능 : 출력일 인쇄 이벤트
@@ -166,17 +166,21 @@ function jiyeons() {
  만든이 : hagdung-i
  날짜 : 2018 - 08 - 27
  ******************************************************************/
-function paper_setting(setting, data) {
-    console.log("data : ",data);
+function paper_setting(setting) {
     //용지방향 설정 가로와 세로를 서로 뒤바꿔주는 식의 형태인데, 가로에 해당하는 라디오 박스가 선택 되어 있을 때만 초기화시 세로로 되돌림.
-    var test = $('input:radio[name="direction"]').prop("checked");
-    if(setting){
-        if(!test){
+    var checked_check = $('input:radio[name="direction"]').prop("checked");
+    console.log("checked_check : ",checked_check);
+    if(setting){    //x 버튼 누르면 초기화
+        if(!checked_check){ //x버튼을 눌럿을 때, 체크가 있는 값이 가로이면
+            console.log("reset");
             paperDirection();
             $("input:radio[name='direction']:radio[value='세로']").prop("checked",true);
             $("input:radio[name='direction']:radio[value='가로']").prop("checked",false);
+        }else{ //가로가 아니면
+            // paperDirection();
         }
     }else{
+        console.log("not reset");
         paperDirection();
     }
 }
@@ -187,38 +191,72 @@ function paper_setting(setting, data) {
  내용 : 페이지 사이즈별로 px 단위로 설정
  ******************************************************************/
 function pagesizeselect(paper) {
-    var pageForCopyRatio = $('.page');
-    if(paper === "Letter"){
-        pageForCopyRatio.css('width', 816.3779527559 + 'px');
-        pageForCopyRatio.css('height', 1054.488188976 + 'px');
-    }else if(paper === "Tabloid"){
-        pageForCopyRatio.css('width', 1054.488188976 + 'px');
-        pageForCopyRatio.css('height', 1632.755905512 + 'px');
-    }else if(paper === "Legal"){
-        pageForCopyRatio.css('width', 816.3779527559 + 'px');
-        pageForCopyRatio.css('height', 1345.511811024 + 'px');
-    }else if(paper === "Statement"){
-        pageForCopyRatio.css('width', 529.1338582677 + 'px');
-        pageForCopyRatio.css('height', 816.3779527559 + 'px');
-    }else if(paper === "Executive"){
-        pageForCopyRatio.css('width', 695.4330708661 + 'px');
-        pageForCopyRatio.css('height', 1009.133858268 + 'px');
-    }else if(paper === "A3"){
-        pageForCopyRatio.css('width', 1122.519685039 + 'px');
-        pageForCopyRatio.css('height', 1587.401574803 + 'px');
-    }else if(paper === "A4"){
-        console.log("pagesizeselect A4 test");
-        pageForCopyRatio.css('width', 793.7007874016 + 'px');
-        pageForCopyRatio.css('height', 1122.519685039 + 'px');
-    }else if(paper === "A5"){
-        pageForCopyRatio.css('width', 793.7007874016 + 'px');
-        pageForCopyRatio.css('height', 559.3700787402 + 'px');
-    }else if(paper === "B4 (JIS)"){
-        pageForCopyRatio.css('width', 971.3385826772 + 'px');
-        pageForCopyRatio.css('height', 1375.748031496 + 'px');
-    }else if(paper === "B5 (JIS)"){
-        pageForCopyRatio.css('width', 687.874015748 + 'px');
-        pageForCopyRatio.css('height', 971.3385826772 + 'px');
+    var checked_check = $('input:radio[name="direction"]').prop("checked");
+    var pageForCopyRatio = $('.pageforcopyratio');
+    if(checked_check){
+        if(paper === "Letter"){
+            pageForCopyRatio.css('width', 816.3779527559 + 'px');
+            pageForCopyRatio.css('height', 1054.488188976 + 'px');
+        }else if(paper === "Tabloid"){
+            pageForCopyRatio.css('width', 1054.488188976 + 'px');
+            pageForCopyRatio.css('height', 1632.755905512 + 'px');
+        }else if(paper === "Legal"){
+            pageForCopyRatio.css('width', 816.3779527559 + 'px');
+            pageForCopyRatio.css('height', 1345.511811024 + 'px');
+        }else if(paper === "Statement"){
+            pageForCopyRatio.css('width', 529.1338582677 + 'px');
+            pageForCopyRatio.css('height', 816.3779527559 + 'px');
+        }else if(paper === "Executive"){
+            pageForCopyRatio.css('width', 695.4330708661 + 'px');
+            pageForCopyRatio.css('height', 1009.133858268 + 'px');
+        }else if(paper === "A3"){
+            pageForCopyRatio.css('width', 1122.519685039 + 'px');
+            pageForCopyRatio.css('height', 1587.401574803 + 'px');
+        }else if(paper === "A4"){
+            pageForCopyRatio.css('width', 793.7007874016 + 'px');
+            pageForCopyRatio.css('height', 1122.519685039 + 'px');
+        }else if(paper === "A5"){
+            pageForCopyRatio.css('width', 793.7007874016 + 'px');
+            pageForCopyRatio.css('height', 559.3700787402 + 'px');
+        }else if(paper === "B4 (JIS)"){
+            pageForCopyRatio.css('width', 971.3385826772 + 'px');
+            pageForCopyRatio.css('height', 1375.748031496 + 'px');
+        }else if(paper === "B5 (JIS)"){
+            pageForCopyRatio.css('width', 687.874015748 + 'px');
+            pageForCopyRatio.css('height', 971.3385826772 + 'px');
+        }
+    }else{
+        if(paper === "Letter"){
+            pageForCopyRatio.css('width',  1054.488188976 + 'px');
+            pageForCopyRatio.css('height', 816.3779527559 + 'px');
+        }else if(paper === "Tabloid"){
+            pageForCopyRatio.css('width', 1632.755905512 + 'px');
+            pageForCopyRatio.css('height', 1054.488188976 + 'px');
+        }else if(paper === "Legal"){
+            pageForCopyRatio.css('width', 1345.511811024 + 'px');
+            pageForCopyRatio.css('height', 816.3779527559 + 'px');
+        }else if(paper === "Statement"){
+            pageForCopyRatio.css('width', 816.3779527559 + 'px');
+            pageForCopyRatio.css('height', 529.1338582677 + 'px');
+        }else if(paper === "Executive"){
+            pageForCopyRatio.css('width', 1009.133858268 + 'px');
+            pageForCopyRatio.css('height', 695.4330708661 + 'px');
+        }else if(paper === "A3"){
+            pageForCopyRatio.css('width', 1587.401574803 + 'px');
+            pageForCopyRatio.css('height', 1122.519685039 + 'px');
+        }else if(paper === "A4"){
+            pageForCopyRatio.css('width', 1122.519685039 + 'px');
+            pageForCopyRatio.css('height', 793.7007874016 + 'px');
+        }else if(paper === "A5"){
+            pageForCopyRatio.css('width', 559.3700787402 + 'px');
+            pageForCopyRatio.css('height', 793.7007874016 + 'px');
+        }else if(paper === "B4 (JIS)"){
+            pageForCopyRatio.css('width', 1375.748031496 + 'px');
+            pageForCopyRatio.css('height', 971.3385826772 + 'px');
+        }else if(paper === "B5 (JIS)"){
+            pageForCopyRatio.css('width', 971.3385826772 + 'px');
+            pageForCopyRatio.css('height', 687.874015748 + 'px');
+        }
     }
 }
 /******************************************************************
@@ -266,13 +304,47 @@ function extra_tail_using_check() {
  내용 : 페이지 세로/가로 값을 반전 시키는 함수.
  ******************************************************************/
 function paperDirection() {
-    var width = $("#pageForCopyRatio1")[0].style.width;
-    var height = $("#pageForCopyRatio1")[0].style.height;
-    var temp = width;
-    height = width;
-    width = temp;
-    console.log("width : ",width);
-    console.log("height : ",height);
+
+    $(".pageforcopyratio").each(function (i, e) {
+        var temp = e.style.width;
+        e.style.width = e.style.height;
+        e.style.height = temp;
+    });
+    $(".forcopyratio").each(function (i, e) {
+        var temp = e.style.width;
+        console.log("temp : ",temp);
+        e.style.width = e.style.height;
+        e.style.height = temp;
+    });
+    $(".backGroundLayer").each(function (i, e) {
+        var temp = e.style.width;
+        e.style.width = e.style.height;
+        e.style.height = temp;
+    });
+    $(".designLayer").each(function (i, e) {
+        console.log("designLayer 돌아감");
+        var temp = e.style.width;
+        e.style.width = e.style.height;
+        e.style.height = temp;
+    });
+    $(".foreGroundLayer").each(function (i, e) {
+        console.log("designLayer 돌아감");
+        var temp = e.style.width;
+        e.style.width = e.style.height;
+        e.style.height = temp;
+    });
+
+    $(".Band").each(function (i, e) {
+        e.style.width = "100%";
+    });
+
+    // var width = $("#pageForCopyRatio1")[0].style.width;
+    // var height = $("#pageForCopyRatio1")[0].style.height;
+    // var temp = width;
+    // height = width;
+    // width = temp;
+    // console.log("width : ",width);
+    // console.log("height : ",height);
     // console.log("data : ",data);
     // width = height;
     //     e.style.width = e.style.height;
