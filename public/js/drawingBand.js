@@ -257,13 +257,7 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
         }
 
         if (band.childFooterBands !== null) { // 자식 풋터 밴드에서 재호출
-            if (!remainData) {
-                drawBand(band.childFooterBands, layerName, reportHeight, band);
-            } else {
-                if (band.fixPriorGroupFooter) {
-                    drawBand(band.childFooterBands, layerName, reportHeight);
-                }
-            }
+            drawChildFooterBand(band.childFooterBands, layerName, reportHeight, band); // 자식 밴드를 그려주는 함수 호출
         }
     });
 }
@@ -279,6 +273,10 @@ function drawChildHeaderBand(childBands, layerName, reportHeight, band) {
             case 'BandGroupHeader' :
                 if (!remainData) {
                     childHeaderBandArray.push(childBand);
+                }else{
+                    if(band.fixPriorGroupHeader === 'true'){ //그룹 헤더 고정
+                        childHeaderBandArray.push(childBand);
+                    }
                 }
                 break;
             case 'BandDataHeader' : // 데이터 헤더 밴드
@@ -324,6 +322,10 @@ function drawChildFooterBand(childBands, layerName, reportHeight, band) {
             case 'BandGroupFooter' :
                 if (!remainData) {
                     childFooterBandArray.push(childBand);
+                }else{
+                    if(band.fixPriorGroupFooter == 'true'){ //그룻 풋터 고정
+                        childFooterBandArray.push(childBand);
+                    }
                 }
                 break;
             case 'BandDataFooter' : // 모든 데이터 출력이 끝난 후에 출력
