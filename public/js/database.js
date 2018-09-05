@@ -9,7 +9,7 @@ function DataBinding(dataTreeJson){
     console.log(DZIList);
     // console.log(DZIList.DZI[0].dBAdapter);
     console.log(Array.isArray(DZIList.DZI));
-    console.log(DZIList.DZI.hasOwnProperty('dBAdapter'))
+    console.log(DZIList.DZI.hasOwnProperty('dBAdapter'));
 
 
     if(Array.isArray(DZIList.DZI)){

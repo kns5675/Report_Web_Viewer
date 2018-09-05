@@ -145,7 +145,7 @@ function BandGroupHeader(band){
      만든이 : 안예솔
      일시 : 2018.08.22
      ******************************************************************/
-    groupFieldArray = new Array();
+    groupFieldArray = [];
     groupFieldName = band.GroupFiledName._text;
     var i = 0;
 
@@ -161,7 +161,7 @@ function BandGroupHeader(band){
             }
         });
         if (!comparison) {
-            groupFieldArray[i] = new Array();
+            groupFieldArray[i] = [];
             groupFieldArray[i].push(data[groupFieldName]._text);
             groupFieldArray[i].push(data);
             i++;

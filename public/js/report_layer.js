@@ -22,7 +22,7 @@ function ReportTemplate(data){
     this.gridGap = { // 그리드 간격
         width : data.ReportTemplate.GridGap.Width._text,
         height : data.ReportTemplate.GridGap.Height._text
-    }
+    };
 
     this.drawGrid = data.ReportTemplate.DrawGrid._text; // 그리드 라인 표시
     this.snapToGrid = data.ReportTemplate.SnapToGrid._text; // 그리드 눈금에 따른 이동
@@ -33,7 +33,7 @@ function ReportTemplate(data){
     // 웹버전은 가상화 버전과 관련이 없으므로 해당 속성에 대해서는 무시하여도 무관 //
 
     this.reportList = (function(data){ // ReportList 배열 생성(Report가 한개든 이상이든)
-        var list = new Array();
+        var list = [];
         var report = null;
         // anyType이 배열인지 체크 (List에 Report가 1개만 존재)
         if(!Array.isArray(data.anyType)){
@@ -66,7 +66,7 @@ function Report(data){
     this.rectangle = { // 크기
         width : data.Rectangle.Width._text,
         height : data.Rectangle.Height._text
-    }
+    };
     this.name = data.Name._text; // 이름
     this.lock = data.Lock._text; // 잠김
 

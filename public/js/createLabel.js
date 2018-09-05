@@ -1,9 +1,9 @@
 document.write("<script type='text/javascript' src='/js/label.js' ><" + "/script>");
 document.write("<script type='text/javascript' src='/js/figure.js' ><" + "/script>");
 
-var labelList = new Array();
-var tableLabelList = new Array();
-var tableList = new Array();
+var labelList = [];
+var tableLabelList = [];
+var tableList = [];
 var systemLabelNum = 1;
 var summaryLabelNum = 1;
 var dataLabelNum = 1;
@@ -23,8 +23,8 @@ var dynamicTableNum = 1;
 var dynamicTitleLabelNum = 1;
 var thNum = 1;
 var dynamicValueLabelNum = 1;
-var groupFieldArray = new Array();
-var titleArray = new Array(); // 그룹으로 묶었을 경우 titleName으로만 접근이 가능해져서 그 titleName을 담을 배열
+var groupFieldArray = [];
+var titleArray = []; // 그룹으로 묶었을 경우 titleName으로만 접근이 가능해져서 그 titleName을 담을 배열
 
 var row = 0;
 var verticalPNum = 0;
@@ -77,7 +77,7 @@ function judgementLabel(data, divId, numOfData) {
         tableList.push(controlFixedTable);
 
         var fixTableLabels = data.Labels.TableLabel;
-        var fixTableLabelList = new Array();
+        var fixTableLabelList = [];
 
         fixTableLabels.forEach(function (label, i) {
             var fixtableLabel = new FixedTableLabel(label, i);
@@ -185,8 +185,7 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData) {
         'height': table.rectangle.height + 'px'
     });
     tableId.append('<tr id = "dynamicTitleLabel' + dynamicTitleLabelNum + '"></tr>');
-
-    if(groupFieldArray == undefined) {
+    if(groupFieldArray.length < 1) {
         numOfData = getNumOfDataInOnePage(tableLabel, divId); //한 페이지에 들어갈 데이터 개수
     }
     var dt = Object.values(dataTable.DataSetName)[0];
@@ -214,6 +213,132 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData) {
         dynamicValueLabelNum++;
     }
 }
+/**************************************************************************************
+ 기능 : GroupFieldArray가 없을 경우
+ DynamicTableValueLabel(동적 테이블 밸류 라벨)을 화면에 그려주는 함수를 만든다.
+ 만든이 : 구영준
+ **************************************************************************************/
+function drawingDynamicTableValueLabelWithoutGropuFiedldArray(label, dt, tableId, numOfData, table){
+    row = (pageNum - 1) * numOfData; //한 페이지 출력 해야할 시작 row
+    var rowLength = row + numOfData; //한 페이지에 마지막으로 출력해야할 row
+    for (var curDatarow = row; curDatarow < rowLength; curDatarow++) {
+        var data = dt[curDatarow];
+        var valueTrId = $("#dynamicValueLabel" + curDatarow);
+        if(valueTrId.length < 1)
+            tableId.append('<tr id = "dynamicValueLabel' + curDatarow + '"></tr>');
+        for (var key in data) {
+            if (label.fieldName == key) {
+                var valueTrId = document.getElementById("dynamicValueLabel" + curDatarow);
+                // var valueTrId = $('#dynamicValueLabel' + curDatarow);
+                var key_data = data[key]._text;
+                var table_reform = table_format_check(data, valueTrId, key_data, table);
+                if(label.labelTextType == 'Number' && label.format != undefined){
+                    valueTrId.append('<td id = "' + key + '" class="Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '">' + table_reform + '</td>');
+                }else{
+                    valueTrId.append('<td id = "' + key + '" class="Label ' + label._attributes + ' ' + label.dataType + '">' + table_reform + '</td>');
+                }
+
+                valueTrId.css({
+                    'width': label.rectangle.width,
+                    'height': label.rectangle.height
+                });
+                var td = $('#' + key);
+                //// 추가 부분 18.08.28 YeSol
+                if (label.noBorder == 'true') {
+                    td.css('border', 'none');
+                } else {
+                    if (label.borderThickness !== undefined) {
+                        var leftBorder = borderDottedLine(label.borderDottedLines.leftDashStyle);
+                        var rightBorder = borderDottedLine(label.borderDottedLines.rightDashStyle);
+                        var bottomBorder = borderDottedLine(label.borderDottedLines.bottomDashStyle);
+                        var topBorder = borderDottedLine(label.borderDottedLines.topDashStyle);
+                        td.css({
+                            'border-left': label.borderThickness.left + 'px ' + leftBorder + ' ' + label.leftBorderColor,
+                            'border-right': label.borderThickness.right + 'px ' + rightBorder + ' ' + label.rightBorderColor,
+                            'border-bottom': label.borderThickness.bottom + 'px ' + bottomBorder + ' ' + label.bottomBorderColor,
+                            'border-top': label.borderThickness.top + 'px ' + topBorder + ' ' + label.topBorderColor
+                        });
+                    } else {
+                        td.css('border', '1px solid black');
+                    }
+                }
+                td.css({
+                    // 'border' : '1px solid black',
+                    'font-size': label.fontSize,
+                    'font-family': label.fontFamily,
+                    'font-weight': label.fontStyle,
+                    'background-color': label.backGroundColor
+                });
+            }
+        }
+    }
+}
+/**************************************************************************************
+ 기능 : GroupFieldArray가 있을 경우
+        DynamicTableValueLabel(동적 테이블 밸류 라벨)을 화면에 그려주는 함수를 만든다.
+ 만든이 : 구영준
+ **************************************************************************************/
+function drawingDynamicTableValueLabelWithGropuFiedldArray(label, dt, tableId, numOfData){
+    for (var j = groupDataRow; j < numOfData; j++) {
+        var data = groupFieldArray[groupFieldNum];
+        var rowNum = curDatarow + j;
+        var $trId = '#dynamicValueLabel' + rowNum;
+        var valueTrId = $($trId);
+        if (valueTrId.length < 1)
+            tableId.append('<tr id =   "dynamicValueLabel' + rowNum + '"></tr>');
+        for (var key in data[j]) {
+            valueTrId = $($trId);
+            if (label.fieldName == key) {
+                var key_data = data[j][key]._text;
+                var table_reform = table_format_check(data, valueTrId, key_data, label);
+
+                if(label.labelTextType == 'Number' && label.format != undefined){
+                    valueTrId.append(
+                        '<td id = "' + key + '" class="Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '">' + table_reform + '</td>'
+                    );
+                }else{
+                    valueTrId.append(
+                        '<td id = "' + key + '" class="Label ' + label._attributes + ' ' + label.dataType + '">' + table_reform + '</td>'
+                    );
+                }
+                valueTrId.css({
+                    'width': label.rectangle.width,
+                    'height': label.rectangle.height,
+
+                });
+                var td = $('#' + key);
+                //// 추가 부분 18.08.28 YeSol
+                if (label.noBorder == 'true') {
+                    td.css('border', 'none');
+                } else {
+                    if (label.borderThickness !== undefined) {
+                        var leftBorder = borderDottedLine(label.borderDottedLines.leftDashStyle);
+                        var rightBorder = borderDottedLine(label.borderDottedLines.rightDashStyle);
+                        var bottomBorder = borderDottedLine(label.borderDottedLines.bottomDashStyle);
+                        var topBorder = borderDottedLine(label.borderDottedLines.topDashStyle);
+
+                        td.css({
+                            'border-left': label.borderThickness.left + 'px ' + leftBorder + ' ' + label.leftBorderColor,
+                            'border-right': label.borderThickness.right + 'px ' + rightBorder + ' ' + label.rightBorderColor,
+                            'border-bottom': label.borderThickness.bottom + 'px ' + bottomBorder + ' ' + label.bottomBorderColor,
+                            'border-top': label.borderThickness.top + 'px ' + topBorder + ' ' + label.topBorderColor
+                        });
+                    } else {
+                        td.css('border', '1px solid black');
+                    }
+                }
+
+                td.css({
+                    // 'border': '1px solid black',
+                    'font-size': label.fontSize,
+                    'font-family': label.fontFamily,
+                    'font-weight': label.fontStyle,
+                    'background-color': label.backGroundColor
+                });
+            }
+        }
+    }
+}
 
 /******************************************************************
  기능 : DynamicTableValueLabel(동적 테이블 밸류 라벨)을 화면에 그려주는 함수를 만든다.
@@ -225,117 +350,9 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData) {
  *******************************************************************/
 function drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table) {
     if (groupFieldArray == undefined || groupFieldArray.length == 0) {
-        row = (pageNum - 1) * numOfData; //한 페이지 출력 해야할 시작 row
-        var rowLength = row + numOfData; //한 페이지에 마지막으로 출력해야할 row
-        for (curDatarow = row; curDatarow < rowLength; curDatarow++) {
-            var data = dt[curDatarow];
-            var valueTrId = $('#dynamicValueLabel' + curDatarow);
-            if(valueTrId.length < 1)
-                tableId.append('<tr id = "dynamicValueLabel' + curDatarow + '"></tr>');
-            for (key in data) {
-                if (label.fieldName == key) {
-                    var valueTrId = $('#dynamicValueLabel' + curDatarow);
-                    var key_data = data[key]._text;
-                    var table_reform = table_format_check(data, valueTrId, key_data, table);
-                    if(label.labelTextType == 'Number' && label.format != undefined){
-                        valueTrId.append('<td id = "' + key + '" class="Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '">' + table_reform + '</td>');
-                    }else{
-                        valueTrId.append('<td id = "' + key + '" class="Label ' + label._attributes + ' ' + label.dataType + '">' + table_reform + '</td>');
-                    }
-
-                    valueTrId.css({
-                        'width': label.rectangle.width,
-                        'height': label.rectangle.height
-                    });
-                    var td = $('#' + key);
-                    //// 추가 부분 18.08.28 YeSol
-                    if (label.noBorder == 'true') {
-                        td.css('border', 'none');
-                    } else {
-                        if (label.borderThickness !== undefined) {
-                            var leftBorder = borderDottedLine(label.borderDottedLines.leftDashStyle);
-                            var rightBorder = borderDottedLine(label.borderDottedLines.rightDashStyle);
-                            var bottomBorder = borderDottedLine(label.borderDottedLines.bottomDashStyle);
-                            var topBorder = borderDottedLine(label.borderDottedLines.topDashStyle);
-                            td.css({
-                                'border-left': label.borderThickness.left + 'px ' + leftBorder + ' ' + label.leftBorderColor,
-                                'border-right': label.borderThickness.right + 'px ' + rightBorder + ' ' + label.rightBorderColor,
-                                'border-bottom': label.borderThickness.bottom + 'px ' + bottomBorder + ' ' + label.bottomBorderColor,
-                                'border-top': label.borderThickness.top + 'px ' + topBorder + ' ' + label.topBorderColor
-                            });
-                        } else {
-                            td.css('border', '1px solid black');
-                        }
-                    }
-                    td.css({
-                        // 'border' : '1px solid black',
-                        'font-size': label.fontSize,
-                        'font-family': label.fontFamily,
-                        'font-weight': label.fontStyle,
-                        'background-color': label.backGroundColor
-                    });
-                }
-            }
-        }
+        drawingDynamicTableValueLabelWithoutGropuFiedldArray(label, dt, tableId, numOfData, table);
     } else {
-        for (var j = groupDataRow; j < numOfData; j++) {
-            var data = groupFieldArray[groupFieldNum];
-            var rowNum = curDatarow + j;
-            var valueTrId = $('#dynamicValueLabel' + rowNum);
-            if (valueTrId.length < 1)
-                tableId.append('<tr id =   "dynamicValueLabel' + rowNum + '"></tr>');
-            for (key in data[j]) {
-                var valueTrId = $('#dynamicValueLabel' + rowNum);
-                if (label.fieldName == key) {
-                    var key_data = data[j][key]._text;
-                    var table_reform = table_format_check(data, valueTrId, key_data, label);
-
-                    if(label.labelTextType == 'Number' && label.format != undefined){
-                        valueTrId.append(
-                        '<td id = "' + key + '" class="Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '">' + table_reform + '</td>'
-                        );
-                    }else{
-                        valueTrId.append(
-                        '<td id = "' + key + '" class="Label ' + label._attributes + ' ' + label.dataType + '">' + table_reform + '</td>'
-                        );
-                    }
-                    valueTrId.css({
-                        'width': label.rectangle.width,
-                        'height': label.rectangle.height,
-
-                    });
-                    var td = $('#' + key);
-                    //// 추가 부분 18.08.28 YeSol
-                    if (label.noBorder == 'true') {
-                        td.css('border', 'none');
-                    } else {
-                        if (label.borderThickness !== undefined) {
-                            var leftBorder = borderDottedLine(label.borderDottedLines.leftDashStyle);
-                            var rightBorder = borderDottedLine(label.borderDottedLines.rightDashStyle);
-                            var bottomBorder = borderDottedLine(label.borderDottedLines.bottomDashStyle);
-                            var topBorder = borderDottedLine(label.borderDottedLines.topDashStyle);
-
-                            td.css({
-                                'border-left': label.borderThickness.left + 'px ' + leftBorder + ' ' + label.leftBorderColor,
-                                'border-right': label.borderThickness.right + 'px ' + rightBorder + ' ' + label.rightBorderColor,
-                                'border-bottom': label.borderThickness.bottom + 'px ' + bottomBorder + ' ' + label.bottomBorderColor,
-                                'border-top': label.borderThickness.top + 'px ' + topBorder + ' ' + label.topBorderColor
-                            });
-                        } else {
-                            td.css('border', '1px solid black');
-                        }
-                    }
-
-                    td.css({
-                        // 'border': '1px solid black',
-                        'font-size': label.fontSize,
-                        'font-family': label.fontFamily,
-                        'font-weight': label.fontStyle,
-                        'background-color': label.backGroundColor
-                    });
-                }
-            }
-        }
+        drawingDynamicTableValueLabelWithGropuFiedldArray(label, dt, tableId, numOfData);
     }
 }
 
@@ -599,7 +616,7 @@ function drawingSystemLabel(data, divId) {
                             pId.css('text-align', 'right');
                             break;
                         case 'Distributed' :
-                            pId.text('')
+                            pId.text('');
                             textEqualDivision(dateStr, "PDate" + dateNum); // 텍스트 수평 정렬이 균등 분할인 경우
                             break;
                     }
@@ -722,7 +739,7 @@ function drawingSystemLabel(data, divId) {
                             pId.css('text-align', 'right');
                             break;
                         case 'Distributed' :
-                            pId.text('')
+                            pId.text('');
                             textEqualDivision(dateTimeStr, "PDateTime" + dateTimeNum); // 텍스트 수평 정렬이 균등 분할인 경우
                             break;
                     }
@@ -842,7 +859,7 @@ function drawingSystemLabel(data, divId) {
                             pId.css('text-align', 'right');
                             break;
                         case 'Distributed' :
-                            pId.text('')
+                            pId.text('');
                             textEqualDivision(timeStr, "PTime" + timeNum); // 텍스트 수평 정렬이 균등 분할인 경우
                             break;
                     }
@@ -1121,7 +1138,7 @@ function drawingSummaryLabel(data, divId) {
                     pId.css('text-align', 'right');
                     break;
                 case 'Distributed' :
-                    pId.text('')
+                    pId.text('');
                     textEqualDivision(data.text, "PSummaryLabel" + summaryLabelNum); // 텍스트 수평 정렬이 균등 분할인 경우
                     break;
             }
@@ -1343,7 +1360,7 @@ function drawingDataLabel(data, divId) {
                     pId.css('text-align', 'right');
                     break;
                 case 'Distributed' :
-                    pId.text('')
+                    pId.text('');
                     textEqualDivision(data.text, "PDataLabel" + dataLabelNum); // 텍스트 수평 정렬이 균등 분할인 경우
                     break;
             }
@@ -1565,7 +1582,7 @@ function drawingNormalLabel(data, divId) {
                     pId.css('text-align', 'right');
                     break;
                 case 'Distributed' :
-                    pId.text('')
+                    pId.text('');
                     textEqualDivision(data.text, "PNormalLabel" + normalLabelNum); // 텍스트 수평 정렬이 균등 분할인 경우
                     break;
             }
@@ -1770,7 +1787,7 @@ function drawingExpression(data, divId) {
                     pId.css('text-align', 'right');
                     break;
                 case 'Distributed' :
-                    pId.text('')
+                    pId.text('');
                     textEqualDivision(data.text, "PExpression" + expressionNum); // 텍스트 수평 정렬이 균등 분할인 경우
                     break;
             }
@@ -1956,7 +1973,7 @@ function drawingGroupLabel(data, divId) {
                     pId.css('text-align', 'right');
                     break;
                 case 'Distributed' :
-                    pId.text('')
+                    pId.text('');
                     textEqualDivision(data.text, "PGroupLabel" + groupLabelNum); // 텍스트 수평 정렬이 균등 분할인 경우
                     break;
             }
@@ -2168,7 +2185,7 @@ function drawingParameterLabel(data, divId) {
                     pId.css('text-align', 'right');
                     break;
                 case 'Distributed' :
-                    pId.text('')
+                    pId.text('');
                     textEqualDivision(data.text, "PParameterLabel" + parameterLabelNum); // 텍스트 수평 정렬이 균등 분할인 경우
                     break;
             }
@@ -2732,8 +2749,7 @@ function table_column_controller(resize_area, Unalterable_area) {
             ui.size.height = ui.originalSize.height;
         }
     });
-};
-
+}
 /******************************************************************
  기능 : 그라데이션의 시작방향, 방향 등을 판단하여 CSS 속성을 줄 함수를 만든다.
  만든이 : 안예솔
@@ -2810,8 +2826,8 @@ function clipping(text, divId, pTagId) {
  만든이 : 안예솔
  ******************************************************************/
 function numberToKOR(num) {
-    var number = new Array("", "일", "이", "삼", "사", "오", "육", "칠", "팔", "구", "십");
-    var unit = new Array("", "십", "백", "천", "", "십", "백", "천", "", "십", "백", "천", "", "십", "백", "천", "", "십", "백", "천", "", "십", "백", "천");
+    var number = ["", "일", "이", "삼", "사", "오", "육", "칠", "팔", "구", "십"];
+    var unit = ["", "십", "백", "천", "", "십", "백", "천", "", "십", "백", "천", "", "십", "백", "천", "", "십", "백", "천", "", "십", "백", "천"];
     var result = "";
     for (var i = 0; i < num.length; i++) {
         var str = "";
@@ -2836,8 +2852,8 @@ function numberToKOR(num) {
  ******************************************************************/
 function numberToCHN(num) {
     // 한자 갖은자 사용
-    var number = new Array("", "壹", "貳", "參", "肆", "伍", "陸", "柒", "捌", "玖", "拾");
-    var unit = new Array("", "拾", "百", "仟", "", "拾", "百", "仟", "", "拾", "百", "仟", "", "拾", "百", "仟", "", "拾", "百", "仟", "", "拾", "百", "仟");
+    var number = ["", "壹", "貳", "參", "肆", "伍", "陸", "柒", "捌", "玖", "拾"];
+    var unit = ["", "拾", "百", "仟", "", "拾", "百", "仟", "", "拾", "百", "仟", "", "拾", "百", "仟", "", "拾", "百", "仟", "", "拾", "百", "仟"];
     var result = "";
     for (var i = 0; i < num.length; i++) {
         var str = "";
@@ -2875,7 +2891,7 @@ function borderDottedLine(borderStyle) {
             return 'dashed'; // css에 DashDot이라는 속성이 없음
             break;
         case 'DashDotDot' : // css에 DashDotDot이라는 속성이 없음
-            return 'dotted'
+            return 'dotted';
             break;
         case 'Custom' : // 아직 뭔지 모름
             return 'solid';

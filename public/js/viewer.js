@@ -100,8 +100,9 @@ function saving (){
  ******************************************************************/
 function makeHTML(){
     var thistext = $("#reportTemplate").html().toString();
+    console.log("this text : " + thistext);
     var pom = document.getElementById("saveAsHTML");
-    pom.setAttribute('href','data:text/plain;charset=utf-8,' + encodeURIComponent(thistext));
+    pom.setAttribute('href','data:text/plain;charset=utf-8,'+ encodeURIComponent(thistext));
     pom.setAttribute('download','saveAsHTML.html');
 
     /*if(document.createEvent){
@@ -111,7 +112,7 @@ function makeHTML(){
     }else{
         pom.click();
     }*/
-};
+}
 /******************************************************************
  기능 : DR Viewer 인쇄 메뉴 선택하기 (select option value받아와서 메뉴 인식 후 모달창 띄우기)
  author : 하지연
@@ -259,7 +260,7 @@ function close_pop() {
 
     resetData();//데이터값 초기화 밑 기본값 세팅처리
 
-};
+}
 /******************************************************************
  기능 : 고급인쇄 모달창의 데이터값 초기화 밑 기본값 세팅처리
  author : 하지연
@@ -320,7 +321,7 @@ function resetData(){
     extra_tail_using_check();
     //페이지 사이즈 조정 초기화
     pagesizeselect("A4");
-};
+}
 /******************************************************************
  기능 : 모달창 닫기 - 데이터값 초기화 밑 기본값 세팅 처리
  author : 하지연
@@ -329,7 +330,7 @@ function close_pop1() {
     //얜 값을 넘겨야함
     $('#myModal').hide();
     $("#copyOptions").val("--인쇄--").attr("selected","selected");
-};
+}
 function close_pop2(){
     //데이터 초기화
     $("#sign").val('');
@@ -344,26 +345,31 @@ function close_pop3(){
     $('#modalcase').hide();
 }
 /******************************************************************
- 기능 : DR Viewer 이미지 내보내기 메뉴 선택하기 (select option value 받아와서
-        이미지 타입 정의 모달창 띄우기)
- author : 하지연
+ 기능 : DR Viewer 이미지 내보내기 메뉴를 이용하여 SELECT의 OPTION
+        값을 설정.
+ 작성자 : 하지연
  ******************************************************************/
-var index = 1;
 function imageOptions(){
     try{
         if ($("#saveAsImage").val() == 'png'){
             var typeofimages = $("#saveAsImage").val();
-            console.log("type of images : "+ typeofimages);
-            var SIndex = index;
+            /*var SIndex = index;
             var iterator = saveImages(typeofimages, SIndex);
-            var firstIteration = iterator.next();
-
-            console.log("firstIteration : ", firstIteration);
-            // saveImages(typeofimages);
+            var firstIteration = iterator.next();*/
+            setImageType(typeofimages)
         }else if($("#saveAsImage").val() == 'jpeg'){
             var typeofimages = $("#saveAsImage").val();
+            setImageType(typeofimages);
+        }else if($("#saveAsImage").val() == 'bmp'){
+            var typeofimages = $("#saveAsImage").val();
+            setImageType(typeofimages);
+        }else if($("#saveAsImage").val() == 'tiff'){
+            var typeofimages = $("#saveAsImage").val();
+            setImageType(typeofimages);
+        }else if($("#saveAsImage").val() == 'gif'){
+            var typeofimages = $("#saveAsImage").val();
             console.log("type of images : "+ typeofimages);
-            saveImages(typeofimages);
+            setImageType(typeofimages);
         }else{
             console.log("인식못했음");
         }
@@ -371,41 +377,38 @@ function imageOptions(){
         console.log(e.message);
     }
 }
-function example(){
-      var doc = new jsPDF();
-       var specialElementHandlers = {
-           '#editor':function(element,renderer){
-               return true;
-           }
-       }
-       html2canvas($("#testpdf"),{
-           useCORS:false,
-           allowTaint:false,
-           onrendered:function(canvas){
-               var imgData = canvas.toDataURL('image/jpeg');
-               var imgData = canvas.getContext("2d");
-               var img = new Image();
-               img.src = ctx.toDataURL('image/png');
-               ctx.drawImage(img,297,210);
+/******************************************************************
+ 기능 : 웹뷰어의 화면을 html2canvas모듈을 이용하여 캡쳐한 후
+        SELECT의 OPTION값에서 받은 이미지의 확장자로 이미지 변환 후,
+        로컬로 파일 저장.
+ 작성자 : 하지연
+ ******************************************************************/
+function setImageType(typeofimages){
 
-               //var doc = new jsPDF("p","mm",[297,210]);
-               //console.log(imgData);
-               //doc.addImage(imgData,'JPEG',0,15,210,297);
-               //doc.save('test.pdf');
-           }
-       });
-}
+    var enumber = $(".pageforcopyratio").length;
 
-function getScreenshot(){
-    html2canvas(document.getElementById('text'),{
-        onrendered: function(canvas){
-            console.log("1");
-            $('#box1').html("");
-            console.log("2");
-            $('#box1').append(canvas);
-            console.log("3");
-        }
-    });
+    for(var i=1; i<=enumber; i++){
+        drawingCanvas(i);
+    }
+    function drawingCanvas(enumber){
+        html2canvas(document.querySelector("#pageForCopyRatio" + enumber)).then(canvas => {
+            console.log("drawingcanvas안에서 enumber : " + enumber);
+            console.log("html2canvas 안에서 image type : " + typeofimages);
+            document.body.appendChild(canvas);
+            //var img = canvas.toDataURL("image/"+ typeofimages).replace("image/"+typeofimages,"image/octet-stream");
+            var img = canvas.toDataURL("image/"+ typeofimages);
+            if(enumber==1){
+                window.open().document.write('<img src="' + img + '" />');
+            }
+            var a = document.createElement('a');
+            //a.href=canvas.toDataURL('image/'+typeofimages).replace("image/"+typeofimages,"image/octet-stream");
+            //a.href=canvas.toDataURL('image/'+typeofimages).replace("image/"+typeofimages);
+            a.href=img;
+            a.download = 'saveAs' + typeofimages+ '.' + typeofimages;
+            a.click();
+        });
+    }
+    $("#saveAsImage").val("--이미지--").attr("selected","selected");
 }
 /******************************************************************
  기능 : select box에서 이미지 타입을 받아 해당타입의 이미지로 저장하는 기능
@@ -416,33 +419,27 @@ function saveImages(typeofimages, currentindex){
     var pageForCopyRatioNum = $(".pageforcopyratio").length;
     console.log("총 페이지 수 : " + pageForCopyRatioNum);
 
-
     var values = [1,2,3,4,5,6,7,8,9,10];
     // var currentindex ;
-
    return {
        next: function(){
            html2canvas(document.querySelector("#pageForCopyRatio"+currentindex)).then(canvas => {
                console.log("html2canvas 까지 들어왔음 : " + currentindex);
+               console.log("html2canvas 안에서 typeof images 찍어봄 : " + typeofimages);
                document.body.appendChild(canvas);
                var img = canvas.toDataURL("image/"+ typeofimages).replace("image/"+ typeofimages,"image/octet-stream");
                window.open().document.write('<img src="' + img + '" />');
                setTimeout(function(){
-                   saveSaveSave(canvas);
+                   saveSaveSave(canvas,typeofimages);
                },2000);
-
            });
-
            // var done = (currentindex =$(".pageforcopyratio").length);
-
            var iteration = {
                value:values[currentindex]
                // done: done
            }
-
                // currentindex++;
                return iteration;
-
        }
    }
 }
@@ -461,11 +458,32 @@ function saveImages(typeofimages, currentindex){
 //
 // console.log(firstIteration);
 
-function saveSaveSave(canvas){
-    return Canvas2Image.saveAsPNG(canvas);
+function saveSaveSave(canvas, typeofimages){
+    console.log("savesavesave들어옴");
+    console.log("typeofimages : " + typeofimages);
+
+    if(typeofimages == 'png'){
+        console.log("png임");
+        return Canvas2Image.saveAsPNG(canvas);
+    }else{
+        console.log("jpeg임");
+        return Canvas2Image.saveAsJPEG(canvas);
+    }
+}
+function saveSaveSave1(canvas, typeofimages, enumber){
+    console.log("savesavesave들어옴 enumber는 : " + enumber );
+    console.log("typeofimages : " + typeofimages);
+
+    if(typeofimages == 'png'){
+        console.log("png임");
+        return Canvas2Image.saveAsPNG(canvas);
+    }else{
+        console.log("jpeg임");
+        return Canvas2Image.saveAsJPEG(canvas);
+    }
 }
 
-$("#saveAsImage").val("--이미지--").attr("selected","selected");
+
 function genScreenshot() {
 
     //지우장
@@ -503,19 +521,6 @@ function genScreenshot() {
             }
     });
 }
-function genPDF1(){
-   // var htmlToImage = require('html-to-image');
-
-    var node = document.getElementById('testDiv');
-    htmlToImage.toPng(node)
-        .then(function (dataUrl) {
-            var img = new Image();
-            document.body.appendChild(img);
-        })
-        .catch(function(error){
-           console.log('opps... something went wrong....',error);
-        });
-}
 /******************************************************************
  기능 : 화면을 pdf로 만드는 기능
  author : 하지연
@@ -551,7 +556,6 @@ jQuery.browser = {}; //jQuery.browser.msie 사용 위함.
 function howmanyPages(thisvalue){
     alert("this value : " + thisvalue);
 }
-
 
 //학준 추가
     function band_dbclick_event() {
