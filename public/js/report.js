@@ -1,7 +1,7 @@
 var pageNum = 1;
 var reportNum = 1;
 var curDatarow = 0;
-var groupFieldArray = new Array();
+var groupFieldArray = [];
 
 /******************************************************************
  기능 : 페이지에서 Json 파일을 매개변수로 받아서 ReportTemplate를 만듬
@@ -15,14 +15,16 @@ function makeReportTemplate(data) {
         makeReport(report);
     });
 }
+
 /******************************************************************
  기능 : make report in function makeReportTemplate
  author : powerku
  ******************************************************************/
 var reportPageCnt = 1;
+
 function makeReport(report) {
     var dt = Object.values(dataTable.DataSetName)[0];
-    if(pageNum == 1){
+    if (pageNum === '1') {
 
     }
 
@@ -36,11 +38,12 @@ function makeReport(report) {
     if (curDatarow < dt.length) {
         reportPageCnt++;
         makeReport(report);
-    }else{
+    } else {
         reportPageCnt = 1;
-        return;
+
     }
 }
+
 /***********************************************************
  기능 : 페이지 계산
  전체 데이터 / 한페이지 데이터 = 페이지 개수
@@ -130,6 +133,7 @@ function getBandHeight(band, reportHeight) {
     });
     return bandDataHeight;
 }
+
 /***********************************************************
  기능 : 한 페이지에 들어갈 데이터 개수 구하기
  : (밴드 길이 - 첫 행 높이) / 데이터 라벨 높이 => 한페이지에 들어가야할 밴드 개수
@@ -144,8 +148,10 @@ function getNumOfDataInOnePage(tableLabel, divId) {
     }
     var firstLine = tableLabel[0].rectangle.height;
     var dataLine = Number(tableLabel[tableLabel.length - 1].rectangle.height);
+
     return Math.floor((bandDataHeight - firstLine) / dataLine);
 }
+
 /******************************************************************
  기능 : 디자인 레이어 세팅
  author : powerku
@@ -165,13 +171,14 @@ function setDesignLayer(report) {
         'margin-bottom': report.margin.y + 'px',
         'margin-right': report.margin.height + 'px',
         'margin-left': report.margin.width + 'px',
-        'position' : 'absolute',
+        'position': 'absolute',
     });//추가 - 하지연
 
     var layerName = "designLayer" + pageNum;
     var reportHeight = report.rectangle.height;
     drawBand(report.layers.designLayer.bands, layerName, reportHeight); // 추가 - 전형준
 }
+
 /******************************************************************
  기능 : 디자인 레이어 방향 세팅
  author : powerku
@@ -190,6 +197,7 @@ function setDesignLayerDirection(report) {
         });
     }
 }
+
 /******************************************************************
  기능 : 백그라운드레이어 세팅
  author : powerku
@@ -210,12 +218,13 @@ function setBackGroundLayer(report) {
         'margin-bottom': report.margin.y + 'px',
         'margin-right': report.margin.height + 'px',
         'margin-left': report.margin.width + 'px',
-        'position' : 'absolute',
+        'position': 'absolute',
     });// 추가 - 하지연
 
     var layerName = "backGroundLayer" + pageNum;
     drawBand(report.layers.backGroundLayer.bands, layerName); // 추가 - 전형준
 }
+
 /******************************************************************
  기능 : 백그라운드레이어 방향 설정에 따른 크기 세팅
  author : powerku
@@ -235,6 +244,7 @@ function setBackGroundLayerDirection(report) {
         });
     }
 }
+
 /******************************************************************
  기능 : 포그라운드 레이어 크기 세팅
  author : powerku
@@ -255,12 +265,13 @@ function setForeGroundLayer(report) {
         'margin-bottom': report.margin.y + 'px',
         'margin-right': report.margin.height + 'px',
         'margin-left': report.margin.width + 'px',
-        'position' : 'absolute',
+        'position': 'absolute',
     });// 수정, 추가 - 하지연
 
     var layerName = "foreGroundLayer" + pageNum;
     drawBand(report.layers.foreGroundLayer.bands, layerName); // 추가 - 전형준
 }
+
 /******************************************************************
  기능 : 포그라운드 레이어 방향 설정에 따른 크기 세팅
  author : powerku
@@ -288,7 +299,7 @@ function setForeGroundLayerDirection(report) {
  수정 : 하지연
  날짜 : 2018 - 09 - 03
  내용 : #page 하위에 forcopyratio라는 인쇄배율 조정을 위한 div를 생성하고
-        forcopyratio라는 클래스 부여 & 스타일 생성
+ forcopyratio라는 클래스 부여 & 스타일 생성
  ******************************************************************/
 function setReport(report) {
     $(('#page' + pageNum)).append('<div id="forcopyratio' + reportNum + '"class = forcopyratio' + '></div>');//추가 - 하지연
@@ -312,7 +323,7 @@ function setReport(report) {
     $('#forcopyratio' + reportNum).css('margin-bottom', report.margin.y + 'px');
     $('#forcopyratio' + reportNum).css('margin-right', report.margin.height + 'px');
     $('#forcopyratio' + reportNum).css('margin-left', report.margin.width + 'px');
-    $('#forcopyratio' + reportNum).css('position','absolute');
+    $('#forcopyratio' + reportNum).css('position', 'absolute');
 
 
     setBackGroundLayer(report);
@@ -325,6 +336,7 @@ function setReport(report) {
 
     reportNum++;
 }
+
 /******************************************************************
  기능 : 테이블안에 데이터를 바인딩함(사용 안함)
  author : powerku
@@ -345,7 +357,7 @@ function makeTableByData() {
     html += '</thead><tbody>';
     dataTable.DataSetName.dt.forEach(function (data) { //Body
         html += '<tr>';
-        for (key in data) {
+        for (var key in data) {
             html += '<td>' + data[key]._text + '</td>';
         }
 
@@ -364,7 +376,7 @@ function makeTableByData() {
 
  수정 : 하지연
  내용 : page의 가로, 세로 값을 100%로 지정해, 부모의 변경값에
-        유동적으로 변하도록 설정.
+ 유동적으로 변하도록 설정.
  ******************************************************************/
 function setReportDirection(report) {
 
@@ -383,9 +395,10 @@ function setReportDirection(report) {
 
     reportInPage.css('text-align', 'center'); // 추가 : 안예솔
 }
+
 /******************************************************************
  기능 : 리포트 div의 부모 div인 forcopyratio div를 만든후 report의
-        크기로 지정하고, 방향지정.
+ 크기로 지정하고, 방향지정.
  author : 하지연
  ******************************************************************/
 function setForCopyRatioDirection(report) {  //추가 - 하지연
@@ -397,6 +410,7 @@ function setForCopyRatioDirection(report) {  //추가 - 하지연
         $('#forcopyratio' + reportNum).css('height', report.rectangle.width + 'px');
     }
 }
+
 /******************************************************************
  기능 : 페이지 크기 렌더링
  author : powerku
@@ -404,7 +418,7 @@ function setForCopyRatioDirection(report) {  //추가 - 하지연
  수정 : 하지연
  날짜 : 2018 - 08 - 23
  내용 : - reportTemplate 자식 pageForCopyRatio를 만들고 그 아래 자식page div 생성.
-        - page의 position을 relative로 설정.
+ - page의 position을 relative로 설정.
 
  수정 : 김학준
  날짜 : 2018 - 08 27
@@ -425,14 +439,14 @@ function setPage(report, width, height) {
     $("#pagesizeoptions").on("change", function () {
         pagesizeselect($(this).val());
     });
-    $("#row_direction").on("click",function () {
+    $("#row_direction").on("click", function () {
         var test = $("#row_direction").val();
     });
 
     var page = $('#page' + pageNum);
     page.css('border', 'solid green');
     page.css('background-color', 'transparent');
-    page.css('position','relative');//추가 - 하지연
+    page.css('position', 'relative');//추가 - 하지연
 
     var pageForCopyRatio = $('#pageForCopyRatio' + pageNum);
     pageForCopyRatio.css('border', 'solid red');
@@ -463,12 +477,12 @@ function setPageForCopyRatioDirection(report) {
  수정 : 하지연
  날짜 : 2018 - 08 - 23
  내용 : page의 width, height값을 page의 부모인 pageForCopyRatio의 width,
-        height값의 100%로 지정하고, 방향 설정
+ height값의 100%로 지정하고, 방향 설정
  ******************************************************************/
 function setPageDirection(report) {
     var page = $('#page' + pageNum);
     var pageForCopyRatio = $('#pageForCopyRatio' + pageNum);
 
     page.css('width', '100%');
-    page.css('height','100%');
+    page.css('height', '100%');
 }

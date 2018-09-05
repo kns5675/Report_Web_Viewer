@@ -112,7 +112,7 @@ function makeHTML(){
     }else{
         pom.click();
     }*/
-};
+}
 /******************************************************************
  기능 : DR Viewer 인쇄 메뉴 선택하기 (select option value받아와서 메뉴 인식 후 모달창 띄우기)
  author : 하지연
@@ -260,7 +260,7 @@ function close_pop() {
 
     resetData();//데이터값 초기화 밑 기본값 세팅처리
 
-};
+}
 /******************************************************************
  기능 : 고급인쇄 모달창의 데이터값 초기화 밑 기본값 세팅처리
  author : 하지연
@@ -321,7 +321,7 @@ function resetData(){
     extra_tail_using_check();
     //페이지 사이즈 조정 초기화
     pagesizeselect("A4");
-};
+}
 /******************************************************************
  기능 : 모달창 닫기 - 데이터값 초기화 밑 기본값 세팅 처리
  author : 하지연
@@ -330,7 +330,7 @@ function close_pop1() {
     //얜 값을 넘겨야함
     $('#myModal').hide();
     $("#copyOptions").val("--인쇄--").attr("selected","selected");
-};
+}
 function close_pop2(){
     //데이터 초기화
     $("#sign").val('');

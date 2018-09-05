@@ -1,7 +1,4 @@
 // Label 객체
-
-// console.log(data.ReportTemplate.ReportList.anyType.Layers.anyType[1].Bands.anyType[0].ControlList.anyType);
-
 /******************************************************************
  기능 : Label에 대한 공통 속성을 빼내서 객체를 만든다.
  만든이 : 안예솔
@@ -9,7 +6,6 @@
 function Label(data){
     this.parentId = data.ParentID === undefined ? undefined : data.ParentID._text;
     this.id = data.Id._text;
-    // x : (data.Rectangle.X === undefined ? 0 : data.Rectangle.X._text)
     this.rectangle = {
         x : (data.Rectangle.X === undefined ? 0 : data.Rectangle.X._text),
         y : (data.Rectangle.Y === undefined ? 0 : data.Rectangle.Y._text),
@@ -19,9 +15,9 @@ function Label(data){
 
     this.name = data.Name._text;
     this.Lock = data.Lock;
-    this.dataType = (data.DataType === undefined ? 0 : data.DataType._text); // 데이터 형태
-    this.imageTransparent = (data.ImageTransparent === undefined ? 0 : data.ImageTransparent._text); // 이미지 투명도
-    this.zOrder = (data.ZOrder === undefined ? 0 : data.ZOrder._text);
+    this.dataType = data.DataType === undefined ? 0 : data.DataType._text; // 데이터 형태
+    this.imageTransparent = data.ImageTransparent === undefined ? 0 : data.ImageTransparent._text; // 이미지 투명도
+    this.zOrder = data.ZOrder === undefined ? 0 : data.ZOrder._text;
 
     this.borderThickness = (data.BorderThickness === undefined ? undefined : { // 테두리 두께 (있을 수도 있고 없을 수도 있는 속성)
         left : (data.BorderThickness.Left === undefined ? 1 : data.BorderThickness.Left._text),
@@ -40,11 +36,11 @@ function Label(data){
         rightDashStyle : (data.BorderDottedLines.RightDashStyle === undefined ? 'Solid' : data.BorderDottedLines.RightDashStyle._text),
         topDashStyle : (data.BorderDottedLines.TopDashStyle === undefined ? 'Solid' : data.BorderDottedLines.TopDashStyle._text),
         bottomDashStyle : (data.BorderDottedLines.BottomDashStyle === undefined ? 'Solid' : data.BorderDottedLines.BottomDashStyle._text),
-    } // 테두리 점선
+    }; // 테두리 점선
 
     this.noBorder = data.NoBorder === undefined ? false : data.NoBorder._text; // 테두리 없음
 
-    this.enableBorder = (data.EnableBorder === undefined ? undefined : { // boolean이라는 태그 이름으로 총 4개가 들어가있어서 어떻게 해야할지 모르겠담..
+    this.enableBorder = (data.EnableBorder === undefined ? undefined : { // 고정 값이라서 구현할 필요 없을 듯!
         boolean1 : data.EnableBorder.boolean[0]._text,
         boolean2 : data.EnableBorder.boolean[1]._text,
         boolean3 : data.EnableBorder.boolean[2]._text,
@@ -62,9 +58,9 @@ function Label(data){
         this.fontSize = (Font[1]).trim(); // 공백 제거
         if(Font.length == 3){ // ex) 굴림, 10pt, style=bold일 때
             Font[2] = Font[2].split('='); // fontWeight
-            this.fontWeight = (Font[2][1]).trim(); // 공백 제거
+            this.fontWeight = (Font[2][1]).trim(); // 글자 굵기 (bold)
         } else if(Font.length == 4) {
-            this.fontStyle = Font[3].trim();
+            this.fontStyle = Font[3].trim(); // 글자 기울임 (italic)
         } else {
             this.fontWeight = 'normal';
             this.fontStyle = 'normal';
@@ -74,13 +70,13 @@ function Label(data){
     this.isDrawStrikeOutLine = data.IsDrawStrikeOutLine === undefined ? false : data.IsDrawStrikeOutLine._text; // 중간줄
 
     // 내부 여백
-    this.interMargin = data.InterMargin === undefined ? undefined : {
+    this.interMargin = (data.InterMargin === undefined ? undefined : {
         left : (data.InterMargin.Left === undefined ? 0 : data.InterMargin.Left._text),
         right : (data.InterMargin.Right === undefined ? 0 : data.InterMargin.Right._text),
         top : (data.InterMargin.Top === undefined ? 0 : data.InterMargin.Top._text),
         bottom : (data.InterMargin.Bottom === undefined ? 0 : data.InterMargin.Bottom._text)
-    }
-    // this.indentLB = data.IndentLB === undefined ? undefined : data.IndentLB._text; // 들여쓰기 (작동 안함)
+    });
+    this.indentLB = data.IndentLB === undefined ? undefined : data.IndentLB._text; // 들여쓰기 (작동 안함)
 
     this.gradientLB = (data.GradientLB === undefined ? undefined : {
         isUseGradient : (data.GradientLB.IsUseGradient === undefined ? false : data.GradientLB.IsUseGradient._text), // 그라데이션 사용 여부
@@ -95,7 +91,7 @@ function Label(data){
         })
     });
 
-    this.indexUnderLine = (data.IndexUnderLine === undefined ? undefined : { // 이중 밑줄
+    this.indexUnderLine = (data.IndexUnderLine === undefined ? undefined : { // 이중 밑줄 (구현 불가)
         isUse : (data.IndexUnderLine.IsUse === undefined ? 0 : data.IndexUnderLine.IsUse._text), // 사용 여부
         verSpace : (data.IndexUnderLine.VerSpace === undefined ? 0 : data.IndexUnderLine.VerSpace._text), // 수직 공백
         edgeSpace : (data.IndexUnderLine.EdgeSpace === undefined ? 0 : data.IndexUnderLine.EdgeSpace._text), // 모서리 너비
@@ -111,16 +107,16 @@ function Label(data){
 
     this.labelTextType = (data.LabelTextType === undefined ? 0 : data.LabelTextType._text); // 문자 형식
     this.format = (data.Format === undefined ? 0 : data.Format._text); // 표시 형식
-    this.startBindScript = (data.StartBindScript === undefined ? 0 : data.StartBindScript._text); // 아마도 JavaScript 코드
-    this.reVectorValue = (data.ReVectorValue === undefined ? 0 : data.ReVectorValue._text); // 어디서 쓰이는지 모르겠음
-    this._formatFieldNone = (data._formatFieldNone === undefined ? 0 : data._formatFieldNone._text);
+    this.startBindScript = data.StartBindScript === undefined ? 0 : data.StartBindScript._text; // 아마도 JavaScript 코드
+    this.reVectorValue = data.ReVectorValue === undefined ? 0 : data.ReVectorValue._text; // 아마도 장평 관련
+    this._formatFieldNone = data._formatFieldNone === undefined ? 0 : data._formatFieldNone._text;
 
     this.drawingType = data.DrawingType === undefined ? undefined : data.DrawingType._text; // 그리기 형태
     this.isSaveImage = data.IsSaveImage === undefined ? undefined : data.IsSaveImage._text; // 이미지 저장
-    this.labelTypeForSetFont = data.LabelTypeForSetFont === undefined ? undefined : data.LabelTypeForSetFont._text; // 폰트 지정 타입
+    this.labelTypeForSetFont = data.LabelTypeForSetFont === undefined ? undefined : data.LabelTypeForSetFont._text; // 폰트 지정 타입 >> 서식, 내용으로 나뉨
     this.autosize = data.Autosize === undefined ? false : data.Autosize._text; // 자동 높이 조정 (default값 : false)
-    this.isVectorCharacter = data.IsVectorCharacter === undefined ? undefined : data.IsVectorCharacter._text; // 장평 조정 설정
-    this.vectorValue = data.VectorValue === undefined ? undefined : data.VectorValue._text; // 수동 장평 조절
+    this.isVectorCharacter = data.IsVectorCharacter === undefined ? undefined : data.IsVectorCharacter._text; // 장평 조정 설정 (구현 불가)
+    this.vectorValue = data.VectorValue === undefined ? undefined : data.VectorValue._text; // 수동 장평 조절 (구현 불가)
     this.autoFontType = data.AutoFontType === undefined ? undefined : data.AutoFontType._text; // 폰트 크기 자동 조절
     this.wordWrap = data.WordWrap === undefined ? false : data.WordWrap._text; // 자동 줄바꾸기
     this.formatType = data.FormatType === undefined ? undefined : data.FormatType._text; // 소수점 자릿수
@@ -133,14 +129,9 @@ function Label(data){
     this.backGroundColor = data.BackgGoundColor === undefined ? 'white' : data.BackgGoundColor._text; // 바탕색
     this.clipping = data.Clipping === undefined ? false : data.Clipping._text; // 클립핑 default : false
     // true일 때 -> 텍스트의 길이가 라벨의 너비보다 긴 경우 라벨의 너비에 맞춰 넘어가는 글자들은 제거하고 출력하는 옵션
-    this.borderLineLocation = data.BorderLineLocation === undefined ? undefined : data.BorderLineLocation._text; // 테두리 라인 위치
+    this.borderLineLocation = data.BorderLineLocation === undefined ? undefined : data.BorderLineLocation._text; // 테두리 라인 위치 (구현 X)
     this.textColor = data.TextColor === undefined ? 'black' : data.TextColor._text; // 글꼴 색
 
-
-
-    /***************************************
-     * 자간, 줄 간격 Default 값 주기
-     ***************************************/
     this.characterSpacing = data.CharacterSpacing === undefined ? undefined : data.CharacterSpacing._text; // 자간
     this.lineSpacing = data.LineSpacing === undefined ? undefined : data.LineSpacing._text; // 줄 간격
 
@@ -149,16 +140,10 @@ function Label(data){
     this.circleLineColor = data.CircleLineColor === undefined ? 'black' : data.CircleLineColor._text; // 원 테두리 색
     this.circleLineThickness = data.CirCleLineThickness === undefined ? 1 : data.CirCleLineThickness._text; //원 테두리 두께
 
-    this.detailWhere = data.DetailWhere === undefined ? undefined : data.DetailWhere._text; // 요약 라벨 조건절
-    this.parameterName = data.ParameterName === undefined ? undefined : data.ParameterName._text; // 파라미터 이름
-    /***************************************
-     * SummaryType수정하기
-     ***************************************/
-    this.summaryType = data.SummaryType === undefined ? 'Sum' : data.SummaryType._text; // 요약 타입
     this.qrCodeEncodingType = data.QRCodeEncodingType === undefined ? undefined : data.QRCodeEncodingType._text; // QR 코드 인코딩 타입
     this.barcodeType = data.BarcodeType === undefined ? undefined : data.BarcodeType._text; // 바코드 타입
     this.priorLabel = data.PriorLabel === undefined ? undefined : data.PriorLabel._text; // 선행 라벨
-    this.groupingRule = data.GroupingRule === undefined ? undefined : data.GroupingRule._text; // 그룹핑규칙
+
     this.imageSizeType = data.ImageSizeType === undefined ? undefined : data.ImageSizeType._text; //이미지 크기
 
     this.lock = data.Lock === undefined ? false : data.Lock._text; // 잠김 속성 default : false
@@ -169,8 +154,6 @@ function Label(data){
     this.horizontalTextAlignment = data.HorizontalTextAlignment === undefined ? 'Center' : data.HorizontalTextAlignment._text; // 텍스트 수평 정렬
     this.verticalTextAlignment = data.VerticalTextAlignment === undefined ? 'Center' : data.VerticalTextAlignment._text; // 텍스트 수직 정렬
     this.textDirection = data.TextDirection === undefined ? 'Horizontal' : data.TextDirection._text; // 텍스트 방향 아마도 default horizontal
-
-
 }
 
 
@@ -252,6 +235,12 @@ function SystemLabel(data){
  ******************************************************************/
 function SummaryLabel(data){
     Label.apply(this, arguments);
+
+    /***************************************
+     * SummaryType수정하기
+     ***************************************/
+    this.summaryType = data.SummaryType === undefined ? 'Sum' : data.SummaryType._text; // 요약 타입
+    this.detailWhere = data.DetailWhere === undefined ? undefined : data.DetailWhere._text; // 요약 라벨 조건절
 }
 
 /******************************************************************
@@ -286,6 +275,9 @@ function Expression(data){
  ******************************************************************/
 function GroupLabel(data){
     Label.apply(this, arguments);
+
+    this.grouppingRule = data.GroupingRule === undefined ? undefined : data.GroupingRule._text; // 그룹핑규칙
+
 }
 
 /******************************************************************
@@ -294,4 +286,6 @@ function GroupLabel(data){
  ******************************************************************/
 function ParameterLabel(data){
     Label.apply(this, arguments);
+
+    this.parameterName = data.ParameterName === undefined ? undefined : data.ParameterName._text; // 파라미터 이름
 }
