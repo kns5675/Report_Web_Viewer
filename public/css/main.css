@@ -175,6 +175,9 @@ span.subject{
 #myModal{
     z-index: 999;
 }
+#loadingModal{
+    z-index: 999;
+}
 
 #modalTableChoice{
     z-index :999;

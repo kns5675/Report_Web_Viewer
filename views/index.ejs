@@ -37,6 +37,7 @@
         $(document).ready(function () {
             $("#header").load("/include/header.ejs");
             $("#myModal").load("/include/modal.ejs");
+            $("#loadingModal").load("/include/loading.ejs");
             $('#modalTableChoice').load("/include/modalTableChoice.ejs");
             makeReportTemplate(data);
 
@@ -65,6 +66,7 @@
 <body id="bodybody">
 <div id="header"></div>
 <div id="myModal" class="modal"></div>
+<div id="loadingModal" class="modal"></div>
 
 <div id="modalTableChoice" class="modal"></div>
 <div id="reportTemplate" style="background-color:lightyellow;"></div>

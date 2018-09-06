@@ -329,14 +329,12 @@ async function image_setting(){
         var styles = $("#"+set_buttonid);
         styles[0].style.visibility = "hidden";
     });
-
     var modalLayer = $("#image_dialog");
     var dialog = $("#dialog");
     var dialog_div = $("#dialog_div");
     dialog_div.css({"visibility": "hidden"});
     var marginLeft = dialog.outerWidth()/2;
     var marginTop = dialog.outerHeight()/2;
-
     /******************************************************************
      기능 : 이미지 속성 버튼 클릭시 이벤트
      만든이 : hagdung-i
@@ -366,7 +364,6 @@ async function image_setting(){
         $("#ImageDivPacking"+CImageNum).remove();
         image_moal_fadeout();
     });
-
     /******************************************************************
      기능 : 이미지 속성 - 이미지 맨 앞으로 보내기 버튼 클릭시 이벤트
      만든이 : hagdung-i
@@ -380,11 +377,10 @@ async function image_setting(){
         console.log("remove_end count : ", count);
         remove_end(CImageNum).then(function (resolveData) {
             var scope = "foreGroundLayer";
-
+            console.log("3");
             tag_Making(scope,resolveData, CImageNum);
         });
     });
-
     /******************************************************************
      기능 : 이미지 속성 - 이미지 맨 뒤로 보내기 버튼 클릭시 이벤트
      만든이 : hagdung-i
@@ -399,7 +395,6 @@ async function image_setting(){
             tag_Making(scope,resolveData, CImageNum);
         });
     });
-
     /******************************************************************
      기능 : 이미지 속성 - 이미지 앞으로 보내기 버튼 클릭시 이벤트
      만든이 : hagdung-i
@@ -417,8 +412,6 @@ async function image_setting(){
         image_moal_fadeout(CImageNum);
     });
 }
-
-
 /******************************************************************
  기능 : realURL 함수 호출.
  만든이 : hagdung-i
@@ -437,14 +430,17 @@ function DRD_button() {
         // shell.echo('hello world');
     });
 }
-
 /******************************************************************
- 기능 : 이미지 순서 변경 시 포,백그라운드에 새로 그려주기 위해 디자인레이어의 이미지와 모달의 버튼들을 지우고 다시 그리는 것을 동기로 변경. 지운 후에 새로 그리기 위함.
+ 기능 : 이미지 순서 변경 시 포,백그라운드에 새로 그려주기 위해 디자인레이어의
+        이미지와 모달의 버튼들을 지우고 다시 그리는 것을 동기로 변경. 지운 후에
+        새로 그리기 위함.
  날짜 : 2018-09-04
  만든이 : hagdung-i
  ******************************************************************/
 async function remove_end(CImageNum) {
+    console.log("1");
     return new Promise(function (resolve) {
+        console.log("2");
         image_moal_fadeout(CImageNum);
         resolve(imgae_src);
     });
