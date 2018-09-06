@@ -136,3 +136,58 @@ div.room{
 #extraheadoptions{
     readOnly : ture;
 }
+
+/* 항목선택 CSS */
+ul#leftpart_modalTableChoice_header{
+    padding : 0;
+    display : block;
+    border-bottom : 1px solid black;
+    margin-top : 0px;
+    /*overflow : auto;*/
+}
+ul#leftpart_modalTableChoice_header > li{
+    display: inline-block;
+    padding : 0px 15px;
+}
+ul#leftpart_modalTableChoice_header > li:hover{
+    background-color : #cce6ff;
+    cursor : pointer;
+}
+ul#leftpart_modalTableChoice_header > li.selected_table{
+    background-color : #cce6ff;
+}
+#rightpart_modalTableChoice{
+    position : relative;
+}
+
+div#leftpart_modalTableChoice_main{
+   overflow : auto;
+}
+
+button.tableChoice_btn  { width : 100%; }
+button#tableChoice_up   { margin : 10px 0px; }
+button#tableChoice_done { position : absolute; bottom : 0px;}
+div#closebtn_modalTableChoice {
+    display : inline-block;
+    cursor : pointer;
+    float : right;
+    padding : 6px 8px;
+    font-size : 14px;
+}
+ul#labelListUl{
+    list-style : none;
+    padding-left : 10px;
+    margin-bottom : 0px;
+}
+ul#labelListUl > li{
+    margin-bottom : 3px;
+}
+ul#labelListUl > li:hover{
+    background-color : #cce6ff;
+}
+li.selected_th{
+    background-color : #cce6ff;
+}
+button.tableChoice_btn:hover{
+    cursor : pointer;
+}

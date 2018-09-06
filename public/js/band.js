@@ -167,6 +167,22 @@ function BandGroupHeader(band){
             i++;
         }
     });
+
+    if(data.GroupingFieldSort !== undefined && data.GroupingFieldSort._text == 'ASC') {
+        // 기준 필드 정렬 순서가 오름차순일 때!
+        groupFieldArray.sort();
+        // console.log(groupFieldArray);
+    }
+    if(data.GroupingFieldSort !== undefined && data.GroupingFieldSort._text == 'DESC') {
+        // 기준 필드 정렬 순서가 내림차순일 때!
+        groupFieldArray.sort(conStringReverse);
+        function conStringReverse(a, b) {
+            if(a > b) return -1;
+            if(b > a) return 1;
+            return 0;
+        }
+        // console.log(groupFieldArray);
+    }
     this.groupFieldArray = groupFieldArray;
 }
 
