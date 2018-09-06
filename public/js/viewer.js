@@ -65,7 +65,7 @@ async function beforeSaving(pageOrientation, docwidth1, docheight1) {
 function createPdf(pageOrientation,docwidth1,docheight1){
     return new Promise(function(resolve){
         doc = new jsPDF(pageOrientation,'mm',[docheight1,docwidth1]);
-        console.log("docheight1 : "+docheight1 + " docwidth1 : "+docwidth1);
+        //console.log("docheight1 : "+docheight1 + " docwidth1 : "+docwidth1);
         var area;
         var totalnum = $(".pageforcopyratio").length;
         $(".pageforcopyratio").each(function (i, e) {
@@ -437,12 +437,6 @@ function saveImages(typeofimages, currentindex){
        }
    }
 }
-// var iterator = saveImages(typeofimages);
-//
-// var firstIteration = iterator.next();
-// var secondIteration = iterator.next();
-//
-// console.log(firstIteration);
 
 function saveSaveSave(canvas, typeofimages){
     console.log("savesavesave들어옴");

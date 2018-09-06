@@ -28,35 +28,7 @@
     <script src="js/createLabel.js"></script>
     <script src="js/drawCurrPageNTotalPage.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-    <script type="text/javascript">
-       /* function genPDF() {
-            html2canvas(document.getElementById("testDiv"), {
-                useCORS: true,
-                allowTaint: false,
-                onrendered: function (canvas) {
-                    var img = canvas.toDataURL("image/png");//캔버스를 이미지로 변환
-
-                    var imgwidth = 210;
-                    var pageheight = imgwidth * 1.414;
-                    var imgheight = canvas.height * imgwidth / canvas.width;
-                    var heightleft = imgheight;
-
-                    var doc = new jsPDF('p', 'mm');
-                    var position = 0;
-
-                    while (heightleft >= 20) {
-                        position = heightleft - imgheight;
-                        doc.addImage(img, 'PNG', 0, position, imgwidth, imgheight);
-                        heightleft -= pageheight;
-                    }
-                    doc.save('sample_A4.pdf');
-                }
-            });
-        }*/
-    </script>
-
     <script>
-
         var data = <%-data%>;  //xml json 데이터
         var dataTable = <%- dataTable %>; //임시 데이터 dataTable
 
@@ -65,9 +37,7 @@
             $("#myModal").load("/include/modal.ejs");
             $("#loadingModal").load("/include/loading.ejs");
             $('#modalTableChoice').load("/include/modalTableChoice.ejs");
-
             makeReportTemplate(data);
-
             drawPageNumberInSystemLabel();
             band_dbclick_event();
             image_setting();
@@ -88,8 +58,8 @@
 </head>
 <body>
 <div id="header"></div>
-<div id="myModal" class="modal"></div>
-<div id="loadingModal" class="modal"></div>
+<div id="myModal" class="modal"></div><!-- 고급인쇄 모달창 -->
+<div id="loadingModal" class="modal"></div><!-- pdf,html등 내보내기에 필요한 로딩창 -->
 
 <div id="modalTableChoice" class="modal"></div>
 
