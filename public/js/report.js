@@ -477,12 +477,12 @@ function setPageForCopyRatioDirection(report) {
  수정 : 하지연
  날짜 : 2018 - 08 - 23
  내용 : page의 width, height값을 page의 부모인 pageForCopyRatio의 width,
- height값의 100%로 지정하고, 방향 설정
+        height값의 100%로 지정하고, 방향 설정
  ******************************************************************/
 function setPageDirection(report) {
     var page = $('#page' + pageNum);
     var pageForCopyRatio = $('#pageForCopyRatio' + pageNum);
 
     page.css('width', '100%');
-    page.css('height', '100%');
+    page.css('height','100%');
 }

@@ -26,13 +26,15 @@ function getMinGroupBandDataHeight(band) {
  * *********************************************************/
 function getFooterHeight(bands) {
     footer_height = 0;
+    var bandDataIndex;
     for (var i = 0; i < bands.length; i++) {
-        var bandDataIndex = 0;
         if (bands[i].attributes["xsi:type"] === "BandData") {
             bandDataIndex = i;
         }
-        if (i > bandDataIndex)
+        if (i > bandDataIndex){
+            console.log(bands[i]);
             footer_height += Number(bands[i].rectangle.height);
+        }
     }
 }
 
@@ -48,6 +50,7 @@ function getAvaHeight(div_id, reportHeight) {
     for (var i = 0; i < siblings.length; i++) {
         curr_height += parseInt(siblings.eq(i).css('height').substring(0, siblings.eq(i).css('height').length - 2));
     }
+
     //ToDo -4 지워야함 Maybe 밴드에 픽셀 때문에 화면이 겹쳐서 강제로 해줌
     var avaHegiht = reportHeight - curr_height - footer_height - 4;
 
@@ -118,7 +121,7 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
             if (remainData) {
 
             } else {
-               groupDataRow = 0;
+                groupDataRow = 0;
             }
         }
 
@@ -257,13 +260,7 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
         }
 
         if (band.childFooterBands !== null) { // 자식 풋터 밴드에서 재호출
-            if (!remainData) {
-                drawBand(band.childFooterBands, layerName, reportHeight, band);
-            } else {
-                if (band.fixPriorGroupFooter) {
-                    drawBand(band.childFooterBands, layerName, reportHeight);
-                }
-            }
+            drawChildFooterBand(band.childFooterBands, layerName, reportHeight, band); // 자식 밴드를 그려주는 함수 호출
         }
     });
 }
@@ -279,6 +276,10 @@ function drawChildHeaderBand(childBands, layerName, reportHeight, band) {
             case 'BandGroupHeader' :
                 if (!remainData) {
                     childHeaderBandArray.push(childBand);
+                }else{
+                    if(band.fixPriorGroupHeader === 'true'){ //그룹 헤더 고정
+                        childHeaderBandArray.push(childBand);
+                    }
                 }
                 break;
             case 'BandDataHeader' : // 데이터 헤더 밴드
@@ -298,7 +299,7 @@ function drawChildHeaderBand(childBands, layerName, reportHeight, band) {
                     }
                 });
                 if(isGroupHeader){ // 그룹 헤더가 있을 때는 그룹의 맨 처음에 출력
-                    if(groupDataRow == 0) {
+                    if(!remainData) {
                         childHeaderBandArray.push(childBand);
                     }
                 } else { // 그룹 헤더가 없을 때는 인쇄물의 첫 페이지에만 출력
@@ -319,14 +320,26 @@ function drawChildHeaderBand(childBands, layerName, reportHeight, band) {
  * *********************************************************/
 function drawChildFooterBand(childBands, layerName, reportHeight, band) {
     var childFooterBandArray = new Array();
+    var dt = Object.values(dataTable.DataSetName)[0];
     childBands.forEach(function (childBand) {
         switch (childBand.attributes["xsi:type"]) {
             case 'BandGroupFooter' :
                 if (!remainData) {
                     childFooterBandArray.push(childBand);
+                }else{
+                    if(band.fixPriorGroupFooter == 'true'){ //그룻 풋터 고정
+                        childFooterBandArray.push(childBand);
+                    }
                 }
                 break;
             case 'BandDataFooter' : // 모든 데이터 출력이 끝난 후에 출력
+                if (band.fixTitle == 'true') { // 데이터 헤더 밴드 고정 값이 '예'일 때
+                    childFooterBandArray.push(childBand); // 매 페이지마다 나와야 함
+                } else { // 데이터 헤더 밴드 고정 값이 '아니오'일 때
+                    if(curDatarow > dt.length) { // 데이터 출력이 끝났을 때 나옴
+                        childFooterBandArray.push(childBand);
+                    }
+                }
                 break;
             case 'BandDummyFooter' :
                 var isGroupHeader = false;
@@ -345,5 +358,6 @@ function drawChildFooterBand(childBands, layerName, reportHeight, band) {
                 break;
         }
     });
+
     drawBand(childFooterBandArray, layerName, reportHeight, band);
 }

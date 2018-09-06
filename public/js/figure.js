@@ -26,7 +26,7 @@ function ControlRectangle(data) {
     Figure.apply(this, arguments);
 
     this.backgroundColor = data.BackGroundColor._text;
-    this.trangsparent = data.Transparent._text;
+    this.trangsparent = data.Transparent._text; // 뭐지?
     this.borderColor = data.BorderColor._text;
     this.roundingValue = data.RoundingValue._text;
     this.recDashStyle = data.RecDashStyle._text;
@@ -57,10 +57,10 @@ function ControlArrow(data) {
 
     this.lineDash = data.LineDash._text;
     this.lineColor = data.LineColor._text;
-    this.lineGap = data.LineGap._text;
+    this.lineGap = data.LineGap._text; // ???
     this.lineType = data.LineType._text;
     this.arrowType = data.ArrowType._text;
     this.arrowSize = data.ArrowSize._text;
     this.arrowShape = data.ArrowShape._text;
-    this.arrowDashStyle = data.ArraowDashStyle._text;
+    this.arrowDashStyle = data.ArraowDashStyle === undefined ? undefined : data.ArraowDashStyle._text;
 }
