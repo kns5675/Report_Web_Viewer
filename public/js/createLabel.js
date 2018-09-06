@@ -168,7 +168,8 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData) {
     dynamicTable_resizing_div_packing.append('<div id="dynamicTable_resizing_div'+dynamicTableNum + '"></div>');
 
     var dynamicTable_resizing_div = $("#dynamicTable_resizing_div"+dynamicTableNum);
-    dynamicTable_resizing_div.append('<table id="dynamicTable' + dynamicTableNum + '"></table>');
+    var temp_table_class = table.id.substring(0, 4); // 임시로 table을 인식하기 위한 번호 - 전형준
+    dynamicTable_resizing_div.append('<table id="dynamicTable' + dynamicTableNum + '" class="table table-' + temp_table_class + '"></table>');
     // dynamicTable_resizing_div.addClass("NormalLabel_scope");
     div.css('position', 'relative');
 
@@ -275,7 +276,7 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
 }
 /**************************************************************************************
  기능 : GroupFieldArray가 있을 경우
-        DynamicTableValueLabel(동적 테이블 밸류 라벨)을 화면에 그려주는 함수를 만든다.
+ DynamicTableValueLabel(동적 테이블 밸류 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 구영준
  **************************************************************************************/
 function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, numOfData){
@@ -787,8 +788,6 @@ function drawingSystemLabel(data, divId) {
                 var fontSize = (pId.css('font-size')).split('p');
                 pId.css('word-spacing', (fontSize[0] - 1.181) + 'px');
             }
-
-
 
             dateTimeNum++;
             break;

@@ -9,26 +9,18 @@
 <div class="modal-content">
     <div class="upperbar" style="width:100%;">
         <span style="width:50%; text-align:left; float:left;margin-left:10px;">항목 선택</span>
-        <span id="closebtn_modalTableChoice"class="pop_bt" style="cursor:pointer;float:right;margin-right:10px;">X</span>
+        <div id="closebtn_modalTableChoice"class="pop_bt">X</div>
     </div>
     <div class="downpart">
-        <!--<form id="modalForm" name="modalForm" onsubmit="return beforeSubmit();">-->
-        <form id="modalForm" name="modalForm">
-            <div id="leftpart_modalTableChoice">
-                <div id="leftpart_modalTableChoice_header">
-                    <p>표 1-1</p>
-                </div>
-                <div id="leftpart_modalTableChoice_main">
-
-
-                </div>
-            </div>
-            <div id="rightpart_modalTableChoice">
-                <input type="button" name="up" id="up" value="위로" style="width:100%"> <br>
-                <input type="button" name="down" id="down" value="아래로" style="width:100%"><br>
-                <input type="button" name="down" id="down" value="확인" style="width:100%"><br>
-            </div>
-        </form>
+        <div id="leftpart_modalTableChoice">
+            <ul id="leftpart_modalTableChoice_header"></ul>
+            <ul id="labelListUl"></ul>
+        </div>
+        <div id="rightpart_modalTableChoice" style="position:relative;">
+            <button class="tableChoice_btn" id="tableChoice_up">위로</button>
+            <button class="tableChoice_btn" id="tableChoice_down">아래로</button>
+            <button class="tableChoice_btn" id="tableChoice_done">확인</button>
+        </div>
     </div>
 </div>
 <div id="modalcase" class="modal" style="display:none;">

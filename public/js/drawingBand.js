@@ -77,13 +77,14 @@ function getNumOfDataWithGroupField(band, avaHeight) {
     });
 
     var numofData = Math.floor((avaHeight - titleHeight - footer_height) / valueHeight);
+    var groupRemainData = (dataCount - groupDataRow);
 
-
-    if (numofData > dataCount) {
-        return dataCount
-    } else {
-        return numofData
+    if(numofData > groupRemainData){ // 마지막 페이지
+        return dataCount;
+    }else{ //마지막 페이지가 아닌 경우
+        return numofData;
     }
+
 }
 
 /***********************************************************
