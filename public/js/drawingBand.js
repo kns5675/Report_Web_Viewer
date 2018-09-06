@@ -26,13 +26,15 @@ function getMinGroupBandDataHeight(band) {
  * *********************************************************/
 function getFooterHeight(bands) {
     footer_height = 0;
+    var bandDataIndex;
     for (var i = 0; i < bands.length; i++) {
-        var bandDataIndex = 0;
         if (bands[i].attributes["xsi:type"] === "BandData") {
             bandDataIndex = i;
         }
-        if (i > bandDataIndex)
+        if (i > bandDataIndex){
+            console.log(bands[i]);
             footer_height += Number(bands[i].rectangle.height);
+        }
     }
 }
 
@@ -48,6 +50,7 @@ function getAvaHeight(div_id, reportHeight) {
     for (var i = 0; i < siblings.length; i++) {
         curr_height += parseInt(siblings.eq(i).css('height').substring(0, siblings.eq(i).css('height').length - 2));
     }
+
     //ToDo -4 지워야함 Maybe 밴드에 픽셀 때문에 화면이 겹쳐서 강제로 해줌
     var avaHegiht = reportHeight - curr_height - footer_height - 4;
 
@@ -74,13 +77,14 @@ function getNumOfDataWithGroupField(band, avaHeight) {
     });
 
     var numofData = Math.floor((avaHeight - titleHeight - footer_height) / valueHeight);
+    var groupRemainData = (dataCount - groupDataRow);
 
-
-    if (numofData > dataCount) {
-        return dataCount
-    } else {
-        return numofData
+    if(numofData > groupRemainData){ // 마지막 페이지
+        return dataCount;
+    }else{ //마지막 페이지가 아닌 경우
+        return numofData;
     }
+
 }
 
 /***********************************************************
@@ -317,6 +321,7 @@ function drawChildHeaderBand(childBands, layerName, reportHeight, band) {
  * *********************************************************/
 function drawChildFooterBand(childBands, layerName, reportHeight, band) {
     var childFooterBandArray = new Array();
+    var dt = Object.values(dataTable.DataSetName)[0];
     childBands.forEach(function (childBand) {
         switch (childBand.attributes["xsi:type"]) {
             case 'BandGroupFooter' :
@@ -329,6 +334,13 @@ function drawChildFooterBand(childBands, layerName, reportHeight, band) {
                 }
                 break;
             case 'BandDataFooter' : // 모든 데이터 출력이 끝난 후에 출력
+                if (band.fixTitle == 'true') { // 데이터 헤더 밴드 고정 값이 '예'일 때
+                    childFooterBandArray.push(childBand); // 매 페이지마다 나와야 함
+                } else { // 데이터 헤더 밴드 고정 값이 '아니오'일 때
+                    if(curDatarow > dt.length) { // 데이터 출력이 끝났을 때 나옴
+                        childFooterBandArray.push(childBand);
+                    }
+                }
                 break;
             case 'BandDummyFooter' :
                 var isGroupHeader = false;
@@ -347,5 +359,6 @@ function drawChildFooterBand(childBands, layerName, reportHeight, band) {
                 break;
         }
     });
+
     drawBand(childFooterBandArray, layerName, reportHeight, band);
 }

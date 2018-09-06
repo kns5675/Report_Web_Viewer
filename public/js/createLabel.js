@@ -229,8 +229,8 @@ function drawingDynamicTableValueLabelWithoutGropuFiedldArray(label, dt, tableId
             tableId.append('<tr id = "dynamicValueLabel' + curDatarow + '"></tr>');
         for (var key in data) {
             if (label.fieldName == key) {
-                var valueTrId = document.getElementById("dynamicValueLabel" + curDatarow);
-                // var valueTrId = $('#dynamicValueLabel' + curDatarow);
+                // var valueTrId = document.getElementById("dynamicValuKeLabel" + curDatarow);
+                var valueTrId = $('#dynamicValueLabel' + curDatarow);
                 var key_data = data[key]._text;
                 var table_reform = table_format_check(data, valueTrId, key_data, table);
                 if(label.labelTextType == 'Number' && label.format != undefined){
