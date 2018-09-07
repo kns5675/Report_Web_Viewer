@@ -41,10 +41,10 @@ function judgementControlList(band, divId, numOfData) {
         var controlList = band.controlList.anyType;
         if (Array.isArray(controlList)) {
             controlList.forEach(function (list) {
-                judgementLabel(list, divId, numOfData);
+                judgementLabel(list, divId, numOfData, band.attributes["xsi:type"]);
             });
         } else {
-            judgementLabel(controlList, divId, numOfData);
+            judgementLabel(controlList, divId, numOfData, band.attributes["xsi:type"]);
         }
     } else {
     }
@@ -54,7 +54,7 @@ function judgementControlList(band, divId, numOfData) {
  기능 : 어떤 Label인지를 판단하여 객체를 생성해주는 함수를 만든다.
  만든이 : 안예솔
  ******************************************************************/
-function judgementLabel(data, divId, numOfData) {
+function judgementLabel(data, divId, numOfData, band_name) {
     var attr = data._attributes["xsi:type"];
     if (attr == "ControlDynamicTable") { // 동적 테이블
         var controlDynamicTable = new Table(data);
@@ -121,7 +121,7 @@ function judgementLabel(data, divId, numOfData) {
         } else {
             var label = new NormalLabel(data);
             labelList.push(label);
-            drawingNormalLabel(label, divId);
+            drawingNormalLabel(label, divId, band_name);
         }
     } else if (attr == 'ControlRectangle') { // 사각형
         var figure = new ControlRectangle(data);
@@ -1426,8 +1426,11 @@ function drawingDataLabel(data, divId) {
  Date : 2018-08-28
  From hagdung-i
  ******************************************************************/
-function drawingNormalLabel(data, divId) {
+function drawingNormalLabel(data, divId, band_name) {
     var div = $('#' + divId);
+    // if (data.attributes["xsi:type"] === "BandBackGround") {
+    //     console.log("BandBackGround : ",data.attributes["xsi:type"]);
+    // }
     div.css('position', 'relative');
     div.append('<div id = "NormalLabel' + normalLabelNum + '"></div>');
     var normalLabelId = $('#NormalLabel' + normalLabelNum);
@@ -1453,12 +1456,18 @@ function drawingNormalLabel(data, divId) {
                 'border-left': data.borderThickness.left + 'px ' + leftBorder + ' ' + data.leftBorderColor,
                 'border-right': data.borderThickness.right + 'px ' + rightBorder + ' ' + data.rightBorderColor,
                 'border-bottom': data.borderThickness.bottom + 'px ' + bottomBorder + ' ' + data.bottomBorderColor,
-                'border-top': data.borderThickness.top + 'px ' + topBorder + ' ' + data.topBorderColor
+                'border-top': data.borderThickness.top + 'px ' + topBorder + ' ' + data.topBorderColor,
+                'zIndex' : 0
             });
         } else {
-            normalLabelId.css('border', '1px solid black');
+            normalLabelId.css({
+                'border': '1px solid black',
+                'zIndex' : 0
+            });
         }
     }
+    var z_index = z_index_setting(band_name);
+
     normalLabelId.css({
         'width': data.rectangle.width,
         'height': data.rectangle.height,
@@ -1467,8 +1476,7 @@ function drawingNormalLabel(data, divId) {
         'top': data.rectangle.y + 'px',
         // 'text-align': 'center',
         // 'overflow': 'visible',
-        'background-color': data.backGroundColor,
-        'zIndex': 999,
+        'zIndex': z_index,
         'white-space': 'nowrap', // 줄바꿈 안되게하는거
         'background-color': data.backGroundColor, // 배경색
         'color': data.textColor // 글자 색
@@ -1496,15 +1504,18 @@ function drawingNormalLabel(data, divId) {
     Lock_check(data, normalLabelId, div);
 
     var pId = $('#PNormalLabel' + normalLabelNum);
-
     // fontSize의 단위를 통일하기위해
     var fontSizePt = changeFontUnit(data.fontSize);
-
+    // console.log("pId : ",pId[0].clientWidth);
     pId.css({
         'font-size': fontSizePt,
         'font-family': data.fontFamily,
         'font-weight': data.fontWeight,
-        'font-style': data.fontStyle
+        'font-style': data.fontStyle,
+        'margin-top' : '10px',
+        'margin-bottom' : '10px',
+        'margin-right' : '10px',
+        'margin-left' : '10px'
     });
 
     // 금액 표시 방법 한글
@@ -2268,7 +2279,6 @@ function toStringFn(text, pTagId) {
  ******************************************************************/
 function textAlignCenter(text, pTagId, wordWrap, textDirection) {
     var tag = $('#' + pTagId);
-
     var fontSize = (tag.css('font-size')).split('px');
     if (wordWrap == false && textDirection == 'Horizontal') {
         var parentWidth = (tag.parent().css('width')).split('px');
@@ -2583,6 +2593,7 @@ function autoSizeTrue(pTagId) {
     // text중에서 <br/>의 개수를 구함
 
     var height = fontSize[0] * (brCount + 1) + brCount;
+    console.log("autoSizeTrue height : ",height);
     tag.parent().css({
         'height': height,
         'top': height + fontSize[0] + 'px'
@@ -2957,4 +2968,15 @@ function characterSpacing(text, spacing, pTagId) {
         });
     } else {
     }
+}
+
+function z_index_setting(band_name) {
+    if(band_name == "BandBackGround"){
+        var z_index = -1;
+    }else if(band_name == "BandForeGround"){
+        var z_index = 100;
+    }else{
+        var z_index = 2;
+    }
+    return z_index;
 }

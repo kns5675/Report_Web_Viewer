@@ -126,6 +126,26 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
         var div_id = 'band' + (bandNum++);
         $('#' + layerName).append("<div id='" + div_id + "' class='Band " + band.attributes["xsi:type"] + "'>" + band.name + "</div>");
 
+        // xml 에서 넘어오는 BandForeGround, BandBackGround 영역을 대신 해 DesignLayer에 통합하여 순서를 정해주는 방안으로 변경.
+        if (band.attributes["xsi:type"] === "BandForeGround") {
+            // $('.BandForeGround').each(function (i, e) {
+            //     e.style.zIndex = 0;
+            //     e.style.position = 'absolute';
+            //     e.style.top = 0;
+            //     // e.style.display = "none";
+            // });
+            div_id = layerName;
+        }
+        if (band.attributes["xsi:type"] === "BandBackGround") {
+            // $('.BandBackGround').each(function (i, e) {
+            //     e.style.zIndex = 0;
+            //     e.style.position = 'absolute';
+            //     e.style.top = 0;
+            //     // e.style.display = "none";
+            // });
+            div_id = layerName;
+        }
+
         // 수정 18.09.04 YeSol
         if (band.attributes["xsi:type"] === "BandData") {
             if (bands.length > 1) {
@@ -169,7 +189,8 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                     $('#' + div_id).css({
                         'width': band.rectangle.width,
                         'height': dataBandHeight,
-                        'border-bottom': "1px solid red"
+                        'border-bottom': "1px solid red",
+                        'zIndex' : -10
                     });
                     var dataCount = groupFieldArray[groupFieldNum].length;
                     var groupRemainData = (dataCount - groupDataRow);
@@ -191,6 +212,7 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                 $('#' + div_id).css({
                     'width': band.rectangle.width,
                     'height': band.rectangle.height,
+                    'zIndex' : -10
                 });
                 break;
             case 'BandPageFooter' :
@@ -199,7 +221,8 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                     'height': band.rectangle.height,
                     'position': 'absolute',
                     'bottom': 0 + "px",
-                    'border-bottom': "1px solid red"
+                    'border-bottom': "1px solid red",
+                    'zIndex' : -10
                 });
                 break;
             case 'BandGroupHeader', 'BandGroupFooter' :
@@ -208,13 +231,15 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                         'width': band.rectangle.width,
                         'height': band.rectangle.height,
                         'border-bottom': "1px solid red",
-                        'display' : 'none'
+                        'display' : 'none',
+                        'zIndex' : -10
                     });
                 }else{
                     $('#' + div_id).css({
                         'width': band.rectangle.width,
                         'height': band.rectangle.height,
-                        'border-bottom': "1px solid red"
+                        'border-bottom': "1px solid red",
+                        'zIndex' : -10
                     });
                 }
                 break;
@@ -222,7 +247,8 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                 $('#' + div_id).css({
                     'width': band.rectangle.width,
                     'height': band.rectangle.height,
-                    'border-bottom': "1px solid red"
+                    'border-bottom': "1px solid red",
+                    'zIndex' : -10
                 });
                 break;
         }
