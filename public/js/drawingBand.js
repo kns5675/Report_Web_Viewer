@@ -51,8 +51,6 @@ function getAvaHeight(div_id, reportHeight) {
         curr_height += parseInt(siblings.eq(i).css('height').substring(0, siblings.eq(i).css('height').length - 2));
     }
 
-
-
     //ToDo -4 지워야함 Maybe 밴드에 픽셀 때문에 화면이 겹쳐서 강제로 해줌
     var avaHegiht = reportHeight - curr_height - footer_height - 4;
 
@@ -112,7 +110,6 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
 
         // 페이지 헤더 밴드의 속성 '첫 페이지 출력 생략(PageOutputSkip)' 속성값이 'true'면 출력X
         if (band.attributes["xsi:type"] === "BandPageHeader" && band.pageOutputSkip === "true") {
-            console.log('hi');
             return;
         }
         // 타이틀 밴드 - 첫 페이지가 아니면 출력X

@@ -17,8 +17,6 @@ function FirstPage(){
         $("#NowPage").val(1);
     });
 }
-
-
 /******************************************************************
  기능 : 현재 페이지 input 태그 기능 함수.
  만든이 : hagdung-i
@@ -32,8 +30,6 @@ function NowPage(){
         $(window).scrollTop(pagevalue);
     });
 }
-
-
 /******************************************************************
  기능 : 이전 페이지 버튼 기능 함수.
  만든이 : hagdung-i
@@ -50,8 +46,6 @@ function PreviousPage(){
         }
     });
 }
-
-
 /******************************************************************
  기능 : 다음 페이지 버튼 기능 함수.
  만든이 : hagdung-i
@@ -74,8 +68,6 @@ function NextPage(){
         }
     });
 }
-
-
 /******************************************************************
  기능 : 마지막 페이지 버튼 기능 함수.
  만든이 : hagdung-i
@@ -88,8 +80,6 @@ function LastPage(pagecount){
         $("#NowPage").val(pagecount);
     });
 }
-
-
 /******************************************************************
  기능 : 페이지 상단바(header) 고정 함수.
  만든이 : hagdung-i
@@ -107,8 +97,6 @@ function HeaderFixAndPageScroll(pagecount) {
         PageValue(pagecount);
     });
 }
-
-
 /******************************************************************
  기능 : SCROLL 시 Page 값 변환 함수.
  만든이 : hagdung-i
@@ -122,20 +110,15 @@ function PageValue() {
         }
     });
 }
-
-
 /******************************************************************
  기능 : image upload를 위한 함수.
  만든이 : hagdung-i
  ******************************************************************/
 function image_upload() {
-
-
     var modalLayer = $("#modalLayer");
     var modalCont = $(".modalContent");
     var marginLeft = modalCont.outerWidth()/2;
     var marginTop = modalCont.outerHeight()/2;
-
     /******************************************************************
      기능 : 이미지 추가 버튼
      만든이 : hagdung-i
@@ -146,16 +129,13 @@ function image_upload() {
         $(this).blur();
         return false;
     });
-
     /******************************************************************
      기능 : 이미지 추가 모달창의 확인 버튼
      만든이 : hagdung-i
      ******************************************************************/
     $("#upload_button").click(function () {
         modalLayer.fadeOut("slow");
-
     });
-
     /******************************************************************
      기능 : 이미지 추가 모달창의 취소 버튼
      만든이 : hagdung-i
@@ -178,7 +158,6 @@ function readURL(input) {
         console.log("data : ",resolve);
         image_setting();
     });
-
     /******************************************************************
      기능 : 실제 url 가져오는 기능.
      만든이 : hagdung-i
@@ -262,7 +241,6 @@ async function tag_Making(scope, imgae_src, imgnum) {
     document.getElementById(imagediv.id).appendChild(images);
     document.getElementById(imagediv.id).appendChild(setdiv);
     document.getElementById(setdiv.id).appendChild(set_button);
-
     /******************************************************************
      기능 : 이미지 영역의 드래그 이동 & 크기 조정 기능.
      만든이 : hagdung-i
@@ -275,7 +253,6 @@ async function tag_Making(scope, imgae_src, imgnum) {
         resolve(data);
     });
 }
-
 /******************************************************************
  기능 : 이미지 모달창 닫기 기능.
  만든이 : hagdung-i
@@ -287,7 +264,6 @@ function image_moal_fadeout() {
     // dialog_div.css({"visibility": "hidden"});
     // $("#image_update_cancel"+ImageNum).css({"visibility": "hidden"});
 }
-
 /******************************************************************
  기능 : 이미지 앞으로/뒤로 기능(영역 변경이 아닌 이미지간의 순서만 변경).
  만든이 : hagdung-i
@@ -309,13 +285,11 @@ function image_level(level, ImageNum) {
         }
     });
 }
-
 /******************************************************************
  기능 : 이미지 삭제, 수정 기능.
  만든이 : hagdung-i
  ******************************************************************/
 async function image_setting(){
-
     /******************************************************************
      기능 : 이미지에 마우스 올릴 시에만 이미지 속성 버튼이 나타남.
      만든이 : hagdung-i
@@ -329,14 +303,12 @@ async function image_setting(){
         var styles = $("#"+set_buttonid);
         styles[0].style.visibility = "hidden";
     });
-
     var modalLayer = $("#image_dialog");
     var dialog = $("#dialog");
     var dialog_div = $("#dialog_div");
     dialog_div.css({"visibility": "hidden"});
     var marginLeft = dialog.outerWidth()/2;
     var marginTop = dialog.outerHeight()/2;
-
     /******************************************************************
      기능 : 이미지 속성 버튼 클릭시 이벤트
      만든이 : hagdung-i
@@ -366,7 +338,6 @@ async function image_setting(){
         $("#ImageDivPacking"+CImageNum).remove();
         image_moal_fadeout();
     });
-
     /******************************************************************
      기능 : 이미지 속성 - 이미지 맨 앞으로 보내기 버튼 클릭시 이벤트
      만든이 : hagdung-i
@@ -380,11 +351,10 @@ async function image_setting(){
         console.log("remove_end count : ", count);
         remove_end(CImageNum).then(function (resolveData) {
             var scope = "foreGroundLayer";
-
+            console.log("3");
             tag_Making(scope,resolveData, CImageNum);
         });
     });
-
     /******************************************************************
      기능 : 이미지 속성 - 이미지 맨 뒤로 보내기 버튼 클릭시 이벤트
      만든이 : hagdung-i
@@ -399,7 +369,6 @@ async function image_setting(){
             tag_Making(scope,resolveData, CImageNum);
         });
     });
-
     /******************************************************************
      기능 : 이미지 속성 - 이미지 앞으로 보내기 버튼 클릭시 이벤트
      만든이 : hagdung-i
@@ -417,8 +386,6 @@ async function image_setting(){
         image_moal_fadeout(CImageNum);
     });
 }
-
-
 /******************************************************************
  기능 : realURL 함수 호출.
  만든이 : hagdung-i
@@ -429,7 +396,6 @@ $(function() {
         readURL(this);
     });
 });
-
 function DRD_button() {
     $("#DRD_Start").on("click", function () {
         console.log("DRD_Start click");
@@ -437,14 +403,17 @@ function DRD_button() {
         // shell.echo('hello world');
     });
 }
-
 /******************************************************************
- 기능 : 이미지 순서 변경 시 포,백그라운드에 새로 그려주기 위해 디자인레이어의 이미지와 모달의 버튼들을 지우고 다시 그리는 것을 동기로 변경. 지운 후에 새로 그리기 위함.
+ 기능 : 이미지 순서 변경 시 포,백그라운드에 새로 그려주기 위해 디자인레이어의
+        이미지와 모달의 버튼들을 지우고 다시 그리는 것을 동기로 변경. 지운 후에
+        새로 그리기 위함.
  날짜 : 2018-09-04
  만든이 : hagdung-i
  ******************************************************************/
 async function remove_end(CImageNum) {
+    console.log("1");
     return new Promise(function (resolve) {
+        console.log("2");
         image_moal_fadeout(CImageNum);
         resolve(imgae_src);
     });

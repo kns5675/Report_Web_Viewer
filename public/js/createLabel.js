@@ -132,7 +132,7 @@ function judgementLabel(data, divId, numOfData) {
     } else if (attr == 'ControlLine') { // 선
         var figure = new ControlLine(data);
         drawingLine(figure, divId);
-    } else if (attr == 'ControlArrrow') { // 화살표
+    } else if (attr == 'ControlArrow') { // 화살표
         var figure = new ControlArrow(data);
         drawingArrow(figure, divId);
     }
@@ -219,11 +219,8 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData) {
  DynamicTableValueLabel(동적 테이블 밸류 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 구영준
  **************************************************************************************/
-function drawingDynamicTableValueLabelWithoutGropuFiedldArray(label, dt, tableId, numOfData, table){
-    // row = (pageNum - 1) * numOfData; //한 페이지 출력 해야할 시작 row
+function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId, numOfData, table){
     var rowLength = curDatarow + numOfData; //한 페이지에 마지막으로 출력해야할 row
-
-
     for (var j = curDatarow; j < rowLength; j++) {
         var data = dt[j];
         var valueTrId = $("#dynamicValueLabel" + j);
@@ -235,16 +232,16 @@ function drawingDynamicTableValueLabelWithoutGropuFiedldArray(label, dt, tableId
                 var key_data = data[key]._text;
                 var table_reform = table_format_check(data, valueTrId, key_data, table);
                 if(label.labelTextType == 'Number' && label.format != undefined){
-                    valueTrId.append('<td id = "' + key + '" class="Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '">' + table_reform + '</td>');
+                    valueTrId.append('<td class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '">' + table_reform + '</td>');
                 }else{
-                    valueTrId.append('<td id = "' + key + '" class="Label ' + label._attributes + ' ' + label.dataType + '">' + table_reform + '</td>');
+                    valueTrId.append('<td class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '">' + table_reform + '</td>');
                 }
 
                 valueTrId.css({
                     'width': label.rectangle.width,
                     'height': label.rectangle.height
                 });
-                var td = $('#' + key);
+                var td = $('.' + key);
                 //// 추가 부분 18.08.28 YeSol
                 if (label.noBorder == 'true') {
                     td.css('border', 'none');
@@ -280,7 +277,7 @@ function drawingDynamicTableValueLabelWithoutGropuFiedldArray(label, dt, tableId
  DynamicTableValueLabel(동적 테이블 밸류 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 구영준
  **************************************************************************************/
-function drawingDynamicTableValueLabelWithGropuFiedldArray(label, dt, tableId, numOfData){
+function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, numOfData){
     for (var j = groupDataRow; j < numOfData; j++) {
         var data = groupFieldArray[groupFieldNum];
         var rowNum = curDatarow + j;
@@ -296,11 +293,11 @@ function drawingDynamicTableValueLabelWithGropuFiedldArray(label, dt, tableId, n
 
                 if(label.labelTextType == 'Number' && label.format != undefined){
                     valueTrId.append(
-                        '<td id = "' + key + '" class="Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '">' + table_reform + '</td>'
+                        '<td class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '">' + table_reform + '</td>'
                     );
                 }else{
                     valueTrId.append(
-                        '<td id = "' + key + '" class="Label ' + label._attributes + ' ' + label.dataType + '">' + table_reform + '</td>'
+                        '<td class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '">' + table_reform + '</td>'
                     );
                 }
                 valueTrId.css({
@@ -308,7 +305,7 @@ function drawingDynamicTableValueLabelWithGropuFiedldArray(label, dt, tableId, n
                     'height': label.rectangle.height,
 
                 });
-                var td = $('#' + key);
+                var td = $('.' + key);
                 //// 추가 부분 18.08.28 YeSol
                 if (label.noBorder == 'true') {
                     td.css('border', 'none');
@@ -351,11 +348,10 @@ function drawingDynamicTableValueLabelWithGropuFiedldArray(label, dt, tableId, n
  From hagdung-i
  *******************************************************************/
 function drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table) {
-
     if (groupFieldArray == undefined || groupFieldArray.length == 0) {
-        drawingDynamicTableValueLabelWithoutGropuFiedldArray(label, dt, tableId, numOfData, table);
+        drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId, numOfData, table);
     } else {
-        drawingDynamicTableValueLabelWithGropuFiedldArray(label, dt, tableId, numOfData);
+        drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, numOfData);
     }
 }
 
@@ -577,12 +573,10 @@ function drawingSystemLabel(data, divId) {
                 'font-weight': data.fontStyle
             });
 
-            if (dateStr !== undefined) {
-                if (data.textDirection == 'Vertical') {
-                    textAlignVertical(dateStr, "PDate" + dateNum); // 아직 구현 안함
-                } else if (data.textDirection == 'Horizontal') {
-                    toStringFn(dateStr, "PDate" + dateNum); // 한 글자씩 찍기
-                }
+            if (data.textDirection == 'Vertical') {
+                textAlignVertical(dateStr, "PDate" + dateNum); // 아직 구현 안함
+            } else if (data.textDirection == 'Horizontal') {
+                toStringFn(dateStr, "PDate" + dateNum); // 한 글자씩 찍기
             }
 
             // 자간 속성
@@ -607,36 +601,34 @@ function drawingSystemLabel(data, divId) {
             if (data.autosize == true) { // 자동 높이 조절
                 autoSizeTrue('PDate' + dateNum);
             } else {
-                if (dateStr !== undefined) {
-                    switch (data.horizontalTextAlignment) {
-                        case 'Center' :
-                            textAlignCenter(dateStr, 'PDate' + dateNum, data.wordWrap, data.textDirection);
-                            break;
-                        case 'Left' :
-                            pId.css('text-align', 'left');
-                            break;
-                        case 'Right' :
-                            pId.css('text-align', 'right');
-                            break;
-                        case 'Distributed' :
-                            pId.text('');
-                            textEqualDivision(dateStr, "PDate" + dateNum); // 텍스트 수평 정렬이 균등 분할인 경우
-                            break;
-                    }
-                    switch (data.verticalTextAlignment) {
-                        case 'Center' :
-                            verticalCenter('PDate' + dateNum); // 텍스트 수직 정렬이 중간인 경우
-                            break;
-                        case 'Top' :
-                            verticalTop('PDate' + dateNum); // 텍스트 수직 정렬이 위쪽인 경우
-                            break;
-                        case 'Bottom' :
-                            verticalBottom('PDate' + dateNum); // 텍스트 수직 정렬이 아래쪽인 경우
-                            break;
-                        case 'Distributed' :
-                            verticalCenterEqualDivision(dateStr, 'PDate' + dateNum, data.textDirection); // 텍스트 수직 정렬이 균등 분할인 경우
-                            break;
-                    }
+                switch (data.horizontalTextAlignment) {
+                    case 'Center' :
+                        textAlignCenter(dateStr, 'PDate' + dateNum, data.wordWrap, data.textDirection);
+                        break;
+                    case 'Left' :
+                        pId.css('text-align', 'left');
+                        break;
+                    case 'Right' :
+                        pId.css('text-align', 'right');
+                        break;
+                    case 'Distributed' :
+                        pId.text('');
+                        textEqualDivision(dateStr, "PDate" + dateNum); // 텍스트 수평 정렬이 균등 분할인 경우
+                        break;
+                }
+                switch (data.verticalTextAlignment) {
+                    case 'Center' :
+                        verticalCenter('PDate' + dateNum); // 텍스트 수직 정렬이 중간인 경우
+                        break;
+                    case 'Top' :
+                        verticalTop('PDate' + dateNum); // 텍스트 수직 정렬이 위쪽인 경우
+                        break;
+                    case 'Bottom' :
+                        verticalBottom('PDate' + dateNum); // 텍스트 수직 정렬이 아래쪽인 경우
+                        break;
+                    case 'Distributed' :
+                        verticalCenterEqualDivision(dateStr, 'PDate' + dateNum, data.textDirection); // 텍스트 수직 정렬이 균등 분할인 경우
+                        break;
                 }
             }
 
@@ -700,12 +692,10 @@ function drawingSystemLabel(data, divId) {
                 'font-weight': data.fontStyle
             });
 
-            if (data.text !== undefined) {
-                if (data.textDirection == 'Vertical') {
-                    textAlignVertical(dateTimeStr, "PDateTime" + dateTimeNum); // 아직 구현 안함
-                } else if (data.textDirection == 'Horizontal') {
-                    toStringFn(dateTimeStr, "PDateTime" + dateTimeNum); // 한 글자씩 찍기
-                }
+            if (data.textDirection == 'Vertical') {
+                textAlignVertical(dateTimeStr, "PDateTime" + dateTimeNum); // 아직 구현 안함
+            } else if (data.textDirection == 'Horizontal') {
+                toStringFn(dateTimeStr, "PDateTime" + dateTimeNum); // 한 글자씩 찍기
             }
 
             // 자간 속성
@@ -730,38 +720,37 @@ function drawingSystemLabel(data, divId) {
             if (data.autosize == true) { // 자동 높이 조절
                 autoSizeTrue('PDateTime' + dateTimeNum);
             } else {
-                if (data.text !== undefined) {
-                    switch (data.horizontalTextAlignment) {
-                        case 'Center' :
-                            textAlignCenter(dateTimeStr, 'PDateTime' + dateTimeNum, data.wordWrap, data.textDirection);
-                            break;
-                        case 'Left' :
-                            pId.css('text-align', 'left');
-                            break;
-                        case 'Right' :
-                            pId.css('text-align', 'right');
-                            break;
-                        case 'Distributed' :
-                            pId.text('');
-                            textEqualDivision(dateTimeStr, "PDateTime" + dateTimeNum); // 텍스트 수평 정렬이 균등 분할인 경우
-                            break;
-                    }
-                    switch (data.verticalTextAlignment) {
-                        case 'Center' :
-                            verticalCenter('PDateTime' + dateTimeNum); // 텍스트 수직 정렬이 중간인 경우
-                            break;
-                        case 'Top' :
-                            verticalTop('PDateTime' + dateTimeNum); // 텍스트 수직 정렬이 위쪽인 경우
-                            break;
-                        case 'Bottom' :
-                            verticalBottom('PDateTime' + dateTimeNum); // 텍스트 수직 정렬이 아래쪽인 경우
-                            break;
-                        case 'Distributed' :
-                            verticalCenterEqualDivision(dateTimeStr, 'PDateTime' + dateTimeNum, data.textDirection); // 텍스트 수직 정렬이 균등 분할인 경우
-                            break;
-                    }
+                switch (data.horizontalTextAlignment) {
+                    case 'Center' :
+                        textAlignCenter(dateTimeStr, 'PDateTime' + dateTimeNum, data.wordWrap, data.textDirection);
+                        break;
+                    case 'Left' :
+                        pId.css('text-align', 'left');
+                        break;
+                    case 'Right' :
+                        pId.css('text-align', 'right');
+                        break;
+                    case 'Distributed' :
+                        pId.text('');
+                        textEqualDivision(dateTimeStr, "PDateTime" + dateTimeNum); // 텍스트 수평 정렬이 균등 분할인 경우
+                        break;
+                }
+                switch (data.verticalTextAlignment) {
+                    case 'Center' :
+                        verticalCenter('PDateTime' + dateTimeNum); // 텍스트 수직 정렬이 중간인 경우
+                        break;
+                    case 'Top' :
+                        verticalTop('PDateTime' + dateTimeNum); // 텍스트 수직 정렬이 위쪽인 경우
+                        break;
+                    case 'Bottom' :
+                        verticalBottom('PDateTime' + dateTimeNum); // 텍스트 수직 정렬이 아래쪽인 경우
+                        break;
+                    case 'Distributed' :
+                        verticalCenterEqualDivision(dateTimeStr, 'PDateTime' + dateTimeNum, data.textDirection); // 텍스트 수직 정렬이 균등 분할인 경우
+                        break;
                 }
             }
+
             // 폰트크기 자동 줄어듦
             if (data.autoFontType == 'AutoSmall') {
                 fontSizeAutoSmall(dateTimeStr, 'PDateTime' + dateTimeNum);
@@ -819,12 +808,10 @@ function drawingSystemLabel(data, divId) {
                 'font-weight': data.fontStyle
             });
 
-            if (timeStr !== undefined) {
-                if (data.textDirection == 'Vertical') {
-                    textAlignVertical(timeStr, "PTime" + timeNum); // 아직 구현 안함
-                } else if (data.textDirection == 'Horizontal') {
-                    toStringFn(timeStr, "PTime" + timeNum); // 한 글자씩 찍기
-                }
+            if (data.textDirection == 'Vertical') {
+                textAlignVertical(timeStr, "PTime" + timeNum); // 아직 구현 안함
+            } else if (data.textDirection == 'Horizontal') {
+                toStringFn(timeStr, "PTime" + timeNum); // 한 글자씩 찍기
             }
 
             // 자간 속성
@@ -850,36 +837,34 @@ function drawingSystemLabel(data, divId) {
             if (data.autosize == true) { // 자동 높이 조절
                 autoSizeTrue('PTime' + timeNum);
             } else {
-                if (timeStr !== undefined) {
-                    switch (data.horizontalTextAlignment) {
-                        case 'Center' :
-                            textAlignCenter(timeStr, 'PTime' + timeNum, data.wordWrap, data.textDirection);
-                            break;
-                        case 'Left' :
-                            pId.css('text-align', 'left');
-                            break;
-                        case 'Right' :
-                            pId.css('text-align', 'right');
-                            break;
-                        case 'Distributed' :
-                            pId.text('');
-                            textEqualDivision(timeStr, "PTime" + timeNum); // 텍스트 수평 정렬이 균등 분할인 경우
-                            break;
-                    }
-                    switch (data.verticalTextAlignment) {
-                        case 'Center' :
-                            verticalCenter('PTime' + timeNum); // 텍스트 수직 정렬이 중간인 경우
-                            break;
-                        case 'Top' :
-                            verticalTop('PTime' + timeNum); // 텍스트 수직 정렬이 위쪽인 경우
-                            break;
-                        case 'Bottom' :
-                            verticalBottom('PTime' + timeNum); // 텍스트 수직 정렬이 아래쪽인 경우
-                            break;
-                        case 'Distributed' :
-                            verticalCenterEqualDivision(timeStr, 'PTime' + timeNum, data.textDirection); // 텍스트 수직 정렬이 균등 분할인 경우
-                            break;
-                    }
+                switch (data.horizontalTextAlignment) {
+                    case 'Center' :
+                        textAlignCenter(timeStr, 'PTime' + timeNum, data.wordWrap, data.textDirection);
+                        break;
+                    case 'Left' :
+                        pId.css('text-align', 'left');
+                        break;
+                    case 'Right' :
+                        pId.css('text-align', 'right');
+                        break;
+                    case 'Distributed' :
+                        pId.text('');
+                        textEqualDivision(timeStr, "PTime" + timeNum); // 텍스트 수평 정렬이 균등 분할인 경우
+                        break;
+                }
+                switch (data.verticalTextAlignment) {
+                    case 'Center' :
+                        verticalCenter('PTime' + timeNum); // 텍스트 수직 정렬이 중간인 경우
+                        break;
+                    case 'Top' :
+                        verticalTop('PTime' + timeNum); // 텍스트 수직 정렬이 위쪽인 경우
+                        break;
+                    case 'Bottom' :
+                        verticalBottom('PTime' + timeNum); // 텍스트 수직 정렬이 아래쪽인 경우
+                        break;
+                    case 'Distributed' :
+                        verticalCenterEqualDivision(timeStr, 'PTime' + timeNum, data.textDirection); // 텍스트 수직 정렬이 균등 분할인 경우
+                        break;
                 }
             }
             // 폰트크기 자동 줄어듦
@@ -2812,11 +2797,19 @@ function clipping(text, divId, pTagId) {
             temp[i] = temp[i].trim();
             space = temp[i].match(/\s/gi); // 공백 찾기
             if (temp[i].length > max) {
-                max = temp[i].length - space.length;
+                if(space == null) {
+                    max = temp[i].length;
+                } else {
+                    max = temp[i].length - space.length;
+                }
             }
         }
     }
-    var spacing = (parentWidth[0] - fontSize[0] * max) / 2 + space.length * (fontSize[0] / 2);
+    if(space == null) {
+        var spacing = (parentWidth[0] - fontSize[0] * max) / 2;
+    } else {
+        var spacing = (parentWidth[0] - fontSize[0] * max) / 2 + space.length * (fontSize[0] / 2);
+    }
     tag.css({
         'left': spacing + 'px',
         'right': spacing + 'px',
