@@ -220,16 +220,18 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData) {
  만든이 : 구영준
  **************************************************************************************/
 function drawingDynamicTableValueLabelWithoutGropuFiedldArray(label, dt, tableId, numOfData, table){
-    row = (pageNum - 1) * numOfData; //한 페이지 출력 해야할 시작 row
-    var rowLength = row + numOfData; //한 페이지에 마지막으로 출력해야할 row
-    for (var curDatarow = row; curDatarow < rowLength; curDatarow++) {
-        var data = dt[curDatarow];
-        var valueTrId = $("#dynamicValueLabel" + curDatarow);
+    // row = (pageNum - 1) * numOfData; //한 페이지 출력 해야할 시작 row
+    var rowLength = curDatarow + numOfData; //한 페이지에 마지막으로 출력해야할 row
+
+
+    for (var j = curDatarow; j < rowLength; j++) {
+        var data = dt[j];
+        var valueTrId = $("#dynamicValueLabel" + j);
         if(valueTrId.length < 1)
-            tableId.append('<tr id = "dynamicValueLabel' + curDatarow + '"></tr>');
+            tableId.append('<tr id = "dynamicValueLabel' + j + '"></tr>');
         for (var key in data) {
             if (label.fieldName == key) {
-                var valueTrId = $('#dynamicValueLabel' + curDatarow);
+                var valueTrId = $('#dynamicValueLabel' + j);
                 var key_data = data[key]._text;
                 var table_reform = table_format_check(data, valueTrId, key_data, table);
                 if(label.labelTextType == 'Number' && label.format != undefined){
@@ -349,6 +351,7 @@ function drawingDynamicTableValueLabelWithGropuFiedldArray(label, dt, tableId, n
  From hagdung-i
  *******************************************************************/
 function drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table) {
+
     if (groupFieldArray == undefined || groupFieldArray.length == 0) {
         drawingDynamicTableValueLabelWithoutGropuFiedldArray(label, dt, tableId, numOfData, table);
     } else {
