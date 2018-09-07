@@ -576,8 +576,66 @@ function howmanyPages(thisvalue){
                 }
             }
         });
+
+        $('.NormalLabel').on("click",function () {
+            autoSize(this.id);
+        });
     }
 
 function print_test() {
     console.log("test");
 }
+
+/******************************************************************
+ 기능 : 라벨 클릭시 자동 사이즈 조절 기능 추가.
+ 이슈 : 문자 크기 기준으로 글자수를 확인해서 가로/세로 크기를 조정해주는데, 문자가 영어/한국어 사이즈가 다른데 해당 처리가 안되어 있으며,
+        p태그 내부에 또 p태그가 있을 경우 해당 태그를 모두 텍스트로 구분해서 너무 긴 라벨이 생성되는 문제가 생김.
+        일단은 최대 크기를 조정해두는 방식으로 묶어둠.
+ 날짜 : 2018-09-07
+ 만든이 : 김학준
+ ******************************************************************/
+function autoSize(pTagId) {
+    var tag = $('#' + pTagId);
+    var fontSize = (tag.css('font-size')).split('p');
+    var tag_row = (tag[0].innerHTML).split('<br>');
+    var big_row = 1;
+    tag_row.forEach(function (e) {
+        var cutting_row = e.replace(/(^\s*)|(\s*$)/, '');
+        if(big_row < cutting_row.length){
+            big_row = cutting_row.length;
+        }
+    });
+    // 16pt 이런 식으로 값이 받아져서 p앞으로 끊어서 숫자만 받아오려고 한 문자열 자르기 작업
+    var brTag = $('#' + pTagId + ' br');
+    var brCount = brTag.length;
+    var one_line = 0;
+    if(brCount == 0){//텍스트가 한줄일 경우를 위해 마진 값을 추가.
+        one_line = 6;
+    }
+    // text중에서 <br/>의 개수를 구함
+    var widths;
+    if(fontSize[0] > 20){
+        widths = (fontSize[0]) * big_row;
+    }else if(fontSize[0] < 10){
+        widths = (fontSize[0]+2) * big_row;
+    }else{
+        widths = (fontSize[0]-3) * big_row;
+    }
+    var designLayerSize = $(".designLayer")[0].style.width.split('p');
+    if(widths>designLayerSize[0]){
+        widths = designLayerSize;
+    }
+    var height = fontSize[0] * (brCount + 1) + brCount + one_line;
+    tag.parent().css({
+        'width' : widths + 'px',
+        'height': height + 'px'
+        // 'top': (height*1 + fontSize[0]*1) + 'px'
+    });
+    tag.css({
+        'margin-left': '3px',
+        'margin-right': '3px',
+        'margin-top': '3px',
+        'margin-bottom': '3px'
+    });
+}
+

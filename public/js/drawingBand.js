@@ -56,7 +56,6 @@ function getAvaHeight(div_id, reportHeight) {
         curr_height += parseInt(siblings.eq(i).css('height').substring(0, siblings.eq(i).css('height').length - 2));
     }
 
-    //ToDo -4 지워야함 Maybe 밴드에 픽셀 때문에 화면이 겹쳐서 강제로 해줌
     var avaHegiht = reportHeight - curr_height - footer_height;
 
     return avaHegiht;
@@ -103,7 +102,7 @@ function getNumOfDataWithGroupField(band, avaHeight) {
  * 수정 : 2018-08-31
  * 그룹 헤더 밴드 구현
  * from 구영준
- * 
+ *
  * 수정 : 2018-09-07
  *  데이터밴드의 자식 밴드들을 함수로 빼서 구현
  * from 안예솔
@@ -133,6 +132,26 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
 
         var div_id = 'band' + (bandNum++);
         $('#' + layerName).append("<div id='" + div_id + "' class='Band " + band.attributes["xsi:type"] + "'>" + band.name + "</div>");
+
+        // xml 에서 넘어오는 BandForeGround, BandBackGround 영역을 대신 해 DesignLayer에 통합하여 순서를 정해주는 방안으로 변경.
+        if (band.attributes["xsi:type"] === "BandForeGround") {
+            // $('.BandForeGround').each(function (i, e) {
+            //     e.style.zIndex = 0;
+            //     e.style.position = 'absolute';
+            //     e.style.top = 0;
+            //     // e.style.display = "none";
+            // });
+            div_id = layerName;
+        }
+        if (band.attributes["xsi:type"] === "BandBackGround") {
+            // $('.BandBackGround').each(function (i, e) {
+            //     e.style.zIndex = 0;
+            //     e.style.position = 'absolute';
+            //     e.style.top = 0;
+            //     // e.style.display = "none";
+            // });
+            div_id = layerName;
+        }
 
         // 수정 18.09.04 YeSol
         if (band.attributes["xsi:type"] === "BandData") {
@@ -198,6 +217,7 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                 $('#' + div_id).css({
                     'width': band.rectangle.width,
                     'height': band.rectangle.height,
+                    'zIndex' : -10
                 });
                 break;
             case 'BandPageFooter' :
