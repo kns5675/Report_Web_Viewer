@@ -87,19 +87,44 @@ function getNumOfPage(report) {
 /***********************************************************
  기능 : 그룹 헤더/풋터 일 경우 데이터 밴드 길이 계산
  1. 그룹 헤더/풋터 일 경우 그룹 데이터의 길이 만큼의 데이터 길이
- 2. th 길이 + td길이 * 데이터 개수
+ 2. th 길이 + td길이 * 데이터 개수 + 테이블 라벨의 두께의 합
  만든이 : 구영준
  * *********************************************************/
 function getBandHeightWithGroupField(band, numOfData) {
-
-    // var dataCount = groupFieldArray[groupFieldNum].length;
     var labels = band.controlList.anyType.Labels.TableLabel;
-
-    var tableSpacing = Number(band.controlList.anyType.Rectangle.Y._text);
+    var tableSpacing = 0;
+    var titleBorderTopThickness = 0;
+    var titleBorderBottomThickness = 0;
+    var valueBorderBottomThickness = 0;
     var titleHeight = Number(labels[0].Rectangle.Height._text);
     var valueHeight = Number(labels[labels.length - 1].Rectangle.Height._text);
+    var allLabelBorderThickness = 0;
 
-    return tableSpacing + titleHeight + valueHeight * numOfData;
+    if(band.controlList.anyType.Rectangle.Y !== undefined){
+        tableSpacing = Number(band.controlList.anyType.Rectangle.Y._text);
+    }
+
+    labels.forEach(function(label){
+        if(label._attributes["xsi:type"] == "DynamicTableTitleLabel"){
+            var labelBottom = Number(label.BorderThickness.Bottom._text);
+            var labelTop = Number(label.BorderThickness.Top._text);
+
+            if(titleBorderBottomThickness < Number(label.BorderThickness.Bottom._text))
+                titleBorderBottomThickness = labelBottom;
+
+            if(titleBorderTopThickness < Number(label.BorderThickness.Top._text))
+                titleBorderTopThickness = labelTop;
+
+        }else{
+            var labelBottom = Number(label.BorderThickness.Bottom._text)
+            if(valueBorderBottomThickness < Number(label.BorderThickness.Bottom._text))
+                valueBorderBottomThickness = labelBottom;
+        }
+    });
+
+    allLabelBorderThickness = titleBorderBottomThickness * numOfData + titleBorderBottomThickness + titleBorderTopThickness;
+
+    return tableSpacing + titleHeight + valueHeight * numOfData + allLabelBorderThickness;
 }
 
 /***********************************************************

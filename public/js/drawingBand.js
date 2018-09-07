@@ -12,12 +12,18 @@ var groupDataRow = 1;
  * 만든이 : 구영준
  * *********************************************************/
 function getMinGroupBandDataHeight(band) {
+    var tableSpacing = 0;
+
+    if(band.controlList.anyType.Rectangle.Y !== undefined){
+        tableSpacing = Number(band.controlList.anyType.Rectangle.Y._text);
+    }
+
     var bandGroupHeaderHeight = Number(band.childHeaderBands[0].rectangle.height);
     var tableLabel = band.controlList.anyType.Labels.TableLabel;
     var tableTitleHeight = Number(tableLabel[0].Rectangle.Height._text);
     var tableValueHeight = Number(tableLabel[tableLabel.length - 1].Rectangle.Height._text);
 
-    minGroupBandDataHeight = bandGroupHeaderHeight + tableTitleHeight + tableValueHeight;
+    minGroupBandDataHeight = tableSpacing +bandGroupHeaderHeight + tableTitleHeight + tableValueHeight;
 }
 
 /***********************************************************
@@ -32,7 +38,6 @@ function getFooterHeight(bands) {
             bandDataIndex = i;
         }
         if (i > bandDataIndex){
-            // console.log(bands[i]);
             footer_height += Number(bands[i].rectangle.height);
         }
     }
@@ -51,8 +56,7 @@ function getAvaHeight(div_id, reportHeight) {
         curr_height += parseInt(siblings.eq(i).css('height').substring(0, siblings.eq(i).css('height').length - 2));
     }
 
-    //ToDo -4 지워야함 Maybe 밴드에 픽셀 때문에 화면이 겹쳐서 강제로 해줌
-    var avaHegiht = reportHeight - curr_height - footer_height - 4;
+    var avaHegiht = reportHeight - curr_height - footer_height;
 
     return avaHegiht;
 }
@@ -88,7 +92,6 @@ function getNumOfDataWithGroupField(band, avaHeight) {
 }
 
 /***********************************************************
- * 임시로 만든 함수.
  * 리포트에 밴드들을 그려줌(ChildBands 들을 그려주기 위해 재귀함수로 사용)
  * 인자 bands : 그려줄 밴드들 // layerName : 어느 Layer에 그려줄 지
  *
@@ -99,6 +102,10 @@ function getNumOfDataWithGroupField(band, avaHeight) {
  * 수정 : 2018-08-31
  * 그룹 헤더 밴드 구현
  * from 구영준
+ *
+ * 수정 : 2018-09-07
+ *  데이터밴드의 자식 밴드들을 함수로 빼서 구현
+ * from 안예솔
  * *********************************************************/
 function drawBand(bands, layerName, reportHeight, parentBand) {
 
@@ -157,14 +164,19 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                 numofData = getNumOfDataWithGroupField(band, avaHeight);
             }else{
                 dataBandHeight = getAvaHeight(div_id, reportHeight);
-                var dataBandFooterHeight = getChildBandHeight(band);
-                var tableLabel = band.controlList.anyType.Labels.TableLabel;
+                if (band.childFooterBands !== null) { // 자식 풋터 밴드에서 재호출
+                    var dataBandFooterHeight = getChildBandHeight(band);
+                }
+                if (band.controlList.anyType.Labels !== undefined) { // 자식 풋터 밴드에서 재호출
+                    var tableLabel = band.controlList.anyType.Labels.TableLabel;
+                }
                 $('#' + div_id).css({
                     'width': band.rectangle.width,
                     'height': dataBandHeight-dataBandFooterHeight,
-                    'border-bottom': "1px solid red"
                 });
-                numofData = getNumOfDataInOnePageNonObject(tableLabel, div_id);
+                if (band.controlList.anyType.Labels !== undefined) { // 자식 풋터 밴드에서 재호출
+                    numofData = getNumOfDataInOnePageNonObject(tableLabel, div_id);
+                }
             }
         }
 
@@ -172,15 +184,10 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
 
         switch(band.attributes["xsi:type"]) {
             case 'BandData' :
-                if (band.childFooterBands) {
-                    // console.log("childFooterBands 2 : ",band.childFooterBands[0]);
-                    // console.log("childHeaderBands 2 : ",band.childHeaderBands[0]);
-                }
                 var dataBandHeight = 0;
                 if(groupFieldArray.length > 0 && band.childHeaderBands !== null) { // band.childHeaderBands !== null 추가
                     // childHeaderBands중에 BandGroupHeader가 있는 지 판단하기!
                     if (remainData) {
-                        //ToDo +1 을 해주는 방법 말고 다른 방법이 있을 것 같기도 함.
                         dataBandHeight = getBandHeightWithGroupField(band, numofData - groupDataRow);
                     } else {
                         dataBandHeight = getBandHeightWithGroupField(band, numofData-1);
@@ -189,8 +196,6 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                     $('#' + div_id).css({
                         'width': band.rectangle.width,
                         'height': dataBandHeight,
-                        'border-bottom': "1px solid red",
-                        'zIndex' : -10
                     });
                     var dataCount = groupFieldArray[groupFieldNum].length;
                     var groupRemainData = (dataCount - groupDataRow);
@@ -221,8 +226,6 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                     'height': band.rectangle.height,
                     'position': 'absolute',
                     'bottom': 0 + "px",
-                    'border-bottom': "1px solid red",
-                    'zIndex' : -10
                 });
                 break;
             case 'BandGroupHeader', 'BandGroupFooter' :
@@ -230,16 +233,12 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                     $('#' + div_id).css({
                         'width': band.rectangle.width,
                         'height': band.rectangle.height,
-                        'border-bottom': "1px solid red",
-                        'display' : 'none',
-                        'zIndex' : -10
+                        'display' : 'none'
                     });
                 }else{
                     $('#' + div_id).css({
                         'width': band.rectangle.width,
                         'height': band.rectangle.height,
-                        'border-bottom': "1px solid red",
-                        'zIndex' : -10
                     });
                 }
                 break;
@@ -247,8 +246,6 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                 $('#' + div_id).css({
                     'width': band.rectangle.width,
                     'height': band.rectangle.height,
-                    'border-bottom': "1px solid red",
-                    'zIndex' : -10
                 });
                 break;
         }
@@ -343,7 +340,6 @@ function drawChildHeaderBand(childBands, layerName, reportHeight, band) {
     drawBand(childHeaderBandArray, layerName, reportHeight, band);
 }
 
-///////////////////////// 헤더 해결한 다음에 할래요...
 /***********************************************************
  기능 : 밴드들의 childFooterBand를 그린다.
  만든이 : 안예솔
@@ -394,6 +390,10 @@ function drawChildFooterBand(childBands, layerName, reportHeight, band) {
     drawBand(childFooterBandArray, layerName, reportHeight, band);
 }
 
+/***********************************************************
+ 기능 : 데이터 밴드의 자식 밴드의 출력 여부에 따라 길이를 구함
+ 만든이 : 구영준
+ * *********************************************************/
 function getChildBandHeight(band) {
     var childBandsHeight = 0;
     var childBands = band.childFooterBands;
