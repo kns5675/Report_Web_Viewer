@@ -32,7 +32,7 @@ function getFooterHeight(bands) {
             bandDataIndex = i;
         }
         if (i > bandDataIndex){
-            console.log(bands[i]);
+            // console.log(bands[i]);
             footer_height += Number(bands[i].rectangle.height);
         }
     }

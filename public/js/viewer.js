@@ -596,25 +596,15 @@ function print_test() {
  ******************************************************************/
 function autoSize(pTagId) {
     var tag = $('#' + pTagId);
-    // var tag_rowP = (tag[0].innerHTML).split('</p>');
-    // console.log("tag_rowP : ",tag_rowP);
-    // if(tag_rowP){
     var fontSize = (tag.css('font-size')).split('p');
     var tag_row = (tag[0].innerHTML).split('<br>');
-    var big_row = 0;
+    var big_row = 1;
     tag_row.forEach(function (e) {
         var cutting_row = e.replace(/(^\s*)|(\s*$)/, '');
-        // var tag_cut = cutting_row.replace(/[0-9]|[^\!-z]/gi,"");
-        // console.log("tag_cut : ",tag_cut);
-        // if(tag_cut){ //영어가 있으면
-        //     fontSize = 10;
-        // }
         if(big_row < cutting_row.length){
             big_row = cutting_row.length;
         }
     });
-    // }
-
     // 16pt 이런 식으로 값이 받아져서 p앞으로 끊어서 숫자만 받아오려고 한 문자열 자르기 작업
     var brTag = $('#' + pTagId + ' br');
     var brCount = brTag.length;
@@ -623,18 +613,23 @@ function autoSize(pTagId) {
         one_line = 6;
     }
     // text중에서 <br/>의 개수를 구함
-    var widths = (fontSize[0]-2) * big_row;
+    var widths;
+    if(fontSize[0] > 20){
+        widths = (fontSize[0]) * big_row;
+    }else if(fontSize[0] < 10){
+        widths = (fontSize[0]+2) * big_row;
+    }else{
+        widths = (fontSize[0]-3) * big_row;
+    }
     var designLayerSize = $(".designLayer")[0].style.width.split('p');
-    console.log("widths : ",widths);
-    console.log("designLayerSize : ",designLayerSize[0]);
     if(widths>designLayerSize[0]){
         widths = designLayerSize;
     }
     var height = fontSize[0] * (brCount + 1) + brCount + one_line;
     tag.parent().css({
         'width' : widths + 'px',
-        'height': height + 'px',
-        'top': height + fontSize[0] + 'px'
+        'height': height + 'px'
+        // 'top': (height*1 + fontSize[0]*1) + 'px'
     });
     tag.css({
         'margin-left': '3px',
