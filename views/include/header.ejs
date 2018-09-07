@@ -38,24 +38,37 @@
             $("div.room").mouseleave(function(){
                 $(this).css("background-color","white");  //지연 - 여러페이지보기 front개발중 개발 보류
             });
-            $(".saveAsPdf").on("mouseover", function(){
-                makePdf();  //지연 - 화면을 pdf로 만드는 function()
-            });
             $(".saveAsPdf").on("click", function(){
-                saving();  //지연 - 화면을 pdf로 만든 후 저장하는 function()
+                var imageName = "PDF";
+                beginLoading(imageName);
+                $("#loadingModal").css("display","block");
+                makePdf().then(function(area){
+                    beforeSaving(area[0], area[1], area[2]).then(function(area){
+                        createPdf(area[0], area[1], area[2]).then(function(){
+                            saving();
+                            endingLoading();
+                          }
+                        );
+                    });
+                }).then(function(){
+                });
             });
             $("#showpages").on("click", function () {
                 print_test();
             });
             $("#saveAsHTML").on("mouseup",function(){
+                var imageName = 'HTML';
+                beginLoading(imageName);
                 makeHTML();
+                endingLoading();
             });
-
-
         });
     </script>
     <style>
       a:visited{
+        text-decoration:none;
+      }
+      a{
         text-decoration:none;
       }
     </style>

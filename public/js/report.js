@@ -35,13 +35,14 @@ function makeReport(report) {
 
     //현재 찍힌 데이터 로우 행이 전체 데이터 보다 작을 경우 재귀함수
     // 클 경우 함수 종료 후 다음 리포트 생성
-    // if (curDatarow < dt.length) {
-    //     reportPageCnt++;
-    //     makeReport(report);
-    // } else {
-    //     reportPageCnt = 1;
-    //
-    // }
+    if (curDatarow < dt.length) {
+        reportPageCnt++;
+
+        makeReport(report);
+    } else {
+        reportPageCnt = 1;
+
+    }
 }
 
 /***********************************************************
@@ -86,18 +87,44 @@ function getNumOfPage(report) {
 /***********************************************************
  기능 : 그룹 헤더/풋터 일 경우 데이터 밴드 길이 계산
  1. 그룹 헤더/풋터 일 경우 그룹 데이터의 길이 만큼의 데이터 길이
- 2. th 길이 + td길이 * 데이터 개수
+ 2. th 길이 + td길이 * 데이터 개수 + 테이블 라벨의 두께의 합
  만든이 : 구영준
  * *********************************************************/
 function getBandHeightWithGroupField(band, numOfData) {
-
-    // var dataCount = groupFieldArray[groupFieldNum].length;
     var labels = band.controlList.anyType.Labels.TableLabel;
-
+    var tableSpacing = 0;
+    var titleBorderTopThickness = 0;
+    var titleBorderBottomThickness = 0;
+    var valueBorderBottomThickness = 0;
     var titleHeight = Number(labels[0].Rectangle.Height._text);
     var valueHeight = Number(labels[labels.length - 1].Rectangle.Height._text);
+    var allLabelBorderThickness = 0;
 
-    return titleHeight + valueHeight * numOfData;
+    if(band.controlList.anyType.Rectangle.Y !== undefined){
+        tableSpacing = Number(band.controlList.anyType.Rectangle.Y._text);
+    }
+
+    labels.forEach(function(label){
+        if(label._attributes["xsi:type"] == "DynamicTableTitleLabel"){
+            var labelBottom = Number(label.BorderThickness.Bottom._text);
+            var labelTop = Number(label.BorderThickness.Top._text);
+
+            if(titleBorderBottomThickness < Number(label.BorderThickness.Bottom._text))
+                titleBorderBottomThickness = labelBottom;
+
+            if(titleBorderTopThickness < Number(label.BorderThickness.Top._text))
+                titleBorderTopThickness = labelTop;
+
+        }else{
+            var labelBottom = Number(label.BorderThickness.Bottom._text)
+            if(valueBorderBottomThickness < Number(label.BorderThickness.Bottom._text))
+                valueBorderBottomThickness = labelBottom;
+        }
+    });
+
+    allLabelBorderThickness = titleBorderBottomThickness * numOfData + titleBorderBottomThickness + titleBorderTopThickness;
+
+    return tableSpacing + titleHeight + valueHeight * numOfData + allLabelBorderThickness;
 }
 
 /***********************************************************
@@ -148,6 +175,24 @@ function getNumOfDataInOnePage(tableLabel, divId) {
     }
     var firstLine = tableLabel[0].rectangle.height;
     var dataLine = Number(tableLabel[tableLabel.length - 1].rectangle.height);
+
+    return Math.floor((bandDataHeight - firstLine) / dataLine);
+}
+
+/***********************************************************
+ 기능 : 객체 생성 없이 한 페이지에 들어갈 데이터 개수 구하기
+ : (밴드 길이 - 첫 행 높이) / 데이터 라벨 높이 => 한페이지에 들어가야할 밴드 개수
+ 만든이 : 구영준
+ * *********************************************************/
+function getNumOfDataInOnePageNonObject(tableLabel, divId) {
+    var bandDataHeight = 0;
+    if (typeof divId == 'string') {
+        bandDataHeight = $('#' + divId).height();
+    } else if (typeof divId == 'number') {
+        bandDataHeight = divId;
+    }
+    var firstLine = Number(tableLabel[0].Rectangle.Height._text);
+    var dataLine = Number(tableLabel[tableLabel.length - 1].Rectangle.Height._text);
 
     return Math.floor((bandDataHeight - firstLine) / dataLine);
 }
