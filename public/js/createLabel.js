@@ -163,11 +163,11 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData) {
     var div = $('#' + divId);
     div.append('<div id = "Table' + tableNum + '"></div>');
     var divIdTable = $('#Table' + tableNum);
-    divIdTable.append('<div id="dynamicTable_resizing_div_packing'+dynamicTableNum + '"></div>');
-    var dynamicTable_resizing_div_packing = $("#dynamicTable_resizing_div_packing"+dynamicTableNum);
-    dynamicTable_resizing_div_packing.append('<div id="dynamicTable_resizing_div'+dynamicTableNum + '"></div>');
+    divIdTable.append('<div id="dynamicTable_resizing_div_packing' + dynamicTableNum + '"></div>');
+    var dynamicTable_resizing_div_packing = $("#dynamicTable_resizing_div_packing" + dynamicTableNum);
+    dynamicTable_resizing_div_packing.append('<div id="dynamicTable_resizing_div' + dynamicTableNum + '"></div>');
 
-    var dynamicTable_resizing_div = $("#dynamicTable_resizing_div"+dynamicTableNum);
+    var dynamicTable_resizing_div = $("#dynamicTable_resizing_div" + dynamicTableNum);
     var temp_table_class = table.id.substring(0, 4); // 임시로 table을 인식하기 위한 번호 - 전형준
     dynamicTable_resizing_div.append('<table id="dynamicTable' + dynamicTableNum + '" class="table table-' + temp_table_class + '"></table>');
     // dynamicTable_resizing_div.addClass("NormalLabel_scope");
@@ -186,7 +186,7 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData) {
         'height': table.rectangle.height + 'px'
     });
     tableId.append('<tr id = "dynamicTitleLabel' + dynamicTitleLabelNum + '"></tr>');
-    if(groupFieldArray.length < 1) {
+    if (groupFieldArray.length < 1) {
         numOfData = getNumOfDataInOnePage(tableLabel, divId); //한 페이지에 들어갈 데이터 개수
     }
     var dt = Object.values(dataTable.DataSetName)[0];
@@ -214,6 +214,7 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData) {
         dynamicValueLabelNum++;
     }
 }
+
 /**************************************************************************************
  기능 : GroupFieldArray가 없을 경우
  DynamicTableValueLabel(동적 테이블 밸류 라벨)을 화면에 그려주는 함수를 만든다.
@@ -272,12 +273,13 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
         }
     }
 }
+
 /**************************************************************************************
  기능 : GroupFieldArray가 있을 경우
  DynamicTableValueLabel(동적 테이블 밸류 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 구영준
  **************************************************************************************/
-function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, numOfData){
+function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, numOfData) {
     for (var j = groupDataRow; j < numOfData; j++) {
         var data = groupFieldArray[groupFieldNum];
         var rowNum = curDatarow + j;
@@ -291,11 +293,11 @@ function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, nu
                 var key_data = data[j][key]._text;
                 var table_reform = table_format_check(data, valueTrId, key_data, label);
 
-                if(label.labelTextType == 'Number' && label.format != undefined){
+                if (label.labelTextType == 'Number' && label.format != undefined) {
                     valueTrId.append(
                         '<td class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '">' + table_reform + '</td>'
                     );
-                }else{
+                } else {
                     valueTrId.append(
                         '<td class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '">' + table_reform + '</td>'
                     );
@@ -1482,6 +1484,55 @@ function drawingNormalLabel(data, divId, band_name) {
         'color': data.textColor // 글자 색
     });
 
+    // 바코드 - 사용한 코드 때문에 크기가 마음대로 줄어듦..
+    if (data.drawingType !== undefined && data.drawingType === "Barcode") {
+        var barcode_text = data.text === undefined ? 'ERROR' : data.text;
+        var barcode_type = data.barcodeType === undefined ? 'code39' : data.barcodeType.toLowerCase();
+        normalLabelId.barcode(barcode_text, barcode_type);
+        normalLabelId.css('overflow', 'visible');
+
+        // 바코드의 높이를 조금 줄여줌
+        normalLabelId.children('div:not(:last-child)').css('height',
+            Number(normalLabelId.children('div:not(:last-child)').css('height').substring(0,
+                normalLabelId.children('div:not(:last-child)').css('height').length-2)) * 0.8 + 'px'
+        );
+
+        // 바코드 폰트 크기를 조금 키워줌
+        normalLabelId.children('div:last-child').css({
+            'font-size' : '15px',
+            'font-weight' : 'bold',
+            'line-height' : '15px'
+        });
+
+        // 바코드를 감싸는 div의 크기를 글씨 div의 높이 +  바코드 div의 높이로 설정
+        normalLabelId.css('height',
+            Number(normalLabelId.children('div:first-child').css('height').substring(0, normalLabelId.children('div:first-child').css('height').length-2))
+            + Number(normalLabelId.children('div:last-child').css('height').substring(0, normalLabelId.children('div:last-child').css('height').length-2)) + 'px'
+        );
+        Lock_check(data, normalLabelId, div);
+        normalLabelNum++;
+        return;
+    }
+
+    // QR코드
+    if (data.drawingType !== undefined && data.drawingType === "QrBarcode") {
+        var qrcode_text = data.text === undefined ? '??? ??' : data.text;
+        normalLabelId.qrcode({
+            render: "canvas",
+            width: data.rectangle.width,
+            height: data.rectangle.height,
+            text: qrcode_text
+        });
+        normalLabelId.find('canvas').css({
+            'width' : '100%',
+            'height' : '100%'
+        })
+        Lock_check(data, normalLabelId, div);
+        normalLabelNum++;
+        return;
+    }
+
+
     // 라벨 형태 -> 원
     if (data.labelShape == 'Circle') {
         normalLabelId.css({
@@ -2593,7 +2644,6 @@ function autoSizeTrue(pTagId) {
     // text중에서 <br/>의 개수를 구함
 
     var height = fontSize[0] * (brCount + 1) + brCount;
-    console.log("autoSizeTrue height : ",height);
     tag.parent().css({
         'height': height,
         'top': height + fontSize[0] + 'px'
@@ -2808,7 +2858,7 @@ function clipping(text, divId, pTagId) {
             temp[i] = temp[i].trim();
             space = temp[i].match(/\s/gi); // 공백 찾기
             if (temp[i].length > max) {
-                if(space == null) {
+                if (space == null) {
                     max = temp[i].length;
                 } else {
                     max = temp[i].length - space.length;
@@ -2816,7 +2866,7 @@ function clipping(text, divId, pTagId) {
             }
         }
     }
-    if(space == null) {
+    if (space == null) {
         var spacing = (parentWidth[0] - fontSize[0] * max) / 2;
     } else {
         var spacing = (parentWidth[0] - fontSize[0] * max) / 2 + space.length * (fontSize[0] / 2);
