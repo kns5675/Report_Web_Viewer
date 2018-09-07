@@ -37,6 +37,7 @@ function makeReport(report) {
     // 클 경우 함수 종료 후 다음 리포트 생성
     if (curDatarow < dt.length) {
         reportPageCnt++;
+
         makeReport(report);
     } else {
         reportPageCnt = 1;
@@ -94,10 +95,11 @@ function getBandHeightWithGroupField(band, numOfData) {
     // var dataCount = groupFieldArray[groupFieldNum].length;
     var labels = band.controlList.anyType.Labels.TableLabel;
 
+    var tableSpacing = Number(band.controlList.anyType.Rectangle.Y._text);
     var titleHeight = Number(labels[0].Rectangle.Height._text);
     var valueHeight = Number(labels[labels.length - 1].Rectangle.Height._text);
 
-    return titleHeight + valueHeight * numOfData;
+    return tableSpacing + titleHeight + valueHeight * numOfData;
 }
 
 /***********************************************************
@@ -148,6 +150,24 @@ function getNumOfDataInOnePage(tableLabel, divId) {
     }
     var firstLine = tableLabel[0].rectangle.height;
     var dataLine = Number(tableLabel[tableLabel.length - 1].rectangle.height);
+
+    return Math.floor((bandDataHeight - firstLine) / dataLine);
+}
+
+/***********************************************************
+ 기능 : 객체 생성 없이 한 페이지에 들어갈 데이터 개수 구하기
+ : (밴드 길이 - 첫 행 높이) / 데이터 라벨 높이 => 한페이지에 들어가야할 밴드 개수
+ 만든이 : 구영준
+ * *********************************************************/
+function getNumOfDataInOnePageNonObject(tableLabel, divId) {
+    var bandDataHeight = 0;
+    if (typeof divId == 'string') {
+        bandDataHeight = $('#' + divId).height();
+    } else if (typeof divId == 'number') {
+        bandDataHeight = divId;
+    }
+    var firstLine = Number(tableLabel[0].Rectangle.Height._text);
+    var dataLine = Number(tableLabel[tableLabel.length - 1].Rectangle.Height._text);
 
     return Math.floor((bandDataHeight - firstLine) / dataLine);
 }

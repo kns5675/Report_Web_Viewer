@@ -154,8 +154,8 @@ function readURL(input) {
     if($("#dialog_div"+ImageNum)[0]){
         $("#dialog_div"+ImageNum).remove();
     }
+    // tag_Making(scope);
     tag_Making(scope).then(function (resolve) {
-        console.log("data : ",resolve);
         image_setting();
     });
     /******************************************************************
@@ -205,7 +205,7 @@ async function tag_Making(scope, imgae_src, imgnum) {
     var images = document.createElement("img");
     imageid = "image"+ImageNum;
     images.id = imageid;
-    images.class = "Images";
+    images.className = "Images";
     if(imgae_src){
         images.src = imgae_src;
     }else{
@@ -259,28 +259,46 @@ async function tag_Making(scope, imgae_src, imgnum) {
  ******************************************************************/
 function image_moal_fadeout() {
     var modalLayer = $("#image_dialog");
-    // var dialog_div = $("#dialog_div"+ImageNum);
     modalLayer.fadeOut("slow");
-    // dialog_div.css({"visibility": "hidden"});
-    // $("#image_update_cancel"+ImageNum).css({"visibility": "hidden"});
 }
 /******************************************************************
  기능 : 이미지 앞으로/뒤로 기능(영역 변경이 아닌 이미지간의 순서만 변경).
  만든이 : hagdung-i
+
+ 기능 : 이미지 순서 맨 앞, 맨 뒤, 앞으로, 뒤로 버튼 기능.
+ 날짜 : 2018-09-05
+ 만든이 : hagdung-i
  ******************************************************************/
-function image_level(level, ImageNum) {
+function image_level(level, ImageNum, index) {
     $(".ImageDiv").each(function (i, e) {
         if(level === "up"){ //이미지 순서 앞으로/뒤로
-            if($("#imagediv"+ImageNum)[0].style.zIndex < e.style.zIndex){
-                $("#imagediv"+ImageNum)[0].style.zIndex = e.style.zIndex*1+1;
-            }else if($("#imagediv"+ImageNum)[0].style.zIndex === e.style.zIndex){
+            if($("#imagediv"+ImageNum)[0].style.zIndex < e.style.zIndex){ //선택한 이미지보다 zindex가 크거나 같은 애가 있을 경우
+                if(index) {  //맨 앞으로인지 그냥 앞으로 인지 구분
+                    if (e.style.zIndex >= 999) {
+                        //이미 맨 앞으로 보낸 이미지가 있는지(999보다 클때), 현재 이미지가 그보다 작거나 같은지 구분
+                        $("#imagediv" + ImageNum)[0].style.zIndex = e.style.zIndex * 1 + 1;
+                    } else {
+                        $("#imagediv" + ImageNum)[0].style.zIndex = 999;
+                    }
+                }else {
+                    $("#imagediv" + ImageNum)[0].style.zIndex = e.style.zIndex * 1 + 1;   //큰애보다 1만 더 크게
+                }
+            }else if($("#imagediv"+ImageNum)[0].style.zIndex === e.style.zIndex){//작을 경우도 자기 자신에 1만 증가.
                 $("#imagediv"+ImageNum)[0].style.zIndex = e.style.zIndex*1+10;
             }
         }else if (level === "down"){
             if($("#imagediv"+ImageNum)[0].style.zIndex > e.style.zIndex){
-                $("#imagediv"+ImageNum)[0].style.zIndex = e.style.zIndex-1;
-            }else if($("#imagediv"+ImageNum)[0].style.zIndex === e.style.zIndex){
-                $("#imagediv"+ImageNum)[0].style.zIndex = e.style.zIndex-10;
+                if(index) {  //맨 앞으로인지 그냥 앞으로 인지 구분
+                    if (e.style.zIndex <= -1) {   //이미 맨 뒤로 보낸 이미지가 있는지 구분
+                        $("#imagediv" + ImageNum)[0].style.zIndex = e.style.zIndex * 1 - 1;
+                    } else {
+                        $("#imagediv" + ImageNum)[0].style.zIndex = -1;
+                    }
+                }else {
+                    $("#imagediv" + ImageNum)[0].style.zIndex = e.style.zIndex * 1-1;   //큰애보다 1만 더 크게
+                }
+            }else if($("#imagediv"+ImageNum)[0].style.zIndex === e.style.zIndex){//작을 경우도 자기 자신에 1만 증가.
+                $("#imagediv"+ImageNum)[0].style.zIndex = e.style.zIndex*1-10;
             }
         }
     });
@@ -294,19 +312,20 @@ async function image_setting(){
      기능 : 이미지에 마우스 올릴 시에만 이미지 속성 버튼이 나타남.
      만든이 : hagdung-i
      ******************************************************************/
-    console.log("imagedivid : ",imagedivid);
-    $("#"+imagedivid).on("mouseover",function () {
-        var styles = $("#"+set_buttonid);
+    $(".ImageDiv").on("mouseover",function () {
+        var id = this.id.replace(/[^0-9]/g,'');
+        var styles = $("#image_button"+id);
         styles[0].style.visibility = "visible";
     });
-    $("#"+imagedivid).on("mouseleave",function () {
-        var styles = $("#"+set_buttonid);
+    $(".ImageDiv").on("mouseleave",function () {
+        var id = this.id.replace(/[^0-9]/g,'');
+        var styles = $("#image_button"+id);
         styles[0].style.visibility = "hidden";
     });
     var modalLayer = $("#image_dialog");
     var dialog = $("#dialog");
-    var dialog_div = $("#dialog_div");
-    dialog_div.css({"visibility": "hidden"});
+    // var dialog_div = $("#dialog_div");
+    // dialog_div.css({"visibility": "hidden"});
     var marginLeft = dialog.outerWidth()/2;
     var marginTop = dialog.outerHeight()/2;
     /******************************************************************
@@ -343,31 +362,16 @@ async function image_setting(){
      만든이 : hagdung-i
      ******************************************************************/
     $("#limit_fore_dialog").on("click", function () {
-        if($("#image"+CImageNum)[0]){
-            imgae_src = $("#image"+CImageNum)[0].src;
-            $("#ImageDivPacking"+CImageNum).remove();
-        }
-        count++;
-        console.log("remove_end count : ", count);
-        remove_end(CImageNum).then(function (resolveData) {
-            var scope = "foreGroundLayer";
-            console.log("3");
-            tag_Making(scope,resolveData, CImageNum);
-        });
+        image_level("up",CImageNum, 500);
+        image_moal_fadeout(CImageNum);
     });
     /******************************************************************
      기능 : 이미지 속성 - 이미지 맨 뒤로 보내기 버튼 클릭시 이벤트
      만든이 : hagdung-i
      ******************************************************************/
     $("#limit_back_dialog").on("click", function () {
-        if($("#image"+CImageNum)[0]){
-            imgae_src = $("#image"+CImageNum)[0].src;
-            $("#ImageDivPacking"+CImageNum).remove();
-        }
-        remove_end(CImageNum).then(function (resolveData) {
-            var scope = "backGroundLayer";
-            tag_Making(scope,resolveData, CImageNum);
-        });
+        image_level("down",CImageNum, "limit");
+        image_moal_fadeout(CImageNum);
     });
     /******************************************************************
      기능 : 이미지 속성 - 이미지 앞으로 보내기 버튼 클릭시 이벤트
@@ -411,9 +415,7 @@ function DRD_button() {
  만든이 : hagdung-i
  ******************************************************************/
 async function remove_end(CImageNum) {
-    console.log("1");
     return new Promise(function (resolve) {
-        console.log("2");
         image_moal_fadeout(CImageNum);
         resolve(imgae_src);
     });
