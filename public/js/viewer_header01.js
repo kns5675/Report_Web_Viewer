@@ -353,7 +353,6 @@ async function image_setting(){
      만든이 : hagdung-i
      ******************************************************************/
     $("#image_dialog_delete").on("click", function () {
-        console.log("CImageNum : ",CImageNum);
         $("#ImageDivPacking"+CImageNum).remove();
         image_moal_fadeout();
     });
@@ -396,13 +395,11 @@ async function image_setting(){
  ******************************************************************/
 $(function() {
     $('#image_insert').on("change", function () {
-        console.log("this : ",this);
         readURL(this);
     });
 });
 function DRD_button() {
     $("#DRD_Start").on("click", function () {
-        console.log("DRD_Start click");
 
         // shell.echo('hello world');
     });

@@ -217,6 +217,8 @@ function setDesignLayer(report) {
         'margin-right': report.margin.height + 'px',
         'margin-left': report.margin.width + 'px',
         'position': 'absolute',
+        'background-color' : 'rgba(255, 0, 0, 0)',
+        'z-index' : 0
     });//추가 - 하지연
 
     var layerName = "designLayer" + pageNum;
@@ -369,6 +371,7 @@ function setReport(report) {
     $('#forcopyratio' + reportNum).css('margin-right', report.margin.height + 'px');
     $('#forcopyratio' + reportNum).css('margin-left', report.margin.width + 'px');
     $('#forcopyratio' + reportNum).css('position', 'absolute');
+    $('#forcopyratio' + reportNum).css('zIndex', -11);
 
 
     setBackGroundLayer(report);

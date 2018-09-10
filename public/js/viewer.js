@@ -477,109 +477,115 @@ function howmanyPages(thisvalue){
 }
 
 //학준 추가
-    function band_dbclick_event() {
-        $(".NormalLabel_scope").on({
-            "dblclick": function () {
-                var this_id = this.children[0].id;
-                var current = this.id;
-                var current_width = this.style.width;
-                var current_height = this.style.height;
-                var this_text = $("#" + this_id)[0].innerText;
+    function band_dbclick_event(data) {
+        var Editable = data.ReportTemplate.ReportList.anyType.Editable._text;
+        console.log("Editable : ",Editable);
+        if(Editable == "true"){
+            $(".NormalLabel_scope").on({
+                "dblclick": function () {
+                    console.log("test");
+                    var this_id = this.children[0].id;
+                    var current = this.id;
+                    var current_width = this.style.width;
+                    var current_height = this.style.height;
+                    var this_text = $("#" + this_id)[0].innerText;
 
-                if ($("#text_area")[0] === undefined) {
-                    var text_div = document.createElement("div");
-                    text_div.id = "text_div";
+                    if ($("#text_area")[0] === undefined) {
+                        var text_div = document.createElement("div");
+                        text_div.id = "text_div";
 
-                    var text_area = document.createElement('textarea');
-                    text_area.id = "text_area";
-                    text_area.value = this_text;
-                    text_area.style.width = current_width;
-                    text_area.style.height = current_height;
-                    text_area.zIndex = 999;
+                        var text_area = document.createElement('textarea');
+                        text_area.id = "text_area";
+                        text_area.value = this_text;
+                        text_area.style.width = current_width;
+                        text_area.style.height = current_height;
+                        text_area.zIndex = 999;
 
-                    this.style.borderWidth = "3px";
-                    this.style.borderColor = "blue";
-                    this.style.borderStyle = "dotted solid";
+                        this.style.borderWidth = "3px";
+                        this.style.borderColor = "blue";
+                        this.style.borderStyle = "dotted solid";
 
-                    document.getElementById(current).appendChild(text_div);
-                    document.getElementById(text_div.id).appendChild(text_area);
+                        document.getElementById(current).appendChild(text_div);
+                        document.getElementById(text_div.id).appendChild(text_area);
 
-                    document.getElementById(text_area.id).focus();
-                }
-            },
-            "keydown": function (key) {
-                if (key.keyCode === 13) { //enter 처리
-                    if(!key.shiftKey){  //shift + enter 처리
-                        var insert_text = $("#text_area").val();
-                        var text_convert = insert_text.replace(/(?:\r\n|\r|\n)/g, '<br />'); // html 문법으로 변환.
-                        var this_id = this.children[0].id;
-                        $("#"+this_id)[0].innerHTML = text_convert;
+                        document.getElementById(text_area.id).focus();
+                    }
+                },
+                "keydown": function (key) {
+                    if (key.keyCode === 13) { //enter 처리
+                        if(!key.shiftKey){  //shift + enter 처리
+                            var insert_text = $("#text_area").val();
+                            var text_convert = insert_text.replace(/(?:\r\n|\r|\n)/g, '<br />'); // html 문법으로 변환.
+                            var this_id = this.children[0].id;
+                            $("#"+this_id)[0].innerHTML = text_convert;
+                            $("#text_div").remove();
+                            this.style.borderWidth = "1px";
+                            this.style.borderColor = "black";
+                            this.style.borderStyle = "solid";
+                        }
+                    }else if (key.keyCode === 27){ //esc 처리
                         $("#text_div").remove();
                         this.style.borderWidth = "1px";
                         this.style.borderColor = "black";
                         this.style.borderStyle = "solid";
                     }
-                }else if (key.keyCode === 27){ //esc 처리
-                    $("#text_div").remove();
-                    this.style.borderWidth = "1px";
-                    this.style.borderColor = "black";
-                    this.style.borderStyle = "solid";
                 }
-            }
-        });
-        $(".DynamicTableHeader").on({
-            "dblclick": function () {
-                var current = this.id;
-                console.log("this : ",this);
-                console.log("current : ",current);
-                var current_width = this.style.width;
-                var current_height = this.style.height;
-                var this_text = $("#" + current)[0].innerText;
+            });
+            $(".DynamicTableHeader").on({
+                "dblclick": function () {
+                    var current = this.id;
+                    console.log("this : ",this);
+                    console.log("current : ",current);
+                    var current_width = this.style.width;
+                    var current_height = this.style.height;
+                    var this_text = $("#" + current)[0].innerText;
 
-                if ($("#text_area")[0] === undefined) {
-                    var text_div = document.createElement("div");
-                    text_div.id = "text_div";
+                    if ($("#text_area")[0] === undefined) {
+                        var text_div = document.createElement("div");
+                        text_div.id = "text_div";
 
-                    var text_area = document.createElement('textarea');
-                    text_area.id = "text_area";
-                    text_area.value = this_text;
-                    text_area.style.width = current_width;
-                    text_area.style.height = current_height;
-                    text_area.zIndex = 999;
+                        var text_area = document.createElement('textarea');
+                        text_area.id = "text_area";
+                        text_area.value = this_text;
+                        text_area.style.width = current_width;
+                        text_area.style.height = current_height;
+                        text_area.zIndex = 999;
 
-                    this.style.borderWidth = "3px";
-                    this.style.borderColor = "blue";
-                    this.style.borderStyle = "dotted solid";
+                        this.style.borderWidth = "3px";
+                        this.style.borderColor = "blue";
+                        this.style.borderStyle = "dotted solid";
 
-                    document.getElementById(current).appendChild(text_div);
-                    document.getElementById(text_div.id).appendChild(text_area);
+                        document.getElementById(current).appendChild(text_div);
+                        document.getElementById(text_div.id).appendChild(text_area);
 
-                    document.getElementById(text_area.id).focus();
-                }
-            },
-            "keydown": function (key) {
-                if (key.keyCode === 13) {
-                    if(!key.shiftKey){
-                        var insert_text = $("#text_area").val();
-                        var text_convert = insert_text.replace(/(?:\r\n|\r|\n)/g, '<br />'); // html 문법으로 변환.
-                        $("#"+this.id)[0].innerHTML = text_convert;
+                        document.getElementById(text_area.id).focus();
+                    }
+                },
+                "keydown": function (key) {
+                    if (key.keyCode === 13) {
+                        if(!key.shiftKey){
+                            var insert_text = $("#text_area").val();
+                            var text_convert = insert_text.replace(/(?:\r\n|\r|\n)/g, '<br />'); // html 문법으로 변환.
+                            $("#"+this.id)[0].innerHTML = text_convert;
+                            $("#text_div").remove();
+                            this.style.borderWidth = "1px";
+                            this.style.borderColor = "black";
+                            this.style.borderStyle = "solid";
+                        }
+                    }else if (key.keyCode === 27){
                         $("#text_div").remove();
                         this.style.borderWidth = "1px";
                         this.style.borderColor = "black";
                         this.style.borderStyle = "solid";
                     }
-                }else if (key.keyCode === 27){
-                    $("#text_div").remove();
-                    this.style.borderWidth = "1px";
-                    this.style.borderColor = "black";
-                    this.style.borderStyle = "solid";
                 }
-            }
-        });
+            });
 
-        $('.NormalLabel').on("click",function () {
-            autoSize(this.id);
-        });
+            $('.NormalLabel').on("click",function () {
+                autoSize(this.id);
+            });
+        }
+
     }
 
 function print_test() {

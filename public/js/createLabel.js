@@ -1435,6 +1435,7 @@ function drawingNormalLabel(data, divId, band_name) {
     // }
     div.css('position', 'relative');
     div.append('<div id = "NormalLabel' + normalLabelNum + '"></div>');
+
     var normalLabelId = $('#NormalLabel' + normalLabelNum);
 
     normalLabelId.addClass("NormalLabel_scope");
@@ -1469,7 +1470,6 @@ function drawingNormalLabel(data, divId, band_name) {
         }
     }
     var z_index = z_index_setting(band_name);
-
     normalLabelId.css({
         'width': data.rectangle.width,
         'height': data.rectangle.height,
@@ -1552,6 +1552,7 @@ function drawingNormalLabel(data, divId, band_name) {
     }
 
     normalLabelId.append('<p id = "PNormalLabel' + normalLabelNum + '"></p>');
+    console.log("data : ",data);
     Lock_check(data, normalLabelId, div);
 
     var pId = $('#PNormalLabel' + normalLabelNum);
@@ -2694,15 +2695,20 @@ function lineSpacing(text, spacing, pTagId) {
  ******************************************************************/
 function Lock_check(data, Label_id, div) { //라벨 데이터, 드래그 리사이즈 영역, 벗어나면 안되는 영역
     var Lock_check;
-    if (data.Lock === undefined) {
-        Lock_check = data.Lock;
-    } else {
-        Lock_check = data.Lock._text;
+    data.editable = 'false';
+    var editable_test = data.editable;
+    if(editable_test == 'true'){
+        if (data.Lock === undefined) {
+            Lock_check = data.Lock;
+        } else {
+            Lock_check = data.Lock._text;
+        }
+        if (!Lock_check) {
+            Label_id.draggable({containment: "#" + div[0].id, zIndex: 999});
+            Label_id.resizable({containment: "#" + div[0].id, autoHide: true});
+        }
     }
-    if (!Lock_check) {
-        Label_id.draggable({containment: "#" + div[0].id, zIndex: 999});
-        Label_id.resizable({containment: "#" + div[0].id, autoHide: true});
-    }
+
 }
 
 /******************************************************************
@@ -3022,7 +3028,7 @@ function characterSpacing(text, spacing, pTagId) {
 
 function z_index_setting(band_name) {
     if(band_name == "BandBackGround"){
-        var z_index = -1;
+        var z_index = -11;
     }else if(band_name == "BandForeGround"){
         var z_index = 100;
     }else{
