@@ -1552,7 +1552,6 @@ function drawingNormalLabel(data, divId, band_name) {
     }
 
     normalLabelId.append('<p id = "PNormalLabel' + normalLabelNum + '"></p>');
-    console.log("data : ",data);
     Lock_check(data, normalLabelId, div);
 
     var pId = $('#PNormalLabel' + normalLabelNum);

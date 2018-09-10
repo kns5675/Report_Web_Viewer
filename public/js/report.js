@@ -2,6 +2,7 @@ var pageNum = 1;
 var reportNum = 1;
 var curDatarow = 0;
 var groupFieldArray = [];
+var remainBand = [];
 
 /******************************************************************
  기능 : 페이지에서 Json 파일을 매개변수로 받아서 ReportTemplate를 만듬
@@ -223,7 +224,12 @@ function setDesignLayer(report) {
 
     var layerName = "designLayer" + pageNum;
     var reportHeight = report.rectangle.height;
-    drawBand(report.layers.designLayer.bands, layerName, reportHeight); // 추가 - 전형준
+    if(remainBand.length > 0){
+        drawBand(remainBand, layerName, reportHeight);
+        remainBand = [];
+    }else{
+        drawBand(report.layers.designLayer.bands, layerName, reportHeight); // 추가 - 전형준
+    }
 }
 
 /******************************************************************
@@ -374,9 +380,9 @@ function setReport(report) {
     $('#forcopyratio' + reportNum).css('zIndex', -11);
 
 
-    setBackGroundLayer(report);
+    // setBackGroundLayer(report);
     setDesignLayer(report);
-    setForeGroundLayer(report);
+    // setForeGroundLayer(report);
 
     // makeTableByData();
 
