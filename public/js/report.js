@@ -2,6 +2,7 @@ var pageNum = 1;
 var reportNum = 1;
 var curDatarow = 0;
 var groupFieldArray = [];
+var isDynamicTable = false;
 
 /******************************************************************
  기능 : 페이지에서 Json 파일을 매개변수로 받아서 ReportTemplate를 만듬
@@ -28,6 +29,21 @@ function makeReport(report) {
 
     }
 
+    // 180910 YeSol 추가
+    var controlLists=[];
+    var bands = report.layers.designLayer.bands;
+    bands.forEach(function (band) {
+        if(band.attributes['xsi:type'] == 'BandData') {
+            controlLists.push(band.controlList.anyType); // dataBand의 controlList배열
+        }
+    })
+
+    controlLists.forEach(function (controlList) {
+        if(controlList._attributes['xsi:type'] == 'ControlDynamicTable') {
+            isDynamicTable = true;
+        }
+    });
+
     setPage(report);
     setReport(report);
 
@@ -35,13 +51,11 @@ function makeReport(report) {
 
     //현재 찍힌 데이터 로우 행이 전체 데이터 보다 작을 경우 재귀함수
     // 클 경우 함수 종료 후 다음 리포트 생성
-    if (curDatarow < dt.length) {
+    if (curDatarow < dt.length && isDynamicTable == true) {
         reportPageCnt++;
-
         makeReport(report);
     } else {
         reportPageCnt = 1;
-
     }
 }
 
@@ -277,7 +291,6 @@ function setBackGroundLayer(report) {
  author : powerku
  ******************************************************************/
 function setBackGroundLayerDirection(report) {
-
     var backGroundLayer = $('#backGroundLayer' + pageNum);
     if (report.paperDirection) {
         backGroundLayer.css({
@@ -374,9 +387,9 @@ function setReport(report) {
     $('#forcopyratio' + reportNum).css('zIndex', -11);
 
 
-    setBackGroundLayer(report);
+    // setBackGroundLayer(report);
     setDesignLayer(report);
-    setForeGroundLayer(report);
+    // setForeGroundLayer(report);
 
     // makeTableByData();
 
@@ -473,7 +486,6 @@ function setForCopyRatioDirection(report) {  //추가 - 하지연
  내용 : 페이지 셋팅시 페이지 사이즈 변경.
  ******************************************************************/
 function setPage(report, width, height) {
-
     var paperType = report.paperType;
 
     $('#reportTemplate').append('<div id="pageForCopyRatio' + pageNum + '" class="pageforcopyratio paperType-' + paperType + '"></div>');//수정 - 하지연
@@ -499,7 +511,6 @@ function setPage(report, width, height) {
     var pageForCopyRatio = $('#pageForCopyRatio' + pageNum);
     pageForCopyRatio.css('border', 'solid red');
     pageForCopyRatio.css('background-color', 'lightgreen');
-
 }
 
 /******************************************************************
