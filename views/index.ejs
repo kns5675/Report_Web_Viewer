@@ -29,11 +29,14 @@
     <script src="js/drawingBand.js"></script>
     <script src="js/label.js"></script>
     <script src="js/createLabel.js"></script>
+    <script src="js/figure.js"></script>
+    <script src="js/createFigure.js"></script>
     <script src="js/drawCurrPageNTotalPage.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script>
         var data = <%-data%>;  //xml json 데이터
         var dataTable = <%- dataTable %>; //임시 데이터 dataTable
+        var paramTable = <%- paramTable %>; // 임시 파라미터 데이터 paramTable
 
         $(document).ready(function () {
             $("#header").load("/include/header.ejs");
