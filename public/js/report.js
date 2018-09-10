@@ -95,11 +95,12 @@ function getBandHeightWithGroupField(band, numOfData) {
     // var dataCount = groupFieldArray[groupFieldNum].length;
     var labels = band.controlList.anyType.Labels.TableLabel;
 
-    var tableSpacing = Number(band.controlList.anyType.Rectangle.Y._text);
+    // var tableSpacing = Number(band.controlList.anyType.Rectangle.Y._text);
     var titleHeight = Number(labels[0].Rectangle.Height._text);
     var valueHeight = Number(labels[labels.length - 1].Rectangle.Height._text);
 
-    return tableSpacing + titleHeight + valueHeight * numOfData;
+    // return tableSpacing + titleHeight + valueHeight * numOfData;
+    return titleHeight + valueHeight * numOfData;
 }
 
 /***********************************************************
@@ -319,7 +320,7 @@ function setForeGroundLayerDirection(report) {
  수정 : 하지연
  날짜 : 2018 - 09 - 03
  내용 : #page 하위에 forcopyratio라는 인쇄배율 조정을 위한 div를 생성하고
- forcopyratio라는 클래스 부여 & 스타일 생성
+        forcopyratio라는 클래스 부여 & 스타일 생성
  ******************************************************************/
 function setReport(report) {
     $(('#page' + pageNum)).append('<div id="forcopyratio' + reportNum + '"class = forcopyratio' + '></div>');//추가 - 하지연
