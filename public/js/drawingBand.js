@@ -179,7 +179,6 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                 }
             }
         }
-
         judgementControlList(band, div_id, numofData); // 라벨을 그려줌
 
         switch(band.attributes["xsi:type"]) {
@@ -217,6 +216,7 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                 $('#' + div_id).css({
                     'width': band.rectangle.width,
                     'height': band.rectangle.height,
+                    'border-bottom': "1px solid red",
                     'zIndex' : -10
                 });
                 break;
@@ -241,6 +241,14 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                         'height': band.rectangle.height,
                     });
                 }
+                break;
+            case 'BandSummary' :
+                $('#' + div_id).css({
+                    'width': band.rectangle.width,
+                    'height': band.rectangle.height,
+                    'border-bottom': "1px solid red",
+                    'zIndex' : -10
+                });
                 break;
             default :
                 $('#' + div_id).css({
