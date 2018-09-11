@@ -15,7 +15,7 @@ function Label(data){
 
     this.name = data.Name._text;
     this.Lock = data.Lock;
-    this.dataType = data.DataType === undefined ? 0 : data.DataType._text; // 데이터 형태
+    this.dataType = data.DataType === undefined ? "NormalLabel" : data.DataType._text; // 데이터 형태
     this.imageTransparent = data.ImageTransparent === undefined ? 0 : data.ImageTransparent; // 이미지 투명도
     this.zOrder = data.ZOrder === undefined ? 0 : data.ZOrder._text;
 
