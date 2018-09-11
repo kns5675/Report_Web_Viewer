@@ -471,7 +471,7 @@ function setPage(report, width, height) {
 
     var pageForCopyRatio = $('#pageForCopyRatio' + pageNum);
     pageForCopyRatio.css('border', 'solid red');
-    pageForCopyRatio.css('background-color', 'lightgreen');
+    pageForCopyRatio.css('background-color', 'lightgrey');
 
 }
 

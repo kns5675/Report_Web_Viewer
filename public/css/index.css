@@ -7,13 +7,16 @@ body{
 }
 
 #header {
-    background-color: #00B7FF;
+    background-color: darkslategrey;
     z-index: 999;
 }
 
 .jbFixed {
     position: fixed;
-    top: 0px;
+    background-color: darkslategrey;
+    margin:0px;
+    padding:0px;
+    z-index: 999;
 }
 
 .show-on-scroll { visibility: hidden; }
@@ -57,14 +60,14 @@ th .DRDSEQ{
     /*position: absolute;*/
     background-color: transparent;
     opacity:1;
-    border: 3px groove darkgreen;
+    border: 1px solid darkgreen;
     opacity:1;
     overflow:hidden;
 }
 .forcopyratio{
     position: absolute;
     background-color: transparent;
-    border:3px solid orangered;
+    border:1px solid orangered;
 }
 
 
