@@ -37,11 +37,17 @@ function makeReport(report) {
         if(band.attributes['xsi:type'] == 'BandData') {
             controlLists.push(band.controlList.anyType); // dataBand의 controlList배열
         }
-    })
+    });
+
+    console.log(controlLists);
+    console.log(curDatarow);
 
     controlLists.forEach(function (controlList) {
-        if(controlList._attributes['xsi:type'] == 'ControlDynamicTable') {
-            isDynamicTable = true;
+        for(var i = 0; i < controlList.length; i++) {
+            if(controlList[i]._attributes['xsi:type'] == 'ControlDynamicTable') {
+                console.log("여기 몇번");
+                isDynamicTable = true;
+            }
         }
     });
 
@@ -52,12 +58,12 @@ function makeReport(report) {
 
     //현재 찍힌 데이터 로우 행이 전체 데이터 보다 작을 경우 재귀함수
     // 클 경우 함수 종료 후 다음 리포트 생성
-    if (curDatarow < dt.length && isDynamicTable == true) {
-        reportPageCnt++;
-        makeReport(report);
-    } else {
-        reportPageCnt = 1;
-    }
+    // if (curDatarow < dt.length && isDynamicTable == true) {
+    //     reportPageCnt++;
+    //     makeReport(report);
+    // } else {
+    //     reportPageCnt = 1;
+    // }
 }
 
 /***********************************************************
@@ -199,19 +205,48 @@ function getNumOfDataInOnePage(tableLabel, divId) {
  : (밴드 길이 - 첫 행 높이) / 데이터 라벨 높이 => 한페이지에 들어가야할 밴드 개수
  만든이 : 구영준
  * *********************************************************/
-function getNumOfDataInOnePageNonObject(tableLabel, divId) {
+function getNumOfDataInOnePageNonObject(band, divId) {
     var bandDataHeight = 0;
     if (typeof divId == 'string') {
         bandDataHeight = $('#' + divId).height();
     } else if (typeof divId == 'number') {
         bandDataHeight = divId;
     }
+
+    console.log('bandDataHeight : ' + bandDataHeight);
+
+    var tableSpacing = 0;
+    console.log(band.controlList.anyType);
+    var tableLabel;
+    if(Array.isArray(band.controlList.anyType)) {
+        band.controlList.anyType.forEach(function(anyType) {
+            if(anyType._attributes['xsi:type'] == 'ControlDynamicTable' && anyType.Labels !== undefined) {
+                tableLabel = anyType.Labels.TableLabel;
+                if (anyType.Rectangle.Y !== undefined) {
+                    tableSpacing = Number(anyType.Rectangle.Y._text);
+                    console.log('tableSpacing : ' + tableSpacing);
+                }
+            }
+        });
+    } else {
+        tableLabel = band.controlList.anyType.Labels.TableLabel;
+        if (band.controlList.anyType.Rectangle.Y !== undefined) {
+            tableSpacing = Number(band.controlList.anyType.Rectangle.Y._text);
+        }
+    }
     var firstLine = Number(tableLabel[0].Rectangle.Height._text);
     var dataLine = Number(tableLabel[tableLabel.length - 1].Rectangle.Height._text);
 
-    return Math.floor((bandDataHeight - firstLine) / dataLine);
+    // if (band.controlList.anyType.Rectangle.Y !== undefined) {
+    //     tableSpacing = Number(band.controlList.anyType.Rectangle.Y._text);
+    // }
+
+    return Math.floor((bandDataHeight - firstLine - tableSpacing) / dataLine);
 }
 
+Array.prototype.injectArray = function( idx, arr ) {
+    return this.slice( 0, idx ).concat( arr ).concat( this.slice( idx ) );
+};
 /******************************************************************
  기능 : 디자인 레이어 세팅
  author : powerku
@@ -393,9 +428,9 @@ function setReport(report) {
     $('#forcopyratio' + reportNum).css('zIndex', -11);
 
 
-    setBackGroundLayer(report);
+    // setBackGroundLayer(report);
     setDesignLayer(report);
-    setForeGroundLayer(report);
+    // setForeGroundLayer(report);
 
     // makeTableByData();
 

@@ -40,10 +40,10 @@ function getFooterHeight(bands) {
             bandDataIndex = i;
         }
         if (i > bandDataIndex) {
-            if(bands[i].attributes['xsi:type'] == 'BandSummary') { // 써머리 밴드는 isBottom이 true일 때만 매 페이지 반복
-                if(bands.isBottom == 'true') {
+            if (bands[i].attributes['xsi:type'] == 'BandSummary') { // 써머리 밴드는 isBottom이 true일 때만 매 페이지 반복
+                if (bands.isBottom == 'true') {
                     footer_height += Number(bands[i].rectangle.height);
-                } else if((bands[i].isBottom == 'false' && curDatarow > dt.length) || isDynamicTable == false){
+                } else if ((bands[i].isBottom == 'false' && curDatarow > dt.length) || isDynamicTable == false) {
                     footer_height += Number(bands[i].rectangle.height);
                 }
             } else {
@@ -123,12 +123,10 @@ function getNumOfDataWithGroupField(band, avaHeight) {
  * from 안예솔
  * *********************************************************/
 function drawBand(bands, layerName, reportHeight, parentBand) {
-
     var avaHeight = 0;
     var dt = Object.values(dataTable.DataSetName)[0];
 
     bands.some(function (band) {
-
         switch (band.attributes["xsi:type"]) {
             case 'BandPageHeader' :
                 if (band.pageOutputSkip === "true") {
@@ -141,7 +139,7 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                 }
                 break;
             case 'BandSummary' :
-                if(band.isBottom == 'false') { // isBottom이 false면 맨 마지막 페이지에만 나옴
+                if (band.isBottom == 'false') { // isBottom이 false면 맨 마지막 페이지에만 나옴
                     if (curDatarow < dt.length && isDynamicTable == true) {
                         return false;
                     }
@@ -181,6 +179,8 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                     getFooterHeight(bands);
                 }
                 if (groupFieldArray.length > 0 && band.childHeaderBands !== null) { // band.childHeaderBands !== null 추가
+                    console.log('예솔아 여기가 에러 인 것 같아 ' + isDynamicTable);
+
                     if (isDynamicTable == true) {
                         getMinGroupBandDataHeight(band);
                         avaHeight = getAvaHeight(div_id, reportHeight);
@@ -190,6 +190,8 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                         } else {
                             dataBandHeight = getBandHeightWithGroupField(band, numofData - 1);
                         }
+
+                        console.log('dataBandHeight : ' + dataBandHeight);
 
                         $('#' + div_id).css({
                             'width': band.rectangle.width,
@@ -201,22 +203,30 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                             'height': band.rectangle.height
                         });
                     }
-                } else {
+                } else/* if(groupFieldArray.length == 0 || band.childHeaderBands === null)*/{
                     if (isDynamicTable == true) {
+                        var dataBandFooterHeight = 0;
+
                         dataBandHeight = getAvaHeight(div_id, reportHeight);
-                        if (band.childFooterBands !== null) { // 자식 풋터 밴드에서 재호출
-                            var dataBandFooterHeight = getChildBandHeight(band);
-                        }
-                        if (band.controlList.anyType.Labels !== undefined) { // 자식 풋터 밴드에서 재호출
-                            var tableLabel = band.controlList.anyType.Labels.TableLabel;
+                        if (band.childFooterBands !== null) {
+                            dataBandFooterHeight = getChildBandHeight(band);
                         }
                         $('#' + div_id).css({
                             'width': band.rectangle.width,
                             'height': dataBandHeight - dataBandFooterHeight,
                         });
-                        if (band.controlList.anyType.Labels !== undefined) { // 자식 풋터 밴드에서 재호출
-                            numofData = getNumOfDataInOnePageNonObject(tableLabel, div_id);
+                        if(Array.isArray(band.controlList.anyType)) {
+                            band.controlList.anyType.forEach(function(anyType) {
+                               if(anyType._attributes['xsi:type'] == 'ControlDynamicTable' && anyType.Labels !== undefined) {
+                                   numofData = getNumOfDataInOnePageNonObject(band, div_id);
+                               }
+                            });
+                        } else {
+                            if (band.controlList.anyType.Labels !== undefined) {
+                                numofData = getNumOfDataInOnePageNonObject(band, div_id);
+                            }
                         }
+                        console.log('numofData : ' + numofData);
                     } else { // 동적 테이블이 없을 때
                         $('#' + div_id).css({
                             'width': band.rectangle.width,
@@ -245,16 +255,16 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                     return true;
                 }
                 break;
-    }
+        }
 
-    judgementControlList(band, div_id, numofData); // 라벨을 그려줌
+        judgementControlList(band, div_id, numofData); // 라벨을 그려줌
 
         switch (band.attributes["xsi:type"]) {
-        case 'BandData' :
-            var dataBandHeight = 0;
+            case 'BandData' :
+                var dataBandHeight = 0;
                 if (groupFieldArray.length > 0 && band.childHeaderBands !== null) {
                     // childHeaderBands중에 BandGroupHeader가 있는 지 판단하기!
-                    if(isDynamicTable == true) {
+                    if (isDynamicTable == true) {
                         var dataCount = groupFieldArray[groupFieldNum].length;
                         var groupRemainData = (dataCount - groupDataRow);
 
@@ -269,32 +279,32 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                         }
                     }
                 } else { //그룹 필드가 아닐 경우
-                curDatarow += numofData;
-            }
-            break;
-        case 'BandSubReport' :
-            $('#' + div_id).css({
-                'width': band.rectangle.width,
-                'height': band.rectangle.height,
-                'border-bottom': "1px solid red",
-                    'zIndex': -10
-            });
-            break;
-        case 'BandPageFooter' :
-            $('#' + div_id).css({
-                'width': band.rectangle.width,
-                'height': band.rectangle.height,
-                'position': 'absolute',
-                'bottom': 0 + "px",
-            });
-            break;
-        case 'BandGroupHeader', 'BandGroupFooter' :
-                if (band.invisible === 'true') {
+                    curDatarow += numofData;
+                }
+                break;
+            case 'BandSubReport' :
                 $('#' + div_id).css({
                     'width': band.rectangle.width,
                     'height': band.rectangle.height,
-                        'display': 'none'
+                    'border-bottom': "1px solid red",
+                    'zIndex': -10
                 });
+                break;
+            case 'BandPageFooter' :
+                $('#' + div_id).css({
+                    'width': band.rectangle.width,
+                    'height': band.rectangle.height,
+                    'position': 'absolute',
+                    'bottom': 0 + "px",
+                });
+                break;
+            case 'BandGroupHeader', 'BandGroupFooter' :
+                if (band.invisible === 'true') {
+                    $('#' + div_id).css({
+                        'width': band.rectangle.width,
+                        'height': band.rectangle.height,
+                        'display': 'none'
+                    });
                 } else {
                     $('#' + div_id).css({
                         'width': band.rectangle.width,
@@ -303,7 +313,7 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                 }
                 break;
             case 'BandSummary' :
-                if(band.isBottom == 'true') {
+                if (band.isBottom == 'true') {
                     $('#' + div_id).css({
                         'width': band.rectangle.width,
                         'height': band.rectangle.height,
@@ -349,25 +359,26 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
             if (curDatarow < dt.length) {
                 if (band.forceNewPage === 'true') { //페이지 넘기기
 
-            } else {
-                    if(isDynamicTable == true)
+                } else {
+                    if (isDynamicTable == true)
                         avaHeight = getAvaHeight(div_id, reportHeight);
 
-                if (avaHeight > minGroupBandDataHeight) {
-                    parentBand = (function (arg) {
-                        var band = [];
-                        band.push(arg);
-                        return band;
-                    })(parentBand);
-                    drawBand(parentBand, layerName, reportHeight);
+                    if (avaHeight > minGroupBandDataHeight) {
+                        parentBand = (function (arg) {
+                            var band = [];
+                            band.push(arg);
+                            return band;
+                        })(parentBand);
+                        drawBand(parentBand, layerName, reportHeight);
+                    }
                 }
             }
         }
-    }
 
-    if (band.childFooterBands !== null) { // 자식 풋터 밴드에서 재호출
-        drawChildFooterBand(band.childFooterBands, layerName, reportHeight, band); // 자식 밴드를 그려주는 함수 호출
-    }
+        if (band.childFooterBands !== null) { // 자식 풋터 밴드에서 재호출
+            drawChildFooterBand(band.childFooterBands, layerName, reportHeight, band); // 자식 밴드를 그려주는 함수 호출
+        }
+    })
 }
 
 /***********************************************************
@@ -475,6 +486,8 @@ function getChildBandHeight(band) {
     var childBandsHeight = 0;
     var childBands = band.childFooterBands;
     var dt = Object.values(dataTable.DataSetName)[0];
+
+    console.log(childBands);
 
     childBands.forEach(function (childBand) {
         switch (childBand.attributes["xsi:type"]) {
