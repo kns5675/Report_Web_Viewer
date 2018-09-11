@@ -1677,7 +1677,7 @@ function labelPropertyApply(labelNbandInfo) {
     if (labelNbandInfo.label_type === "DataLabel") {
         if (groupFieldArray !== undefined) {
             pId.append(groupFieldArray[groupFieldNum][0]);
-            data.text = pId.text();
+            labelNbandInfo.data.text = pId.text();
         }
     }
 
@@ -1687,19 +1687,13 @@ function labelPropertyApply(labelNbandInfo) {
     }
 
     if (labelNbandInfo.data.text !== undefined) {
+        pId.text('');
         if (labelNbandInfo.data.textDirection == 'Vertical') {
             textAlignVertical(labelNbandInfo.data.text, "P" + labelNbandInfo.label_type + labelNbandInfo.labelNum);
         } else if (labelNbandInfo.data.textDirection == 'Horizontal') {
             toStringFn(labelNbandInfo.data.text, "P" + labelNbandInfo.label_type + labelNbandInfo.labelNum);
         }
     }
-
-
-    // if (labelNbandInfo.data.textDirection == 'Vertical') {
-    //     textAlignVertical(labelNbandInfo.data.text, "P" + labelNbandInfo.label_type + labelNbandInfo.labelNum);
-    // } else if (labelNbandInfo.data.textDirection == 'Horizontal') {
-    //     toStringFn(labelNbandInfo.data.text, "P" + labelNbandInfo.label_type + labelNbandInfo.labelNum);
-    // }
 
     // 자간 속성
     if (labelNbandInfo.data.characterSpacing !== undefined) {
