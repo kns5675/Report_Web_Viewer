@@ -37,7 +37,7 @@ function makeReport(report) {
         if(band.attributes['xsi:type'] == 'BandData') {
             controlLists.push(band.controlList.anyType); // dataBand의 controlList배열
         }
-    })
+    });
 
     controlLists.forEach(function (controlList) {
         if(controlList._attributes['xsi:type'] == 'ControlDynamicTable') {
@@ -191,7 +191,7 @@ function getNumOfDataInOnePage(tableLabel, divId) {
     var firstLine = tableLabel[0].rectangle.height;
     var dataLine = Number(tableLabel[tableLabel.length - 1].rectangle.height);
 
-    return Math.floor((bandDataHeight - firstLine) / dataLine);
+    return Math.floor((bandDataHeight - firstLine ) / dataLine);
 }
 
 /***********************************************************
@@ -199,18 +199,34 @@ function getNumOfDataInOnePage(tableLabel, divId) {
  : (밴드 길이 - 첫 행 높이) / 데이터 라벨 높이 => 한페이지에 들어가야할 밴드 개수
  만든이 : 구영준
  * *********************************************************/
-function getNumOfDataInOnePageNonObject(tableLabel, divId) {
+function getNumOfDataInOnePageNonObject(band, divId) {
     var bandDataHeight = 0;
     if (typeof divId == 'string') {
         bandDataHeight = $('#' + divId).height();
     } else if (typeof divId == 'number') {
         bandDataHeight = divId;
     }
+
+    var tableSpacing = 0;
+    var tableLabel = band.controlList.anyType.Labels.TableLabel;
     var firstLine = Number(tableLabel[0].Rectangle.Height._text);
     var dataLine = Number(tableLabel[tableLabel.length - 1].Rectangle.Height._text);
 
-    return Math.floor((bandDataHeight - firstLine) / dataLine);
+    if (band.controlList.anyType.Rectangle.Y !== undefined) {
+        tableSpacing = Number(band.controlList.anyType.Rectangle.Y._text);
+    }
+
+    return Math.floor((bandDataHeight - firstLine - tableSpacing) / dataLine);
 }
+
+/****************************************************************
+ * 배열에 배열을 추가하는 메서드
+ * 만든이 : 구영준
+ * 2018-09-11
+********************************************************************* */
+Array.prototype.injectArray = function( idx, arr ) {
+    return this.slice( 0, idx ).concat( arr ).concat( this.slice( idx ) );
+};
 
 /******************************************************************
  기능 : 디자인 레이어 세팅
@@ -239,7 +255,26 @@ function setDesignLayer(report) {
     var layerName = "designLayer" + pageNum;
     var reportHeight = report.rectangle.height;
     if(remainBand.length > 0){
-        drawBand(remainBand, layerName, reportHeight);
+        var bands = report.layers.designLayer.bands;
+        var dataBandIndex = 0;
+
+        bands.forEach(function(band, i){
+            if(band.attributes["xsi:type"] == "BandData"){
+                dataBandIndex = i;
+            }
+        });
+
+        var returnBands = bands.injectArray(dataBandIndex, remainBand);
+
+        returnBands.forEach(function(band, i){
+            if(band.attributes["xsi:type"] == "BandData"){
+                dataBandIndex = i;
+            }
+        });
+
+        returnBands.splice(dataBandIndex, 1);
+
+        drawBand(returnBands, layerName, reportHeight);
         remainBand = [];
     }else{
         drawBand(report.layers.designLayer.bands, layerName, reportHeight); // 추가 - 전형준
@@ -393,9 +428,9 @@ function setReport(report) {
     $('#forcopyratio' + reportNum).css('zIndex', -11);
 
 
-    setBackGroundLayer(report);
+    // setBackGroundLayer(report);
     setDesignLayer(report);
-    setForeGroundLayer(report);
+    // setForeGroundLayer(report);
 
     // makeTableByData();
 

@@ -186,9 +186,7 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData) {
         'height': table.rectangle.height + 'px'
     });
     tableId.append('<tr id = "dynamicTitleLabel' + dynamicTitleLabelNum + '"></tr>');
-    if (groupFieldArray.length < 1) {
-        numOfData = getNumOfDataInOnePage(tableLabel, divId); //한 페이지에 들어갈 데이터 개수
-    }
+
     var dt = Object.values(dataTable.DataSetName)[0];
     if (Array.isArray(tableLabel)) {
         tableLabel.forEach(function (label) {
