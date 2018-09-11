@@ -154,7 +154,7 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
         var div_id = 'band' + (bandNum++);
         if (band.attributes["xsi:type"] !== "BandSubReport") {
             $('#' + layerName).append("<div id='" + div_id + "' class='Band " + band.attributes["xsi:type"] + "'>" + band.name + "</div>");
-            $("#"+div_id).css('pointer-events', 'none');
+            // $("#"+div_id).css('pointer-events', 'none');
         }
 
         switch (band.attributes["xsi:type"]) {

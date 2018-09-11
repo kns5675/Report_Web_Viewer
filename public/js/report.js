@@ -287,8 +287,8 @@ function setDesignLayer(report) {
         'margin-left': report.margin.width + 'px',
         'position': 'absolute',
         'background-color' : 'rgba(255, 0, 0, 0)',
-        'z-index' : 0,
-        'pointer-events': 'none'
+        'z-index' : 0
+        // 'pointer-events': 'none'
     });//추가 - 하지연
 
     var layerName = "designLayer" + pageNum;
@@ -318,6 +318,13 @@ function setDesignLayer(report) {
     }else{
         drawBand(report.layers.designLayer.bands, layerName, reportHeight); // 추가 - 전형준
     }
+    // if(report){
+    //     drawSubReport(report.layers.designLayer.bands, layerName, reportHeight);
+    // }else{
+    //     drawBand(report.layers.designLayer.bands, layerName, reportHeight); // 추가 - 전형준
+    // }
+
+
 }
 
 /******************************************************************
@@ -361,8 +368,8 @@ function setBackGroundLayer(report) {
         'margin-left': report.margin.width + 'px',
         'background-color' : 'rgba(255, 0, 0, 0)',
         'z-index' : 0,
-        'position' : 'absolute',
-        'pointer-events': 'none'
+        'position' : 'absolute'
+        // 'pointer-events': 'none'
     });// 추가 - 하지연
 
     var layerName = "backGroundLayer" + pageNum;
@@ -445,14 +452,14 @@ function setForeGroundLayerDirection(report) {
  수정 : 하지연
  날짜 : 2018 - 09 - 03
  내용 : #page 하위에 forcopyratio라는 인쇄배율 조정을 위한 div를 생성하고
- forcopyratio라는 클래스 부여 & 스타일 생성
+        forcopyratio라는 클래스 부여 & 스타일 생성
  ******************************************************************/
 function setReport(report) {
     $(('#page' + pageNum)).append('<div id="forcopyratio' + reportNum + '"class = forcopyratio' + '></div>');//추가 - 하지연
     $(('#forcopyratio' + reportNum)).append('<div id="report' + reportNum + '"class = report' + '></div>');//추가 - 하지연
-    $("#report"+reportNum).css('pointer-events', 'none');
-    $("#forcopyratio"+reportNum).css('pointer-events', 'none');
-    $('#forcopyratio' + reportNum).css("position", "absolute");
+    // $("#report"+reportNum).css('pointer-events', 'none');//학준추가
+    // $("#forcopyratio"+reportNum).css('pointer-events', 'none');//학준추가
+    $('#forcopyratio' + reportNum).css("position", "absolute");//학준추가
 
     setForCopyRatioDirection(report);//추가 - 하지연
     setReportDirection(report);
@@ -473,7 +480,7 @@ function setReport(report) {
     $('#forcopyratio' + reportNum).css('margin-right', report.margin.height + 'px');
     $('#forcopyratio' + reportNum).css('margin-left', report.margin.width + 'px');
     $('#forcopyratio' + reportNum).css('position', 'absolute');
-    $('#forcopyratio' + reportNum).css('zIndex', -11);
+    $('#forcopyratio' + reportNum).css('zIndex', -11);//학준추가
 
     setBackGroundLayer(report);
     setDesignLayer(report);
@@ -579,11 +586,11 @@ function setPage(report, width, height) {
     $('#reportTemplate').append('<div id="pageForCopyRatio' + pageNum + '" class="pageforcopyratio paperType-' + paperType + '"></div>');//수정 - 하지연
     $('#pageForCopyRatio' + pageNum).append('<div id="page' + pageNum + '" class="page paperType-' + paperType + '"></div>');//수정 - 하지연
     // $(('#forcopyratio' + reportNum)).append('<div id="report' + reportNum + '"class = report' +'></div>');
-    $(document.html).css('pointer-events', 'none');
-    $(document.body).css('pointer-events', 'none');
-    $("#reportTemplate").css('pointer-events', 'none');
-    $("#pageForCopyRatio"+pageNum).css('pointer-events', 'none');
-    $("#page"+pageNum).css('pointer-events', 'none');
+    // $(document.html).css('pointer-events', 'none');//학준추가
+    // $(document.body).css('pointer-events', 'none');//학준추가
+    // $("#reportTemplate").css('pointer-events', 'none');//학준추가
+    // $("#pageForCopyRatio"+pageNum).css('pointer-events', 'none');//학준추가
+    // $("#page"+pageNum).css('pointer-events', 'none');//학준추가
 
     setPageDirection(report);
     setPageForCopyRatioDirection(report);//추가 - 하지연
@@ -603,7 +610,8 @@ function setPage(report, width, height) {
 
     var pageForCopyRatio = $('#pageForCopyRatio' + pageNum);
     pageForCopyRatio.css('border', 'solid red');
-    pageForCopyRatio.css('background-color', 'lightgreen');
+    pageForCopyRatio.css('background-color', 'lightgrey');
+
 }
 
 /******************************************************************
