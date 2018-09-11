@@ -192,6 +192,7 @@ async function tag_Making(scope, imgae_src, imgnum) {
     var Packing = document.createElement("div");
     Packing.id = "ImageDivPacking"+ImageNum;
     Packing.style.position = "absolute";
+    Packing.style.pointerEvents = "auto";
     Packing.style.height = "1px";
 
     var imagediv = document.createElement("div");

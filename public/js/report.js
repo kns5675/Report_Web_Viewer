@@ -8,14 +8,34 @@ var isDynamicTable = false;
 /******************************************************************
  기능 : 페이지에서 Json 파일을 매개변수로 받아서 ReportTemplate를 만듬
  author : powerku
- ******************************************************************/
-function makeReportTemplate(data) {
-    var reportTemplate = new ReportTemplate(data);
 
+ 기능 : 서브 리포트 1번째 루트 많은 양의 데이터 리포트를 삽입할 경우 페이지를 새로 만들어서 기존 리포트를 모두 출력 후 출력한다.
+ 날짜 : 2018-09-10
+ 만든이 : 김학준
+ ******************************************************************/
+function makeReportTemplate(data, subReport) {
+    var reportTemplate = new ReportTemplate(data);
+    var subReport_click;
+    var subReport_yes = false;
     reportTemplate.reportList.forEach(function (value, i) {
         var report = reportTemplate.reportList[i];
+        subReport_click = report.layers.designLayer.bands;
+        subReport_click.forEach(function (value, j) {
+            if(subReport_click[j].attributes["xsi:type"] === "BandSubReport"){
+                subReport_yes = subReport_click[j];
+            }
+        });
         makeReport(report);
     });
+    if(subReport_yes){
+        var SubreportTemplate = new ReportTemplate(subReport);
+
+        SubreportTemplate.reportList.forEach(function (value, i) {
+            var report = SubreportTemplate.reportList[i];
+            makeReport(report);
+        });
+    }
+
 }
 
 /******************************************************************
@@ -59,7 +79,6 @@ function makeReport(report) {
         reportPageCnt = 1;
     }
 }
-
 /***********************************************************
  기능 : 페이지 계산
  전체 데이터 / 한페이지 데이터 = 페이지 개수
@@ -233,7 +252,8 @@ function setDesignLayer(report) {
         'margin-left': report.margin.width + 'px',
         'position': 'absolute',
         'background-color' : 'rgba(255, 0, 0, 0)',
-        'z-index' : 0
+        'z-index' : 0,
+        'pointer-events': 'none'
     });//추가 - 하지연
 
     var layerName = "designLayer" + pageNum;
@@ -285,7 +305,10 @@ function setBackGroundLayer(report) {
         'margin-bottom': report.margin.y + 'px',
         'margin-right': report.margin.height + 'px',
         'margin-left': report.margin.width + 'px',
-        'position': 'absolute',
+        'background-color' : 'rgba(255, 0, 0, 0)',
+        'z-index' : 0,
+        'position' : 'absolute',
+        'pointer-events': 'none'
     });// 추가 - 하지연
 
     var layerName = "backGroundLayer" + pageNum;
@@ -331,7 +354,10 @@ function setForeGroundLayer(report) {
         'margin-bottom': report.margin.y + 'px',
         'margin-right': report.margin.height + 'px',
         'margin-left': report.margin.width + 'px',
+        'background-color' : 'rgba(255, 0, 0, 0)',
         'position': 'absolute',
+        "z-index" : 0,
+        'pointer-events': 'none'
     });// 수정, 추가 - 하지연
 
     var layerName = "foreGroundLayer" + pageNum;
@@ -370,6 +396,9 @@ function setForeGroundLayerDirection(report) {
 function setReport(report) {
     $(('#page' + pageNum)).append('<div id="forcopyratio' + reportNum + '"class = forcopyratio' + '></div>');//추가 - 하지연
     $(('#forcopyratio' + reportNum)).append('<div id="report' + reportNum + '"class = report' + '></div>');//추가 - 하지연
+    $("#report"+reportNum).css('pointer-events', 'none');
+    $("#forcopyratio"+reportNum).css('pointer-events', 'none');
+    $('#forcopyratio' + reportNum).css("position", "absolute");
 
     setForCopyRatioDirection(report);//추가 - 하지연
     setReportDirection(report);
@@ -391,7 +420,6 @@ function setReport(report) {
     $('#forcopyratio' + reportNum).css('margin-left', report.margin.width + 'px');
     $('#forcopyratio' + reportNum).css('position', 'absolute');
     $('#forcopyratio' + reportNum).css('zIndex', -11);
-
 
     setBackGroundLayer(report);
     setDesignLayer(report);
@@ -497,6 +525,11 @@ function setPage(report, width, height) {
     $('#reportTemplate').append('<div id="pageForCopyRatio' + pageNum + '" class="pageforcopyratio paperType-' + paperType + '"></div>');//수정 - 하지연
     $('#pageForCopyRatio' + pageNum).append('<div id="page' + pageNum + '" class="page paperType-' + paperType + '"></div>');//수정 - 하지연
     // $(('#forcopyratio' + reportNum)).append('<div id="report' + reportNum + '"class = report' +'></div>');
+    $(document.html).css('pointer-events', 'none');
+    $(document.body).css('pointer-events', 'none');
+    $("#reportTemplate").css('pointer-events', 'none');
+    $("#pageForCopyRatio"+pageNum).css('pointer-events', 'none');
+    $("#page"+pageNum).css('pointer-events', 'none');
 
     setPageDirection(report);
     setPageForCopyRatioDirection(report);//추가 - 하지연

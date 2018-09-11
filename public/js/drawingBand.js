@@ -135,29 +135,31 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
         if (band.childHeaderBands !== null) { // 자식헤더밴드에서 재호출
             drawChildHeaderBand(band.childHeaderBands, layerName, reportHeight, band); // 자식 밴드를 그려주는 함수 호출
         }
-
         var div_id = 'band' + (bandNum++);
-        $('#' + layerName).append("<div id='" + div_id + "' class='Band " + band.attributes["xsi:type"] + "'>" + band.name + "</div>");
+        if (band.attributes["xsi:type"] !== "BandSubReport") {
+            $('#' + layerName).append("<div id='" + div_id + "' class='Band " + band.attributes["xsi:type"] + "'>" + band.name + "</div>");
+            $("#"+div_id).css('pointer-events', 'none');
+        }
 
-        // xml 에서 넘어오는 BandForeGround, BandBackGround 영역을 대신 해 DesignLayer에 통합하여 순서를 정해주는 방안으로 변경.
-        if (band.attributes["xsi:type"] === "BandForeGround") {
-            // $('.BandForeGround').each(function (i, e) {
-            //     e.style.zIndex = 0;
-            //     e.style.position = 'absolute';
-            //     e.style.top = 0;
-            //     // e.style.display = "none";
-            // });
-            div_id = layerName;
-        }
-        if (band.attributes["xsi:type"] === "BandBackGround") {
-            // $('.BandBackGround').each(function (i, e) {
-            //     e.style.zIndex = 0;
-            //     e.style.position = 'absolute';
-            //     e.style.top = 0;
-            //     // e.style.display = "none";
-            // });
-            div_id = layerName;
-        }
+        // // xml 에서 넘어오는 BandForeGround, BandBackGround 영역을 대신 해 DesignLayer에 통합하여 순서를 정해주는 방안으로 변경.
+        // if (band.attributes["xsi:type"] === "BandForeGround") {
+        //     // $('.BandForeGround').each(function (i, e) {
+        //     //     e.style.zIndex = 0;
+        //     //     e.style.position = 'absolute';
+        //     //     e.style.top = 0;
+        //     //     // e.style.display = "none";
+        //     // });
+        //     div_id = layerName;
+        // }
+        // if (band.attributes["xsi:type"] === "BandBackGround") {
+        //     // $('.BandBackGround').each(function (i, e) {
+        //     //     e.style.zIndex = 0;
+        //     //     e.style.position = 'absolute';
+        //     //     e.style.top = 0;
+        //     //     // e.style.display = "none";
+        //     // });
+        //     div_id = layerName;
+        // }
 
         switch (band.attributes["xsi:type"]) {
             case 'BandData' :
@@ -230,9 +232,9 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                 }
                 break;
     }
-
-    judgementControlList(band, div_id, numofData); // 라벨을 그려줌
-
+            if(band.attributes["xsi:type"] !== "BandSubReport"){
+                judgementControlList(band, div_id, numofData); // 라벨을 그려줌
+            }
         switch (band.attributes["xsi:type"]) {
         case 'BandData' :
             var dataBandHeight = 0;

@@ -14,13 +14,17 @@ var dataTable = convert.xml2json(tempData, {compact : true});
 var paramData = fs.readFileSync('xml/GroupParameterData_Param.xml', 'utf-8');
 var paramTable = convert.xml2json(paramData, {compact : true});
 
+var SubReport = fs.readFileSync('xml/Sample01.xml', 'utf-8');
+var dataTable2 = convert.xml2json(SubReport, {compact : true});
+
 /* GET home page. */
 router.get('/', function(req, res) {
     res.render('index', {
         layout: false,
         data : json,
         dataTable: dataTable,
-        paramTable: paramTable
+        paramTable: paramTable,
+        subReport: dataTable2
     });
 });
 
