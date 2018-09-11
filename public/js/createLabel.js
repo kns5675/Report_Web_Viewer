@@ -22,9 +22,12 @@ var totalPageNum = 1;
 var groupFieldNum = 0; // 그룹으로 묶었을 경우 BandGroupHeader에서 DataLabel을 사용했을 때 몇 번째 그룹이 출력중인지 알 수 있는 변수
 var tableNum = 1;
 var dynamicTableNum = 1;
+var fixedTableNum = 1; // 지연추가
 var dynamicTitleLabelNum = 1;
 var thNum = 1;
 var dynamicValueLabelNum = 1;
+//var fixedValueLabelNum =1; //지연추가
+var fixedTableLabelNum=1; //지연추가
 var groupFieldArray = [];
 var titleArray = []; // 그룹으로 묶었을 경우 titleName으로만 접근이 가능해져서 그 titleName을 담을 배열
 
@@ -70,7 +73,7 @@ function judgementLabel(data, divId, numOfData, band_name) {
             }
         });
         drawingDynamicTable(controlDynamicTable, tableLabelList, divId, numOfData);
-    } else if (attr == "ControlFixedTable") { // 고정 테이블
+    } else if (attr == "ControlFixedTable") { // 고정 테이블일때
 
         /*
         ToDo : 하나의 페이지에 고정테이블이 2개 이상 있을 경우 fixTableLabelList에 겹침
@@ -83,9 +86,11 @@ function judgementLabel(data, divId, numOfData, band_name) {
 
         fixTableLabels.forEach(function (label, i) {
             var fixtableLabel = new FixedTableLabel(label, i);
-            fixTableLabelList.push(fixtableLabel);
+            if(fixTableLabelList.length< fixTableLabels.length){ // 수정 : 하지연
+                fixTableLabelList.push(fixtableLabel);
+            }
         });
-        drawingFixedTable(controlFixedTable, fixTableLabelList, divId);
+        drawingFixedTable(controlFixedTable, fixTableLabelList, divId, numOfData);//numOfData추가.
     } else if (attr == "ControlLabel") {
         if (!(data.DataType === undefined)) {
             switch (data.DataType._text) {
@@ -174,12 +179,15 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData) {
     dynamicTable_resizing_div.append('<table id="dynamicTable' + dynamicTableNum + '" class="table table-' + temp_table_class + '"></table>');
     // dynamicTable_resizing_div.addClass("NormalLabel_scope");
     div.css('position', 'relative');
+    div.css('border','5px solid pink');//지연추가 구조볼라고 잠시
+    divIdTable.css('border','2px solid purple');//지연추가 구조볼라고 잠시
 
     dynamicTable_resizing_div.css({
         'position': 'absolute',
         'left': table.rectangle.x + 'px',
-        'top': table.rectangle.y + 'px'
-        // // 'pointer-events': 'auto'
+        'top': table.rectangle.y + 'px',
+        // 'pointer-events': 'auto',
+        'border' : '3px solid white'//일단 추가해놈 영역 잘 안보여서 지연추가
     });
     var tableId = $('#dynamicTable' + dynamicTableNum);
     Lock_Check_Table(table, dynamicTable_resizing_div, tableId, div);
@@ -200,10 +208,13 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData) {
                 case "DynamicTableValueLabel" :
                     drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table);
                     break;
+                default :
+                    console.log("case default");
+                    break;
             }
         });
         tableId.css({
-            'border': '1px solid black',
+            'border': '1px solid red',
             'border-collapse': 'collapse',
             'text-align': 'center'
         });
@@ -1095,8 +1106,6 @@ function Lock_check(data, Label_id, div) { //라벨 데이터, 드래그 리사�
             Label_id.resizable({containment: "#" + div[0].id, autoHide: true});
         }
     }
-
-}
 
 /******************************************************************
  기능 : 각각의 형태의 테이블의 id와 데이터를 받아서 lock이 걸려있는 라벨을 제외한 라벨들의 위치 이동, 크기 조정 기능 추가.

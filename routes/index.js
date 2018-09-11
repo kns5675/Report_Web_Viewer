@@ -3,12 +3,12 @@ var router = express.Router();
 
 var convert = require('xml-js');
 var fs = require('fs');
-var xml = fs.readFileSync('xml/Sample01.xml', 'utf-8');
+var xml = fs.readFileSync('xml/ChildBands.xml', 'utf-8');
 
 var json_origin = convert.xml2json(xml, {compact : true});
 var json = json_origin.replace(/\\r/gi, '<br/>'); // 엔터키(\r)를 <br/>로 치환
 
-var tempData = fs.readFileSync('xml/GroupParameterData.xml', 'utf-8');
+var tempData = fs.readFileSync('xml/db_ChildBands_20180905092637.xml', 'utf-8');
 var dataTable = convert.xml2json(tempData, {compact : true});
 
 var paramData = fs.readFileSync('xml/GroupParameterData_Param.xml', 'utf-8');
