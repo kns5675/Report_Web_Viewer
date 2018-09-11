@@ -33,12 +33,22 @@ function getMinGroupBandDataHeight(band) {
 function getFooterHeight(bands) {
     footer_height = 0;
     var bandDataIndex;
+    var dt = Object.values(dataTable.DataSetName)[0];
+
     for (var i = 0; i < bands.length; i++) {
         if (bands[i].attributes["xsi:type"] === "BandData") {
             bandDataIndex = i;
         }
         if (i > bandDataIndex) {
-            footer_height += Number(bands[i].rectangle.height);
+            if(bands[i].attributes['xsi:type'] == 'BandSummary') { // 써머리 밴드는 isBottom이 true일 때만 매 페이지 반복
+                if(bands.isBottom == 'true') {
+                    footer_height += Number(bands[i].rectangle.height);
+                } else if((bands[i].isBottom == 'false' && curDatarow > dt.length) || isDynamicTable == false){
+                    footer_height += Number(bands[i].rectangle.height);
+                }
+            } else {
+                footer_height += Number(bands[i].rectangle.height);
+            }
         }
     }
 }
@@ -123,6 +133,11 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
         }
         if (band.attributes["xsi:type"] === "BandGroupHeader") {
 
+        }
+        if (band.attributes["xsi:type"] === "BandSummary" && band.isBottom === "false") { // isBottom이 false면 맨 마지막 페이지에만 나옴
+            if (curDatarow < dt.length && isDynamicTable == true) {
+                return;
+            }
         }
         if (band.childHeaderBands !== null) { // 자식헤더밴드에서 재호출
             drawChildHeaderBand(band.childHeaderBands, layerName, reportHeight, band); // 자식 밴드를 그려주는 함수 호출
@@ -259,12 +274,23 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                 }
                 break;
             case 'BandSummary' :
-                $('#' + div_id).css({
-                    'width': band.rectangle.width,
-                    'height': band.rectangle.height,
-                    'border-bottom': "1px solid red",
-                    'zIndex': -10
-                });
+                if(band.isBottom == 'true') {
+                    $('#' + div_id).css({
+                        'width': band.rectangle.width,
+                        'height': band.rectangle.height,
+                        'border-bottom': "1px solid red",
+                        'zIndex': -10
+                    });
+                } else {
+                    if (curDatarow > dt.length || isDynamicTable == false) { // 데이터 출력이 끝났을 때 나옴
+                        $('#' + div_id).css({
+                            'width': band.rectangle.width,
+                            'height': band.rectangle.height,
+                            'border-bottom': "1px solid red",
+                            'zIndex': -10
+                        });
+                    }
+                }
                 break;
             default :
                 $('#' + div_id).css({
@@ -386,8 +412,6 @@ function drawChildFooterBand(childBands, layerName, reportHeight, band) {
                 if (band.fixTitle == 'true') { // 데이터 헤더 밴드 고정 값이 '예'일 때
                     childFooterBandArray.push(childBand); // 매 페이지마다 나와야 함
                 } else { // 데이터 헤더 밴드 고정 값이 '아니오'일 때
-                    console.log('curDataRow : ' + curDatarow);
-                    console.log(dt.length);
                     if (curDatarow > dt.length || isDynamicTable == false) { // 데이터 출력이 끝났을 때 나옴
                         childFooterBandArray.push(childBand);
                     }
