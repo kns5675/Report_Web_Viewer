@@ -482,9 +482,9 @@ function setReport(report) {
     $('#forcopyratio' + reportNum).css('position', 'absolute');
     $('#forcopyratio' + reportNum).css('zIndex', -11);//학준추가
 
-    setBackGroundLayer(report);
+    // setBackGroundLayer(report);
     setDesignLayer(report);
-    setForeGroundLayer(report);
+    // setForeGroundLayer(report);
 
     // makeTableByData();
 

@@ -1095,7 +1095,7 @@ function Lock_check(data, Label_id, div) { //라벨 데이터, 드래그 리사�
     var Lock_check;
     var editable_test = data.editable;
     editable_test = 'true';
-    if(editable_test == 'true'){
+    if (editable_test == 'true') {
         if (data.Lock === undefined) {
             Lock_check = data.Lock;
         } else {
@@ -1106,6 +1106,7 @@ function Lock_check(data, Label_id, div) { //라벨 데이터, 드래그 리사�
             Label_id.resizable({containment: "#" + div[0].id, autoHide: true});
         }
     }
+}
 
 /******************************************************************
  기능 : 각각의 형태의 테이블의 id와 데이터를 받아서 lock이 걸려있는 라벨을 제외한 라벨들의 위치 이동, 크기 조정 기능 추가.
@@ -1441,14 +1442,14 @@ function drd_javascript(label, labelId, script){
         script = str_replace(script, '<br/>', '\n');
         script = str_replace(script, 'TextColor', 'color');
         script = str_replace(script, 'Color.', '');
-        console.log(script);
+        // console.log(script);
         script = str_replace(script, 'This.', '$("#' + labelId + '").css(');
-        console.log(script);
+        // console.log(script);
     }
 }
 
 /**
-    DRD 자바스크립트 텍스트 치환 함수
+ DRD 자바스크립트 텍스트 치환 함수
  */
 function str_replace(str, searchStr, replaceStr){
     return str.split(searchStr).join(replaceStr);
@@ -1680,7 +1681,7 @@ function labelPropertyApply(labelNbandInfo){
     if(labelNbandInfo.label_type === "DataLabel") {
         if (groupFieldArray !== undefined) {
             pId.append(groupFieldArray[groupFieldNum][0]);
-            data.text = pId.text();
+            labelNbandInfo.data.text = pId.text();
         }
     }
 
@@ -1690,19 +1691,13 @@ function labelPropertyApply(labelNbandInfo){
     }
 
     if (labelNbandInfo.data.text !== undefined) {
+        pId.text('');
         if (labelNbandInfo.data.textDirection == 'Vertical') {
             textAlignVertical(labelNbandInfo.data.text, "P" + labelNbandInfo.label_type + labelNbandInfo.labelNum);
         } else if (labelNbandInfo.data.textDirection == 'Horizontal') {
             toStringFn(labelNbandInfo.data.text, "P" + labelNbandInfo.label_type + labelNbandInfo.labelNum);
         }
     }
-
-
-    // if (labelNbandInfo.data.textDirection == 'Vertical') {
-    //     textAlignVertical(labelNbandInfo.data.text, "P" + labelNbandInfo.label_type + labelNbandInfo.labelNum);
-    // } else if (labelNbandInfo.data.textDirection == 'Horizontal') {
-    //     toStringFn(labelNbandInfo.data.text, "P" + labelNbandInfo.label_type + labelNbandInfo.labelNum);
-    // }
 
     // 자간 속성
     if (labelNbandInfo.data.characterSpacing !== undefined) {
