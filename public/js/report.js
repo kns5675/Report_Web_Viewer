@@ -54,6 +54,7 @@ function makeReport(report) {
     // 180910 YeSol 추가
     var controlLists=[];
     var bands = report.layers.designLayer.bands;
+
     bands.forEach(function (band) {
         if(band.attributes['xsi:type'] == 'BandData') {
             controlLists.push(band.controlList.anyType); // dataBand의 controlList배열
@@ -61,8 +62,14 @@ function makeReport(report) {
     });
 
     controlLists.forEach(function (controlList) {
-        for(var i = 0; i < controlList.length; i++) {
-            if(controlList[i]._attributes['xsi:type'] == 'ControlDynamicTable') {
+        if(controlList.length !== undefined) {
+            for(var i = 0; i < controlList.length; i++) {
+                if(controlList[i]._attributes['xsi:type'] == 'ControlDynamicTable') {
+                    isDynamicTable = true;
+                }
+            }
+        } else {
+            if(controlList._attributes['xsi:type'] == 'ControlDynamicTable') {
                 isDynamicTable = true;
             }
         }
@@ -230,10 +237,7 @@ function getNumOfDataInOnePageNonObject(band, divId) {
         bandDataHeight = divId;
     }
 
-    console.log('bandDataHeight : ' + bandDataHeight);
-
     var tableSpacing = 0;
-    console.log(band.controlList.anyType);
     var tableLabel;
     if(Array.isArray(band.controlList.anyType)) {
         band.controlList.anyType.forEach(function(anyType) {
@@ -241,7 +245,6 @@ function getNumOfDataInOnePageNonObject(band, divId) {
                 tableLabel = anyType.Labels.TableLabel;
                 if (anyType.Rectangle.Y !== undefined) {
                     tableSpacing = Number(anyType.Rectangle.Y._text);
-                    console.log('tableSpacing : ' + tableSpacing);
                 }
             }
         });
@@ -254,7 +257,7 @@ function getNumOfDataInOnePageNonObject(band, divId) {
     var firstLine = Number(tableLabel[0].Rectangle.Height._text);
     var dataLine = Number(tableLabel[tableLabel.length - 1].Rectangle.Height._text);
 
-    return Math.floor((bandDataHeight - firstLine) / dataLine);
+    return Math.floor((bandDataHeight - firstLine - tableSpacing) / dataLine);
 }
 
 /****************************************************************

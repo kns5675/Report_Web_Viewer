@@ -22,6 +22,10 @@ function Figure(data) {
     this.printable = data.Printable._text;
 }
 
+/******************************************************************
+ 기능 : Figure 객체를 상속 받는 ControlRectangle(사각형)에 대한 객체를 만든다.
+ 만든이 : 안예솔
+ ******************************************************************/
 function ControlRectangle(data) {
     Figure.apply(this, arguments);
 
@@ -32,6 +36,10 @@ function ControlRectangle(data) {
     this.recDashStyle = data.RecDashStyle._text;
 }
 
+/******************************************************************
+ 기능 : Figure 객체를 상속 받는 ControlCircle(원)에 대한 객체를 만든다.
+ 만든이 : 안예솔
+ ******************************************************************/
 function ControlCircle(data) {
     Figure.apply(this, arguments);
 
@@ -42,6 +50,10 @@ function ControlCircle(data) {
     this.recDashStyle = data.RecDashStyle === undefined ? undefined : data.RecDashStyle._text;
 }
 
+/******************************************************************
+ 기능 : Figure 객체를 상속 받는 ControlLine(선)에 대한 객체를 만든다.
+ 만든이 : 안예솔
+ ******************************************************************/
 function ControlLine(data) {
     Figure.apply(this, arguments);
 
@@ -52,6 +64,10 @@ function ControlLine(data) {
     this.lineDashStyle = data.LineDashStyle._text;
 }
 
+/******************************************************************
+ 기능 : Figure 객체를 상속 받는 ControlArrow(화살표)에 대한 객체를 만든다.
+ 만든이 : 안예솔
+ ******************************************************************/
 function ControlArrow(data) {
     Figure.apply(this, arguments);
 

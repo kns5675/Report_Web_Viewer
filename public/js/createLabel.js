@@ -1,5 +1,6 @@
 document.write("<script type='text/javascript' src='/js/label.js' ><" + "/script>");
 document.write("<script type='text/javascript' src='/js/figure.js' ><" + "/script>");
+document.write("<script type='text/javascript' src='/js/additionalControl.js' ><" + "/script>");
 
 var labelList = [];
 var tableLabelList = [];
@@ -142,6 +143,12 @@ function judgementLabel(data, divId, numOfData, band_name) {
     } else if (attr == 'ControlArrow') { // 화살표
         var figure = new ControlArrow(data);
         drawingArrow(figure, divId);
+    } else if(attr == 'ControlRadioButton') {
+        var additionalControl = new ControlRadioButton(data);
+        drawingRadioButton(additionalControl, divId);
+    } else if(attr == 'ControlCheckBoxButton') {
+        var additionalControl = new ControlCheckBoxButton(data);
+        drawingCheckBox(additionalControl, divId);
     }
 }
 

@@ -130,7 +130,7 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
 
         switch (band.attributes["xsi:type"]) {
             case 'BandPageHeader' :
-                if (band.pageOutputSkip === "true") {
+                if (band.pageOutputSkip === "true" && reportPageCnt == 1) {
                     return false;
                 }
                 break;
@@ -188,7 +188,7 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
 
                         dataBandHeight = getAvaHeight(div_id, reportHeight);
                         if (band.childFooterBands !== null) { // 자식 풋터 밴드에서 재호출
-                            var dataBandFooterHeight = getChildBandHeight(band);
+                            dataBandFooterHeight = getChildBandHeight(band);
                         }
                         $('#' + div_id).css({
                             'width': band.rectangle.width,
@@ -205,7 +205,6 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                                 numofData = getNumOfDataInOnePageNonObject(band, div_id);
                             }
                         }
-                        console.log('numofData : ' + numofData);
                     } else { // 동적 테이블이 없을 때
                         $('#' + div_id).css({
                             'width': band.rectangle.width,
@@ -343,7 +342,7 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                     
                     //ToDo 로직 수정
                     //하위의 자리에 밴드가 들어갈 자리가 있으면 넣는다.
-                    if (avaHeight > minGroupBandDataHeight) {
+                    if (avaHeight > minGroupBandDataHeight && isDynamicTable == true) {
                         parentBand = (function (arg) {
                             var band = [];
                             band.push(arg);
