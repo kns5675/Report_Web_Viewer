@@ -178,8 +178,8 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData) {
     dynamicTable_resizing_div.css({
         'position': 'absolute',
         'left': table.rectangle.x + 'px',
-        'top': table.rectangle.y + 'px',
-        'pointer-events': 'auto'
+        'top': table.rectangle.y + 'px'
+        // // 'pointer-events': 'auto'
     });
     var tableId = $('#dynamicTable' + dynamicTableNum);
     Lock_Check_Table(table, dynamicTable_resizing_div, tableId, div);
@@ -439,8 +439,8 @@ function drawingFixedTable(table, tableLabel, divId) {
         'width': table.rectangle.width,
         'height': table.rectangle.height,
         'left': table.rectangle.x + 'px',
-        'top': table.rectangle.y + 'px',
-        'pointer-events': 'auto'
+        'top': table.rectangle.y + 'px'
+        // // 'pointer-events': 'auto'
     });
 
     tableId.append('<tr id = "fixedTitleLabel"></tr>');
@@ -1082,8 +1082,8 @@ function lineSpacing(text, spacing, pTagId) {
  ******************************************************************/
 function Lock_check(data, Label_id, div) { //라벨 데이터, 드래그 리사이즈 영역, 벗어나면 안되는 영역
     var Lock_check;
-    data.editable = 'false';
     var editable_test = data.editable;
+    editable_test = 'true';
     if(editable_test == 'true'){
         if (data.Lock === undefined) {
             Lock_check = data.Lock;

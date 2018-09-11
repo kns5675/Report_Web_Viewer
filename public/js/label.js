@@ -15,8 +15,8 @@ function Label(data){
 
     this.name = data.Name._text;
     this.Lock = data.Lock;
-    this.dataType = data.DataType === undefined ? undefined : data.DataType._text; // 데이터 형태
-    this.imageTransparent = data.ImageTransparent === undefined ? 0 : data.ImageTransparent._text; // 이미지 투명도
+    this.dataType = data.DataType === undefined ? 0 : data.DataType._text; // 데이터 형태
+    this.imageTransparent = data.ImageTransparent === undefined ? 0 : data.ImageTransparent; // 이미지 투명도
     this.zOrder = data.ZOrder === undefined ? 0 : data.ZOrder._text;
 
     this.borderThickness = (data.BorderThickness === undefined ? undefined : { // 테두리 두께 (있을 수도 있고 없을 수도 있는 속성)
@@ -145,7 +145,6 @@ function Label(data){
     this.priorLabel = data.PriorLabel === undefined ? undefined : data.PriorLabel._text; // 선행 라벨
 
     this.imageSizeType = data.ImageSizeType === undefined ? undefined : data.ImageSizeType._text; //이미지 크기
-
     this.lock = data.Lock === undefined ? false : data.Lock._text; // 잠김 속성 default : false
     // true일 때 위치 이동, 크기 수정 불가
 
