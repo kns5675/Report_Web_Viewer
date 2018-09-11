@@ -189,7 +189,7 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                 if (avaHeight < Number(band.rectangle.height)) {
                     remainBand.push(band);
                     $('#' + div_id).remove();
-                    return true;
+                    return false;
                 }
                 break;
             case 'BandGroupFooter' :
@@ -198,7 +198,7 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                     band.parentBand = parentBand;
                     remainBand.push(band);
                     $('#' + div_id).remove();
-                    return true;
+                    return false;
                 }
                 break;
     }
@@ -298,9 +298,9 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                 } else {
                     if (isDynamicTable == true)
                         avaHeight = getAvaHeight(div_id, reportHeight);
-
-                        console.log('avaHeight : ' + avaHeight);
-                        console.log('minGroupBandDataHeight : ' + minGroupBandDataHeight);
+                    
+                    //ToDo 로직 수정
+                    //하위의 자리에 밴드가 들어갈 자리가 있으면 넣는다.
                     if (avaHeight > minGroupBandDataHeight) {
                         parentBand = (function (arg) {
                             var band = [];
