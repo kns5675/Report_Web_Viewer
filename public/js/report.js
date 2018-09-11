@@ -8,14 +8,35 @@ var isDynamicTable = false;
 /******************************************************************
  기능 : 페이지에서 Json 파일을 매개변수로 받아서 ReportTemplate를 만듬
  author : powerku
- ******************************************************************/
-function makeReportTemplate(data) {
-    var reportTemplate = new ReportTemplate(data);
 
+ 기능 : 서브 리포트 1번째 루트 많은 양의 데이터 리포트를 삽입할 경우
+        페이지를 새로 만들어서 기존 리포트를 모두 출력 후 출력한다.
+ 날짜 : 2018-09-10
+ 만든이 : 김학준
+ ******************************************************************/
+function makeReportTemplate(data, subReport) {
+    var reportTemplate = new ReportTemplate(data);
+    var subReport_click;
+    var subReport_yes = false;
     reportTemplate.reportList.forEach(function (value, i) {
         var report = reportTemplate.reportList[i];
+        subReport_click = report.layers.designLayer.bands;
+        subReport_click.forEach(function (value, j) {
+            if(subReport_click[j].attributes["xsi:type"] === "BandSubReport"){
+                subReport_yes = subReport_click[j];
+            }
+        });
         makeReport(report);
     });
+    if(subReport_yes){
+        var SubreportTemplate = new ReportTemplate(subReport);
+
+        SubreportTemplate.reportList.forEach(function (value, i) {
+            var report = SubreportTemplate.reportList[i];
+            makeReport(report);
+        });
+    }
+
 }
 
 /******************************************************************
@@ -39,13 +60,9 @@ function makeReport(report) {
         }
     });
 
-    console.log(controlLists);
-    console.log(curDatarow);
-
     controlLists.forEach(function (controlList) {
         for(var i = 0; i < controlList.length; i++) {
             if(controlList[i]._attributes['xsi:type'] == 'ControlDynamicTable') {
-                console.log("여기 몇번");
                 isDynamicTable = true;
             }
         }
@@ -56,14 +73,14 @@ function makeReport(report) {
 
     pageNum++;
 
-    //현재 찍힌 데이터 로우 행이 전체 데이터 보다 작을 경우 재귀함수
+    // 현재 찍힌 데이터 로우 행이 전체 데이터 보다 작을 경우 재귀함수
     // 클 경우 함수 종료 후 다음 리포트 생성
-    // if (curDatarow < dt.length && isDynamicTable == true) {
-    //     reportPageCnt++;
-    //     makeReport(report);
-    // } else {
-    //     reportPageCnt = 1;
-    // }
+    if (curDatarow < dt.length && isDynamicTable == true) {
+        reportPageCnt++;
+        makeReport(report);
+    } else {
+        reportPageCnt = 1;
+    }
 }
 
 /***********************************************************
@@ -237,16 +254,18 @@ function getNumOfDataInOnePageNonObject(band, divId) {
     var firstLine = Number(tableLabel[0].Rectangle.Height._text);
     var dataLine = Number(tableLabel[tableLabel.length - 1].Rectangle.Height._text);
 
-    // if (band.controlList.anyType.Rectangle.Y !== undefined) {
-    //     tableSpacing = Number(band.controlList.anyType.Rectangle.Y._text);
-    // }
-
-    return Math.floor((bandDataHeight - firstLine - tableSpacing) / dataLine);
+    return Math.floor((bandDataHeight - firstLine) / dataLine);
 }
 
+/****************************************************************
+ * 배열에 배열을 추가하는 메서드
+ * 만든이 : 구영준
+ * 2018-09-11
+********************************************************************* */
 Array.prototype.injectArray = function( idx, arr ) {
     return this.slice( 0, idx ).concat( arr ).concat( this.slice( idx ) );
 };
+
 /******************************************************************
  기능 : 디자인 레이어 세팅
  author : powerku
@@ -268,13 +287,33 @@ function setDesignLayer(report) {
         'margin-left': report.margin.width + 'px',
         'position': 'absolute',
         'background-color' : 'rgba(255, 0, 0, 0)',
-        'z-index' : 0
+        'z-index' : 0,
+        'pointer-events': 'none'
     });//추가 - 하지연
 
     var layerName = "designLayer" + pageNum;
     var reportHeight = report.rectangle.height;
     if(remainBand.length > 0){
-        drawBand(remainBand, layerName, reportHeight);
+        var bands = report.layers.designLayer.bands;
+        var dataBandIndex = 0;
+
+        bands.forEach(function(band, i){
+            if(band.attributes["xsi:type"] == "BandData"){
+                dataBandIndex = i;
+            }
+        });
+
+        var returnBands = bands.injectArray(dataBandIndex, remainBand);
+
+        returnBands.forEach(function(band, i){
+            if(band.attributes["xsi:type"] == "BandData"){
+                dataBandIndex = i;
+            }
+        });
+
+        returnBands.splice(dataBandIndex, 1);
+
+        drawBand(returnBands, layerName, reportHeight);
         remainBand = [];
     }else{
         drawBand(report.layers.designLayer.bands, layerName, reportHeight); // 추가 - 전형준
@@ -320,7 +359,10 @@ function setBackGroundLayer(report) {
         'margin-bottom': report.margin.y + 'px',
         'margin-right': report.margin.height + 'px',
         'margin-left': report.margin.width + 'px',
-        'position': 'absolute',
+        'background-color' : 'rgba(255, 0, 0, 0)',
+        'z-index' : 0,
+        'position' : 'absolute',
+        'pointer-events': 'none'
     });// 추가 - 하지연
 
     var layerName = "backGroundLayer" + pageNum;
@@ -366,7 +408,10 @@ function setForeGroundLayer(report) {
         'margin-bottom': report.margin.y + 'px',
         'margin-right': report.margin.height + 'px',
         'margin-left': report.margin.width + 'px',
+        'background-color' : 'rgba(255, 0, 0, 0)',
         'position': 'absolute',
+        "z-index" : 0,
+        'pointer-events': 'none'
     });// 수정, 추가 - 하지연
 
     var layerName = "foreGroundLayer" + pageNum;
@@ -405,6 +450,9 @@ function setForeGroundLayerDirection(report) {
 function setReport(report) {
     $(('#page' + pageNum)).append('<div id="forcopyratio' + reportNum + '"class = forcopyratio' + '></div>');//추가 - 하지연
     $(('#forcopyratio' + reportNum)).append('<div id="report' + reportNum + '"class = report' + '></div>');//추가 - 하지연
+    $("#report"+reportNum).css('pointer-events', 'none');
+    $("#forcopyratio"+reportNum).css('pointer-events', 'none');
+    $('#forcopyratio' + reportNum).css("position", "absolute");
 
     setForCopyRatioDirection(report);//추가 - 하지연
     setReportDirection(report);
@@ -427,10 +475,9 @@ function setReport(report) {
     $('#forcopyratio' + reportNum).css('position', 'absolute');
     $('#forcopyratio' + reportNum).css('zIndex', -11);
 
-
-    // setBackGroundLayer(report);
+    setBackGroundLayer(report);
     setDesignLayer(report);
-    // setForeGroundLayer(report);
+    setForeGroundLayer(report);
 
     // makeTableByData();
 
@@ -532,6 +579,11 @@ function setPage(report, width, height) {
     $('#reportTemplate').append('<div id="pageForCopyRatio' + pageNum + '" class="pageforcopyratio paperType-' + paperType + '"></div>');//수정 - 하지연
     $('#pageForCopyRatio' + pageNum).append('<div id="page' + pageNum + '" class="page paperType-' + paperType + '"></div>');//수정 - 하지연
     // $(('#forcopyratio' + reportNum)).append('<div id="report' + reportNum + '"class = report' +'></div>');
+    $(document.html).css('pointer-events', 'none');
+    $(document.body).css('pointer-events', 'none');
+    $("#reportTemplate").css('pointer-events', 'none');
+    $("#pageForCopyRatio"+pageNum).css('pointer-events', 'none');
+    $("#page"+pageNum).css('pointer-events', 'none');
 
     setPageDirection(report);
     setPageForCopyRatioDirection(report);//추가 - 하지연
