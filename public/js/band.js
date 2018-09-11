@@ -13,6 +13,7 @@ function Band(data){
 
     this.attributes = data._attributes; // 속성(밴드 타입)
     this.id = data.Id._text; // ID
+    this.parentBand = undefined;
     this.name = data.Name._text; // 이름
     this.rectangle = { // 레이아웃(위치 + 크기)
         x : (data.Rectangle.X === undefined ? "0" : data.Rectangle.X._text),
