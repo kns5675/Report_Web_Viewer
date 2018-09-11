@@ -15,7 +15,7 @@ function Label(data){
 
     this.name = data.Name._text;
     this.Lock = data.Lock;
-    this.dataType = data.DataType === undefined ? 0 : data.DataType._text; // 데이터 형태
+    this.dataType = data.DataType === undefined ? undefined : data.DataType._text; // 데이터 형태
     this.imageTransparent = data.ImageTransparent === undefined ? 0 : data.ImageTransparent._text; // 이미지 투명도
     this.zOrder = data.ZOrder === undefined ? 0 : data.ZOrder._text;
 
@@ -107,7 +107,7 @@ function Label(data){
 
     this.labelTextType = (data.LabelTextType === undefined ? 0 : data.LabelTextType._text); // 문자 형식
     this.format = (data.Format === undefined ? 0 : data.Format._text); // 표시 형식
-    this.startBindScript = data.StartBindScript === undefined ? 0 : data.StartBindScript._text; // 아마도 JavaScript 코드
+    this.startBindScript = data.StartBindScript === undefined ? undefined : data.StartBindScript._text; // 아마도 JavaScript 코드
     this.reVectorValue = data.ReVectorValue === undefined ? 0 : data.ReVectorValue._text; // 아마도 장평 관련
     this._formatFieldNone = data._formatFieldNone === undefined ? 0 : data._formatFieldNone._text;
 

@@ -477,110 +477,113 @@ function howmanyPages(thisvalue){
 }
 
 //학준 추가
-    function band_dbclick_event() {
-        $(".NormalLabel_scope").on({
-            "dblclick": function () {
-                var this_id = this.children[0].id;
-                var current = this.id;
-                var current_width = this.style.width;
-                var current_height = this.style.height;
-                var this_text = $("#" + this_id)[0].innerText;
+function band_dbclick_event(data) {
+    if (data.ReportTemplate.ReportList.anyType.Editable !== undefined) {
+        var Editable = data.ReportTemplate.ReportList.anyType.Editable._text;
+        if(Editable == "true"){
+            $(".NormalLabel_scope").on({
+                "dblclick": function () {
+                    var this_id = this.children[0].id;
+                    var current = this.id;
+                    var current_width = this.style.width;
+                    var current_height = this.style.height;
+                    var this_text = $("#" + this_id)[0].innerText;
 
-                if ($("#text_area")[0] === undefined) {
-                    var text_div = document.createElement("div");
-                    text_div.id = "text_div";
+                    if ($("#text_area")[0] === undefined) {
+                        var text_div = document.createElement("div");
+                        text_div.id = "text_div";
 
-                    var text_area = document.createElement('textarea');
-                    text_area.id = "text_area";
-                    text_area.value = this_text;
-                    text_area.style.width = current_width;
-                    text_area.style.height = current_height;
-                    text_area.zIndex = 999;
+                        var text_area = document.createElement('textarea');
+                        text_area.id = "text_area";
+                        text_area.value = this_text;
+                        text_area.style.width = current_width;
+                        text_area.style.height = current_height;
+                        text_area.zIndex = 999;
 
-                    this.style.borderWidth = "3px";
-                    this.style.borderColor = "blue";
-                    this.style.borderStyle = "dotted solid";
+                        this.style.borderWidth = "3px";
+                        this.style.borderColor = "blue";
+                        this.style.borderStyle = "dotted solid";
 
-                    document.getElementById(current).appendChild(text_div);
-                    document.getElementById(text_div.id).appendChild(text_area);
+                        document.getElementById(current).appendChild(text_div);
+                        document.getElementById(text_div.id).appendChild(text_area);
 
-                    document.getElementById(text_area.id).focus();
-                }
-            },
-            "keydown": function (key) {
-                if (key.keyCode === 13) { //enter 처리
-                    if(!key.shiftKey){  //shift + enter 처리
-                        var insert_text = $("#text_area").val();
-                        var text_convert = insert_text.replace(/(?:\r\n|\r|\n)/g, '<br />'); // html 문법으로 변환.
-                        var this_id = this.children[0].id;
-                        $("#"+this_id)[0].innerHTML = text_convert;
+                        document.getElementById(text_area.id).focus();
+                    }
+                },
+                "keydown": function (key) {
+                    if (key.keyCode === 13) { //enter 처리
+                        if(!key.shiftKey){  //shift + enter 처리
+                            var insert_text = $("#text_area").val();
+                            var text_convert = insert_text.replace(/(?:\r\n|\r|\n)/g, '<br />'); // html 문법으로 변환.
+                            var this_id = this.children[0].id;
+                            $("#"+this_id)[0].innerHTML = text_convert;
+                            $("#text_div").remove();
+                            this.style.borderWidth = "1px";
+                            this.style.borderColor = "black";
+                            this.style.borderStyle = "solid";
+                        }
+                    }else if (key.keyCode === 27){ //esc 처리
                         $("#text_div").remove();
                         this.style.borderWidth = "1px";
                         this.style.borderColor = "black";
                         this.style.borderStyle = "solid";
                     }
-                }else if (key.keyCode === 27){ //esc 처리
-                    $("#text_div").remove();
-                    this.style.borderWidth = "1px";
-                    this.style.borderColor = "black";
-                    this.style.borderStyle = "solid";
                 }
-            }
-        });
-        $(".DynamicTableHeader").on({
-            "dblclick": function () {
-                var current = this.id;
-                console.log("this : ",this);
-                console.log("current : ",current);
-                var current_width = this.style.width;
-                var current_height = this.style.height;
-                var this_text = $("#" + current)[0].innerText;
+            });
+            $(".DynamicTableHeader").on({
+                "dblclick": function () {
+                    var current = this.id;
+                    var current_width = this.style.width;
+                    var current_height = this.style.height;
+                    var this_text = $("#" + current)[0].innerText;
 
-                if ($("#text_area")[0] === undefined) {
-                    var text_div = document.createElement("div");
-                    text_div.id = "text_div";
+                    if ($("#text_area")[0] === undefined) {
+                        var text_div = document.createElement("div");
+                        text_div.id = "text_div";
 
-                    var text_area = document.createElement('textarea');
-                    text_area.id = "text_area";
-                    text_area.value = this_text;
-                    text_area.style.width = current_width;
-                    text_area.style.height = current_height;
-                    text_area.zIndex = 999;
+                        var text_area = document.createElement('textarea');
+                        text_area.id = "text_area";
+                        text_area.value = this_text;
+                        text_area.style.width = current_width;
+                        text_area.style.height = current_height;
+                        text_area.zIndex = 999;
 
-                    this.style.borderWidth = "3px";
-                    this.style.borderColor = "blue";
-                    this.style.borderStyle = "dotted solid";
+                        this.style.borderWidth = "3px";
+                        this.style.borderColor = "blue";
+                        this.style.borderStyle = "dotted solid";
 
-                    document.getElementById(current).appendChild(text_div);
-                    document.getElementById(text_div.id).appendChild(text_area);
+                        document.getElementById(current).appendChild(text_div);
+                        document.getElementById(text_div.id).appendChild(text_area);
 
-                    document.getElementById(text_area.id).focus();
-                }
-            },
-            "keydown": function (key) {
-                if (key.keyCode === 13) {
-                    if(!key.shiftKey){
-                        var insert_text = $("#text_area").val();
-                        var text_convert = insert_text.replace(/(?:\r\n|\r|\n)/g, '<br />'); // html 문법으로 변환.
-                        $("#"+this.id)[0].innerHTML = text_convert;
+                        document.getElementById(text_area.id).focus();
+                    }
+                },
+                "keydown": function (key) {
+                    if (key.keyCode === 13) {
+                        if(!key.shiftKey){
+                            var insert_text = $("#text_area").val();
+                            var text_convert = insert_text.replace(/(?:\r\n|\r|\n)/g, '<br />'); // html 문법으로 변환.
+                            $("#"+this.id)[0].innerHTML = text_convert;
+                            $("#text_div").remove();
+                            this.style.borderWidth = "1px";
+                            this.style.borderColor = "black";
+                            this.style.borderStyle = "solid";
+                        }
+                    }else if (key.keyCode === 27){
                         $("#text_div").remove();
                         this.style.borderWidth = "1px";
                         this.style.borderColor = "black";
                         this.style.borderStyle = "solid";
                     }
-                }else if (key.keyCode === 27){
-                    $("#text_div").remove();
-                    this.style.borderWidth = "1px";
-                    this.style.borderColor = "black";
-                    this.style.borderStyle = "solid";
                 }
-            }
-        });
+            });
 
-        $('.NormalLabel').on("click",function () {
-            autoSize(this.id);
-        });
+            $('.NormalLabel').on("click", function () {
+                autoSize(this.id);
+            });
+        }
     }
+}
 
 function print_test() {
     console.log("test");
@@ -596,25 +599,15 @@ function print_test() {
  ******************************************************************/
 function autoSize(pTagId) {
     var tag = $('#' + pTagId);
-    // var tag_rowP = (tag[0].innerHTML).split('</p>');
-    // console.log("tag_rowP : ",tag_rowP);
-    // if(tag_rowP){
     var fontSize = (tag.css('font-size')).split('p');
     var tag_row = (tag[0].innerHTML).split('<br>');
-    var big_row = 0;
+    var big_row = 1;
     tag_row.forEach(function (e) {
         var cutting_row = e.replace(/(^\s*)|(\s*$)/, '');
-        // var tag_cut = cutting_row.replace(/[0-9]|[^\!-z]/gi,"");
-        // console.log("tag_cut : ",tag_cut);
-        // if(tag_cut){ //영어가 있으면
-        //     fontSize = 10;
-        // }
         if(big_row < cutting_row.length){
             big_row = cutting_row.length;
         }
     });
-    // }
-
     // 16pt 이런 식으로 값이 받아져서 p앞으로 끊어서 숫자만 받아오려고 한 문자열 자르기 작업
     var brTag = $('#' + pTagId + ' br');
     var brCount = brTag.length;
@@ -623,18 +616,23 @@ function autoSize(pTagId) {
         one_line = 6;
     }
     // text중에서 <br/>의 개수를 구함
-    var widths = (fontSize[0]-2) * big_row;
+    var widths;
+    if(fontSize[0] > 20){
+        widths = (fontSize[0]) * big_row;
+    }else if(fontSize[0] < 10){
+        widths = (fontSize[0]+2) * big_row;
+    }else{
+        widths = (fontSize[0]-3) * big_row;
+    }
     var designLayerSize = $(".designLayer")[0].style.width.split('p');
-    console.log("widths : ",widths);
-    console.log("designLayerSize : ",designLayerSize[0]);
     if(widths>designLayerSize[0]){
         widths = designLayerSize;
     }
     var height = fontSize[0] * (brCount + 1) + brCount + one_line;
     tag.parent().css({
         'width' : widths + 'px',
-        'height': height + 'px',
-        'top': height + fontSize[0] + 'px'
+        'height': height + 'px'
+        // 'top': (height*1 + fontSize[0]*1) + 'px'
     });
     tag.css({
         'margin-left': '3px',
