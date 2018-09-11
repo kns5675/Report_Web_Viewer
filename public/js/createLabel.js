@@ -27,7 +27,7 @@ var dynamicTitleLabelNum = 1;
 var thNum = 1;
 var dynamicValueLabelNum = 1;
 //var fixedValueLabelNum =1; //지연추가
-var fixedTableLabelNum=1; //지연추가
+var fixedTableLabelNum = 1; //지연추가
 var groupFieldArray = [];
 var titleArray = []; // 그룹으로 묶었을 경우 titleName으로만 접근이 가능해져서 그 titleName을 담을 배열
 
@@ -86,7 +86,7 @@ function judgementLabel(data, divId, numOfData, band_name) {
 
         fixTableLabels.forEach(function (label, i) {
             var fixtableLabel = new FixedTableLabel(label, i);
-            if(fixTableLabelList.length< fixTableLabels.length){ // 수정 : 하지연
+            if (fixTableLabelList.length < fixTableLabels.length) { // 수정 : 하지연
                 fixTableLabelList.push(fixtableLabel);
             }
         });
@@ -179,15 +179,15 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData) {
     dynamicTable_resizing_div.append('<table id="dynamicTable' + dynamicTableNum + '" class="table table-' + temp_table_class + '"></table>');
     // dynamicTable_resizing_div.addClass("NormalLabel_scope");
     div.css('position', 'relative');
-    div.css('border','5px solid pink');//지연추가 구조볼라고 잠시
-    divIdTable.css('border','2px solid purple');//지연추가 구조볼라고 잠시
+    div.css('border', '5px solid pink');//지연추가 구조볼라고 잠시
+    divIdTable.css('border', '2px solid purple');//지연추가 구조볼라고 잠시
 
     dynamicTable_resizing_div.css({
         'position': 'absolute',
         'left': table.rectangle.x + 'px',
         'top': table.rectangle.y + 'px',
         // 'pointer-events': 'auto',
-        'border' : '3px solid white'//일단 추가해놈 영역 잘 안보여서 지연추가
+        'border': '3px solid white'//일단 추가해놈 영역 잘 안보여서 지연추가
     });
     var tableId = $('#dynamicTable' + dynamicTableNum);
     Lock_Check_Table(table, dynamicTable_resizing_div, tableId, div);
@@ -232,12 +232,12 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData) {
  DynamicTableValueLabel(동적 테이블 밸류 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 구영준
  **************************************************************************************/
-function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId, numOfData, table){
+function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId, numOfData, table) {
     var rowLength = curDatarow + numOfData; //한 페이지에 마지막으로 출력해야할 row
     for (var j = curDatarow; j < rowLength; j++) {
         var data = dt[j];
         var valueTrId = $("#dynamicValueLabel" + j);
-        if(valueTrId.length < 1)
+        if (valueTrId.length < 1)
             tableId.append('<tr id = "dynamicValueLabel' + j + '"></tr>');
         for (var key in data) {
             if (label.fieldName == key) {
@@ -245,9 +245,9 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
                 var key_data = data[key]._text;
                 var table_reform = table_format_check(data, valueTrId, key_data, table);
                 var tdId = 'tableValueLabelNum' + tableValueLabelNum++;
-                if(label.labelTextType == 'Number' && label.format != undefined){
+                if (label.labelTextType == 'Number' && label.format != undefined) {
                     valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '">' + table_reform + '</td>');
-                }else{
+                } else {
                     valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '">' + table_reform + '</td>');
                 }
 
@@ -509,14 +509,14 @@ function drawingFixedTable(table, tableLabel, divId) {
  ******************************************************************/
 function drawingSystemLabel(data, divId, band_name) {
     var labelNbandInfo = {
-        data : data,
-        divId : divId,
-        band_name : band_name !== undefined ? band_name : undefined,
-        div : $('#' + divId),
-        labelId : $('#' + data.dataType + systemLabelNum++),
-        label_scope : "NormalLabel_scope",
-        labelNum : systemLabelNum,
-        label_type : data.dataType !== undefined ? data.dataType : "NormalLabel"
+        data: data,
+        divId: divId,
+        band_name: band_name !== undefined ? band_name : undefined,
+        div: $('#' + divId),
+        labelId: $('#' + data.dataType + systemLabelNum++),
+        label_scope: "NormalLabel_scope",
+        labelNum: systemLabelNum,
+        label_type: data.dataType !== undefined ? data.dataType : "NormalLabel"
     }
     labelPropertyApply(labelNbandInfo);
 }
@@ -536,14 +536,14 @@ function drawingSystemLabel(data, divId, band_name) {
  ******************************************************************/
 function drawingSummaryLabel(data, divId, band_name) {
     var labelNbandInfo = {
-        data : data,
-        divId : divId,
-        band_name : band_name !== undefined ? band_name : undefined,
-        div : $('#' + divId),
-        labelId : $('#' + data.dataType + summaryLabelNum++),
-        label_scope : "NormalLabel_scope",
-        labelNum : summaryLabelNum,
-        label_type : data.dataType !== undefined ? data.dataType : "NormalLabel"
+        data: data,
+        divId: divId,
+        band_name: band_name !== undefined ? band_name : undefined,
+        div: $('#' + divId),
+        labelId: $('#' + data.dataType + summaryLabelNum++),
+        label_scope: "NormalLabel_scope",
+        labelNum: summaryLabelNum,
+        label_type: data.dataType !== undefined ? data.dataType : "NormalLabel"
     }
     labelPropertyApply(labelNbandInfo);
 
@@ -582,14 +582,14 @@ function drawingSummaryLabel(data, divId, band_name) {
  ******************************************************************/
 function drawingDataLabel(data, divId, band_name) {
     var labelNbandInfo = {
-        data : data,
-        divId : divId,
-        band_name : band_name !== undefined ? band_name : undefined,
-        div : $('#' + divId),
-        labelId : $('#' + data.dataType + dataLabelNum++),
-        label_scope : "NormalLabel_scope",
-        labelNum : dataLabelNum,
-        label_type : data.dataType !== undefined ? data.dataType : "NormalLabel"
+        data: data,
+        divId: divId,
+        band_name: band_name !== undefined ? band_name : undefined,
+        div: $('#' + divId),
+        labelId: $('#' + data.dataType + dataLabelNum++),
+        label_scope: "NormalLabel_scope",
+        labelNum: dataLabelNum,
+        label_type: data.dataType !== undefined ? data.dataType : "NormalLabel"
     }
     labelPropertyApply(labelNbandInfo);
 }
@@ -612,14 +612,14 @@ function drawingDataLabel(data, divId, band_name) {
  ******************************************************************/
 function drawingNormalLabel(data, divId, band_name) {
     var labelNbandInfo = {
-        data : data,
-        divId : divId,
-        band_name : band_name !== undefined ? band_name : undefined,
-        div : $('#' + divId),
-        labelId : $('#' + data.dataType + normalLabelNum++),
-        label_scope : "NormalLabel_scope",
-        labelNum : normalLabelNum,
-        label_type : data.dataType !== undefined ? data.dataType : "NormalLabel"
+        data: data,
+        divId: divId,
+        band_name: band_name !== undefined ? band_name : undefined,
+        div: $('#' + divId),
+        labelId: $('#' + data.dataType + normalLabelNum++),
+        label_scope: "NormalLabel_scope",
+        labelNum: normalLabelNum,
+        label_type: data.dataType !== undefined ? data.dataType : "NormalLabel"
     }
     labelPropertyApply(labelNbandInfo);
 }
@@ -638,14 +638,14 @@ function drawingNormalLabel(data, divId, band_name) {
  ******************************************************************/
 function drawingExpression(data, divId, band_name) {
     var labelNbandInfo = {
-        data : data,
-        divId : divId,
-        band_name : band_name !== undefined ? band_name : undefined,
-        div : $('#' + divId),
-        labelId : $('#' + data.dataType + expressionNum++),
-        label_scope : "NormalLabel_scope",
-        labelNum : expressionNum,
-        label_type : data.dataType !== undefined ? data.dataType : "NormalLabel"
+        data: data,
+        divId: divId,
+        band_name: band_name !== undefined ? band_name : undefined,
+        div: $('#' + divId),
+        labelId: $('#' + data.dataType + expressionNum++),
+        label_scope: "NormalLabel_scope",
+        labelNum: expressionNum,
+        label_type: data.dataType !== undefined ? data.dataType : "NormalLabel"
     }
     labelPropertyApply(labelNbandInfo);
 }
@@ -663,14 +663,14 @@ function drawingExpression(data, divId, band_name) {
  ******************************************************************/
 function drawingGroupLabel(data, divId, band_name) {
     var labelNbandInfo = {
-        data : data,
-        divId : divId,
-        band_name : band_name !== undefined ? band_name : undefined,
-        div : $('#' + divId),
-        labelId : $('#' + data.dataType + groupLabelNum++),
-        label_scope : "NormalLabel_scope",
-        labelNum : groupLabelNum,
-        label_type : data.dataType !== undefined ? data.dataType : "NormalLabel"
+        data: data,
+        divId: divId,
+        band_name: band_name !== undefined ? band_name : undefined,
+        div: $('#' + divId),
+        labelId: $('#' + data.dataType + groupLabelNum++),
+        label_scope: "NormalLabel_scope",
+        labelNum: groupLabelNum,
+        label_type: data.dataType !== undefined ? data.dataType : "NormalLabel"
     }
     labelPropertyApply(labelNbandInfo);
 }
@@ -685,14 +685,14 @@ function drawingGroupLabel(data, divId, band_name) {
  ******************************************************************/
 function drawingParameterLabel(data, divId, band_name) {
     var labelNbandInfo = {
-        data : data,
-        divId : divId,
-        band_name : band_name !== undefined ? band_name : undefined,
-        div : $('#' + divId),
-        labelId : $('#ParameterLabel' + parameterLabelNum++),
-        label_scope : "NormalLabel_scope",
-        labelNum : parameterLabelNum,
-        label_type : data.dataType !== undefined ? data.dataType : "NormalLabel"
+        data: data,
+        divId: divId,
+        band_name: band_name !== undefined ? band_name : undefined,
+        div: $('#' + divId),
+        labelId: $('#ParameterLabel' + parameterLabelNum++),
+        label_scope: "NormalLabel_scope",
+        labelNum: parameterLabelNum,
+        label_type: data.dataType !== undefined ? data.dataType : "NormalLabel"
     }
     labelPropertyApply(labelNbandInfo);
 }
@@ -1202,6 +1202,7 @@ function table_column_controller(resize_area, Unalterable_area) {
         }
     });
 }
+
 /******************************************************************
  기능 : 그라데이션의 시작방향, 방향 등을 판단하여 CSS 속성을 줄 함수를 만든다.
  만든이 : 안예솔
@@ -1424,11 +1425,11 @@ function characterSpacing(text, spacing, pTagId) {
 }
 
 function z_index_setting(band_name) {
-    if(band_name == "BandBackGround"){
+    if (band_name == "BandBackGround") {
         var z_index = -11;
-    }else if(band_name == "BandForeGround"){
+    } else if (band_name == "BandForeGround") {
         var z_index = 100;
-    }else{
+    } else {
         var z_index = 2;
     }
     return z_index;
@@ -1437,26 +1438,21 @@ function z_index_setting(band_name) {
 /*************************
  * DRD 자바스크립트 구현
  *************************/
-function drd_javascript(label, labelId, script){
-    if(labelId !== undefined && script !== undefined) {
+function drd_javascript(label, labelId, script) {
+    if (labelId !== undefined && script !== undefined) {
         script = str_replace(script, '<br/>', '\n');
         script = str_replace(script, 'TextColor', 'color');
         script = str_replace(script, 'Color.', '');
-        // console.log(script);
         script = str_replace(script, 'This.', '$("#' + labelId + '").css(');
-        // console.log(script);
     }
 }
 
 /**
  DRD 자바스크립트 텍스트 치환 함수
  */
-function str_replace(str, searchStr, replaceStr){
+function str_replace(str, searchStr, replaceStr) {
     return str.split(searchStr).join(replaceStr);
 }
-
-
-
 
 
 // var labelNbandInfo = {
@@ -1468,7 +1464,7 @@ function str_replace(str, searchStr, replaceStr){
 //     label_scope : "NormalLabel_scope",
 //     divNum : normalLabelNum
 // }
-function labelPropertyApply(labelNbandInfo){
+function labelPropertyApply(labelNbandInfo) {
 
     labelNbandInfo.div = $('#' + labelNbandInfo.divId);
     labelNbandInfo.div.css('position', 'relative');
@@ -1495,12 +1491,12 @@ function labelPropertyApply(labelNbandInfo){
                 'border-right': labelNbandInfo.data.borderThickness.right + 'px ' + rightBorder + ' ' + labelNbandInfo.data.rightBorderColor,
                 'border-bottom': labelNbandInfo.data.borderThickness.bottom + 'px ' + bottomBorder + ' ' + labelNbandInfo.data.bottomBorderColor,
                 'border-top': labelNbandInfo.data.borderThickness.top + 'px ' + topBorder + ' ' + labelNbandInfo.data.topBorderColor,
-                'zIndex' : 0
+                'zIndex': 0
             });
         } else {
             labelNbandInfo.labelId.css({
                 'border': '1px solid black',
-                'zIndex' : 0
+                'zIndex': 0
             });
         }
     }
@@ -1530,22 +1526,22 @@ function labelPropertyApply(labelNbandInfo){
         // 바코드의 높이를 조금 줄여줌
         labelNbandInfo.labelId.children('div:not(:last-child)').css('height',
             Number(labelNbandInfo.labelId.children('div:not(:last-child)').css('height').substring(0,
-                labelNbandInfo.labelId.children('div:not(:last-child)').css('height').length-2)) * 0.8 + 'px'
+                labelNbandInfo.labelId.children('div:not(:last-child)').css('height').length - 2)) * 0.8 + 'px'
         );
 
         // 바코드 폰트 크기를 조금 키워줌
         labelNbandInfo.labelId.children('div:last-child').css({
-            'font-size' : '15px',
-            'font-weight' : 'bold',
-            'line-height' : '15px'
+            'font-size': '15px',
+            'font-weight': 'bold',
+            'line-height': '15px'
         });
 
         // 바코드를 감싸는 div의 크기를 글씨 div의 높이 +  바코드 div의 높이로 설정
         labelNbandInfo.labelId.css('height',
             Number(labelNbandInfo.labelId.children('div:first-child').css('height')
-                .substring(0, labelNbandInfo.labelId.children('div:first-child').css('height').length-2))
+                .substring(0, labelNbandInfo.labelId.children('div:first-child').css('height').length - 2))
             + Number(labelNbandInfo.labelId.children('div:last-child').css('height')
-                .substring(0, labelNbandInfo.labelId.children('div:last-child').css('height').length-2)) + 'px'
+                .substring(0, labelNbandInfo.labelId.children('div:last-child').css('height').length - 2)) + 'px'
         );
         Lock_check(labelNbandInfo.data, labelNbandInfo.labelId, labelNbandInfo.div);
         return;
@@ -1561,8 +1557,8 @@ function labelPropertyApply(labelNbandInfo){
             text: qrcode_text
         });
         labelNbandInfo.labelId.find('canvas').css({
-            'width' : '100%',
-            'height' : '100%'
+            'width': '100%',
+            'height': '100%'
         })
         Lock_check(labelNbandInfo.data, labelNbandInfo.labelId, labelNbandInfo.div);
         return;
@@ -1596,7 +1592,7 @@ function labelPropertyApply(labelNbandInfo){
 
     var pId = $('#P' + labelNbandInfo.label_type + labelNbandInfo.labelNum);
 
-    if(labelNbandInfo.label_type === "SystemLabel") {
+    if (labelNbandInfo.label_type === "SystemLabel") {
         var date = new Date();
         switch (labelNbandInfo.data.systemFieldName) {
             case 'Date' :
@@ -1646,10 +1642,10 @@ function labelPropertyApply(labelNbandInfo){
         'font-family': labelNbandInfo.data.fontFamily,
         'font-weight': labelNbandInfo.data.fontWeight,
         'font-style': labelNbandInfo.data.fontStyle,
-        'margin-top' : '10px',
-        'margin-bottom' : '10px',
-        'margin-right' : '10px',
-        'margin-left' : '10px'
+        'margin-top': '10px',
+        'margin-bottom': '10px',
+        'margin-right': '10px',
+        'margin-left': '10px'
     });
 
     // 금액 표시 방법 한글
@@ -1668,7 +1664,7 @@ function labelPropertyApply(labelNbandInfo){
     //     var CHN = numberToCHN((data.text).replace(/[^0-9]/g, ""));
     // }
 
-    if(labelNbandInfo.label_type === "ParameterLabel") {
+    if (labelNbandInfo.label_type === "ParameterLabel") {
         paramTable.NewDataSet.Table1.forEach(function (paramData) {
             if (labelNbandInfo.data.parameterName == paramData.Key._text) {
                 labelNbandInfo.data.text = paramData.Value._text;
@@ -1678,7 +1674,7 @@ function labelPropertyApply(labelNbandInfo){
     /********************************************
      한 그룹의 데이터 출력이 끝나면 groupFieldNum++를 어디선가 해줘야함..어떻게해야하지..모르겠담
      *******************************************/
-    if(labelNbandInfo.label_type === "DataLabel") {
+    if (labelNbandInfo.label_type === "DataLabel") {
         if (groupFieldArray !== undefined) {
             pId.append(groupFieldArray[groupFieldNum][0]);
             labelNbandInfo.data.text = pId.text();
@@ -1796,4 +1792,6 @@ function labelPropertyApply(labelNbandInfo){
     drd_javascript(labelNbandInfo.data, labelNbandInfo.labelId, labelNbandInfo.data.startBindScript);
     pId.addClass('Label');
     pId.addClass(labelNbandInfo.label_type);
+
 }
+
