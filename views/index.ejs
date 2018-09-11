@@ -37,13 +37,14 @@
         var data = <%-data%>;  //xml json 데이터
         var dataTable = <%- dataTable %>; //임시 데이터 dataTable
         var paramTable = <%- paramTable %>; // 임시 파라미터 데이터 paramTable
+        var subReport = <%- subReport %>; //서브리포트에 뿌릴 데이터 가져옴 나중에 xml을 넣는 로직도 하나 만들어서 xml 파일을 드래그하면 해당 xml을 추가할 수 있도록 수정 필요.
 
         $(document).ready(function () {
             $("#header").load("/include/header.ejs");
             $("#myModal").load("/include/modal.ejs");
             $("#loadingModal").load("/include/loading.ejs");
             $('#modalTableChoice').load("/include/modalTableChoice.ejs");
-            makeReportTemplate(data);
+            makeReportTemplate(data, subReport);
             drawPageNumberInSystemLabel();
             band_dbclick_event(data);
             image_setting();
@@ -63,14 +64,14 @@
     </style>
 </head>
 <body>
-<div id="header"></div>
-<div id="myModal" class="modal"></div><!-- 고급인쇄 모달창 -->
-<div id="loadingModal" class="modal"></div><!-- pdf,html등 내보내기에 필요한 로딩창 -->
+<div id="header" style="pointer-events: auto;"></div>
+<div id="myModal" class="modal" style="pointer-events: auto;"></div><!-- 고급인쇄 모달창 -->
+<div id="loadingModal" class="modal" style="pointer-events: auto;"></div><!-- pdf,html등 내보내기에 필요한 로딩창 -->
 
-<div id="modalTableChoice" class="modal"></div>
+<div id="modalTableChoice" class="modal" style="pointer-events: auto;"></div>
 
 <div id="reportTemplate" style="background-color:lightyellow;"></div>
-<div id="Image_Modal"><!--이미지 추가 모달창-->
+<div id="Image_Modal" style="pointer-events: auto;"><!--이미지 추가 모달창-->
     <div id="modalLayer" class="modalLayer">
         <div class="modalContent modal-content">
             <div id="image_add_area" class="image_add_area">
@@ -93,7 +94,7 @@
     </div>
 </div>
 <div id="reportTemplate" style="background-color:lightyellow;"></div>
-<div id="Image_Modal2"><!--이미지 추가 상세 모달창-->
+<div id="Image_Modal2" style="pointer-events: auto;"><!--이미지 추가 상세 모달창-->
     <div id="image_dialog" class="modalLayer" title="이미지 속성">
         <div id="dialog" class="modal-content">
             <div id="image_type_add_area" class="image_add_area">

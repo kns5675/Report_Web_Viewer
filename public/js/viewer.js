@@ -478,13 +478,11 @@ function howmanyPages(thisvalue){
 
 //학준 추가
 function band_dbclick_event(data) {
-    console.log(data.ReportTemplate.ReportList.anyType.Editable);
     if (data.ReportTemplate.ReportList.anyType.Editable !== undefined) {
         var Editable = data.ReportTemplate.ReportList.anyType.Editable._text;
-        if (Editable == "true") {
+        if(Editable == "true"){
             $(".NormalLabel_scope").on({
                 "dblclick": function () {
-                    console.log("test");
                     var this_id = this.children[0].id;
                     var current = this.id;
                     var current_width = this.style.width;
@@ -514,17 +512,17 @@ function band_dbclick_event(data) {
                 },
                 "keydown": function (key) {
                     if (key.keyCode === 13) { //enter 처리
-                        if (!key.shiftKey) {  //shift + enter 처리
+                        if(!key.shiftKey){  //shift + enter 처리
                             var insert_text = $("#text_area").val();
                             var text_convert = insert_text.replace(/(?:\r\n|\r|\n)/g, '<br />'); // html 문법으로 변환.
                             var this_id = this.children[0].id;
-                            $("#" + this_id)[0].innerHTML = text_convert;
+                            $("#"+this_id)[0].innerHTML = text_convert;
                             $("#text_div").remove();
                             this.style.borderWidth = "1px";
                             this.style.borderColor = "black";
                             this.style.borderStyle = "solid";
                         }
-                    } else if (key.keyCode === 27) { //esc 처리
+                    }else if (key.keyCode === 27){ //esc 처리
                         $("#text_div").remove();
                         this.style.borderWidth = "1px";
                         this.style.borderColor = "black";
@@ -535,8 +533,6 @@ function band_dbclick_event(data) {
             $(".DynamicTableHeader").on({
                 "dblclick": function () {
                     var current = this.id;
-                    console.log("this : ", this);
-                    console.log("current : ", current);
                     var current_width = this.style.width;
                     var current_height = this.style.height;
                     var this_text = $("#" + current)[0].innerText;
@@ -564,16 +560,16 @@ function band_dbclick_event(data) {
                 },
                 "keydown": function (key) {
                     if (key.keyCode === 13) {
-                        if (!key.shiftKey) {
+                        if(!key.shiftKey){
                             var insert_text = $("#text_area").val();
                             var text_convert = insert_text.replace(/(?:\r\n|\r|\n)/g, '<br />'); // html 문법으로 변환.
-                            $("#" + this.id)[0].innerHTML = text_convert;
+                            $("#"+this.id)[0].innerHTML = text_convert;
                             $("#text_div").remove();
                             this.style.borderWidth = "1px";
                             this.style.borderColor = "black";
                             this.style.borderStyle = "solid";
                         }
-                    } else if (key.keyCode === 27) {
+                    }else if (key.keyCode === 27){
                         $("#text_div").remove();
                         this.style.borderWidth = "1px";
                         this.style.borderColor = "black";

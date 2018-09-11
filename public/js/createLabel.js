@@ -176,7 +176,8 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData) {
     dynamicTable_resizing_div.css({
         'position': 'absolute',
         'left': table.rectangle.x + 'px',
-        'top': table.rectangle.y + 'px'
+        'top': table.rectangle.y + 'px',
+        'pointer-events': 'auto'
     });
     var tableId = $('#dynamicTable' + dynamicTableNum);
     Lock_Check_Table(table, dynamicTable_resizing_div, tableId, div);
@@ -432,7 +433,8 @@ function drawingFixedTable(table, tableLabel, divId) {
         'width': table.rectangle.width,
         'height': table.rectangle.height,
         'left': table.rectangle.x + 'px',
-        'top': table.rectangle.y + 'px'
+        'top': table.rectangle.y + 'px',
+        'pointer-events': 'auto'
     });
 
     tableId.append('<tr id = "fixedTitleLabel"></tr>');
@@ -495,7 +497,7 @@ function drawingSystemLabel(data, divId) {
     div.append('<div id = "SystemLabel' + systemLabelNum + '"></div>');
 
     var systemLabelId = $('#SystemLabel' + systemLabelNum);
-
+    systemLabelId.css('pointer-events', 'auto');
     // visible 속성
     if (data.visible == 'false') {
         systemLabelId.css('display', 'none');
@@ -985,6 +987,7 @@ function drawingSummaryLabel(data, divId) {
     div.css('position', 'relative');
     div.append('<div id = "SummaryLabel' + summaryLabelNum + '">SummaryLabel</div>');
     var summaryLabelId = $('#SummaryLabel' + summaryLabelNum);
+    summaryLabelId.css('pointer-events', 'auto');
 
     // visible 속성
     if (data.visible == 'false') {
@@ -1211,7 +1214,7 @@ function drawingDataLabel(data, divId) {
     div.css('position', 'relative');
     div.append('<div id = "DataLabel' + dataLabelNum + '"></div>');
     var dataLabelId = $('#DataLabel' + dataLabelNum);
-
+    dataLabelId.css('pointer-events', 'auto');
     // visible 속성
     if (data.visible == 'false') {
         dataLabelId.css('display', 'none');
@@ -1437,6 +1440,7 @@ function drawingNormalLabel(data, divId, band_name) {
     var normalLabelId = $('#NormalLabel' + normalLabelNum);
 
     normalLabelId.addClass("NormalLabel_scope");
+    normalLabelId.css('pointer-events', 'auto');
 
     // console.log("div[0].id : ",div[0].id);
 
@@ -1710,7 +1714,7 @@ function drawingExpression(data, divId) {
     div.append('<div id = "Expression' + expressionNum + '">Expression</div>');
     var expressionId = $('#Expression' + expressionNum);
     expressionId.addClass("NormalLabel_scope");
-
+    expressionId.css('pointer-events', 'auto');
     // visible 속성
     if (data.visible == 'false') {
         expressionId.css('display', 'none');
@@ -1915,7 +1919,7 @@ function drawingGroupLabel(data, divId) {
 
     var groupLabelId = $('#GroupLabel' + groupLabelNum);
     groupLabelId.addClass("NormalLabel_scope");
-
+    groupLabelId.css('pointer-events', 'auto');
     // visible 속성
     if (data.visible == 'false') {
         groupLabelId.css('display', 'none');
@@ -2100,7 +2104,7 @@ function drawingParameterLabel(data, divId) {
     var parameterLabelId = $('#ParameterLabel' + parameterLabelNum);
 
     parameterLabelId.addClass("NormalLabel_scope");
-
+    parameterLabelId.css('pointer-events', 'auto');
     // visible 속성
     if (data.visible == 'false') {
         parameterLabelId.css('display', 'none');
