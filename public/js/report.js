@@ -2,7 +2,7 @@ var pageNum = 1;
 var reportNum = 1;
 var curDatarow = 0;
 var groupFieldArray = [];
-var remainBand = [];
+var remainFooterBand = [];
 var isDynamicTable = false;
 
 /******************************************************************
@@ -143,7 +143,7 @@ function getBandHeightWithGroupField(band, numOfData) {
     var valueBorderBottomThickness = 0;
     var titleHeight = Number(labels[0].Rectangle.Height._text);
     var valueHeight = Number(labels[labels.length - 1].Rectangle.Height._text);
-    var allLabelBorderThickness = 0;
+    var allLabelBorderThickness;
 
     if(band.controlList.anyType.Rectangle.Y !== undefined){
         tableSpacing = Number(band.controlList.anyType.Rectangle.Y._text);
@@ -296,7 +296,7 @@ function setDesignLayer(report) {
 
     var layerName = "designLayer" + pageNum;
     var reportHeight = report.rectangle.height;
-    if(remainBand.length > 0){
+    if(remainFooterBand.length > 0){
         var bands = report.layers.designLayer.bands;
         var dataBandIndex = 0;
 
@@ -306,7 +306,7 @@ function setDesignLayer(report) {
             }
         });
 
-        var returnBands = bands.injectArray(dataBandIndex, remainBand);
+        var returnBands = bands.injectArray(dataBandIndex, remainFooterBand);
 
         returnBands.forEach(function(band, i){
             if(band.attributes["xsi:type"] == "BandData"){
@@ -317,7 +317,7 @@ function setDesignLayer(report) {
         returnBands.splice(dataBandIndex, 1);
 
         drawBand(returnBands, layerName, reportHeight);
-        remainBand = [];
+        remainFooterBand = [];
     }else{
         drawBand(report.layers.designLayer.bands, layerName, reportHeight); // 추가 - 전형준
     }
