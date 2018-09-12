@@ -166,10 +166,23 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                         getMinGroupBandDataHeight(band);
                         avaHeight = getAvaHeight(div_id, reportHeight);
                         numofData = getNumOfDataWithGroupField(band, avaHeight);
-                        if (remainData) {
-                            dataBandHeight = getBandHeightWithGroupField(band, numofData - groupDataRow);
+                        if(band.controlList.anyType.MinimumRowCount !== undefined) {
+                            var minimumCnt = Number(band.controlList.anyType.MinimumRowCount._text);
+                            if(minimumCnt != 1 && (numofData - groupDataRow) < minimumCnt) { // 최소행 개수 적용
+                                dataBandHeight = getBandHeightWithGroupField(band, minimumCnt);
+                            } else {
+                                if (remainData) {
+                                    dataBandHeight = getBandHeightWithGroupField(band, numofData - groupDataRow);
+                                } else {
+                                    dataBandHeight = getBandHeightWithGroupField(band, numofData - 1);
+                                }
+                            }
                         } else {
-                            dataBandHeight = getBandHeightWithGroupField(band, numofData - 1);
+                            if (remainData) {
+                                dataBandHeight = getBandHeightWithGroupField(band, numofData - groupDataRow);
+                            } else {
+                                dataBandHeight = getBandHeightWithGroupField(band, numofData - 1);
+                            }
                         }
 
                         $('#' + div_id).css({

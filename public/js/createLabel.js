@@ -34,6 +34,7 @@ var titleArray = []; // 그룹으로 묶었을 경우 titleName으로만 접근�
 
 var row = 0;
 var verticalPNum = 0;
+var plusRowNum = 0;
 
 /******************************************************************
  기능 : ControlList의 유무를 판단하는 함수를 만든다.
@@ -249,9 +250,11 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
         var valueTrId = $("#dynamicValueLabel" + j);
         if (valueTrId.length < 1)
             tableId.append('<tr id = "dynamicValueLabel' + j + '"></tr>');
-        if((j >= dt.length) && table.minimumRowCount !== undefined) {
-            data = dt[j - table.minimumRowCount];
-            minimumRow = true;
+        if((j >= dt.length) && table.minimumRowCount !== undefined) { // 최소행 개수
+            if(table.minimumRowCount != 1) { // 최소행 개수 1이 기본 값임
+                data = dt[j - table.minimumRowCount];
+                minimumRow = true;
+            }
         }
         for (var key in data) {
             if (label.fieldName == key) {
@@ -265,8 +268,7 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
                     } else {
                         valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '">' + table_reform + '</td>');
                     }
-                }
-                if(minimumRow) {
+                } else { // 최소행 개수
                     valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '"></td>');
                 }
 
@@ -312,28 +314,54 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
  DynamicTableValueLabel(동적 테이블 밸류 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 구영준
  **************************************************************************************/
-function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, numOfData) {
+function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, numOfData, table) {
+    var minimumRow = false;
+    if(table.minimumRowCount !== undefined) {
+        var minimumCnt = Number(table.minimumRowCount);
+        if(minimumCnt != 1 && (numOfData - groupDataRow) < minimumCnt) { // 최소행 개수 적용
+            numOfData = numOfData + minimumCnt - (numOfData - groupDataRow);
+            minimumRow = true;
+        }
+    }
+
     for (var j = groupDataRow; j < numOfData; j++) {
+        var temp = j;
         var data = groupFieldArray[groupFieldNum];
+
         var rowNum = curDatarow + j;
+
+        if(minimumRow && data[j] === undefined) {
+            temp = data.length - 1 ;
+            rowNum += 'min';
+        }
+
         var $trId = '#dynamicValueLabel' + rowNum;
         var valueTrId = $($trId);
-        if (valueTrId.length < 1)
+
+        if (valueTrId.length < 1) {
             tableId.append('<tr id =   "dynamicValueLabel' + rowNum + '"></tr>');
-        for (var key in data[j]) {
+        }
+
+        for (var key in data[temp]) {
             valueTrId = $($trId);
             if (label.fieldName == key) {
-                var key_data = data[j][key]._text;
+                var key_data = data[temp][key]._text;
                 var table_reform = table_format_check(data, valueTrId, key_data, label);
                 var tdId = 'tableValueLabelNum' + tableValueLabelNum++;
-                if (label.labelTextType == 'Number' && label.format != undefined) {
+                if(minimumRow && j >= data.length){
                     valueTrId.append(
-                        '<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '">' + table_reform + '</td>'
+                        '<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '"></td>'
                     );
                 } else {
-                    valueTrId.append(
-                        '<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '">' + table_reform + '</td>'
-                    );
+                    if (label.labelTextType == 'Number' && label.format != undefined) {
+                        valueTrId.append(
+                            '<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '">' + table_reform + '</td>'
+                        );
+                    } else {
+                        valueTrId.append(
+                            '<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '">' + table_reform + '</td>'
+                        );
+                    }
                 }
                 valueTrId.css({
                     'width': label.rectangle.width,
@@ -387,7 +415,7 @@ function drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table) {
     if (groupFieldArray == undefined || groupFieldArray.length == 0) {
         drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId, numOfData, table);
     } else {
-        drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, numOfData);
+        drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, numOfData, table);
     }
 }
 
