@@ -9,6 +9,7 @@ body{
 #header {
     background-color: darkslategrey;
     z-index: 999;
+    height:77px;
 }
 
 .jbFixed {
@@ -17,6 +18,7 @@ body{
     margin:0px;
     padding:0px;
     z-index: 999;
+    height:77px;
 }
 
 .show-on-scroll { visibility: hidden; }

@@ -3,6 +3,7 @@ document.write("<script type='text/javascript' src='/js/figure.js' ><" + "/scrip
 
 var labelList = [];
 var tableLabelList = [];
+var fixTableLabelList = [];
 var tableList = [];
 var systemLabelNum = 1;
 var summaryLabelNum = 1;
@@ -74,13 +75,11 @@ function judgementLabel(data, divId, numOfData, band_name) {
         });
         drawingDynamicTable(controlDynamicTable, tableLabelList, divId, numOfData);
     } else if (attr == "ControlFixedTable") { // 고정 테이블일때
-
         /*
         ToDo : 하나의 페이지에 고정테이블이 2개 이상 있을 경우 fixTableLabelList에 겹침
          */
         var controlFixedTable = new Table(data);
         tableList.push(controlFixedTable);
-
         var fixTableLabels = data.Labels.TableLabel;
         var fixTableLabelList = [];
 
@@ -179,7 +178,7 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData) {
     dynamicTable_resizing_div.append('<table id="dynamicTable' + dynamicTableNum + '" class="table table-' + temp_table_class + '"></table>');
     // dynamicTable_resizing_div.addClass("NormalLabel_scope");
     div.css('position', 'relative');
-    div.css('border','5px solid pink');//지연추가 구조볼라고 잠시
+    div.css('border','5px solid lightblue');//지연추가 구조볼라고 잠시
     divIdTable.css('border','2px solid purple');//지연추가 구조볼라고 잠시
 
     dynamicTable_resizing_div.css({
@@ -187,8 +186,17 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData) {
         'left': table.rectangle.x + 'px',
         'top': table.rectangle.y + 'px',
         // 'pointer-events': 'auto',
-        'border' : '3px solid white'//일단 추가해놈 영역 잘 안보여서 지연추가
+        'border' : '3px dotted orange'//일단 추가해놈 영역 잘 안보여서 지연추가
     });
+    if(div.attr('width') == dynamicTable_resizing_div.attr('width')){
+        console.log("!!!!!!!!!!!!!width!!!!!!!!!!!!! 같다.");
+    }else{
+        console.log("!!!!!!!!!!!!!width!!!!!!!!!!!!! 달라!!!!");
+    }if(div.attr('height') == dynamicTable_resizing_div.attr('height')){
+        console.log("!!!!!!!!!!!!!height!!!!!!!!!!!!! 같다.")
+    }else if(div.attr('height') !== dynamicTable_resizing_div.attr('height')){
+        console.log("!!!!!!!!!!!!!height!!!!!!!!!!!!! 달라!!!!!")
+    }
     var tableId = $('#dynamicTable' + dynamicTableNum);
     Lock_Check_Table(table, dynamicTable_resizing_div, tableId, div);
     // table_format_check(table, dynamicTable_resizing_div, tableId, div);
@@ -198,14 +206,22 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData) {
     });
     tableId.append('<tr id = "dynamicTitleLabel' + dynamicTitleLabelNum + '"></tr>');
 
+    if(groupFieldArray.length < 1) {
+        console.log("if들어옴");
+        numOfData = getNumOfDataInOnePage(tableLabel, divId); //한 페이지에 들어갈 데이터 개수
+    }
     var dt = Object.values(dataTable.DataSetName)[0];
+    console.log("dt는 : " + dt);
     if (Array.isArray(tableLabel)) {
         tableLabel.forEach(function (label) {
+            console.log( "들여오는 라벨 값 : "+ label._attributes);
             switch (label._attributes) {
                 case "DynamicTableTitleLabel" :
+                    //console.log("case 1들어옴");
                     drawingDynamicTableTitleLabel(label, dt);
                     break;
                 case "DynamicTableValueLabel" :
+                    //console.log("case 2들어옴");
                     drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table);
                     break;
                 default :
@@ -366,8 +382,11 @@ function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, nu
  *******************************************************************/
 function drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table) {
     if (groupFieldArray == undefined || groupFieldArray.length == 0) {
+        console.log("다이나믹 1번째");
         drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId, numOfData, table);
     } else {
+        console.log("다이나믹 2번째");
+        //console.log(groupFieldArray);
         drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, numOfData);
     }
 }
@@ -433,66 +452,300 @@ function drawingDynamicTableTitleLabel(label, dt) {
 
 /******************************************************************
  기능 : FixedTable(고정 테이블)을 화면에 그려주는 함수를 만든다.
- 만든이 : 안예솔
+ 만든이 : 하지연
  ******************************************************************/
-function drawingFixedTable(table, tableLabel, divId) {
-    var div = $('#' + divId);
-    div.append('<div id="Table"></div>');
+//drawingFixedTable(controlFixedTable, fixTableLabelList, divId, numOfData);
+function drawingFixedTable(table, tableLabel, divId, numOfData) {
+    console.log("고정테이블 그리기 들옴.");//지연보류
+    console.log("tableLabel list의 랭쓰  : " + tableLabel.length + " 찍어보자 이름 : " + tableLabel[0].name + " " + tableLabel[1].name);//지연보류
+    console.log("이거이 중요함!! : " + divId);
+    /*
+    * 테이블 라벨리스트의 길이를 기준으로 -1을 해서 가장 작은 인덱스부터 라벨을 그려주자!
+    * */
+    var div = $('#' + divId);//divId = 밴드임
+    div.append('<div id = "Table' + tableNum + '"></div>');
+    var divIdTable = $('#Table' + tableNum);
+    divIdTable.append('<div id="fixedTable_resizing_div_packing'+ fixedTableNum+'"></div>');
+    var fixedTable_resizing_div_packing = $("#fixedTable_resizing_div_packing"+fixedTableNum);
+    fixedTable_resizing_div_packing.append('<div id="fixedTable_resizing_div'+fixedTableNum+'"></div>');
 
-    var divIdTable = $('#Table');
-    divIdTable.append('<table id="fixedTable"></table>');
+    var fixedTable_resizing_div = $("#fixedTable_resizing_div"+fixedTableNum);
+    var temp_table_class = table.id.substring(0, 4); // 임시로 table을 인식하기 위한 번호 - 전형준
+    fixedTable_resizing_div.append('<table id="fixedTable' + fixedTableNum + '" class="table table-' + temp_table_class + '"></table>');
+
     div.css('position', 'relative');
-    divIdTable.css('position', 'absolute');
+    div.css('border','3px solid blue');//band 테두리
+    //div.css('overflow','hidden');
+    divIdTable.css('border','2px solid orange');//table테두리//테이블안보임.
 
-    var tableId = $('#fixedTable');
+    fixedTable_resizing_div.css({//얘가 고정테이블 역할. 얘한테 뿌려줘야함..
+        'position': 'absolute',
+        'left': table.rectangle.x + 'px',
+        'top': table.rectangle.y + 'px',
+        'pointer-events' : 'auto',
+        'border' : '3px dotted orange' //일단 추가해놈 영역 잘 안보여서
+    });
+
+    var tableId = $('#fixedTable' + fixedTableNum);
+
+    Lock_Check_Table(table, fixedTable_resizing_div, tableId, div);
 
     tableId.css({
         'width': table.rectangle.width,
         'height': table.rectangle.height,
         'left': table.rectangle.x + 'px',
         'top': table.rectangle.y + 'px'
-        // // 'pointer-events': 'auto'
+        // 'pointer-events': 'auto'
     });
+    tableId.append('<tr id = "fixedTableLabel' + fixedTableLabelNum + '"></tr>');
 
-    tableId.append('<tr id = "fixedTitleLabel"></tr>');
-    tableId.append('<tr id = "fixedValueLabel"></tr>');
-
-    var titleTrId = $('#fixedTitleLabel');
-    var valueTrId = $('#fixedValueLabel');
-
+    console.log("groupfieldarray.length : " + groupFieldArray.length + "  !! groupfieldarry : '" + groupFieldArray);
+    if(groupFieldArray.length < 1) {
+        console.log("groupFiledArry가 1보다 작을때 !");//지연보류
+        numOfData = getNumOfDataInOnePage(tableLabel, divId); //한 페이지에 들어갈 데이터 개수
+    }
+    console.log("groupFiledArray가 1보다 클때 !");
+    var dt = Object.values(dataTable.DataSetName)[0];
+    console.log("DataSetName dt는 : " + dt);
     if (Array.isArray(tableLabel)) {
         tableLabel.forEach(function (label) {
-            switch (label._attributes["xsi:type"]) {
-                case "FixedTableTitleLabel" :
-                    titleTrId.append('<th></th>');
-                    titleTrId.css({
-                        'width': label.rectangle.width,
-                        'height': label.rectangle.height,
-                        'font-size': label.fontSize,
-                        'font-family': label.fontFamily,
-                        'font-weight': label.fontStyle,
-                        'background-color': label.backGroundColor
-                    });
+            //console.log( "들여오는 라벨 값 : "+ label._attributes);지연보류
+            switch (label._attributes) {
+                case "FixedTableLabel" :
+                    //onsole.log("case 1들어옴");지연보류
+                    drawingFixedTableLabel(label, dt, tableId, numOfData, table);//지연보류
                     break;
-                case "FixedTableValueLabel" :
-                    valueTrId.append('<td></td>');
-                    valueTrId.css({
-                        'width': label.rectangle.width,
-                        'height': label.rectangle.height,
-                        'font-size': label.fontSize,
-                        'font-family': label.fontFamily,
-                        'font-weight': label.fontStyle,
-                        'background-color': label.backGroundColor
-                    });
+                default :
+                    console.log("case default");
                     break;
             }
-        })
+        });
+        tableId.css({
+            'border': '2px solid red',
+            'border-collapse': 'collapse',
+            'text-align': 'center'
+        });
+
+        tableNum++;
+        fixedTableNum++;
+        thNum++;
+        fixedTableLabelNum++;
     }
-    tableId.css({
-        'border': '1px solid black',
-        'border-collapse': 'collapse',
-        'text-align': 'center'
+}
+/**************************************************************************************
+ 기능 : GroupFieldArray가 없을 경우
+ FixedTableValueLabel(고정 테이블 밸류 라벨)을 화면에 그려주는 함수를 만든다.
+ 만든이 : 하지연
+ **************************************************************************************/
+function drawingFixedTableValueLabelWithoutGroupFieldArray(label, dt, tableId, numOfData, table){
+    console.log("without");
+    var rowLength = curDatarow + numOfData; //한 페이지에 마지막으로 출력해야할 row
+    for (var j = curDatarow; j < rowLength; j++) {
+        var data = dt[j];
+        // var valueTrId = $("#fixedValueLabel" + j);
+        var valueTrId = $("#fixedTableLabel" + j);
+        if(valueTrId.length < 1)
+            // tableId.append('<tr id = "fixedValueLabel' + j + '"></tr>');
+            tableId.append('<tr id = "fixedTableLabel' + j + '"></tr>');
+        for (var key in data) {
+            if (label.fieldName == key) {
+                // var valueTrId = $('#fixedValueLabel' + j);
+                var valueTrId = $('#fixedTableLabel' + j);
+                var key_data = data[key]._text;
+                var table_reform = table_format_check(data, valueTrId, key_data, table);
+                if(label.labelTextType == 'Number' && label.format != undefined){
+                    valueTrId.append('<td class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '">' + table_reform + '</td>');
+                }else{
+                    valueTrId.append('<td class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '">' + table_reform + '</td>');
+                }
+
+                valueTrId.css({
+                    'width': label.rectangle.width,
+                    'height': label.rectangle.height
+                });
+                var td = $('.' + key);
+                //// 추가 부분 18.08.28 YeSol
+                if (label.noBorder == 'true') {
+                    td.css('border', 'none');
+                } else {
+                    if (label.borderThickness !== undefined) {
+                        var leftBorder = borderDottedLine(label.borderDottedLines.leftDashStyle);
+                        var rightBorder = borderDottedLine(label.borderDottedLines.rightDashStyle);
+                        var bottomBorder = borderDottedLine(label.borderDottedLines.bottomDashStyle);
+                        var topBorder = borderDottedLine(label.borderDottedLines.topDashStyle);
+                        td.css({
+                            'border-left': label.borderThickness.left + 'px ' + leftBorder + ' ' + label.leftBorderColor,
+                            'border-right': label.borderThickness.right + 'px ' + rightBorder + ' ' + label.rightBorderColor,
+                            'border-bottom': label.borderThickness.bottom + 'px ' + bottomBorder + ' ' + label.bottomBorderColor,
+                            'border-top': label.borderThickness.top + 'px ' + topBorder + ' ' + label.topBorderColor
+                        });
+                    } else {
+                        td.css('border', '1px solid black');
+                    }
+                }
+                td.css({
+                    // 'border' : '1px solid black',
+                    'font-size': label.fontSize,
+                    'font-family': label.fontFamily,
+                    'font-weight': label.fontStyle,
+                    'background-color': label.backGroundColor
+                });
+            }
+        }
+    }
+}
+/**************************************************************************************
+ 기능 : GroupFieldArray가 있을 경우
+ FixedTableValueLabel(고정 테이블 밸류 라벨)을 화면에 그려주는 함수를 만든다.
+ 만든이 : 하지연
+ **************************************************************************************/
+function drawingFixedTableValueLabelWithGroupFieldArray(label, dt, tableId, numOfData){
+    console.log("with");
+    console.log("@@groupDataRow : " + groupDataRow + " numOfData : " + numOfData);
+    for (var j = groupDataRow; j < numOfData; j++) {
+        console.log("for문1 들어왔음 groupFieldNum : "+ groupFieldNum + " groupFieldArray[groupFieldNum] : "+groupFieldArray[groupFieldNum] + " groupDataRow : " + groupDataRow);
+        var data = groupFieldArray[groupFieldNum];
+        var rowNum = curDatarow + j;
+        // var $trId = '#fixedValueLabel' + rowNum;
+        var $trId = '#fixedTableLabel' + rowNum;
+        var valueTrId = $($trId);
+        if (valueTrId.length < 1)
+            // tableId.append('<tr id =   "fixedValueLabel' + rowNum + '"></tr>');
+            tableId.append('<tr id =   "fixedTableLabel' + rowNum + '"></tr>');
+        for (var key in data[j]) {
+            console.log("for문2 들어왔음");
+            valueTrId = $($trId);
+            console.log("!! label.fieldName : "+label.fieldName + " key : " + key);
+            // if (label.fieldName == key) {
+            if (label.fieldName == undefined) {
+                console.log("if문1 들어왔음");
+                var key_data = data[j][key]._text;
+                var table_reform = table_format_check(data, valueTrId, key_data, label);
+
+                if(label.labelTextType == 'Number' && label.format != undefined){//데이터형식이 숫자이고, 라벨의 형식이 정해져있다면. 머니소수클래스더함.
+                    console.log("if문2 들어왔음");
+                    valueTrId.append(
+                        '<td class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '">' + table_reform + '</td>'
+                    );
+                }else{
+                    console.log("else문1 들어왔음");
+                    valueTrId.append(
+                        '<td class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '">' + table_reform + '</td>'
+                    );
+                }
+                valueTrId.css({
+                    'width': label.rectangle.width,
+                    'height': label.rectangle.height,
+                });
+                var td = $('.' + key);
+                //// 추가 부분 18.08.28 YeSol
+                if (label.noBorder == 'true') {
+                    td.css('border', 'none');
+                } else {
+                    if (label.borderThickness !== undefined) {
+                        console.log("if문2 들어왔음");
+                        var leftBorder = borderDottedLine(label.borderDottedLines.leftDashStyle);
+                        var rightBorder = borderDottedLine(label.borderDottedLines.rightDashStyle);
+                        var bottomBorder = borderDottedLine(label.borderDottedLines.bottomDashStyle);
+                        var topBorder = borderDottedLine(label.borderDottedLines.topDashStyle);
+
+                        td.css({
+                            'border-left': label.borderThickness.left + 'px ' + leftBorder + ' ' + label.leftBorderColor,
+                            'border-right': label.borderThickness.right + 'px ' + rightBorder + ' ' + label.rightBorderColor,
+                            'border-bottom': label.borderThickness.bottom + 'px ' + bottomBorder + ' ' + label.bottomBorderColor,
+                            'border-top': label.borderThickness.top + 'px ' + topBorder + ' ' + label.topBorderColor
+                        });
+                    } else {
+                        console.log("else문2 들어왔음");
+                        td.css('border', '1px solid black');
+                    }
+                }
+                td.css({
+                    // 'border': '1px solid black',
+                    'font-size': label.fontSize,
+                    'font-family': label.fontFamily,
+                    'font-weight': label.fontStyle,
+                    'background-color': label.backGroundColor
+                });
+            }
+        }
+    }
+}
+
+/******************************************************************
+ 기능 : FixedTableValueLabel(고정 테이블 밸류 라벨)을 화면에 그려주는 함수를 만든다.
+ 만든이 : 하지연
+ *******************************************************************/
+function drawingFixedTableValueLabel(label, dt, tableId, numOfData, table) {
+    console.log("드로잉픽스테이블밸류라벨");
+    if (groupFieldArray == undefined || groupFieldArray.length == 0) {
+        console.log("without 그룹어레이");
+        drawingFixedTableValueLabelWithoutGroupFieldArray(label, dt, tableId, numOfData, table);
+    } else {
+        console.log("with 그룹어레이");
+        drawingFixedTableValueLabelWithGroupFieldArray(label, dt, tableId, numOfData);
+    }
+}
+
+/******************************************************************
+ 기능 : FixedTableLabel(고정 테이블 라벨)을 화면에 그려주는 함수를 만든다.
+ 만든이 : 하지연
+ *******************************************************************/
+function drawingFixedTableLabel(label, dt, tableId, numOfData, table) {
+    var temp = Object.keys(dt[0]);
+    console.log("case1들어옴! + temp : " + temp);  //날짜,품명,단가,수량,금액,이름,DRDSEQ
+    var titleTrId = $('#fixedTableLabel' + fixedTableLabelNum);
+    var header_Name_Number = 1;
+    temp.forEach(function (titleName) {
+        console.log("1 + titleName : " + titleName);
+        console.log("1 + label.text : " + label.text);
     });
+    drawingFixedTableValueLabel(label, dt, tableId, numOfData, table);
+        /*if (label.text == titleName) {
+            console.log("1 + if들옴.");
+            titleArray.push(titleName);
+            titleTrId.append('<th id = "FixedTableLabel' + header_Name_Number + '_View_Page_Number' + thNum + '"></th>');
+            titleTrId.css({
+                'width': label.rectangle.width,
+                'height': label.rectangle.height
+            });
+            var thId = $('#FixedTableLabel' + header_Name_Number + "_View_Page_Number" + thNum);
+
+            //// 추가 부분 18.08.28 YeSol
+            if (label.noBorder == 'true') {
+                thId.css('border', 'none');
+            } else {
+                if (label.borderThickness !== undefined) {
+                    var leftBorder = borderDottedLine(label.borderDottedLines.leftDashStyle);
+                    var rightBorder = borderDottedLine(label.borderDottedLines.rightDashStyle);
+                    var bottomBorder = borderDottedLine(label.borderDottedLines.bottomDashStyle);
+                    var topBorder = borderDottedLine(label.borderDottedLines.topDashStyle);
+                    thId.css({
+                        'border-left': label.borderThickness.left + 'px ' + leftBorder + ' ' + label.leftBorderColor,
+                        'border-right': label.borderThickness.right + 'px ' + rightBorder + ' ' + label.rightBorderColor,
+                        'border-bottom': label.borderThickness.bottom + 'px ' + bottomBorder + ' ' + label.bottomBorderColor,
+                        'border-top': label.borderThickness.top + 'px ' + topBorder + ' ' + label.topBorderColor
+                    });
+                } else {
+                    thId.css('border', '1px solid red');
+                }
+            }
+
+            thId.css({
+                'background-color': label.backGroundColor,
+                'font-size': label.fontSize,
+                'font-family': label.fontFamily,
+                'font-weight': label.fontStyle,
+                'font-color': label.textColor
+            });
+            thId.append(titleName);
+            thId.addClass('Label FixedTableHeader');
+            thId.addClass(label._attributes);
+            table_column_controller(thId, titleTrId);
+        }
+        header_Name_Number++;*/
+        console.log("할일 끝?");
+
 }
 
 /******************************************************************
