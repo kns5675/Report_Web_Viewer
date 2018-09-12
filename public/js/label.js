@@ -179,7 +179,7 @@ function Table(data){ // ControlList 밑에 anyType이 ControlFixedTable, Contro
     this.isApprovalBox = data.IsApprovalBox === undefined ? undefined : data.IsApprovalBox._text;
     this.relateTableList = data.RelateTableList === undefined ? 0 : data.RelateTableList._text; // 연결된 테이블
     this.forceAnnex = data.ForceAnnex === undefined ? 0 : data.ForceAnnex._text;
-    this.minimumRowCount = data.MinimumRowCount === undefined ? 1 : data.MinimumRowCount._text; // 최소 행 개수 (DRD에서 Default값이 1임)
+    this.minimumRowCount = data.MinimumRowCount === undefined ? undefined : data.MinimumRowCount._text; // 최소 행 개수 (DRD에서 Default값이 1임)
     this.fixRowCount = data.FixRowCount === undefined ? 0 : data.FixRowCount._text; // 최대 행 개수 (DRD에서 Default값이 0임)
     this.isForceOverRow = data.IsForceOverRow === undefined ? true : data.IsForceOverRow._text; // 최대 행 이후의 데이터 true 일 때는 페이지 넘기기 false일 때는 제거(별지 출력)
     this.isAnnexMark = data.isAnnexMark === undefined ? 0 : data.isAnnexMark._text; // 별지 마크 표시 여부

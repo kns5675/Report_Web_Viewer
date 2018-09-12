@@ -189,10 +189,23 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                         getMinGroupBandDataHeight(band);
                         avaHeight = getAvaHeight(div_id, reportHeight);
                         numofData = getNumOfDataWithGroupField(band, avaHeight);
-                        if (remainData) {
-                            dataBandHeight = getBandHeightWithGroupField(band, numofData - groupDataRow);
+                        if (band.controlList.anyType.MinimumRowCount !== undefined) {
+                            var minimumCnt = Number(band.controlList.anyType.MinimumRowCount._text);
+                            if (minimumCnt != 1 && (numofData - groupDataRow) < minimumCnt) { // 최소행 개수 적용
+                                dataBandHeight = getBandHeightWithGroupField(band, minimumCnt);
+                            } else {
+                                if (remainData) {
+                                    dataBandHeight = getBandHeightWithGroupField(band, numofData - groupDataRow);
+                                } else {
+                                    dataBandHeight = getBandHeightWithGroupField(band, numofData - 1);
+                                }
+                            }
                         } else {
-                            dataBandHeight = getBandHeightWithGroupField(band, numofData - 1);
+                            if (remainData) {
+                                dataBandHeight = getBandHeightWithGroupField(band, numofData - groupDataRow);
+                            } else {
+                                dataBandHeight = getBandHeightWithGroupField(band, numofData - 1);
+                            }
                         }
 
                         $('#' + div_id).css({
@@ -218,11 +231,23 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                             band.controlList.anyType.forEach(function (anyType) {
                                 if (anyType._attributes['xsi:type'] == 'ControlDynamicTable' && anyType.Labels !== undefined) {
                                     numofData = getNumOfDataInOnePageNonObject(band, div_id);
+                                    if (band.controlList.anyType.MinimumRowCount !== undefined) { // 최소 행 개수
+                                        var minimumRowCount = Number(band.controlList.anyType.MinimumRowCount._text);
+                                        if ((dt.length - curDatarow) < minimumRowCount) {
+                                            numofData = minimumRowCount;
+                                        }
+                                    }
                                 }
                             });
                         } else {
                             if (band.controlList.anyType.Labels !== undefined) {
                                 numofData = getNumOfDataInOnePageNonObject(band, div_id);
+                                if (band.controlList.anyType.MinimumRowCount !== undefined) { // 최소 행 개수
+                                    var minimumRowCount = Number(band.controlList.anyType.MinimumRowCount._text);
+                                    if ((dt.length - curDatarow) < minimumRowCount) {
+                                        numofData = minimumRowCount;
+                                    }
+                                }
                             }
                         }
                     } else { // 동적 테이블이 없을 때
@@ -310,7 +335,8 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
 function afterjudgementControlListAction(band, div_id, layerName, reportHeight, parentBand, dt) {
     switch (band.attributes["xsi:type"]) {
         case 'BandData' :
-            if (groupFieldArray.length > 0 && band.childHeaderBands !== null) {  // childHeaderBands중에 BandGroupHeader가 있는 지 판단하기!
+            if (groupFieldArray.length > 0 && band.childHeaderBands !== null) {
+                // childHeaderBands중에 BandGroupHeader가 있는 지 판단하기!
                 if (isDynamicTable == true) {
                     var dataCount = groupFieldArray[groupFieldNum].length;
                     var groupRemainData = (dataCount - groupDataRow);
@@ -327,6 +353,12 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
                 }
             } else { //그룹 필드가 아닐 경우
                 curDatarow += numofData;
+                if (band.controlList.anyType.MinimumRowCount !== undefined) {
+                    var minimumRowCount = Number(band.controlList.anyType.MinimumRowCount._text);
+                    if ((dt.length - curDatarow) < minimumRowCount) {
+                        numofData = minimumRowCount;
+                    }
+                }
             }
             break;
 
