@@ -241,21 +241,33 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData) {
  **************************************************************************************/
 function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId, numOfData, table) {
     var rowLength = curDatarow + numOfData; //한 페이지에 마지막으로 출력해야할 row
+    var thCnt = tableId.find('th').length;
+
     for (var j = curDatarow; j < rowLength; j++) {
         var data = dt[j];
+        var minimumRow = false;
         var valueTrId = $("#dynamicValueLabel" + j);
         if (valueTrId.length < 1)
             tableId.append('<tr id = "dynamicValueLabel' + j + '"></tr>');
+        if((j >= dt.length) && table.minimumRowCount !== undefined) {
+            data = dt[j - table.minimumRowCount];
+            minimumRow = true;
+        }
         for (var key in data) {
             if (label.fieldName == key) {
                 var valueTrId = $('#dynamicValueLabel' + j);
                 var key_data = data[key]._text;
                 var table_reform = table_format_check(data, valueTrId, key_data, table);
                 var tdId = 'tableValueLabelNum' + tableValueLabelNum++;
-                if (label.labelTextType == 'Number' && label.format != undefined) {
-                    valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '">' + table_reform + '</td>');
-                } else {
-                    valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '">' + table_reform + '</td>');
+                if(!minimumRow) {
+                    if (label.labelTextType == 'Number' && label.format != undefined) {
+                        valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '">' + table_reform + '</td>');
+                    } else {
+                        valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '">' + table_reform + '</td>');
+                    }
+                }
+                if(minimumRow) {
+                    valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '"></td>');
                 }
 
                 valueTrId.css({
