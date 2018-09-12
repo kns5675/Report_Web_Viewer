@@ -1461,6 +1461,267 @@ function table_column_controller(resize_area, Unalterable_area) {
     });
 }
 /******************************************************************
+ 기능 : 이미지 라벨 추가.
+ Date : 2018-09-12
+ 만든이 : hagdung-i
+ ******************************************************************/
+function image_label_making(labelNbandInfo) {
+    var image_str = labelNbandInfo.data.base64ImageFromViewer;
+    var file_name = labelNbandInfo.data.text;
+    var div_id = labelNbandInfo.labelId[0].id;
+    var test2 = "%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M224%20387.814V512L32 320l192-192v126.912C447.375 260.152 437.794 103.016 380.93 0 521.287 151.707 491.48 394.785 224 387.814z'/%3E%3C/svg%3E";
+    var baseMaking = "data:image/svg;base64,"+image_str.trim(); //base64 -> html 포맷으로 변경.
+    var test3 = "data:image/svg;base64,"+test2;
+    console.log("baseMaking : ",test3);
+    var image_send = document.createElement("img");
+    image_send.id = "DRD_image"+div_id.replace(/[^0-9]/g, '');
+    image_send.className = "image";
+    image_send.style.width = "100%";
+    image_send.style.height = "100%";
+    image_send.style.color = "rgba(255, 151, 166, 0.5)";
+    image_send.src = baseMaking;
+    var image_div = document.getElementById(div_id); //추후 변경해야됨 해당 div의 id로
+    image_div.appendChild(image_send);
+
+    Transparent_Cloak(labelNbandInfo.data.imageTransparent, image_send);
+
+}
+
+/******************************************************************
+ 기능 : 이미지 투명도, 이미지 크기에 따른 이미지 조정 기능
+ Date : 2018-09-11
+ 만든이 : hagdung-i
+ ******************************************************************/
+function Transparent_Cloak(imageTransparent, image) {
+    if(imageTransparent.IsUseTransParent){ //투명도 관련 속성이 존재할 경우
+        var TransparentOX = imageTransparent.IsUseTransParent._text;
+        if(TransparentOX){  //투명도 여부를 확인
+            var TransparentColor= imageTransparent.TransParentColor._text;
+            // image_id.css({'filter':'chroma(color=#FF97A6)'});
+            //#fb99a6
+            return TransparentColor;
+        }
+    }
+}
+
+/******************************************************************
+ 기능 : 라벨의 p태그 생성 및 각 가벨의 특성에 맞춰 커스텀하는 로직을 따로 추출.
+ 사유 : 이미지 같이 p태그가 들어가지 않는 라벨 작업을 위함.
+ Date : 2018-09-12
+ 만든이 : hagdung-i
+ ******************************************************************/
+function label_text_Setting(labelNbandInfo) {
+
+    labelNbandInfo.labelId.append('<p id = "P' + labelNbandInfo.label_type + labelNbandInfo.labelNum + '"></p>');
+    Lock_check(labelNbandInfo.data, labelNbandInfo.labelId, labelNbandInfo.div);
+
+    var pId = $('#P' + labelNbandInfo.label_type + labelNbandInfo.labelNum);
+
+
+    if (labelNbandInfo.label_type === "SystemLabel") {
+        var date = new Date();
+        switch (labelNbandInfo.data.systemFieldName) {
+            case 'Date' :
+                var year = date.getFullYear();
+                var month = plusZero(date.getMonth() + 1); // month는 0부터 시작
+                var day = plusZero(date.getDate());
+                labelNbandInfo.data.text = year + '-' + month + '-' + day;
+                pId.addClass("date");
+                break;
+            case 'Date/time' :
+                var year = date.getFullYear();
+                var month = plusZero(date.getMonth() + 1); // month는 0부터 시작
+                var day = plusZero(date.getDate());
+                var hour = plusZero(date.getHours());
+                var min = plusZero(date.getMinutes());
+                var sec = plusZero(date.getSeconds());
+                labelNbandInfo.data.text = year + '-' + month + '-' + day + ' ' + hour + ':' + min + ':' + sec;
+                pId.addClass("dateTime");
+                break;
+            case 'Time' :
+                var hour = plusZero(date.getHours());
+                var min = plusZero(date.getMinutes());
+                var sec = plusZero(date.getSeconds());
+                labelNbandInfo.data.text = hour + ':' + min + ':' + sec;
+                pId.addClass("time");
+                break;
+            case 'PageNumber' : // 현재 페이지 번호
+                pId.addClass("pageNumber");
+                labelNbandInfo.data.text = "tempStr";
+                break;
+            case 'TotalPage' : // 전체 페이지 번호
+                pId.addClass("totalPage");
+                labelNbandInfo.data.text = "tempStr";
+                break;
+            case 'PageNumber / TotalPage' :  // 현재 페이지 번호 / 전체 페이지 정보
+                pId.addClass("pageNumberTotalPage");
+                labelNbandInfo.data.text = "tempStr";
+                break;
+        }
+    }
+
+    // fontSize의 단위를 통일하기위해
+    var fontSizePt = changeFontUnit(labelNbandInfo.data.fontSize);
+    // console.log("pId : ",pId[0].clientWidth);
+    pId.css({
+        'font-size': fontSizePt,
+        'font-family': labelNbandInfo.data.fontFamily,
+        'font-weight': labelNbandInfo.data.fontWeight,
+        'font-style': labelNbandInfo.data.fontStyle,
+        'margin-top': '10px',
+        'margin-bottom': '10px',
+        'margin-right': '10px',
+        'margin-left': '10px'
+    });
+
+    // 금액 표시 방법 한글
+    // if (data.numberToTextType == 'KOR') {
+    //     var KOR = numberToKOR((data.text).replace(/[^0-9]/g, ""));
+    //     var tempKOR = (data.text).match(/[0-9]/gi);
+    //     var toStringKOR = tempKOR[0];
+    //     for (var i = 1; i < tempKOR.length; i++) {
+    //         toStringKOR += tempKOR[i];
+    //     }
+    //     toStringKOR = toStringKOR.toString();
+    // }
+    //
+    // // 금액 표시 방법 한자
+    // if (data.numberToTextType == 'CHN') {
+    //     var CHN = numberToCHN((data.text).replace(/[^0-9]/g, ""));
+    // }
+
+    if (labelNbandInfo.label_type === "ParameterLabel") {
+        paramTable.NewDataSet.Table1.forEach(function (paramData) {
+            if (labelNbandInfo.data.parameterName == paramData.Key._text) {
+                labelNbandInfo.data.text = paramData.Value._text;
+            }
+        });
+    }
+
+    /********************************************
+     한 그룹의 데이터 출력이 끝나면 groupFieldNum++를 어디선가 해줘야함..어떻게해야하지..모르겠담
+     *******************************************/
+    if (labelNbandInfo.label_type === "DataLabel") {
+        if (groupFieldArray !== undefined) {
+            pId.append(groupFieldArray[groupFieldNum][0]);
+            labelNbandInfo.data.text = pId.text();
+        }
+    }
+
+    // 0값 표시 여부가 NoShow(표시하지 않음) 이고 문자 형식이 숫자 일 때
+    if (labelNbandInfo.data.showZeroState == 'NoShow' && labelNbandInfo.data.labelTextType == 'Number') {
+        labelNbandInfo.data.text = (labelNbandInfo.data.text).replace(/(^0+)/, '');
+    }
+
+    if (labelNbandInfo.data.text !== undefined) {
+        pId.text('');
+        if (labelNbandInfo.data.textDirection == 'Vertical') {
+            textAlignVertical(labelNbandInfo.data.text, "P" + labelNbandInfo.label_type + labelNbandInfo.labelNum);
+        } else if (labelNbandInfo.data.textDirection == 'Horizontal') {
+            toStringFn(labelNbandInfo.data.text, "P" + labelNbandInfo.label_type + labelNbandInfo.labelNum);
+        }
+    }
+
+    // 자간 속성
+    if (labelNbandInfo.data.characterSpacing !== undefined) {
+        characterSpacing(labelNbandInfo.data.text, labelNbandInfo.data.characterSpacing,
+            "P" + labelNbandInfo.label_type + labelNbandInfo.labelNum);
+    }
+
+    // 줄 간격 속성
+    if (labelNbandInfo.data.lineSpacing !== undefined) {
+        lineSpacing(labelNbandInfo.data.text,
+            labelNbandInfo.data.lineSpacing, "P" + labelNbandInfo.label_type + labelNbandInfo.labelNum);
+    }
+    var test = $('#' + "P" + labelNbandInfo.label_type + labelNbandInfo.labelNum + ' br');
+    // Clipping 속성
+    if (labelNbandInfo.data.clipping == 'true') {
+        labelNbandInfo.labelId.css({
+            'text-overflow': 'clip',
+            'overflow': 'hidden'
+        });
+        clipping(labelNbandInfo.data.text, labelNbandInfo.label_type + labelNbandInfo.labelNum,
+            'P' + labelNbandInfo.label_type + labelNbandInfo.labelNum);
+    }
+
+    if (labelNbandInfo.data.autosize == true) { // 자동 높이 조절
+        autoSizeTrue('P' + labelNbandInfo.label_type + labelNbandInfo.labelNum);
+    } else {
+        if (labelNbandInfo.data.text !== undefined) {
+            switch (labelNbandInfo.data.horizontalTextAlignment) {
+                case 'Center' :
+                    textAlignCenter(labelNbandInfo.data.text, "P" + labelNbandInfo.label_type + labelNbandInfo.labelNum,
+                        labelNbandInfo.data.wordWrap, labelNbandInfo.data.textDirection);
+                    break;
+                case 'Left' :
+                    pId.css('text-align', 'left');
+                    break;
+                case 'Right' :
+                    pId.css('text-align', 'right');
+                    break;
+                case 'Distributed' :
+                    pId.text('');
+                    textEqualDivision(labelNbandInfo.data.text, "P" + labelNbandInfo.label_type + labelNbandInfo.labelNum); // 텍스트 수평 정렬이 균등 분할인 경우
+                    break;
+            }
+            switch (labelNbandInfo.data.verticalTextAlignment) {
+                case 'Center' :
+                    verticalCenter("P" + labelNbandInfo.label_type + labelNbandInfo.labelNum); // 텍스트 수직 정렬이 중간인 경우
+                    break;
+                case 'Top' :
+                    verticalTop("P" + labelNbandInfo.label_type + labelNbandInfo.labelNum); // 텍스트 수직 정렬이 위쪽인 경우
+                    break;
+                case 'Bottom' :
+                    verticalBottom("P" + labelNbandInfo.label_type + labelNbandInfo.labelNum); // 텍스트 수직 정렬이 아래쪽인 경우
+                    break;
+                case 'Distributed' :
+                    verticalCenterEqualDivision(labelNbandInfo.data.text, "P" + labelNbandInfo.label_type
+                        + labelNbandInfo.labelNum, labelNbandInfo.data.textDirection); // 텍스트 수직 정렬이 균등 분할인 경우
+                    break;
+            }
+        }
+    }
+    // 폰트크기 자동 줄어듦
+    if (labelNbandInfo.data.autoFontType == 'AutoSmall') {
+        fontSizeAutoSmall(labelNbandInfo.data.text, "P" + labelNbandInfo.label_type + labelNbandInfo.labelNum);
+    }
+
+    // 기본 여백 미사용
+    if (labelNbandInfo.data.isUseBasicInnerMargin == 'false') {
+        pId.css({
+            'margin-left': labelNbandInfo.data.interMargin.left + 'px',
+            'margin-right': labelNbandInfo.data.interMargin.right + 'px',
+            'margin-top': labelNbandInfo.data.interMargin.top + 'px',
+            'margin-bottom': labelNbandInfo.data.interMargin.bottom + 'px',
+        });
+    }
+
+    // 중간 줄 그리기
+    if (labelNbandInfo.data.isDrawStrikeOutLine == 'true') {
+        pId.css('text-decoration', 'line-through');
+    }
+
+    // 밑줄 그리기
+    if (labelNbandInfo.data.isDrawUnderLine == 'true') {
+        pId.css('text-decoration', 'underline');
+    }
+
+    // 중간 줄과 밑줄 모두 그릴 때
+    if (labelNbandInfo.data.isDrawStrikeOutLine == 'true' && labelNbandInfo.data.isDrawUnderLine == 'true') {
+        pId.css('text-decoration', 'line-through underline');
+    }
+
+    // 글자 크기 동일하게 하기
+    if (labelNbandInfo.data.isSameWidth == 'true') {
+        var fontSize = (pId.css('font-size')).split('p');
+        pId.css('word-spacing', (fontSize[0] - 1.181) + 'px');
+    }
+    drd_javascript(labelNbandInfo.data, labelNbandInfo.labelId, labelNbandInfo.data.startBindScript);
+    pId.addClass('Label');
+    pId.addClass(labelNbandInfo.label_type);
+}
+
+/******************************************************************
  기능 : 그라데이션의 시작방향, 방향 등을 판단하여 CSS 속성을 줄 함수를 만든다.
  만든이 : 안예솔
  ******************************************************************/
@@ -1729,6 +1990,7 @@ function labelPropertyApply(labelNbandInfo) {
     labelNbandInfo.labelId = $('#' + labelNbandInfo.label_type + labelNbandInfo.labelNum);
 
     labelNbandInfo.labelId.addClass(labelNbandInfo.label_scope);
+    Lock_check(labelNbandInfo.data, labelNbandInfo.labelId, labelNbandInfo.div);
 
     // visible 속성
     if (labelNbandInfo.data.visible == 'false') {
@@ -1823,7 +2085,6 @@ function labelPropertyApply(labelNbandInfo) {
             + Number(labelNbandInfo.labelId.children('div:last-child').css('height')
                 .substring(0, labelNbandInfo.labelId.children('div:last-child').css('height').length - 2)) + 'px'
         );
-        Lock_check(labelNbandInfo.data, labelNbandInfo.labelId, labelNbandInfo.div);
         return;
     }
 
@@ -1867,209 +2128,9 @@ function labelPropertyApply(labelNbandInfo) {
         labelNbandInfo.labelId.css('white-space', 'normal');
     }
 
-    labelNbandInfo.labelId.append('<p id = "P' + labelNbandInfo.label_type + labelNbandInfo.labelNum + '"></p>');
-    Lock_check(labelNbandInfo.data, labelNbandInfo.labelId, labelNbandInfo.div);
-
-    var pId = $('#P' + labelNbandInfo.label_type + labelNbandInfo.labelNum);
-
-    if (labelNbandInfo.label_type === "SystemLabel") {
-        var date = new Date();
-        switch (labelNbandInfo.data.systemFieldName) {
-            case 'Date' :
-                var year = date.getFullYear();
-                var month = plusZero(date.getMonth() + 1); // month는 0부터 시작
-                var day = plusZero(date.getDate());
-                labelNbandInfo.data.text = year + '-' + month + '-' + day;
-                pId.addClass("date");
-                break;
-            case 'Date/time' :
-                var year = date.getFullYear();
-                var month = plusZero(date.getMonth() + 1); // month는 0부터 시작
-                var day = plusZero(date.getDate());
-                var hour = plusZero(date.getHours());
-                var min = plusZero(date.getMinutes());
-                var sec = plusZero(date.getSeconds());
-                labelNbandInfo.data.text = year + '-' + month + '-' + day + ' ' + hour + ':' + min + ':' + sec;
-                pId.addClass("dateTime");
-                break;
-            case 'Time' :
-                var hour = plusZero(date.getHours());
-                var min = plusZero(date.getMinutes());
-                var sec = plusZero(date.getSeconds());
-                labelNbandInfo.data.text = hour + ':' + min + ':' + sec;
-                pId.addClass("time");
-                break;
-            case 'PageNumber' : // 현재 페이지 번호
-                pId.addClass("pageNumber");
-                labelNbandInfo.data.text = "tempStr";
-                break;
-            case 'TotalPage' : // 전체 페이지 번호
-                pId.addClass("totalPage");
-                labelNbandInfo.data.text = "tempStr";
-                break;
-            case 'PageNumber / TotalPage' :  // 현재 페이지 번호 / 전체 페이지 정보
-                pId.addClass("pageNumberTotalPage");
-                labelNbandInfo.data.text = "tempStr";
-                break;
-        }
+    if(labelNbandInfo.data.base64ImageFromViewer){
+        image_label_making(labelNbandInfo);
+    }else{
+        label_text_Setting(labelNbandInfo);
     }
-
-    // fontSize의 단위를 통일하기위해
-    var fontSizePt = changeFontUnit(labelNbandInfo.data.fontSize);
-    // console.log("pId : ",pId[0].clientWidth);
-    pId.css({
-        'font-size': fontSizePt,
-        'font-family': labelNbandInfo.data.fontFamily,
-        'font-weight': labelNbandInfo.data.fontWeight,
-        'font-style': labelNbandInfo.data.fontStyle,
-        'margin-top': '10px',
-        'margin-bottom': '10px',
-        'margin-right': '10px',
-        'margin-left': '10px'
-    });
-
-    // 금액 표시 방법 한글
-    // if (data.numberToTextType == 'KOR') {
-    //     var KOR = numberToKOR((data.text).replace(/[^0-9]/g, ""));
-    //     var tempKOR = (data.text).match(/[0-9]/gi);
-    //     var toStringKOR = tempKOR[0];
-    //     for (var i = 1; i < tempKOR.length; i++) {
-    //         toStringKOR += tempKOR[i];
-    //     }
-    //     toStringKOR = toStringKOR.toString();
-    // }
-    //
-    // // 금액 표시 방법 한자
-    // if (data.numberToTextType == 'CHN') {
-    //     var CHN = numberToCHN((data.text).replace(/[^0-9]/g, ""));
-    // }
-
-    if (labelNbandInfo.label_type === "ParameterLabel") {
-        paramTable.NewDataSet.Table1.forEach(function (paramData) {
-            if (labelNbandInfo.data.parameterName == paramData.Key._text) {
-                labelNbandInfo.data.text = paramData.Value._text;
-            }
-        });
-    }
-    /********************************************
-     한 그룹의 데이터 출력이 끝나면 groupFieldNum++를 어디선가 해줘야함..어떻게해야하지..모르겠담
-     *******************************************/
-    if (labelNbandInfo.label_type === "DataLabel") {
-        if (groupFieldArray !== undefined) {
-            pId.append(groupFieldArray[groupFieldNum][0]);
-            labelNbandInfo.data.text = pId.text();
-        }
-    }
-
-    // 0값 표시 여부가 NoShow(표시하지 않음) 이고 문자 형식이 숫자 일 때
-    if (labelNbandInfo.data.showZeroState == 'NoShow' && labelNbandInfo.data.labelTextType == 'Number') {
-        labelNbandInfo.data.text = (labelNbandInfo.data.text).replace(/(^0+)/, '');
-    }
-
-    if (labelNbandInfo.data.text !== undefined) {
-        pId.text('');
-        if (labelNbandInfo.data.textDirection == 'Vertical') {
-            textAlignVertical(labelNbandInfo.data.text, "P" + labelNbandInfo.label_type + labelNbandInfo.labelNum);
-        } else if (labelNbandInfo.data.textDirection == 'Horizontal') {
-            toStringFn(labelNbandInfo.data.text, "P" + labelNbandInfo.label_type + labelNbandInfo.labelNum);
-        }
-    }
-
-    // 자간 속성
-    if (labelNbandInfo.data.characterSpacing !== undefined) {
-        characterSpacing(labelNbandInfo.data.text, labelNbandInfo.data.characterSpacing,
-            "P" + labelNbandInfo.label_type + labelNbandInfo.labelNum);
-    }
-
-    // 줄 간격 속성
-    if (labelNbandInfo.data.lineSpacing !== undefined) {
-        lineSpacing(labelNbandInfo.data.text,
-            labelNbandInfo.data.lineSpacing, "P" + labelNbandInfo.label_type + labelNbandInfo.labelNum);
-    }
-    var test = $('#' + "P" + labelNbandInfo.label_type + labelNbandInfo.labelNum + ' br');
-    // Clipping 속성
-    if (labelNbandInfo.data.clipping == 'true') {
-        labelNbandInfo.labelId.css({
-            'text-overflow': 'clip',
-            'overflow': 'hidden'
-        });
-        clipping(labelNbandInfo.data.text, labelNbandInfo.label_type + labelNbandInfo.labelNum,
-            'P' + labelNbandInfo.label_type + labelNbandInfo.labelNum);
-    }
-
-    if (labelNbandInfo.data.autosize == true) { // 자동 높이 조절
-        autoSizeTrue('P' + labelNbandInfo.label_type + labelNbandInfo.labelNum);
-    } else {
-        if (labelNbandInfo.data.text !== undefined) {
-            switch (labelNbandInfo.data.horizontalTextAlignment) {
-                case 'Center' :
-                    textAlignCenter(labelNbandInfo.data.text, "P" + labelNbandInfo.label_type + labelNbandInfo.labelNum,
-                        labelNbandInfo.data.wordWrap, labelNbandInfo.data.textDirection);
-                    break;
-                case 'Left' :
-                    pId.css('text-align', 'left');
-                    break;
-                case 'Right' :
-                    pId.css('text-align', 'right');
-                    break;
-                case 'Distributed' :
-                    pId.text('');
-                    textEqualDivision(labelNbandInfo.data.text, "P" + labelNbandInfo.label_type + labelNbandInfo.labelNum); // 텍스트 수평 정렬이 균등 분할인 경우
-                    break;
-            }
-            switch (labelNbandInfo.data.verticalTextAlignment) {
-                case 'Center' :
-                    verticalCenter("P" + labelNbandInfo.label_type + labelNbandInfo.labelNum); // 텍스트 수직 정렬이 중간인 경우
-                    break;
-                case 'Top' :
-                    verticalTop("P" + labelNbandInfo.label_type + labelNbandInfo.labelNum); // 텍스트 수직 정렬이 위쪽인 경우
-                    break;
-                case 'Bottom' :
-                    verticalBottom("P" + labelNbandInfo.label_type + labelNbandInfo.labelNum); // 텍스트 수직 정렬이 아래쪽인 경우
-                    break;
-                case 'Distributed' :
-                    verticalCenterEqualDivision(labelNbandInfo.data.text, "P" + labelNbandInfo.label_type
-                        + labelNbandInfo.labelNum, labelNbandInfo.data.textDirection); // 텍스트 수직 정렬이 균등 분할인 경우
-                    break;
-            }
-        }
-    }
-    // 폰트크기 자동 줄어듦
-    if (labelNbandInfo.data.autoFontType == 'AutoSmall') {
-        fontSizeAutoSmall(labelNbandInfo.data.text, "P" + labelNbandInfo.label_type + labelNbandInfo.labelNum);
-    }
-
-    // 기본 여백 미사용
-    if (labelNbandInfo.data.isUseBasicInnerMargin == 'false') {
-        pId.css({
-            'margin-left': labelNbandInfo.data.interMargin.left + 'px',
-            'margin-right': labelNbandInfo.data.interMargin.right + 'px',
-            'margin-top': labelNbandInfo.data.interMargin.top + 'px',
-            'margin-bottom': labelNbandInfo.data.interMargin.bottom + 'px',
-        });
-    }
-
-    // 중간 줄 그리기
-    if (labelNbandInfo.data.isDrawStrikeOutLine == 'true') {
-        pId.css('text-decoration', 'line-through');
-    }
-
-    // 밑줄 그리기
-    if (labelNbandInfo.data.isDrawUnderLine == 'true') {
-        pId.css('text-decoration', 'underline');
-    }
-
-    // 중간 줄과 밑줄 모두 그릴 때
-    if (labelNbandInfo.data.isDrawStrikeOutLine == 'true' && labelNbandInfo.data.isDrawUnderLine == 'true') {
-        pId.css('text-decoration', 'line-through underline');
-    }
-
-    // 글자 크기 동일하게 하기
-    if (labelNbandInfo.data.isSameWidth == 'true') {
-        var fontSize = (pId.css('font-size')).split('p');
-        pId.css('word-spacing', (fontSize[0] - 1.181) + 'px');
-    }
-    drd_javascript(labelNbandInfo.data, labelNbandInfo.labelId, labelNbandInfo.data.startBindScript);
-    pId.addClass('Label');
-    pId.addClass(labelNbandInfo.label_type);
 }
