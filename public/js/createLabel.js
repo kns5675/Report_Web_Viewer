@@ -222,7 +222,7 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData) {
                     break;
                 case "DynamicTableValueLabel" :
                     //console.log("case 2들어옴");
-                    drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table);
+                    //drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table);
                     break;
                 default :
                     console.log("case default");
