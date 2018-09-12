@@ -54,6 +54,7 @@ function makeReport(report) {
     // 180910 YeSol 추가
     var controlLists=[];
     var bands = report.layers.designLayer.bands;
+
     bands.forEach(function (band) {
         if(band.attributes['xsi:type'] == 'BandData') {
             controlLists.push(band.controlList.anyType); // dataBand의 controlList배열
@@ -61,8 +62,16 @@ function makeReport(report) {
     });
 
     controlLists.forEach(function (controlList) {
-        if(controlList._attributes['xsi:type'] == 'ControlDynamicTable') {
-            isDynamicTable = true;
+        if(controlList.length !== undefined) {
+            for(var i = 0; i < controlList.length; i++) {
+                if(controlList[i]._attributes['xsi:type'] == 'ControlDynamicTable') {
+                    isDynamicTable = true;
+                }
+            }
+        } else {
+            if(controlList._attributes['xsi:type'] == 'ControlDynamicTable') {
+                isDynamicTable = true;
+            }
         }
     });
 
@@ -80,6 +89,7 @@ function makeReport(report) {
         reportPageCnt = 1;
     }
 }
+
 /***********************************************************
  기능 : 페이지 계산
  전체 데이터 / 한페이지 데이터 = 페이지 개수
@@ -211,7 +221,7 @@ function getNumOfDataInOnePage(tableLabel, divId) {
     var firstLine = tableLabel[0].rectangle.height;
     var dataLine = Number(tableLabel[tableLabel.length - 1].rectangle.height);
 
-    return Math.floor((bandDataHeight - firstLine ) / dataLine);
+    return Math.floor((bandDataHeight - firstLine) / dataLine);
 }
 
 /***********************************************************
@@ -228,13 +238,24 @@ function getNumOfDataInOnePageNonObject(band, divId) {
     }
 
     var tableSpacing = 0;
-    var tableLabel = band.controlList.anyType.Labels.TableLabel;
+    var tableLabel;
+    if(Array.isArray(band.controlList.anyType)) {
+        band.controlList.anyType.forEach(function(anyType) {
+            if(anyType._attributes['xsi:type'] == 'ControlDynamicTable' && anyType.Labels !== undefined) {
+                tableLabel = anyType.Labels.TableLabel;
+                if (anyType.Rectangle.Y !== undefined) {
+                    tableSpacing = Number(anyType.Rectangle.Y._text);
+                }
+            }
+        });
+    } else {
+        tableLabel = band.controlList.anyType.Labels.TableLabel;
+        if (band.controlList.anyType.Rectangle.Y !== undefined) {
+            tableSpacing = Number(band.controlList.anyType.Rectangle.Y._text);
+        }
+    }
     var firstLine = Number(tableLabel[0].Rectangle.Height._text);
     var dataLine = Number(tableLabel[tableLabel.length - 1].Rectangle.Height._text);
-
-    if (band.controlList.anyType.Rectangle.Y !== undefined) {
-        tableSpacing = Number(band.controlList.anyType.Rectangle.Y._text);
-    }
 
     return Math.floor((bandDataHeight - firstLine - tableSpacing) / dataLine);
 }

@@ -32,12 +32,22 @@ function getMinGroupBandDataHeight(band) {
 function getFooterHeight(bands) {
     footer_height = 0;
     var bandDataIndex;
+    var dt = Object.values(dataTable.DataSetName)[0];
+
     for (var i = 0; i < bands.length; i++) {
         if (bands[i].attributes["xsi:type"] === "BandData") {
             bandDataIndex = i;
         }
         if (i > bandDataIndex) {
-            footer_height += Number(bands[i].rectangle.height);
+            if (bands[i].attributes['xsi:type'] == 'BandSummary') { // 써머리 밴드는 isBottom이 true일 때만 매 페이지 반복
+                if (bands.isBottom == 'true') {
+                    footer_height += Number(bands[i].rectangle.height);
+                } else if ((bands[i].isBottom == 'false' && curDatarow > dt.length) || isDynamicTable == false) {
+                    footer_height += Number(bands[i].rectangle.height);
+                }
+            } else {
+                footer_height += Number(bands[i].rectangle.height);
+            }
         }
     }
 }
@@ -112,19 +122,28 @@ function getNumOfDataWithGroupField(band, avaHeight) {
  * from 안예솔
  * *********************************************************/
 function drawBand(bands, layerName, reportHeight, parentBand) {
+
     var avaHeight = 0;
     var dt = Object.values(dataTable.DataSetName)[0];
 
     bands.some(function (band) {
+
         switch (band.attributes["xsi:type"]) {
             case 'BandPageHeader' :
-                if (band.pageOutputSkip === "true") {
+                if (band.pageOutputSkip === "true" && reportPageCnt == 1) {
                     return false;
                 }
                 break;
             case 'BandTitle' :
                 if (reportPageCnt > 1) {
                     return false;
+                }
+                break;
+            case 'BandSummary' :
+                if (band.isBottom == 'false') { // isBottom이 false면 맨 마지막 페이지에만 나옴
+                    if (curDatarow < dt.length && isDynamicTable == true) {
+                        return false;
+                    }
                 }
                 break;
         }
@@ -163,18 +182,28 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                             'height': band.rectangle.height
                         });
                     }
-                } else {  //그룹 필드가 없는 경우
+                } else/* if(groupFieldArray.length == 0 || band.childHeaderBands === null)*/{
                     if (isDynamicTable == true) {
+                        var dataBandFooterHeight = 0;
+
                         dataBandHeight = getAvaHeight(div_id, reportHeight);
                         if (band.childFooterBands !== null) { // 자식 풋터 밴드에서 재호출
-                            var dataBandFooterHeight = getChildBandHeight(band);
+                            dataBandFooterHeight = getChildBandHeight(band);
                         }
                         $('#' + div_id).css({
                             'width': band.rectangle.width,
                             'height': dataBandHeight - dataBandFooterHeight,
                         });
-                        if (band.controlList.anyType.Labels !== undefined) { // 자식 풋터 밴드에서 재호출
-                            numofData = getNumOfDataInOnePageNonObject(band, div_id);
+                        if(Array.isArray(band.controlList.anyType)) {
+                            band.controlList.anyType.forEach(function(anyType) {
+                               if(anyType._attributes['xsi:type'] == 'ControlDynamicTable' && anyType.Labels !== undefined) {
+                                   numofData = getNumOfDataInOnePageNonObject(band, div_id);
+                               }
+                            });
+                        } else {
+                            if (band.controlList.anyType.Labels !== undefined) {
+                                numofData = getNumOfDataInOnePageNonObject(band, div_id);
+                            }
                         }
                     } else { // 동적 테이블이 없을 때
                         $('#' + div_id).css({
@@ -185,6 +214,7 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                 }
                 break;
             case 'BandDummyFooter' :
+                //ToDo 그룹 필드 데이터가 아닐경우 Error
                 avaHeight = getAvaHeight(div_id, reportHeight);
                 if (avaHeight < Number(band.rectangle.height)) {
                     remainBand.push(band);
@@ -259,12 +289,23 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                 }
                 break;
             case 'BandSummary' :
-                $('#' + div_id).css({
-                    'width': band.rectangle.width,
-                    'height': band.rectangle.height,
-                    'border-bottom': "1px solid red",
-                    'zIndex': -10
-                });
+                if (band.isBottom == 'true') {
+                    $('#' + div_id).css({
+                        'width': band.rectangle.width,
+                        'height': band.rectangle.height,
+                        'border-bottom': "1px solid red",
+                        'zIndex': -10
+                    });
+                } else {
+                    if (curDatarow > dt.length || isDynamicTable == false) { // 데이터 출력이 끝났을 때 나옴
+                        $('#' + div_id).css({
+                            'width': band.rectangle.width,
+                            'height': band.rectangle.height,
+                            'border-bottom': "1px solid red",
+                            'zIndex': -10
+                        });
+                    }
+                }
                 break;
             default :
                 $('#' + div_id).css({
@@ -280,14 +321,14 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
          *                 false면 데이터 밴드가 다시 그려짐
          *
          * 데이터 밴드가 다시 그려질 때,
-         * 현재 페이지에서 여유 공간 = 리포트 길이 = 그룹 풋터 밴드 상위의 밴드 길이 - 풋터 밴드 길이
+         * 현재 페이지에서 여유 공간 = 리포트 길이 = 그룹 풋터 밴드 상위의 밴드 길이 - 풋터 밴들 길이
          *
          * 최소 그룹데이터 길이 = 그룹헤더길이 + 동적테이블 title Height  + 동적테이블 value Height 길이
          *
          * 여유 공간이 최소 그룹데이터 길이보다 클 경우
          * 다시 데이터 밴드 그림
          *
-         * 만든 사람 : 구영준
+         * 만든 사람 : 구영준...
          *
          **************************************************************************************/
         if (band.attributes["xsi:type"] === "BandGroupFooter") {
@@ -301,7 +342,7 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                     
                     //ToDo 로직 수정
                     //하위의 자리에 밴드가 들어갈 자리가 있으면 넣는다.
-                    if (avaHeight > minGroupBandDataHeight) {
+                    if (avaHeight > minGroupBandDataHeight && isDynamicTable == true) {
                         parentBand = (function (arg) {
                             var band = [];
                             band.push(arg);
@@ -392,7 +433,7 @@ function drawChildFooterBand(childBands, layerName, reportHeight, band) {
                 if (band.fixTitle == 'true') { // 데이터 헤더 밴드 고정 값이 '예'일 때
                     childFooterBandArray.push(childBand); // 매 페이지마다 나와야 함
                 } else { // 데이터 헤더 밴드 고정 값이 '아니오'일 때
-                    if (curDatarow > dt.length) { // 데이터 출력이 끝났을 때 나옴
+                    if (curDatarow > dt.length || isDynamicTable == false) { // 데이터 출력이 끝났을 때 나옴
                         childFooterBandArray.push(childBand);
                     }
                 }
@@ -522,5 +563,3 @@ function getChildBandHeight(band) {
     });
     return childBandsHeight;
 }
-
-

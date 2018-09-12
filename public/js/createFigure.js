@@ -24,6 +24,8 @@ function drawingRectangle(data, divId) {
         roundingValue = 50;
     }
 
+    Lock_check(data, rectangleId, div);
+
     rectangleId.css({
         'border' : thickness + 'px ' + recDashStyle + ' ' + borderColor,
         'width' : data.rectangle.width,
@@ -61,6 +63,8 @@ function drawingCircle(data, divId) {
         'left' : data.rectangle.x + 'px',
         'top' : data.rectangle.y + 'px'
     });
+
+    Lock_check(data, figureId, div);
 
     var kappa = 0.5522848;
     var x = 0;
@@ -118,6 +122,8 @@ function drawingLine(data, divId) {
         'left' : data.rectangle.x + 'px',
         'top' : data.rectangle.y + 'px'
     });
+
+    Lock_check(data, figureId, div);
 
     var x = parseInt(data.rectangle.x);
     var y = parseInt(data.rectangle.y);
@@ -188,6 +194,8 @@ function drawingArrow(data, divId) {
         'left' : data.rectangle.x + 'px',
         'top' : data.rectangle.y + 'px'
     });
+
+    Lock_check(data, figureId, div);
 
     var x = parseInt(data.rectangle.x);
     var y = parseInt(data.rectangle.y);
