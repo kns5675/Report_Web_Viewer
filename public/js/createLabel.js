@@ -535,7 +535,7 @@ function drawingSystemLabel(data, divId, band_name) {
         labelId: $('#' + data.dataType + systemLabelNum++),
         label_scope: "NormalLabel_scope",
         labelNum: systemLabelNum,
-        label_type: data.dataType !== undefined ? data.dataType : "NormalLabel"
+        label_type : data.dataType
     }
     labelPropertyApply(labelNbandInfo);
 }
@@ -562,7 +562,7 @@ function drawingSummaryLabel(data, divId, band_name) {
         labelId: $('#' + data.dataType + summaryLabelNum++),
         label_scope: "NormalLabel_scope",
         labelNum: summaryLabelNum,
-        label_type: data.dataType !== undefined ? data.dataType : "NormalLabel"
+        label_type : data.dataType
     }
     labelPropertyApply(labelNbandInfo);
 
@@ -608,7 +608,7 @@ function drawingDataLabel(data, divId, band_name) {
         labelId: $('#' + data.dataType + dataLabelNum++),
         label_scope: "NormalLabel_scope",
         labelNum: dataLabelNum,
-        label_type: data.dataType !== undefined ? data.dataType : "NormalLabel"
+        label_type : data.dataType
     }
     labelPropertyApply(labelNbandInfo);
 }
@@ -638,7 +638,7 @@ function drawingNormalLabel(data, divId, band_name) {
         labelId: $('#' + data.dataType + normalLabelNum++),
         label_scope: "NormalLabel_scope",
         labelNum: normalLabelNum,
-        label_type: data.dataType !== undefined ? data.dataType : "NormalLabel"
+        label_type : data.dataType
     }
     labelPropertyApply(labelNbandInfo);
 }
@@ -664,7 +664,7 @@ function drawingExpression(data, divId, band_name) {
         labelId: $('#' + data.dataType + expressionNum++),
         label_scope: "NormalLabel_scope",
         labelNum: expressionNum,
-        label_type: data.dataType !== undefined ? data.dataType : "NormalLabel"
+        label_type : data.dataType
     }
     labelPropertyApply(labelNbandInfo);
 }
@@ -689,7 +689,7 @@ function drawingGroupLabel(data, divId, band_name) {
         labelId: $('#' + data.dataType + groupLabelNum++),
         label_scope: "NormalLabel_scope",
         labelNum: groupLabelNum,
-        label_type: data.dataType !== undefined ? data.dataType : "NormalLabel"
+        label_type : data.dataType
     }
     labelPropertyApply(labelNbandInfo);
 }
@@ -711,7 +711,7 @@ function drawingParameterLabel(data, divId, band_name) {
         labelId: $('#ParameterLabel' + parameterLabelNum++),
         label_scope: "NormalLabel_scope",
         labelNum: parameterLabelNum,
-        label_type: data.dataType !== undefined ? data.dataType : "NormalLabel"
+        label_type : data.dataType
     }
     labelPropertyApply(labelNbandInfo);
 }
@@ -1548,6 +1548,29 @@ function labelPropertyApply(labelNbandInfo) {
                 labelNbandInfo.labelId.children('div:not(:last-child)').css('height').length - 2)) * 0.8 + 'px'
         );
 
+        var changeRatio = Number(labelNbandInfo.data.rectangle.width)
+            / Number(labelNbandInfo.labelId.css('width').substring(0, labelNbandInfo.labelId.css('width').length-2));
+
+        for(var i=0; i<labelNbandInfo.labelId.children('div:not(:last-child)').length; i++){
+            if(labelNbandInfo.labelId.children('div:not(:last-child)').eq(i).css('width') !== "0px"){
+                labelNbandInfo.labelId.children('div:not(:last-child)').eq(i).css(
+                    'width',
+                    labelNbandInfo.labelId.children('div:not(:last-child)').eq(i).css('width').substring(
+                        0, labelNbandInfo.labelId.children('div:not(:last-child)').eq(i).css('width').length-2
+                    ) * changeRatio + 'px');
+            } else{
+                labelNbandInfo.labelId.children('div:not(:last-child)').eq(i).css(
+                    'border-left-width',
+                    labelNbandInfo.labelId.children('div:not(:last-child)').eq(i).css('border-left-width').substring(
+                        0, labelNbandInfo.labelId.children('div:not(:last-child)').eq(i).css('border-left-width').length-2
+                    ) * changeRatio + 'px');
+            }
+        }
+
+        labelNbandInfo.labelId.css('width', labelNbandInfo.data.rectangle.width + 'px');
+
+        // labelNbandInfo.labelId.children('div:not(:last-child)').css(' ')
+
         // 바코드 폰트 크기를 조금 키워줌
         labelNbandInfo.labelId.children('div:last-child').css({
             'font-size': '15px',
@@ -1811,6 +1834,5 @@ function labelPropertyApply(labelNbandInfo) {
     drd_javascript(labelNbandInfo.data, labelNbandInfo.labelId, labelNbandInfo.data.startBindScript);
     pId.addClass('Label');
     pId.addClass(labelNbandInfo.label_type);
-
 }
 
