@@ -441,7 +441,8 @@ function drawingDynamicTableTitleLabel(label, dt) {
                 'font-size': label.fontSize,
                 'font-family': label.fontFamily,
                 'font-weight': label.fontStyle,
-                'font-color': label.textColor
+                'font-color': label.textColor,
+                'width' : label.rectangle.width + 'px'
             });
             thId.append(titleName);
             thId.addClass('Label DynamicTableHeader');
