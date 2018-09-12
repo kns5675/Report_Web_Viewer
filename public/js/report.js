@@ -6,6 +6,15 @@ var remainFooterBand = [];
 var isDynamicTable = false;
 
 /******************************************************************
+ 기능 : 하나의 리포트를 다 출력 시킨 후에 사용한 전역 변수들 초기화
+ 만든이 : 구영준
+ ******************************************************************/
+function initializeVariable(){
+    groupFieldArray = [];
+    groupFieldNum = 0;
+}
+
+/******************************************************************
  기능 : 페이지에서 Json 파일을 매개변수로 받아서 ReportTemplate를 만듬
  author : powerku
 
@@ -27,6 +36,7 @@ function makeReportTemplate(data, subReport) {
             }
         });
         makeReport(report);
+        initializeVariable();
     });
     if(subReport_yes){
         var SubreportTemplate = new ReportTemplate(subReport);
@@ -82,7 +92,7 @@ function makeReport(report) {
 
     // 현재 찍힌 데이터 로우 행이 전체 데이터 보다 작을 경우 재귀함수
     // 클 경우 함수 종료 후 다음 리포트 생성
-    if (curDatarow < dt.length && isDynamicTable == true) {
+    if (curDatarow < dt.length  && isDynamicTable == true) {
         reportPageCnt++;
         makeReport(report);
     } else {
