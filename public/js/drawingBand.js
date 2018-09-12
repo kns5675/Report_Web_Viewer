@@ -305,6 +305,7 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
             case 'BandPageFooter' :
                 setWidthHeightInBand(div_id, band);
                 $('#' + div_id).css({
+                    //ToDo position이 absolute로 먹지 않음
                     'position': 'absolute',
                     'bottom': 0 + "px",
                 });
