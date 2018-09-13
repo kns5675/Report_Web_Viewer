@@ -181,7 +181,7 @@ function Table(data){ // ControlList 밑에 anyType이 ControlFixedTable, Contro
     this.forceAnnex = data.ForceAnnex === undefined ? 0 : data.ForceAnnex._text;
     this.minimumRowCount = data.MinimumRowCount === undefined ? undefined : data.MinimumRowCount._text; // 최소 행 개수 (DRD에서 Default값이 1임)
     this.fixRowCount = data.FixRowCount === undefined ? 0 : data.FixRowCount._text; // 최대 행 개수 (DRD에서 Default값이 0임)
-    this.isForceOverRow = data.IsForceOverRow === undefined ? true : data.IsForceOverRow._text; // 최대 행 이후의 데이터 true 일 때는 페이지 넘기기 false일 때는 제거(별지 출력)
+    this.isForceOverRow = data.IsForceOverRow === undefined ? false : data.IsForceOverRow._text; // 최대 행 이후의 데이터 true 일 때는 페이지 넘기기 false일 때는 제거(별지 출력)
     this.isAnnexMark = data.isAnnexMark === undefined ? 0 : data.isAnnexMark._text; // 별지 마크 표시 여부
     this.annexReportName = data.AnnextReportName === undefined ? undefined : data.AnnextReportName._text; // 별지 리포트 명
     this.isFirstPagePrint = data.IsFirstPagePrint === undefined ? undefined : data.IsFirstPagePrint._text; // 첫 페이지만 출력, 결재란 여부가 예 일때 결재란을 첫페이지에만 출력할것인지, 전체 페이지에 출력할것인지 판단하는 값
@@ -275,7 +275,7 @@ function Expression(data){
 function GroupLabel(data){
     Label.apply(this, arguments);
 
-    this.grouppingRule = data.GroupingRule === undefined ? undefined : data.GroupingRule._text; // 그룹핑규칙
+    this.grouppingRule = data.GroupingRule === undefined ? 'Merge' : data.GroupingRule._text; // 그룹핑규칙
 
 }
 
