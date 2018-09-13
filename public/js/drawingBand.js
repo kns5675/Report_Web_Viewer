@@ -69,6 +69,7 @@ function getAvaHeight(div_id, reportHeight) {
         for (var i = 0; i < siblings.length; i++) {
             curr_height += parseInt(siblings.eq(i).css('height').substring(0, siblings.eq(i).css('height').length - 2));
         }
+
         avaHeight = reportHeight - curr_height - footer_height;
     }
 
@@ -83,6 +84,11 @@ function getAvaHeight(div_id, reportHeight) {
  * *********************************************************/
 function getNumOfDataWithGroupField(band, avaHeight) {
 
+    var tableSpacing = 0;
+
+    if (band.controlList.anyType.Rectangle.Y !== undefined) {
+        tableSpacing = Number(band.controlList.anyType.Rectangle.Y._text);
+    }
     var dataCount = groupFieldArray[groupFieldNum].length;
     var labels = band.controlList.anyType.Labels.TableLabel;
 
@@ -95,7 +101,7 @@ function getNumOfDataWithGroupField(band, avaHeight) {
     });
 
     //ToDo 확인 필요
-    var numofData = Math.floor((avaHeight - titleHeight) / valueHeight) + 1;
+    var numofData = Math.floor((avaHeight - titleHeight - tableSpacing) / valueHeight) + 1;
     var groupRemainData = (dataCount - groupDataRow);
 
 
@@ -161,6 +167,13 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
         }
 
         switch (band.attributes["xsi:type"]) {
+            case 'BandDataHeader' :
+                if (getAvaHeight(div_id, reportHeight) < Number(band.rectangle.height)) {
+                    $('#' + div_id).remove();
+                    return true;
+                }
+                setWidthHeightInBand(div_id, band);
+                break;
             case 'BandDummyHeader' :
                 if (getAvaHeight(div_id, reportHeight) < Number(band.rectangle.height)) {
                     $('#' + div_id).remove();
@@ -186,7 +199,6 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                 if (groupFieldArray.length > 0 && band.childHeaderBands !== null) { //그룹 필드가 있는 경우
                     var dataBandHeight = 0
                     if (isDynamicTable == true) {
-                        getMinGroupBandDataHeight(band);
                         avaHeight = getAvaHeight(div_id, reportHeight);
                         numofData = getNumOfDataWithGroupField(band, avaHeight);
                         if (band.controlList.anyType.FixRowCount !== undefined) { // 최대 행 개수
@@ -316,6 +328,7 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
             case 'BandPageFooter' :
                 setWidthHeightInBand(div_id, band);
                 $('#' + div_id).css({
+                    //ToDo position이 absolute로 먹지 않음
                     'position': 'absolute',
                     'bottom': 0 + "px",
                 });
@@ -354,7 +367,10 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
     });
 }
 
-
+/***********************************************************
+ 기능 : JudegementControlList 이후에 필요한 작업들
+ 만든이 : 구영준
+ * *********************************************************/
 function afterjudgementControlListAction(band, div_id, layerName, reportHeight, parentBand, dt) {
     switch (band.attributes["xsi:type"]) {
         case 'BandData' :
@@ -365,7 +381,7 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
                     var groupRemainData = (dataCount - groupDataRow);
 
                     if (numofData > groupRemainData) { // 마지막 페이지
-                        curDatarow += groupFieldArray[groupFieldNum].length;
+                        curDatarow += groupFieldArray[groupFieldNum].length - 1;
                         groupFieldNum++;
                         remainData = false;
                         groupDataRow = 1;
@@ -408,9 +424,6 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
                 if (band.forceNewPage === 'true') { //페이지 넘기기
 
                 } else {
-                    if (isDynamicTable == true)
-                        avaHeight = getAvaHeight(div_id, reportHeight);
-
                     if (isDynamicTable == true) {
                         parentBand = (function (arg) {
                             var band = [];
@@ -546,7 +559,6 @@ function drawChildFooterBand(childBands, layerName, reportHeight, band) {
 function getChildHeaderBandHeight(band) {
     var childHeaderBandsHeight = 0;
     var childBands = band.childHeaderBands;
-    var dt = Object.values(dataTable.DataSetName)[0];
 
     childBands.forEach(function (childBand) {
         switch (childBand.attributes["xsi:type"]) {
