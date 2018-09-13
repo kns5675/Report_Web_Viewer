@@ -290,6 +290,30 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
                     'width': label.rectangle.width,
                     'height': label.rectangle.height
                 });
+
+                if(label.dataType == 'GroupLabel' && j == numOfData - 1 && label.grouppingRule == 'Merge') { // 그룹 라벨
+                    var i = 0;
+                    var tableValueLabelNum2 = tableValueLabelNum - 1;
+
+                    for(i; i < j - groupDataRow; i++){
+                        var groupLabel = $('#tableValueLabelNum' + (tableValueLabelNum2 - i));
+                        var priorGroupLabel = $('#tableValueLabelNum' + (tableValueLabelNum2 - (i + 1)));
+
+                        if ((groupLabel.attr('class') == priorGroupLabel.attr('class')) && groupLabel.text() == priorGroupLabel.text()) {
+                            groupLabelNum++;
+                            groupLabel.remove();
+                            if(groupLabelNum == (j - groupDataRow + 1)) {
+                                priorGroupLabel.attr('rowspan', groupLabelNum);
+                            }
+                        } else {
+                            if (groupLabelNum != 1) {
+                                groupLabel.attr('rowspan', groupLabelNum);
+                                groupLabelNum = 1;
+                            }
+                        }
+                    }
+                }
+
                 var td = $('.' + key);
                 //// 추가 부분 18.08.28 YeSol
                 if (label.noBorder == 'true') {
@@ -338,7 +362,7 @@ function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, nu
             minimumRow = true;
         }
     }
-
+    var groupLabelNum = 1;
     for (var j = groupDataRow; j < numOfData; j++) {
         var temp = j;
         var data = groupFieldArray[groupFieldNum];
@@ -383,26 +407,27 @@ function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, nu
                     'height': label.rectangle.height,
 
                 });
-
-                if(label.dataType == 'GroupLabel' && j == (numOfData - 1)) {
+                if(label.dataType == 'GroupLabel' && j == numOfData - 1 && label.grouppingRule == 'Merge') { // 그룹 라벨
                     var i = 0;
                     var tableValueLabelNum2 = tableValueLabelNum - 1;
-                    var groupLabelNum = 1;
-                    var rowSpanTdId;
-                    for(i; i < numOfData - groupDataRow; i++){
-                        // TODO 수정하기! 뭔가 이상해
+
+                    for(i; i < j - groupDataRow; i++){
                         var groupLabel = $('#tableValueLabelNum' + (tableValueLabelNum2 - i));
-                        var priorGroupLabel = $('#tableValueLabelNum' + (tableValueLabelNum2 - (i - 1)));
-                        if((groupLabel.attr('class') == priorGroupLabel.attr('class')) && groupLabel.text() == groupLabel.text()) {
-                            rowSpanTdId = groupLabel;
-                            priorGroupLabel.remove();
+                        var priorGroupLabel = $('#tableValueLabelNum' + (tableValueLabelNum2 - (i + 1)));
+
+                        if ((groupLabel.attr('class') == priorGroupLabel.attr('class')) && groupLabel.text() == priorGroupLabel.text()) {
                             groupLabelNum++;
+                            groupLabel.remove();
+                            if(groupLabelNum == (j - groupDataRow + 1)) {
+                                priorGroupLabel.attr('rowspan', groupLabelNum);
+                            }
+                        } else {
+                            if (groupLabelNum != 1) {
+                                groupLabel.attr('rowspan', groupLabelNum);
+                                groupLabelNum = 1;
+                            }
                         }
                     }
-                    if(rowSpanTdId !== undefined) {
-                        rowSpanTdId.attr('rowspan', groupLabelNum);
-                    }
-
                 }
 
                 var td = $('.' + key);

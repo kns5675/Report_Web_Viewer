@@ -153,6 +153,9 @@ function Label(data){
     this.horizontalTextAlignment = data.HorizontalTextAlignment === undefined ? 'Center' : data.HorizontalTextAlignment._text; // 텍스트 수평 정렬
     this.verticalTextAlignment = data.VerticalTextAlignment === undefined ? 'Center' : data.VerticalTextAlignment._text; // 텍스트 수직 정렬
     this.textDirection = data.TextDirection === undefined ? 'Horizontal' : data.TextDirection._text; // 텍스트 방향 아마도 default horizontal
+
+    // this.grouppingRule = data.GroupingRule === undefined ? 'Merge' : data.GroupingRule._text; // 그룹핑규칙
+    this.grouppingRule = 'Merge'; // 그룹핑 규칙 (일단은 Merge만 될 거라고 해서 Merge로 해놓음)
 }
 
 
@@ -275,7 +278,7 @@ function Expression(data){
 function GroupLabel(data){
     Label.apply(this, arguments);
 
-    this.grouppingRule = data.GroupingRule === undefined ? 'Merge' : data.GroupingRule._text; // 그룹핑규칙
+
 
 }
 
