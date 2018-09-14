@@ -143,12 +143,15 @@ function judgementLabel(data, divId, numOfData, band_name) {
     } else if (attr == 'ControlArrow') { // 화살표
         var figure = new ControlArrow(data);
         drawingArrow(figure, divId);
-    } else if (attr == 'ControlRadioButton') {
+    } else if (attr == 'ControlRadioButton') { // 라디오 버튼
         var additionalControl = new ControlRadioButton(data);
         drawingRadioButton(additionalControl, divId);
-    } else if (attr == 'ControlCheckBoxButton') {
+    } else if (attr == 'ControlCheckBoxButton') { // 체크 박스
         var additionalControl = new ControlCheckBoxButton(data);
         drawingCheckBox(additionalControl, divId);
+    } else if (attr == 'ControlRegion') { // 리전
+        // TODO 리전ㅠㅠ
+        var regionControl = new ControlRegion(data);
     }
 }
 

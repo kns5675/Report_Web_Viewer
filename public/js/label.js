@@ -277,9 +277,6 @@ function Expression(data){
  ******************************************************************/
 function GroupLabel(data){
     Label.apply(this, arguments);
-
-
-
 }
 
 /******************************************************************
@@ -290,4 +287,23 @@ function ParameterLabel(data){
     Label.apply(this, arguments);
 
     this.parameterName = data.ParameterName === undefined ? undefined : data.ParameterName._text; // 파라미터 이름
+}
+
+/******************************************************************
+ 기능 : Report 객체를 상속 받는 Region(리전)의 객체를 만든다.
+ 만든이 : 전형준
+ 
+ 수정 : 안예솔
+ ******************************************************************/
+function ControlRegion(data){
+    Report.apply(this, arguments);
+    this.layer = new Layer(data.layers.anyType);
+    this.regionRepeatFile = data.RegionRepeatFill._text;
+    this.zOrder = data.ZOrder._text;
+    this.printDirection = data.PrintDirection._text;
+    this.offsetBetweentResion = {
+        width : data.OffsetBetweenResion.Width._text,
+        height : data.OffsetBetweenResion.Height._text
+    };
+    this.forcePage = data.Forcepage._text;
 }

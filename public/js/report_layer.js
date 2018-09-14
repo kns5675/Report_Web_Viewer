@@ -64,6 +64,8 @@ function Report(data){
     // this.parentId = data.ParentID._text;
     this.id = data.Id._text; // id
     this.rectangle = { // 크기
+        x : data.Rectangle.X === undefined ? 0 : data.Rectangle.X._text,
+        y : data.Rectangle.Y === undefined ? 0 : data.Rectangle.Y._text,
         width : data.Rectangle.Width._text,
         height : data.Rectangle.Height._text
     };
@@ -80,11 +82,13 @@ function Report(data){
     this.noPrintIfNoData = data.NoPrintIfNoData._text; // 데이터 테이블에 따른 인쇄 유무
 
     // Layers
-    this.layers = {
-        backGroundLayer : new Layer(data.Layers.anyType[0]),
-        designLayer : new Layer(data.Layers.anyType[1]),
-        foreGroundLayer : new Layer(data.Layers.anyType[2])
-    };
+    if(data._attributes["xsi:type"] === "Report") {
+        this.layers = {
+            backGroundLayer: new Layer(data.Layers.anyType[0]),
+            designLayer: new Layer(data.Layers.anyType[1]),
+            foreGroundLayer: new Layer(data.Layers.anyType[2])
+        };
+    }
 
     this.margin = { // 여백
         x : data.Margin.X._text,
@@ -97,10 +101,14 @@ function Report(data){
     this.gutterPosition = data.GutterPosition._text; // 제본용 여백 위치
     this.morrirMargins = data.MorrirMargins._text; // 페이지 마주보기
     this.paperType = data.PaperType._text; // 용지 타입
-    this.paperSize = { // 페이지 크기
-        width : data.PaperSize.Width._text,
-        height : data.PaperSize.Height._text
-    };
+
+    if(data._attributes["xsi:type"] === "Report") {
+        this.paperSize = { // 페이지 크기
+            width : data.PaperSize.Width._text,
+            height : data.PaperSize.Height._text
+        };
+    }
+
     this.showPageBorder = data.ShowPageBorder;
     this.hideVirtualArea = data.HideVirtualArea; // 가상 영역 숨김
     this.standardMarginPixel = data.StandardMarginPixel; // 라벨 기본 여백값
@@ -117,6 +125,7 @@ function Layer(data){
     this.attributes = data._attributes;
     this.name = data.Name._text;
     this.isActive = data.IsActive._text;
+    this.isVisible = data.IsVisible === undefined ? undefined : data.IsVisible._text;
     this.bands = CreateBandArray(data.Bands); // 각 Layer가 갖고 있는 Bands
 }
 /***************************************************************************
