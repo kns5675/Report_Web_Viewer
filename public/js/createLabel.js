@@ -32,6 +32,7 @@ var dynamicValueLabelNum = 1;
 var fixedTableLabelNum = 1; //지연추가
 var groupFieldArray = [];
 var titleArray = []; // 그룹으로 묶었을 경우 titleName으로만 접근이 가능해져서 그 titleName을 담을 배열
+var regionNum = 1;
 
 var row = 0;
 var verticalPNum = 0;
@@ -152,7 +153,78 @@ function judgementLabel(data, divId, numOfData, band_name) {
     } else if (attr == 'ControlRegion') { // 리전
         // TODO 리전ㅠㅠ
         var regionControl = new ControlRegion(data);
+        drawingRegion(regionControl, divId);
     }
+}
+
+function drawingRegion(data, divId) {
+    console.log('divId : ' + divId);
+    var div = $('#' + divId);
+
+    div.css('position', 'relative');
+
+    div.append('<div id = "region' + regionNum + '"></div>');
+
+    var regionDiv = $('#region' + regionNum);
+
+    regionDiv.css({
+        // 'margin-top': data.margin.x + 'px',
+        // 'margin-bottom': data.margin.y + 'px',
+        // 'margin-right': data.margin.height + 'px',
+        // 'margin-left': data.margin.width + 'px',
+        'left' : data.rectangle.x + 'px',
+        'top' : data.rectangle.y + 'px',
+        'width' : data.rectangle.width + 'px',
+        'height' : data.rectangle.height + 'px',
+        'position': 'absolute',
+        'background-color' : 'rgba(255, 0, 0, 0)',
+        'border' : '1px solid black',
+        'z-index' : 0
+    });
+    var regionName = 'resion' + regionNum;
+    var regionHeight = data.rectangle.height;
+
+    console.log(data.layer.bands);
+
+    var bands = data.layer.bands;
+    var dataBandIndex = 0;
+
+    drawBand(bands, regionName, regionHeight);
+
+    // var layerName = "designLayer" + pageNum;
+    // var reportHeight = report.rectangle.height;
+    // if(remainFooterBand.length > 0){
+    //     var bands = report.layers.designLayer.bands;
+    //     var dataBandIndex = 0;
+    //
+    //     bands.forEach(function(band, i){
+    //         if(band.attributes["xsi:type"] == "BandData"){
+    //             dataBandIndex = i;
+    //         }
+    //     });
+    //
+    //     var returnBands = bands.injectArray(dataBandIndex, remainFooterBand);
+    //
+    //     returnBands.forEach(function(band, i){
+    //         if(band.attributes["xsi:type"] == "BandData"){
+    //             dataBandIndex = i;
+    //         }
+    //     });
+    //
+    //     returnBands.splice(dataBandIndex, 1);
+    //
+    //     drawBand(returnBands, layerName, reportHeight);
+    //     remainFooterBand = [];
+    // }else{
+    //     drawBand(report.layers.designLayer.bands, layerName, reportHeight); // 추가 - 전형준
+    // }
+    // if(report){
+    //     drawSubReport(report.layers.designLayer.bands, layerName, reportHeight);
+    // }else{
+    //     drawBand(report.layers.designLayer.bands, layerName, reportHeight); // 추가 - 전형준
+    // }
+
+
 }
 
 /******************************************************************
@@ -177,6 +249,7 @@ function judgementLabel(data, divId, numOfData, band_name) {
  From hagdung-i
  ******************************************************************/
 function drawingDynamicTable(table, tableLabel, divId, numOfData) {
+    console.log(divId);
     var div = $('#' + divId);
     div.append('<div id = "Table' + tableNum + '"></div>');
     var divIdTable = $('#Table' + tableNum);
@@ -830,6 +903,7 @@ function drawingFixedTableLabel(label, dt, tableId, numOfData, table) {
  From hagdung-i
  ******************************************************************/
 function drawingSystemLabel(data, divId, band_name) {
+    console.log('divId' + divId);
     var labelNbandInfo = {
         data: data,
         divId: divId,
@@ -1436,6 +1510,7 @@ function Lock_check(data, Label_id, div) { //라벨 데이터, 드래그 리사�
  만든이 : hagdung-i
  ******************************************************************/
 function Lock_Check_Table(data, drag, resize, div) { //테이블 데이터, 드래거블 지정할 영역, 리사이즈 영역, 위치 이동시 벗어나면 안되는 영역
+    console.log(div[0]);
     var Lock_check;
     if (data.Lock === undefined) {
         Lock_check = data.Lock;

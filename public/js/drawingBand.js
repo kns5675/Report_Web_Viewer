@@ -130,9 +130,9 @@ function getNumOfDataWithGroupField(band, avaHeight) {
  * from 안예솔
  **********************************************************/
 function drawBand(bands, layerName, reportHeight, parentBand) {
-
     var avaHeight = 0;
     var dt = Object.values(dataTable.DataSetName)[0];
+    console.log(dt);
 
     bands.some(function (band) {
 
@@ -341,6 +341,11 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                         'zIndex': -10
                     });
                 } else {
+                    setWidthHeightInBand(div_id, band);
+                    $('#' + div_id).css({
+                        'border-bottom': "1px solid red",
+                        'zIndex': -10
+                    });
                     if (curDatarow > dt.length || isDynamicTable == false) { // 데이터 출력이 끝났을 때 나옴
                         setWidthHeightInBand(div_id, band);
                         $('#' + div_id).css({

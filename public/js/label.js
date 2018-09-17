@@ -297,7 +297,7 @@ function ParameterLabel(data){
  ******************************************************************/
 function ControlRegion(data){
     Report.apply(this, arguments);
-    this.layer = new Layer(data.layers.anyType);
+    this.layer = new Layer(data.Layers.anyType);
     this.regionRepeatFile = data.RegionRepeatFill._text;
     this.zOrder = data.ZOrder._text;
     this.printDirection = data.PrintDirection._text;

@@ -70,7 +70,7 @@ function Report(data){
         height : data.Rectangle.Height._text
     };
     this.name = data.Name._text; // 이름
-    this.lock = data.Lock._text; // 잠김
+    this.lock = data.Lock === undefined ? undefined : data.Lock._text; // 잠김
 
     // 인쇄 무시하기란 다중의 리포트가 있는 경우 특정 리포트에 IsIgnore값을
     // true로 하게 되면 데이터 유무와 관계없이 해당 리포트는 인쇄 미리보기에서 제외함
