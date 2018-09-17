@@ -1,5 +1,6 @@
 var pageNum = 1;
 var reportNum = 1;
+var reportPageCnt = 0;
 var curDatarow = 0;
 var groupFieldArray = [];
 var remainFooterBand = [];
@@ -53,9 +54,9 @@ function makeReportTemplate(data, subReport) {
  기능 : make report in function makeReportTemplate
  author : powerku
  ******************************************************************/
-var reportPageCnt = 1;
-
 function makeReport(report) {
+    reportPageCnt++;
+    
     var dt = Object.values(dataTable.DataSetName)[0];
     if (pageNum === '1') {
 
