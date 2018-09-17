@@ -1,5 +1,6 @@
 var pageNum = 1;
 var reportNum = 1;
+var reportPageCnt = 0;
 var curDatarow = 0;
 var curDatarowInDataBand = 0;
 var groupFieldArray = [];
@@ -23,7 +24,7 @@ function initializeVariable() {
  author : powerku
 
  기능 : 서브 리포트 1번째 루트 많은 양의 데이터 리포트를 삽입할 경우
- 페이지를 새로 만들어서 기존 리포트를 모두 출력 후 출력한다.
+        페이지를 새로 만들어서 기존 리포트를 모두 출력 후 출력한다.
  날짜 : 2018-09-10
  만든이 : 김학준
  ******************************************************************/
@@ -81,7 +82,6 @@ function makeReport(report, dataBand) {
 
     }
 
-
     // 180910 YeSol 추가
     var controlLists = [];
     // var dt = Object.values(dataTable.DataSetName);
@@ -117,7 +117,6 @@ function makeReport(report, dataBand) {
         }
     });
 
-
     setPage(report);
     setReport(report, dataBand);
 
@@ -133,7 +132,6 @@ function makeReport(report, dataBand) {
             reportPageCnt = 1;
         }
     }
-
 }
 
 /***********************************************************
@@ -689,7 +687,7 @@ function setPageForCopyRatioDirection(report) {
  수정 : 하지연
  날짜 : 2018 - 08 - 23
  내용 : page의 width, height값을 page의 부모인 pageForCopyRatio의 width,
- height값의 100%로 지정하고, 방향 설정
+        height값의 100%로 지정하고, 방향 설정
  ******************************************************************/
 function setPageDirection(report) {
     var page = $('#page' + pageNum);

@@ -183,7 +183,6 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData, band) {
     divIdTable.append('<div id="dynamicTable_resizing_div_packing' + dynamicTableNum + '"></div>');
     var dynamicTable_resizing_div_packing = $("#dynamicTable_resizing_div_packing" + dynamicTableNum);
     dynamicTable_resizing_div_packing.append('<div id="dynamicTable_resizing_div' + dynamicTableNum + '"></div>');
-
     var dynamicTable_resizing_div = $("#dynamicTable_resizing_div" + dynamicTableNum);
     var temp_table_class = table.id.substring(0, 4); // 임시로 table을 인식하기 위한 번호 - 전형준
     dynamicTable_resizing_div.append('<table id="dynamicTable' + dynamicTableNum + '" class="table table-' + temp_table_class + '"></table>');
@@ -228,6 +227,7 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData, band) {
             'border': '1px solid red',
             'border-collapse': 'collapse',
             'text-align': 'center',
+            'table-layout' : 'fixed'
         });
 
         tableNum++;
@@ -326,10 +326,11 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
                     'font-size': label.fontSize,
                     'font-family': label.fontFamily,
                     'font-weight': label.fontStyle,
-                    'background-color': label.backGroundColor,
                     'font-color': label.textColor,
                     // 'width': label.rectangle.width + 'px',
                     // 'height': label.rectangle.height + 'px'
+                    'background-color': label.backGroundColor,
+                    'white-space': 'nowrap'
                 });
                 drd_javascript(label, tdId, label.startBindScript);
             }
@@ -448,7 +449,8 @@ function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, nu
                     'font-size': label.fontSize,
                     'font-family': label.fontFamily,
                     'font-weight': label.fontStyle,
-                    'background-color': label.backGroundColor
+                    'background-color': label.backGroundColor,
+                    'white-space': 'nowrap'
                 });
                 drd_javascript(label, tdId, label.startBindScript);
             }
@@ -522,7 +524,8 @@ function drawingDynamicTableTitleLabel(label, dt) {
                 'font-weight': label.fontStyle,
                 'font-color': label.textColor,
                 'width': label.rectangle.width + 'px',
-                'height': label.rectangle.height + 'px'
+                'height': label.rectangle.height + 'px',
+                'white-space': 'nowrap'
             });
             thId.append(titleName);
             thId.addClass('Label DynamicTableHeader');
@@ -857,22 +860,6 @@ function drawingSummaryLabel(data, divId, band_name) {
         label_type: data.dataType
     }
     labelPropertyApply(labelNbandInfo);
-
-    // 해당 부분은 아래 labelPropertyApply 함수에 중간에 정의할 것 !!
-
-    /////////////////// 샘플 받으면 수정하기 ///////////////////////////
-    switch (data.summaryType) {
-        case 'Sum' :
-            break;
-        case 'Avg' :
-            break;
-        case 'Max' :
-            break;
-        case 'Min' :
-            break;
-        case 'Cnt' :
-            break;
-    }
 }
 
 /******************************************************************
@@ -1614,6 +1601,126 @@ function label_text_Setting(labelNbandInfo) {
         }
     }
 
+    // 요약라벨
+    if (labelNbandInfo.label_type === "SummaryLabel") {
+        var dt = Object.values(dataTable.DataSetName)[0];
+        var key_arr = Object.keys(dt[0]);
+
+        var key = null;
+        key_arr.forEach(function (obj) { // key 값 설정
+            if(labelNbandInfo.data.fieldName == obj) {
+                key = obj;
+                return;
+            }
+        });
+
+        switch (labelNbandInfo.data.summaryType) {
+            case 'Sum' :    // 합계
+                var summary_label_sum = 0;
+
+                if (groupFieldArray.length !== 0) { // 그룹 기준 필드가 있을 때
+                    for (var i = 0; i < groupFieldArray[groupFieldNum-1].length-1; i++) {
+                        summary_label_sum += Number(groupFieldArray[groupFieldNum-1][i+1][key]._text);
+                    }
+                } else{
+                    for(var i=0; i < dt.length; i++){
+                        summary_label_sum += Number(dt[i][key]._text);
+                    }
+                }
+
+                labelNbandInfo.data.text = summary_label_sum;
+                if(isNaN(Number(labelNbandInfo.data.text))) {
+                    labelNbandInfo.data.text = "오류!";
+                    pId.attr('title', '값이 숫자가 아닙니다');
+                }
+                break;
+            case 'Avg' :    // 평균
+                var summary_label_sum = 0;
+                var summary_label_avg = 0;
+
+                if (groupFieldArray.length !== 0) { // 그룹 기준 필드가 있을 때
+                    for (var i = 0; i < groupFieldArray[groupFieldNum-1].length-1; i++) {
+                        summary_label_sum += Number(groupFieldArray[groupFieldNum-1][i+1][key]._text);
+                    }
+                    summary_label_avg = summary_label_sum / (groupFieldArray[groupFieldNum-1].length-1);
+                } else{
+                    for(var i=0; i < dt.length; i++){
+                        summary_label_sum += Number(dt[i][key]._text);
+                    }
+                    summary_label_avg = summary_label_sum / dt.length;
+                }
+                labelNbandInfo.data.text = summary_label_avg;
+                if(isNaN(Number(labelNbandInfo.data.text))) {
+                    labelNbandInfo.data.text = "오류!";
+                    pId.attr('title', '값이 숫자가 아닙니다');
+                }
+                break;
+            case 'Max' :    // 최대값
+                var temp_arr = [];
+                if(groupFieldArray.length !== 0) { // 그룹 기준 필드가 있을 때
+                    for (var i = 0; i < groupFieldArray[groupFieldNum - 1].length - 1; i++) {
+                        temp_arr.push(Number(groupFieldArray[groupFieldNum - 1][i + 1][key]._text));
+                    }
+                    var summary_label_max = temp_arr.reduce(function (previous, current) {
+                        return previous > current ? previous : current;
+                    });
+                } else{
+                    for(var i=0; i < dt.length; i++){
+                        temp_arr.push(Number(dt[i][key]));
+                    }
+                    var summary_label_max = temp_arr.reduce(function (previous, current) {
+                        return previous > current ? previous : current;
+                    });
+                }
+                if(isNaN(Number(labelNbandInfo.data.text))){
+                    labelNbandInfo.data.text = "오류!";
+                    pId.attr('title', '값이 숫자가 아닙니다');
+                }
+                labelNbandInfo.data.text = summary_label_max;
+                break;
+            case 'Min' :    // 최소값
+                var temp_arr = [];
+                if(groupFieldArray.length !== 0) { // 그룹 기준 필드가 있을 때
+                    for (var i = 0; i < groupFieldArray[groupFieldNum - 1].length - 1; i++) {
+                        temp_arr.push(Number(groupFieldArray[groupFieldNum - 1][i + 1][key]._text));
+                    }
+                    var summary_label_min = temp_arr.reduce(function (previous, current) {
+                        return previous > current ? current : previous;
+                    });
+                } else{
+                    for(var i=0; i < dt.length; i++){
+                        temp_arr.push(Number(dt[i][key]));
+                    }
+                    var summary_label_min = temp_arr.reduce(function (previous, current) {
+                        return previous > current ? current : previous;
+                    });
+                }
+                labelNbandInfo.data.text = summary_label_min;
+                if(isNaN(Number(labelNbandInfo.data.text))) {
+                    labelNbandInfo.data.text = "오류!";
+                    pId.attr('title', '값이 숫자가 아닙니다');
+                }
+                break;
+            case 'Cnt' :    // 개수
+                var summary_label_cnt = 0;
+                if (groupFieldArray.length !== 0) { // 그룹 기준 필드가 있을 때
+                    summary_label_cnt = groupFieldArray[groupFieldNum-1].length-1;
+                } else{
+                    summary_label_cnt = dt.length;
+                }
+
+                labelNbandInfo.data.text = summary_label_cnt;
+                if(isNaN(Number(labelNbandInfo.data.text))) {
+                    labelNbandInfo.data.text = "오류!";
+                    pId.attr('title', '값이 숫자가 아닙니다');
+                }
+                break;
+            default :   // None
+                labelNbandInfo.data.text = '';
+                break;
+        }
+    }
+
     // fontSize의 단위를 통일하기위해
     var fontSizePt = changeFontUnit(labelNbandInfo.data.fontSize);
     // console.log("pId : ",pId[0].clientWidth);
@@ -2089,7 +2196,7 @@ function labelPropertyApply(labelNbandInfo) {
         'color': labelNbandInfo.data.textColor // 글자 색
     });
 
-    // 바코드 - 사용한 코드 때문에 크기가 마음대로 줄어듦..
+    // 바코드
     if (labelNbandInfo.data.drawingType !== undefined && labelNbandInfo.data.drawingType === "Barcode") {
         var barcode_text = labelNbandInfo.data.text === undefined ? 'ERROR' : labelNbandInfo.data.text;
         var barcode_type = labelNbandInfo.data.barcodeType === undefined ? 'code39' : labelNbandInfo.data.barcodeType.toLowerCase();

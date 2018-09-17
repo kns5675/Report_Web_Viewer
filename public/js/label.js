@@ -243,6 +243,7 @@ function SummaryLabel(data){
      ***************************************/
     this.summaryType = data.SummaryType === undefined ? 'Sum' : data.SummaryType._text; // 요약 타입
     this.detailWhere = data.DetailWhere === undefined ? undefined : data.DetailWhere._text; // 요약 라벨 조건절
+    this.fieldName = data.FieldName === undefined ? undefined : data.FieldName._text; // 필드 이름
 }
 
 /******************************************************************
