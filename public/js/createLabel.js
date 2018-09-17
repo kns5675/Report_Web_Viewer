@@ -50,10 +50,10 @@ function judgementControlList(band, divId, numOfData) {
         var controlList = band.controlList.anyType;
         if (Array.isArray(controlList)) {
             controlList.forEach(function (list) {
-                judgementLabel(list, divId, numOfData, band.attributes["xsi:type"]);
+                judgementLabel(list, divId, numOfData, band);
             });
         } else {
-            judgementLabel(controlList, divId, numOfData, band.attributes["xsi:type"]);
+            judgementLabel(controlList, divId, numOfData, band);
         }
     } else {
     }
@@ -63,8 +63,10 @@ function judgementControlList(band, divId, numOfData) {
  기능 : 어떤 Label인지를 판단하여 객체를 생성해주는 함수를 만든다.
  만든이 : 안예솔
  ******************************************************************/
-function judgementLabel(data, divId, numOfData, band_name) {
+function judgementLabel(data, divId, numOfData, band) {
     var attr = data._attributes["xsi:type"];
+    var band_name = band.attributes["xsi:type"];
+
     if (attr == "ControlDynamicTable") { // 동적 테이블
         var controlDynamicTable = new Table(data);
         tableList.push(controlDynamicTable);
@@ -72,11 +74,12 @@ function judgementLabel(data, divId, numOfData, band_name) {
 
         tableLabels.forEach(function (label, i) {
             var tableLabel = new DynamicTableLabel(label, i);
+
             if (tableLabelList.length < tableLabels.length) { //영준 수정
                 tableLabelList.push(tableLabel);
             }
         });
-        drawingDynamicTable(controlDynamicTable, tableLabelList, divId, numOfData);
+        drawingDynamicTable(controlDynamicTable, tableLabelList, divId, numOfData, band);
     } else if (attr == "ControlFixedTable") { // 고정 테이블일때
         /*
         ToDo : 하나의 페이지에 고정테이블이 2개 이상 있을 경우 fixTableLabelList에 겹침
@@ -248,8 +251,7 @@ function drawingRegion(data, divId) {
  Date : 2018-08-27
  From hagdung-i
  ******************************************************************/
-function drawingDynamicTable(table, tableLabel, divId, numOfData) {
-    console.log(divId);
+function drawingDynamicTable(table, tableLabel, divId, numOfData, band) {
     var div = $('#' + divId);
     div.append('<div id = "Table' + tableNum + '"></div>');
     var divIdTable = $('#Table' + tableNum);
@@ -271,15 +273,7 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData) {
         // 'pointer-events': 'auto',
         'border': '3px dotted orange'//일단 추가해놈 영역 잘 안보여서 지연추가
     });
-    // if(div.attr('width') == dynamicTable_resizing_div.attr('width')){
-    //     console.log("!!!!!!!!!!!!!width!!!!!!!!!!!!! 같다.");
-    // }else{
-    //     console.log("!!!!!!!!!!!!!width!!!!!!!!!!!!! 달라!!!!");
-    // }if(div.attr('height') == dynamicTable_resizing_div.attr('height')){
-    //     console.log("!!!!!!!!!!!!!height!!!!!!!!!!!!! 같다.")
-    // }else if(div.attr('height') !== dynamicTable_resizing_div.attr('height')){
-    //     console.log("!!!!!!!!!!!!!height!!!!!!!!!!!!! 달라!!!!!")
-    // }
+
     var tableId = $('#dynamicTable' + dynamicTableNum);
     Lock_Check_Table(table, dynamicTable_resizing_div, tableId, div);
     // table_format_check(table, dynamicTable_resizing_div, tableId, div);
@@ -289,18 +283,12 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData) {
     });
     tableId.append('<tr id = "dynamicTitleLabel' + dynamicTitleLabelNum + '"></tr>');
 
-    // if(groupFieldArray.length < 1) {
-    //     console.log("if들어옴");
-    //     numOfData = getNumOfDataInOnePage(tableLabel, divId); //한 페이지에 들어갈 데이터 개수
-    // }
-    var dt = Object.values(dataTable.DataSetName)[0];
-    //console.log("dt는 : " + dt);
+    // var dt = Object.values(dataTable.DataSetName)[0]
+    var dt = dataTable.DataSetName[band.dataTableName];
     if (Array.isArray(tableLabel)) {
         tableLabel.forEach(function (label) {
-            //console.log( "들여오는 라벨 값 : "+ label._attributes);
             switch (label._attributes) {
                 case "DynamicTableTitleLabel" :
-                    //console.log("case 1들어옴");
                     drawingDynamicTableTitleLabel(label, dt);
                     break;
                 case "DynamicTableValueLabel" :
@@ -331,15 +319,16 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData) {
  만든이 : 구영준
  **************************************************************************************/
 function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId, numOfData, table) {
-    var rowLength = curDatarow + numOfData; //한 페이지에 마지막으로 출력해야할 row
+    var rowLength = curDatarowInDataBand + numOfData; //한 페이지에 마지막으로 출력해야할 row
     var thCnt = tableId.find('th').length;
-
-    for (var j = curDatarow; j < rowLength; j++) {
+    var tempCurDataRow = curDatarow;
+    for (var j = curDatarowInDataBand; j < rowLength; j++) {
         var data = dt[j];
         var minimumRow = false;
-        var valueTrId = $("#dynamicValueLabel" + j);
-        if (valueTrId.length < 1)
-            tableId.append('<tr id = "dynamicValueLabel' + j + '"></tr>');
+        var valueTrId = $("#dynamicValueLabel" + tempCurDataRow);
+        if (valueTrId.length < 1){
+            tableId.append('<tr id = "dynamicValueLabel' + tempCurDataRow + '"></tr>');
+        }
         if ((j >= dt.length) && table.minimumRowCount !== undefined) { // 최소행 개수
             if (table.minimumRowCount != 1) { // 최소행 개수 1이 기본 값임
                 data = dt[j - table.minimumRowCount];
@@ -348,7 +337,7 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
         }
         for (var key in data) {
             if (label.fieldName == key) {
-                var valueTrId = $('#dynamicValueLabel' + j);
+                var valueTrId = $('#dynamicValueLabel' + tempCurDataRow);
                 var key_data = data[key]._text;
                 var table_reform = table_format_check(data, valueTrId, key_data, table);
                 var tdId = 'tableValueLabelNum' + tableValueLabelNum++;
@@ -361,7 +350,6 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
                 } else { // 최소행 개수
                     valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '"></td>');
                 }
-
                 valueTrId.css({
                     'width': label.rectangle.width,
                     'height': label.rectangle.height
@@ -389,7 +377,6 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
                         }
                     }
                 }
-
                 var td = $('.' + key);
                 //// 추가 부분 18.08.28 YeSol
                 if (label.noBorder == 'true') {
@@ -411,16 +398,19 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
                     }
                 }
                 td.css({
-                    // 'border' : '1px solid black',
                     'font-size': label.fontSize,
                     'font-family': label.fontFamily,
                     'font-weight': label.fontStyle,
+                    'font-color': label.textColor,
+                    // 'width': label.rectangle.width + 'px',
+                    // 'height': label.rectangle.height + 'px'
                     'background-color': label.backGroundColor,
                     'white-space': 'nowrap'
                 });
                 drd_javascript(label, tdId, label.startBindScript);
             }
         }
+        tempCurDataRow++;
     }
 }
 
@@ -568,6 +558,7 @@ function drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table) {
  From hagdung-i
  *******************************************************************/
 function drawingDynamicTableTitleLabel(label, dt) {
+    //ToDo 데이터 테이블이 없을 때, 데이터가 안보이도록
     var temp = Object.keys(dt[0]);
     var titleTrId = $('#dynamicTitleLabel' + dynamicTitleLabelNum);
     var header_Name_Number = 1;
@@ -1497,7 +1488,6 @@ function Lock_check(data, Label_id, div) { //라벨 데이터, 드래그 리사�
  만든이 : hagdung-i
  ******************************************************************/
 function Lock_Check_Table(data, drag, resize, div) { //테이블 데이터, 드래거블 지정할 영역, 리사이즈 영역, 위치 이동시 벗어나면 안되는 영역
-    console.log(div[0]);
     var Lock_check;
     if (data.Lock === undefined) {
         Lock_check = data.Lock;
