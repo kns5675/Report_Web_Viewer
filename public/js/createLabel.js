@@ -258,7 +258,7 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData) {
     dynamicTable_resizing_div_packing.append('<div id="dynamicTable_resizing_div' + dynamicTableNum + '"></div>');
     var dynamicTable_resizing_div = $("#dynamicTable_resizing_div" + dynamicTableNum);
     var temp_table_class = table.id.substring(0, 4); // 임시로 table을 인식하기 위한 번호 - 전형준
-    dynamicTable_resizing_div.append('<table id="dynamicTable' + dynamicTableNum + '" class="table table-' + temp_table_class + '" style="table-laylout:fixed;"></table>');
+    dynamicTable_resizing_div.append('<table id="dynamicTable' + dynamicTableNum + '" class="table table-' + temp_table_class + '"></table>');
     // dynamicTable_resizing_div.addClass("NormalLabel_scope");
     div.css('position', 'relative');
     div.css('border', '5px solid lightblue');//지연추가 구조볼라고 잠시
@@ -313,7 +313,8 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData) {
         tableId.css({
             'border': '1px solid red',
             'border-collapse': 'collapse',
-            'text-align': 'center'
+            'text-align': 'center',
+            'table-layout' : 'fixed'
         });
 
         tableNum++;
@@ -410,13 +411,11 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
                     }
                 }
                 td.css({
+                    // 'border' : '1px solid black',
                     'font-size': label.fontSize,
                     'font-family': label.fontFamily,
                     'font-weight': label.fontStyle,
                     'background-color': label.backGroundColor,
-                    'width' : label.rectangle.width + 'px',
-                    'max-width' : label.rectangle.width + 'px',
-                    'height': label.rectangle.height + 'px',
                     'white-space': 'nowrap'
                 });
                 drd_javascript(label, tdId, label.startBindScript);
@@ -531,13 +530,11 @@ function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, nu
                 }
 
                 td.css({
+                    // 'border': '1px solid black',
                     'font-size': label.fontSize,
                     'font-family': label.fontFamily,
                     'font-weight': label.fontStyle,
                     'background-color': label.backGroundColor,
-                    'width' : label.rectangle.width + 'px',
-                    'max-width' : label.rectangle.width + 'px',
-                    'height': label.rectangle.height + 'px',
                     'white-space': 'nowrap'
                 });
                 drd_javascript(label, tdId, label.startBindScript);
@@ -610,8 +607,7 @@ function drawingDynamicTableTitleLabel(label, dt) {
                 'font-family': label.fontFamily,
                 'font-weight': label.fontStyle,
                 'font-color': label.textColor,
-                'width' : label.rectangle.width + 'px',
-                'max-width' : label.rectangle.width + 'px',
+                'width': label.rectangle.width + 'px',
                 'height': label.rectangle.height + 'px',
                 'white-space': 'nowrap'
             });
