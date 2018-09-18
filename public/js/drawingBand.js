@@ -418,8 +418,6 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
             isMaximumRowCount = false;
             isMinimumRowCount = false;
 
-            break;
-        case 'BandGroupFooter' :
             if (groupFieldArray.length > 0 && band.childHeaderBands !== null) {
                 if (isDynamicTable == true && dt != undefined) {
                     var dataCount = groupFieldArray[groupFieldNum].length;
@@ -428,7 +426,6 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
                     if (numofData > groupRemainData) { // 마지막 페이지
                         curDatarow += groupFieldArray[groupFieldNum].length - 1;
                         curDatarowInDataBand += groupFieldArray[groupFieldNum].length - 1;
-                        groupFieldNum++;
                         remainData = false;
                         groupDataRow = 1;
                     } else { //마지막 페이지가 아닌 경우
@@ -453,6 +450,20 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
                     }
                 }
             }
+
+            break;
+        case 'BandGroupFooter' :
+            if (groupFieldArray.length > 0) /*&& band.childHeaderBands !== null)*/ {
+                if (isDynamicTable == true && dt != undefined) {
+                    var dataCount = groupFieldArray[groupFieldNum].length;
+                    var groupRemainData = (dataCount - groupDataRow);
+
+                    if (numofData >= groupRemainData) { // 마지막 페이지
+                        groupFieldNum++;
+                    }
+                }
+            }
+
             /**************************************************************************************
              * 그룹 풋터 일 경우
              *
