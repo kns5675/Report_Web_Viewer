@@ -37,12 +37,9 @@ function makeReportTemplate(data, subReport) {
         var report = reportTemplate.reportList[i];
         var bands = report.layers.designLayer.bands;
         var dataBands = [];
-        var dataBandCnt = 0;
         bands.forEach(function (band) {
             if (band.attributes['xsi:type'] == 'BandData') {
-
                 dataBands.push(band);
-                dataBandCnt++;
             }
         });
 
@@ -58,15 +55,15 @@ function makeReportTemplate(data, subReport) {
         });
     });
 
-    //
-    // if (subReport_yes) {
-    //     var SubreportTemplate = new ReportTemplate(subReport);
-    //
-    //     SubreportTemplate.reportList.forEach(function (value, i) {
-    //         var report = SubreportTemplate.reportList[i];
-    //         makeReport(report);
-    //     });
-    // }
+
+    if (subReport_yes) {
+        var SubreportTemplate = new ReportTemplate(subReport);
+
+        SubreportTemplate.reportList.forEach(function (value, i) {
+            var report = SubreportTemplate.reportList[i];
+            makeReport(report);
+        });
+    }
 
 }
 
@@ -84,19 +81,7 @@ function makeReport(report, dataBand) {
 
     // 180910 YeSol 추가
     var controlLists = [];
-    // var dt = Object.values(dataTable.DataSetName);
     var bands = report.layers.designLayer.bands;
-    // var dataBand= [];
-
-
-    // bands.forEach(function (band) {
-    //     if (band.attributes['xsi:type'] == 'BandData') {
-    //
-    //         controlLists.push(band.controlList.anyType); // dataBand의 controlList배열
-    //         key.push(band);
-    //         dataBandCnt++;
-    //     }
-    // });
     bands.forEach(function (band) {
         if (band.attributes['xsi:type'] == 'BandData') {
             controlLists.push(band.controlList.anyType); // dataBand의 controlList배열
@@ -346,7 +331,8 @@ function setDesignLayer(report, dataBand) {
         var bands = report.layers.designLayer.bands;
         var dataBandIndex = 0;
 
-        //ToDo BandData가 n개 있을 때 에러
+        //ToDo BandData가 n개 있을 때 에러날 수도 있을 것 같음
+        // 아마 아이디로 비교하면 될 것 같은데 Test 해보고 수정 예정
         bands.forEach(function (band, i) {
             if (band.attributes["xsi:type"] == "BandData") {
                 dataBandIndex = i;
@@ -368,13 +354,6 @@ function setDesignLayer(report, dataBand) {
     } else {
         drawBand(report.layers.designLayer.bands, dataBand, layerName, reportHeight); // 추가 - 전형준
     }
-    // if(report){
-    //     drawSubReport(report.layers.designLayer.bands, layerName, reportHeight);
-    // }else{
-    //     drawBand(report.layers.designLayer.bands, layerName, reportHeight); // 추가 - 전형준
-    // }
-
-
 }
 
 /******************************************************************
@@ -502,7 +481,7 @@ function setForeGroundLayerDirection(report) {
  수정 : 하지연
  날짜 : 2018 - 09 - 03
  내용 : #page 하위에 forcopyratio라는 인쇄배율 조정을 위한 div를 생성하고
- forcopyratio라는 클래스 부여 & 스타일 생성
+        forcopyratio라는 클래스 부여 & 스타일 생성
  ******************************************************************/
 function setReport(report, dataBand) {
     $(('#page' + pageNum)).append('<div id="forcopyratio' + reportNum + '"class = forcopyratio' + '></div>');//추가 - 하지연
@@ -541,39 +520,6 @@ function setReport(report, dataBand) {
     // drawBand(report); // 추가 - 전형준
 
     reportNum++;
-}
-
-/******************************************************************
- 기능 : 테이블안에 데이터를 바인딩함(사용 안함)
- author : powerku
- ******************************************************************/
-function makeTableByData() {
-
-    let html = '<table><thead>';
-    var fieldLength = Object.keys(dataTable.DataSetName.dt[0]).length;
-
-    Object.keys(dataTable.DataSetName.dt[0]).forEach(function (field) { //Header
-        if (field == 'DRDSEQ') {
-            html += '<th clsss = "DRDSEQ">' + field + '</th>';
-        } else {
-            html += '<th>' + field + '</th>';
-        }
-
-    });
-    html += '</thead><tbody>';
-    dataTable.DataSetName.dt.forEach(function (data) { //Body
-        html += '<tr>';
-        for (var key in data) {
-            html += '<td>' + data[key]._text + '</td>';
-        }
-
-        +'</tr>';
-    });
-
-    html += '</tbody></table>';
-
-    $('#designLayer1').html(html);
-    $('td:nth-child(' + fieldLength + '),th:nth-child(' + fieldLength + ')').hide(); //DRDSEQ 컬럼 숨기기
 }
 
 /******************************************************************

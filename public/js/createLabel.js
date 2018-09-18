@@ -183,6 +183,7 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData, band) {
     divIdTable.append('<div id="dynamicTable_resizing_div_packing' + dynamicTableNum + '"></div>');
     var dynamicTable_resizing_div_packing = $("#dynamicTable_resizing_div_packing" + dynamicTableNum);
     dynamicTable_resizing_div_packing.append('<div id="dynamicTable_resizing_div' + dynamicTableNum + '"></div>');
+
     var dynamicTable_resizing_div = $("#dynamicTable_resizing_div" + dynamicTableNum);
     var temp_table_class = table.id.substring(0, 4); // 임시로 table을 인식하기 위한 번호 - 전형준
     dynamicTable_resizing_div.append('<table id="dynamicTable' + dynamicTableNum + '" class="table table-' + temp_table_class + '"></table>');
@@ -210,16 +211,17 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData, band) {
 
     // var dt = Object.values(dataTable.DataSetName)[0]
     var dt = dataTable.DataSetName[band.dataTableName];
+    var header_Name_Number = 1;
+
     if (Array.isArray(tableLabel)) {
         tableLabel.forEach(function (label) {
             switch (label._attributes) {
                 case "DynamicTableTitleLabel" :
-                    drawingDynamicTableTitleLabel(label, dt);
+                    drawingDynamicTableTitleLabel(label, header_Name_Number);
+                    header_Name_Number++;
                     break;
                 case "DynamicTableValueLabel" :
                     drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table);
-                    break;
-                default :
                     break;
             }
         });
@@ -467,12 +469,81 @@ function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, nu
  From hagdung-i
  *******************************************************************/
 function drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table) {
-    if (groupFieldArray == undefined || groupFieldArray.length == 0) {
-        drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId, numOfData, table);
-    } else {
-        drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, numOfData, table);
+    if(dt == undefined) { //without DataTable in DataBand
+        drawingDynamicTableValueLabelWithOutDataTable(label, tableId);
+    }else{
+        if (groupFieldArray == undefined || groupFieldArray.length == 0) {
+            drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId, numOfData, table);
+        } else {
+            drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, numOfData, table);
+        }
     }
 }
+
+/**************************************************************************************
+ 기능 : 동적테이블이에 데이터 테이블이 없을 경우 데이터 바인딩 없이 ValueLabel을 그려줌
+ 만든이 : 구영준
+ **************************************************************************************/
+function drawingDynamicTableValueLabelWithOutDataTable(label, tableId){
+    tableId.append('<tr id = "dynamicValueLabel' + dynamicValueLabelNum + '"></tr>');
+    var valueTrId = $("#dynamicValueLabel" + dynamicValueLabelNum);
+
+    valueTrId.append('<td id = "tableValueLabelNum' + tableValueLabelNum + '"></td>');
+    valueTrId.css({
+        'width': label.rectangle.width,
+        'height': label.rectangle.height
+    });
+
+    var tdId = $('#tableValueLabelNum' + tableValueLabelNum++);
+
+    setCssInTable(label, tdId);
+
+    tdId.append(label.text);
+    tdId.addClass('Label DynamicTableHeader');
+    tdId.addClass(label._attributes);
+
+    drd_javascript(label, tdId, label.startBindScript);
+
+}
+
+/**************************************************************************************
+ 기능 : 동적테이블이에 Css  세팅
+ 만든이 : 구영준
+ **************************************************************************************/
+function setCssInTable(label, tdId){
+    //// 추가 부분 18.08.28 YeSol
+    if (label.noBorder == 'true') {
+        tdId.css('border', 'none');
+    } else {
+        if (label.borderThickness !== undefined) {
+            var leftBorder = borderDottedLine(label.borderDottedLines.leftDashStyle);
+            var rightBorder = borderDottedLine(label.borderDottedLines.rightDashStyle);
+            var bottomBorder = borderDottedLine(label.borderDottedLines.bottomDashStyle);
+            var topBorder = borderDottedLine(label.borderDottedLines.topDashStyle);
+            tdId.css({
+                'border-left': label.borderThickness.left + 'px ' + leftBorder + ' ' + label.leftBorderColor,
+                'border-right': label.borderThickness.right + 'px ' + rightBorder + ' ' + label.rightBorderColor,
+                'border-bottom': label.borderThickness.bottom + 'px ' + bottomBorder + ' ' + label.bottomBorderColor,
+                'border-top': label.borderThickness.top + 'px ' + topBorder + ' ' + label.topBorderColor
+            });
+        } else {
+            tdId.css('border', '1px solid black');
+        }
+    }
+
+    tdId.css({
+        'background-color': label.backGroundColor,
+        'font-size': label.fontSize,
+        'font-family': label.fontFamily,
+        'font-weight': label.fontStyle,
+        'font-color': label.textColor,
+        'width': label.rectangle.width + 'px',
+        'height': label.rectangle.height + 'px',
+        'white-space': 'nowrap'
+    });
+
+}
+
 
 /******************************************************************
  기능 : DynamicTableTitleLabel(동적 테이블 타이틀 라벨)을 화면에 그려주는 함수를 만든다.
@@ -482,59 +553,24 @@ function drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table) {
  Date : 2018-08-28
  From hagdung-i
  *******************************************************************/
-function drawingDynamicTableTitleLabel(label, dt) {
-    //ToDo 데이터 테이블이 없을 때, 데이터가 안보이도록
-    var temp = Object.keys(dt[0]);
+function drawingDynamicTableTitleLabel(label, header_Name_Number) {
     var titleTrId = $('#dynamicTitleLabel' + dynamicTitleLabelNum);
-    var header_Name_Number = 1;
-    temp.forEach(function (titleName) {
-        if (label.text == titleName) {
-            titleArray.push(titleName);
-            titleTrId.append('<th id = "DynamicTableTitleLabel' + header_Name_Number + '_View_Page_Number' + thNum + '"></th>');
-            titleTrId.css({
-                'width': label.rectangle.width,
-                'height': label.rectangle.height
-            });
-            var thId = $('#DynamicTableTitleLabel' + header_Name_Number + "_View_Page_Number" + thNum);
 
-            //// 추가 부분 18.08.28 YeSol
-            if (label.noBorder == 'true') {
-                thId.css('border', 'none');
-            } else {
-                if (label.borderThickness !== undefined) {
-                    var leftBorder = borderDottedLine(label.borderDottedLines.leftDashStyle);
-                    var rightBorder = borderDottedLine(label.borderDottedLines.rightDashStyle);
-                    var bottomBorder = borderDottedLine(label.borderDottedLines.bottomDashStyle);
-                    var topBorder = borderDottedLine(label.borderDottedLines.topDashStyle);
-                    thId.css({
-                        'border-left': label.borderThickness.left + 'px ' + leftBorder + ' ' + label.leftBorderColor,
-                        'border-right': label.borderThickness.right + 'px ' + rightBorder + ' ' + label.rightBorderColor,
-                        'border-bottom': label.borderThickness.bottom + 'px ' + bottomBorder + ' ' + label.bottomBorderColor,
-                        'border-top': label.borderThickness.top + 'px ' + topBorder + ' ' + label.topBorderColor
-                    });
-                } else {
-                    thId.css('border', '1px solid black');
-                }
-            }
-
-            thId.css({
-                'background-color': label.backGroundColor,
-                'font-size': label.fontSize,
-                'font-family': label.fontFamily,
-                'font-weight': label.fontStyle,
-                'font-color': label.textColor,
-                'width': label.rectangle.width + 'px',
-                'height': label.rectangle.height + 'px',
-                'white-space': 'nowrap'
-            });
-            thId.append(titleName);
-            thId.addClass('Label DynamicTableHeader');
-            thId.addClass(label._attributes);
-            table_column_controller(thId, titleTrId);
-        }
-        drd_javascript(label, thId, label.startBindScript);
-        header_Name_Number++;
+    titleTrId.append('<th id = "DynamicTableTitleLabel' + header_Name_Number + '_View_Page_Number' + thNum + '"></th>');
+    titleTrId.css({
+        'width': label.rectangle.width,
+        'height': label.rectangle.height
     });
+    var thId = $('#DynamicTableTitleLabel' + header_Name_Number + "_View_Page_Number" + thNum);
+
+    setCssInTable(label, thId);
+
+    thId.append(label.text);
+    thId.addClass('Label DynamicTableHeader');
+    thId.addClass(label._attributes);
+    table_column_controller(thId, titleTrId);
+
+    drd_javascript(label, thId, label.startBindScript);
 }
 
 /******************************************************************
@@ -586,7 +622,7 @@ function drawingFixedTable(table, tableLabel, divId, numOfData) {
     if (groupFieldArray.length < 1) {
         numOfData = getNumOfDataInOnePage(tableLabel, divId); //한 페이지에 들어갈 데이터 개수
     }
-    var dt = Object.values(dataTable.DataSetName)[0];
+    var dt = dataTable.DataSetName[band.dataTableName];
     if (Array.isArray(tableLabel)) {
         tableLabel.forEach(function (label) {
             switch (label._attributes) {
@@ -847,6 +883,10 @@ function drawingSystemLabel(data, divId, band_name) {
  수정 : SummaryLabel의 크기 조정, 위치 이동, 내용 수정 추가.
  Date : 2018-08-27
  From hagdung-i
+
+ 수정 : DataTableName 추가
+ Date : 2018-09-18
+ From Mr.Koo
  ******************************************************************/
 function drawingSummaryLabel(data, divId, band_name) {
     var labelNbandInfo = {
@@ -857,7 +897,8 @@ function drawingSummaryLabel(data, divId, band_name) {
         labelId: $('#' + data.dataType + summaryLabelNum++),
         label_scope: "NormalLabel_scope",
         labelNum: summaryLabelNum,
-        label_type: data.dataType
+        label_type: data.dataType,
+        dataTableName : data.dataTableName
     }
     labelPropertyApply(labelNbandInfo);
 }
@@ -877,6 +918,10 @@ function drawingSummaryLabel(data, divId, band_name) {
  수정 : DataLabel의 크기 조정, 위치 이동이 lock 속성이 있을 경우 수정 불가한 로직 추가.
  Date : 2018-08-28
  From hagdung-i
+
+ 수정 : DataTableName 추가
+ Date : 2018-09-18
+ From Mr.Koo
  ******************************************************************/
 function drawingDataLabel(data, divId, band_name) {
     var labelNbandInfo = {
@@ -887,7 +932,8 @@ function drawingDataLabel(data, divId, band_name) {
         labelId: $('#' + data.dataType + dataLabelNum++),
         label_scope: "NormalLabel_scope",
         labelNum: dataLabelNum,
-        label_type: data.dataType
+        label_type: data.dataType,
+        dataTableName : data.dataTableName
     }
     labelPropertyApply(labelNbandInfo);
 }
@@ -1603,7 +1649,7 @@ function label_text_Setting(labelNbandInfo) {
 
     // 요약라벨
     if (labelNbandInfo.label_type === "SummaryLabel") {
-        var dt = Object.values(dataTable.DataSetName)[0];
+        var dt = dataTable.DataSetName[labelNbandInfo.dataTableName];
         var key_arr = Object.keys(dt[0]);
 
         var key = null;
@@ -1759,11 +1805,9 @@ function label_text_Setting(labelNbandInfo) {
         });
     }
 
-    /********************************************
-     한 그룹의 데이터 출력이 끝나면 groupFieldNum++를 어디선가 해줘야함..어떻게해야하지..모르겠담
-     *******************************************/
     if (labelNbandInfo.label_type === "DataLabel") {
-        if (groupFieldArray !== undefined) {
+        var dt = dataTable.DataSetName[labelNbandInfo.dataTableName];
+        if (groupFieldArray !== undefined && dt != undefined) {
             pId.append(groupFieldArray[groupFieldNum][0]);
             labelNbandInfo.data.text = pId.text();
         }

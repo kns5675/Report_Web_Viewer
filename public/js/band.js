@@ -150,41 +150,42 @@ function BandGroupHeader(band){
     groupFieldName = band.GroupFiledName._text;
     var i = 0;
 
-    var dt = Object.values(dataTable.DataSetName)[0];
+    var dt = dataTable.DataSetName[this.dataTableName];
 
-    dt.forEach(function (data) {
-        var comparison = groupFieldArray.some(function (arr) {
-            if (arr[0] == data[groupFieldName]._text) {
-                arr.push(data);
-                return true; // 배열 중 같은 이름이 있으면 break;
-            } else {
-                return false; // continue;
+    if(dt != undefined){
+        dt.forEach(function (data) {
+            var comparison = groupFieldArray.some(function (arr) {
+                if (arr[0] == data[groupFieldName]._text) {
+                    arr.push(data);
+                    return true; // 배열 중 같은 이름이 있으면 break;
+                } else {
+                    return false; // continue;
+                }
+            });
+            if (!comparison) {
+                groupFieldArray[i] = [];
+                groupFieldArray[i].push(data[groupFieldName]._text);
+                groupFieldArray[i].push(data);
+                i++;
             }
         });
-        if (!comparison) {
-            groupFieldArray[i] = [];
-            groupFieldArray[i].push(data[groupFieldName]._text);
-            groupFieldArray[i].push(data);
-            i++;
-        }
-    });
 
-    if(data.GroupingFieldSort !== undefined && data.GroupingFieldSort._text == 'ASC') {
-        // 기준 필드 정렬 순서가 오름차순일 때!
-        groupFieldArray.sort();
-        // console.log(groupFieldArray);
-    }
-    if(data.GroupingFieldSort !== undefined && data.GroupingFieldSort._text == 'DESC') {
-        // 기준 필드 정렬 순서가 내림차순일 때!
-        groupFieldArray.sort(conStringReverse);
-        function conStringReverse(a, b) {
-            if(a > b) return -1;
-            if(b > a) return 1;
-            return 0;
+        if(data.GroupingFieldSort !== undefined && data.GroupingFieldSort._text == 'ASC') {
+            // 기준 필드 정렬 순서가 오름차순일 때!
+            groupFieldArray.sort();
+            // console.log(groupFieldArray);
         }
-        // console.log(groupFieldArray);
+        if(data.GroupingFieldSort !== undefined && data.GroupingFieldSort._text == 'DESC') {
+            // 기준 필드 정렬 순서가 내림차순일 때!
+            groupFieldArray.sort(conStringReverse);
+            function conStringReverse(a, b) {
+                if(a > b) return -1;
+                if(b > a) return 1;
+                return 0;
+            }
+        }
+        this.groupFieldArray = groupFieldArray;
     }
-    this.groupFieldArray = groupFieldArray;
 }
 
 // 그룹 풋터 밴드
