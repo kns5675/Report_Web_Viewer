@@ -156,6 +156,8 @@ function Label(data){
 
     // this.grouppingRule = data.GroupingRule === undefined ? 'Merge' : data.GroupingRule._text; // 그룹핑규칙
     this.grouppingRule = 'Merge'; // 그룹핑 규칙 (일단은 Merge만 될 거라고 해서 Merge로 해놓음)
+
+    this.parameterName = data.ParameterName === undefined ? undefined : data.ParameterName._text; // 파라미터 이름 (테이블 내에 파라미터가 있을 때 ParameterName이 필요함)
 }
 
 
@@ -189,7 +191,6 @@ function Table(data){ // ControlList 밑에 anyType이 ControlFixedTable, Contro
     this.annexReportName = data.AnnextReportName === undefined ? undefined : data.AnnextReportName._text; // 별지 리포트 명
     this.isFirstPagePrint = data.IsFirstPagePrint === undefined ? undefined : data.IsFirstPagePrint._text; // 첫 페이지만 출력, 결재란 여부가 예 일때 결재란을 첫페이지에만 출력할것인지, 전체 페이지에 출력할것인지 판단하는 값
     this.IsdynamicBinding = data.IsdynamicBinding === undefined ? undefined : data.IsdynamicBinding._text; // 결재란의 컬럼을 동적으로 (수정 못하니까 신경 안써도 됨)
-
 
     this.isPrintColumn = data.IsPrintColumn === undefined ? true : data.IsPrintColumn._text; // 테이블의 컬럼 출력 여부
 }
@@ -281,9 +282,6 @@ function Expression(data){
  ******************************************************************/
 function GroupLabel(data){
     Label.apply(this, arguments);
-
-
-
 }
 
 /******************************************************************
@@ -294,4 +292,23 @@ function ParameterLabel(data){
     Label.apply(this, arguments);
 
     this.parameterName = data.ParameterName === undefined ? undefined : data.ParameterName._text; // 파라미터 이름
+}
+
+/******************************************************************
+ 기능 : Report 객체를 상속 받는 Region(리전)의 객체를 만든다.
+ 만든이 : 전형준
+
+ 수정 : 안예솔
+ ******************************************************************/
+function ControlRegion(data){
+    Report.apply(this, arguments);
+    this.layer = new Layer(data.Layers.anyType);
+    this.regionRepeatFile = data.RegionRepeatFill._text;
+    this.zOrder = data.ZOrder._text;
+    this.printDirection = data.PrintDirection._text;
+    this.offsetBetweentResion = {
+        width : data.OffsetBetweenResion.Width._text,
+        height : data.OffsetBetweenResion.Height._text
+    };
+    this.forcePage = data.Forcepage._text;
 }

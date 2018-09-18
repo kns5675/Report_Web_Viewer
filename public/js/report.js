@@ -7,6 +7,7 @@ var groupFieldArray = [];
 var remainFooterBand = [];
 var isDynamicTable = false;
 var tableLabelList = [];
+var completeDataBand = []; // 0918 예솔 추가 : 출력이 끝난 데이터 밴드의 id를 담는 배열
 
 /******************************************************************
  기능 : 하나의 리포트를 다 출력 시킨 후에 사용한 전역 변수들 초기화
@@ -53,6 +54,7 @@ function makeReportTemplate(data, subReport) {
         // });
         dataBands.forEach(function(dataBand, index){
             makeReport(report, dataBand);
+            completeDataBand.push(dataBand.id);
             initializeVariable();
         });
     });
@@ -79,10 +81,10 @@ function makeReport(report, dataBand) {
     if (pageNum === '1') {
 
     }
-
     // 180910 YeSol 추가
     var controlLists = [];
     var bands = report.layers.designLayer.bands;
+
     bands.forEach(function (band) {
         if (band.attributes['xsi:type'] == 'BandData') {
             controlLists.push(band.controlList.anyType); // dataBand의 controlList배열
