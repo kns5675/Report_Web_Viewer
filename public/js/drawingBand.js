@@ -418,8 +418,6 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
             isMaximumRowCount = false;
             isMinimumRowCount = false;
 
-            break;
-        case 'BandGroupFooter' :
             if (groupFieldArray.length > 0 && band.childHeaderBands !== null) {
                 if (isDynamicTable == true && dt != undefined) {
                     var dataCount = groupFieldArray[groupFieldNum].length;
@@ -453,6 +451,9 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
                     }
                 }
             }
+            break;
+        case 'BandGroupFooter' :
+
             /**************************************************************************************
              * 그룹 풋터 일 경우
              *
