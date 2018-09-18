@@ -641,4 +641,3 @@ function autoSize(pTagId) {
         'margin-bottom': '3px'
     });
 }
-

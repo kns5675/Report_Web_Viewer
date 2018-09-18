@@ -24,6 +24,7 @@ function makeReportTemplate(data, subReport) {
         subReport_click.forEach(function (value, j) {
             if(subReport_click[j].attributes["xsi:type"] === "BandSubReport"){
                 subReport_yes = subReport_click[j];
+                console.log("subReport_click[j] : ",subReport_click[j]);
             }
         });
         makeReport(report);

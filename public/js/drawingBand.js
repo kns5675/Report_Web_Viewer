@@ -57,6 +57,7 @@ function getFooterHeight(bands) {
  * 만든이 : 구영준
  * *********************************************************/
 function getAvaHeight(div_id, reportHeight) {
+    console.log("band.rectangle.height : ",)
     var $divId = '#' + div_id;
     var avaHeight = 0;
     if ($($divId).hasClass('designLayer')) {
@@ -223,7 +224,9 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                 }
                 break;
             case 'BandGroupFooter' :
+                console.log("BandGroupFooter in ");
                 avaHeight = getAvaHeight(div_id, reportHeight);
+                console.log("avaHeight : ",avaHeight);
                 if (avaHeight < Number(band.rectangle.height)) {
                     band.parentBand = parentBand;
                     remainBand.push(band);
@@ -339,7 +342,7 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                 } else {
                     if (isDynamicTable == true)
                         avaHeight = getAvaHeight(div_id, reportHeight);
-                    
+
                     //ToDo 로직 수정
                     //하위의 자리에 밴드가 들어갈 자리가 있으면 넣는다.
                     if (avaHeight > minGroupBandDataHeight && isDynamicTable == true) {
