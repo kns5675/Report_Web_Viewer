@@ -156,6 +156,8 @@ function Label(data){
 
     // this.grouppingRule = data.GroupingRule === undefined ? 'Merge' : data.GroupingRule._text; // 그룹핑규칙
     this.grouppingRule = 'Merge'; // 그룹핑 규칙 (일단은 Merge만 될 거라고 해서 Merge로 해놓음)
+
+    this.parameterName = data.ParameterName === undefined ? undefined : data.ParameterName._text; // 파라미터 이름 (테이블 내에 파라미터가 있을 때 ParameterName이 필요함)
 }
 
 
