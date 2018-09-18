@@ -5,7 +5,7 @@ var doc;// = new jsPDF('p','mm',[297,210]);
  기능 : 이미지 내보내기, PDF내보내기, HTML내보내기 시 필요한 로딩화면 띄우기
  작성자 : 하지연
  ******************************************************************/
-function beginLoading(imageName){
+function beginLoading(imageName) {
     $("#imageType").text(imageName);
     console.log("불키기 들어왔따.");
     $("#loadingModal").show();
@@ -14,24 +14,23 @@ function beginLoading(imageName){
  기능 : 이미지 내보내기, PDF내보내기, HTML내보내기 시 필요한 로딩화면 없애기
  작성자 : 하지연
  ******************************************************************/
-function endingLoading() {
-    //console.log("불끄기 들어왔다.");
-    $("#loadingModal").css("display", "none");
+function endingLoading(){
+   // console.log("불끄기 들어왔다.");
+    $("#loadingModal").css("display","none");
 }
-
 /******************************************************************
  기능 : 리포트 리스트의 리포트들을 하나의 pdf 파일로 저장.
  작성자 : 하지연
  ******************************************************************/
 async function makePdf() {
-    return new Promise(function (resolve) {
+    return new Promise(function(resolve){
         var docwidth1 = Number(($("#page1").css("width")).replace(/[^0-9]/g, ''));
         var docheight1 = Number(($("#page1").css("height")).replace(/[^0-9]/g, ''));
         docwidth1 = ((docwidth1 / 96) * 25.4).toFixed(1);
         docheight1 = ((docheight1 / 96) * 0.254).toFixed(1);
         docwidth1 = Math.floor(Number(docwidth1)) - 1;
         docheight1 = Math.floor(Number(docheight1)) - 1;
-        var data = 100;
+        var data=100;
         //Dr Viewer의 고급인쇄에서 용지방향을 바꿨을 경우 pdf orientation값 변경 처리
         var pageOrientation;
         var area = [];
@@ -53,27 +52,26 @@ async function makePdf() {
 
 async function beforeSaving(pageOrientation, docwidth1, docheight1) {
 
-    return new Promise(function (resolve) {
+    return new Promise(function(resolve){
         var area;
         if (pageOrientation == 'p') {
-        } else {
+        } else{
             pageOrientation == 'l'
         }
         area = [pageOrientation, docwidth1, docheight1];
         resolve(area);
     });
 }
-
-function createPdf(pageOrientation, docwidth1, docheight1) {
-    return new Promise(function (resolve) {
-        doc = new jsPDF(pageOrientation, 'mm', [docheight1, docwidth1]);
+function createPdf(pageOrientation,docwidth1,docheight1){
+    return new Promise(function(resolve){
+        doc = new jsPDF(pageOrientation,'mm',[docheight1,docwidth1]);
         //console.log("docheight1 : "+docheight1 + " docwidth1 : "+docwidth1);
         var area;
         var totalnum = $(".pageforcopyratio").length;
         $(".pageforcopyratio").each(function (i, e) {
-            docheight = (e.style.height).replace(/[^0-9]/g, '');
-            docheight = (((Number(docheight)) / 96) * 2.54).toFixed(1);
-            docheight = Math.floor(Number(docheight)) - 1;
+            docheight = (e.style.height).replace(/[^0-9]/g,'');
+            docheight = (((Number(docheight))/96)*2.54).toFixed(1);
+            docheight = Math.floor(Number(docheight))-1;
 
             docwidth = (e.style.width).replace(/[^0-9]/g,'');
             docwidth = (((Number(docwidth))/96)*25.4).toFixed(1);
@@ -250,6 +248,7 @@ function close_pop() {
     $('#myModal').hide();//고급인쇄 모달창 닫기
     resetData();//데이터값 초기화 밑 기본값 세팅처리
 }
+
 /******************************************************************
  기능 : 고급인쇄 모달창의 데이터값 초기화 밑 기본값 세팅처리
  작성자 : 하지연
