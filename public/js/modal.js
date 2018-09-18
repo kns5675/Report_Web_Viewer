@@ -312,7 +312,7 @@ function paperDirection() {
     });
     $(".forcopyratio").each(function (i, e) {
         var temp = e.style.width;
-        console.log("temp : ",temp);
+        //console.log("temp : ",temp);
         e.style.width = e.style.height;
         e.style.height = temp;
     });

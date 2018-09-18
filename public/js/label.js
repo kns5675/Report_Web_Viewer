@@ -169,8 +169,8 @@ function Table(data){ // ControlList 밑에 anyType이 ControlFixedTable, Contro
     this.rectangle = {
         x : (data.Rectangle.X === undefined ? 0 : data.Rectangle.X._text),
         y : (data.Rectangle.Y === undefined ? 0 : data.Rectangle.Y._text),
-        width : data.Rectangle.Width._text,
-        height : data.Rectangle.Height._text
+        width : (data.Rectangle.Width === undefined ? undefined : data.Rectangle.Width._text),//학준추가
+        height : (data.Rectangle.Height === undefined ? undefined : data.Rectangle.Height._text)//학준추가
     };
     this.name = data.Name._text;
 
@@ -205,6 +205,8 @@ function FixedTableLabel(data, i){
     this._attributes = data._attributes["xsi:type"];
 
     this.selected = data.Selected._text; // 테이블 라벨에만 있는 것 같음
+    this.fieldName = data.FieldName === undefined ? 0 : data.FieldName._text;
+
 }
 
 
@@ -293,7 +295,7 @@ function ParameterLabel(data){
 /******************************************************************
  기능 : Report 객체를 상속 받는 Region(리전)의 객체를 만든다.
  만든이 : 전형준
- 
+
  수정 : 안예솔
  ******************************************************************/
 function ControlRegion(data){
