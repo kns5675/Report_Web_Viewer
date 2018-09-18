@@ -2146,6 +2146,8 @@ function label_text_Setting(labelNbandInfo) {
     }
 
     if (labelNbandInfo.label_type === "DataLabel") {
+        var dt = dataTable.DataSetName[labelNbandInfo.dataTableName];
+
         if(dt != undefined){
             if (groupFieldArray !== undefined) {
                 pId.append(groupFieldArray[groupFieldNum][0]);
