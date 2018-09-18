@@ -1,5 +1,5 @@
 var pageNum = 1;
-var reportNum = 1;
+var reportNum = 0;
 var reportPageCnt = 0;
 var curDatarow = 0;
 var curDatarowInDataBand = 0;
@@ -34,6 +34,7 @@ function makeReportTemplate(data, subReport) {
     var subReport_yes = false;
 
     reportTemplate.reportList.forEach(function (value, i) {
+        ++reportNum;
         var report = reportTemplate.reportList[i];
         var bands = report.layers.designLayer.bands;
         var dataBands = [];
@@ -74,9 +75,8 @@ function makeReportTemplate(data, subReport) {
  기능 : make report in function makeReportTemplate
  author : powerku
  ******************************************************************/
-var reportPageCnt = 1;
-
 function makeReport(report, dataBand) {
+    reportPageCnt++;
 
     if (pageNum === '1') {
 
@@ -505,17 +505,17 @@ function setForeGroundLayerDirection(report) {
  forcopyratio라는 클래스 부여 & 스타일 생성
  ******************************************************************/
 function setReport(report, dataBand) {
-    $(('#page' + pageNum)).append('<div id="forcopyratio' + reportNum + '"class = forcopyratio' + '></div>');//추가 - 하지연
-    $(('#forcopyratio' + reportNum)).append('<div id="report' + reportNum + '"class = report' + '></div>');//추가 - 하지연
-    // $("#report"+reportNum).css('pointer-events', 'none');//학준추가
-    // $("#forcopyratio"+reportNum).css('pointer-events', 'none');//학준추가
-    $('#forcopyratio' + reportNum).css("position", "absolute");//학준추가
+    $(('#page' + pageNum)).append('<div id="forcopyratio' + pageNum + '"class = forcopyratio' + '></div>');//추가 - 하지연
+    $(('#forcopyratio' + pageNum)).append('<div id="report' + pageNum + '"class = report' + '></div>');//추가 - 하지연
+    // $("#report"+pageNum).css('pointer-events', 'none');//학준추가
+    // $("#forcopyratio"+pageNum).css('pointer-events', 'none');//학준추가
+    $('#forcopyratio' + pageNum).css("position", "absolute");//학준추가
 
     setForCopyRatioDirection(report);//추가 - 하지연
     setReportDirection(report);
 
-    var reportInPage = $('#report' + reportNum);
-    $('#forcopyratio' + reportNum).css("position", "absolute");
+    var reportInPage = $('#report' + pageNum);
+    $('#forcopyratio' + pageNum).css("position", "absolute");
 
     /*reportInPage.css({
         'margin-top': report.margin.x + 'px',
@@ -525,12 +525,12 @@ function setReport(report, dataBand) {
     });*/
 
     //  추가 - 하지연
-    $('#forcopyratio' + reportNum).css('margin-top', report.margin.x + 'px');
-    $('#forcopyratio' + reportNum).css('margin-bottom', report.margin.y + 'px');
-    $('#forcopyratio' + reportNum).css('margin-right', report.margin.height + 'px');
-    $('#forcopyratio' + reportNum).css('margin-left', report.margin.width + 'px');
-    $('#forcopyratio' + reportNum).css('position', 'absolute');
-    $('#forcopyratio' + reportNum).css('zIndex', -11);//학준추가
+    $('#forcopyratio' + pageNum).css('margin-top', report.margin.x + 'px');
+    $('#forcopyratio' + pageNum).css('margin-bottom', report.margin.y + 'px');
+    $('#forcopyratio' + pageNum).css('margin-right', report.margin.height + 'px');
+    $('#forcopyratio' + pageNum).css('margin-left', report.margin.width + 'px');
+    $('#forcopyratio' + pageNum).css('position', 'absolute');
+    $('#forcopyratio' + pageNum).css('zIndex', -11);//학준추가
 
     // setBackGroundLayer(report);
     setDesignLayer(report, dataBand);
@@ -540,7 +540,7 @@ function setReport(report, dataBand) {
 
     // drawBand(report); // 추가 - 전형준
 
-    reportNum++;
+    // reportNum++; // pageNum으로 대체되어 본 함수 빠져나간 뒤에 pageNum++만 - 형준
 }
 
 /******************************************************************
@@ -586,7 +586,7 @@ function makeTableByData() {
  ******************************************************************/
 function setReportDirection(report) {
 
-    var reportInPage = $('#report' + reportNum);
+    var reportInPage = $('#report' + pageNum);
     if (report.paperDirection) {//수정 - 하지연
         reportInPage.css({
             'width': '100%',
@@ -594,8 +594,8 @@ function setReportDirection(report) {
         });
     } else {//수정 - 하지연
         reportInPage.css({
-            'height': $('#forcopyratio' + reportNum).width,
-            'width': $('#forcopyratio' + reportNum).height
+            'height': $('#forcopyratio' + pageNum).width,
+            'width': $('#forcopyratio' + pageNum).height
         });
     }
 
@@ -609,11 +609,11 @@ function setReportDirection(report) {
  ******************************************************************/
 function setForCopyRatioDirection(report) {  //추가 - 하지연
     if (report.paperDirection) {
-        $('#forcopyratio' + reportNum).css('width', report.rectangle.width + 'px');
-        $('#forcopyratio' + reportNum).css('height', report.rectangle.height + 'px');
+        $('#forcopyratio' + pageNum).css('width', report.rectangle.width + 'px');
+        $('#forcopyratio' + pageNum).css('height', report.rectangle.height + 'px');
     } else {
-        $('#forcopyratio' + reportNum).css('width', report.rectangle.height + 'px');
-        $('#forcopyratio' + reportNum).css('height', report.rectangle.width + 'px');
+        $('#forcopyratio' + pageNum).css('width', report.rectangle.height + 'px');
+        $('#forcopyratio' + pageNum).css('height', report.rectangle.width + 'px');
     }
 }
 
@@ -635,7 +635,7 @@ function setPage(report, width, height) {
 
     $('#reportTemplate').append('<div id="pageForCopyRatio' + pageNum + '" class="pageforcopyratio paperType-' + paperType + '"></div>');//수정 - 하지연
     $('#pageForCopyRatio' + pageNum).append('<div id="page' + pageNum + '" class="page paperType-' + paperType + '"></div>');//수정 - 하지연
-    // $(('#forcopyratio' + reportNum)).append('<div id="report' + reportNum + '"class = report' +'></div>');
+    // $(('#forcopyratio' + pageNum)).append('<div id="report' + pageNum + '"class = report' +'></div>');
     // $(document.html).css('pointer-events', 'none');//학준추가
     // $(document.body).css('pointer-events', 'none');//학준추가
     // $("#reportTemplate").css('pointer-events', 'none');//학준추가

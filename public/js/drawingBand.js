@@ -387,8 +387,6 @@ function drawBand(bands, dataBand, layerName, reportHeight, parentBand) {
             }
         }
 
-
-
         if (band.childFooterBands !== null) { // 자식 풋터 밴드에서 재호출
             drawChildFooterBand(band.childFooterBands, dataBand, layerName, reportHeight); // 자식 밴드를 그려주는 함수 호출
         }
@@ -403,7 +401,6 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
     switch (band.attributes["xsi:type"]) {
         case 'BandData' :
             if (groupFieldArray.length > 0 && band.childHeaderBands !== null) {
-                console.log('group');
                 // childHeaderBands중에 BandGroupHeader가 있는 지 판단하기!
                 if (isDynamicTable == true) {
                     var dataCount = groupFieldArray[groupFieldNum].length;
