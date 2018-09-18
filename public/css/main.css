@@ -2,8 +2,8 @@
  기능 : modal에 필요한 css 정의
  author : 하지연
  ******************************************************************/
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
+input[type="number"]#copyratio::-webkit-outer-spin-button,
+input[type="number"]#copyratio::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }

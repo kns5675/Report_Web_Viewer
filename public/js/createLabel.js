@@ -37,6 +37,7 @@ var fixTableRowCount = 0;
 
 var row = 0;
 var verticalPNum = 0;
+var plusRowNum = 0;
 
 /******************************************************************
  기능 : ControlList의 유무를 판단하는 함수를 만든다.
@@ -48,16 +49,12 @@ function judgementControlList(band, divId, numOfData) {
     }
     if (!(band.controlList.anyType === undefined)) { // ControlList 태그 안에 뭔가가 있을 때
         var controlList = band.controlList.anyType;
-        console.log("controlList : ",controlList);
         if (Array.isArray(controlList)) {
-            console.log("controlList : ",controlList);
             controlList.forEach(function (list) {
-                console.log("list : ",list);
-                judgementLabel(list, divId, numOfData, band.attributes["xsi:type"]);
+                judgementLabel(list, divId, numOfData, band);
             });
         } else {
-            console.log("controlList : ",controlList);
-            judgementLabel(controlList, divId, numOfData, band.attributes["xsi:type"]);
+            judgementLabel(controlList, divId, numOfData, band);
         }
     } else {
     }
@@ -66,11 +63,15 @@ function judgementControlList(band, divId, numOfData) {
 /******************************************************************
  기능 : 어떤 Label인지를 판단하여 객체를 생성해주는 함수를 만든다.
  만든이 : 안예솔
+
+ 수정 : 하지연
+ 날짜 : 2018-09-18
+ 내용 : else if 고정테이블 부분 수정
  ******************************************************************/
-function judgementLabel(data, divId, numOfData, band_name) {
+function judgementLabel(data, divId, numOfData, band) {
     var attr = data._attributes["xsi:type"];
-    console.log("judgementLabel in ");
-    console.log("attr : ",attr);
+    var band_name = band.attributes["xsi:type"];
+
     if (attr == "ControlDynamicTable") { // 동적 테이블
         var controlDynamicTable = new Table(data);
         tableList.push(controlDynamicTable);
@@ -78,16 +79,16 @@ function judgementLabel(data, divId, numOfData, band_name) {
 
         tableLabels.forEach(function (label, i) {
             var tableLabel = new DynamicTableLabel(label, i);
+
             if (tableLabelList.length < tableLabels.length) { //영준 수정
                 tableLabelList.push(tableLabel);
             }
         });
-        drawingDynamicTable(controlDynamicTable, tableLabelList, divId, numOfData);
+        drawingDynamicTable(controlDynamicTable, tableLabelList, divId, numOfData, band);
     } else if (attr == "ControlFixedTable") { // 고정 테이블일때
         /*
         ToDo : 하나의 페이지에 고정테이블이 2개 이상 있을 경우 fixTableLabelList에 겹침
          */
-        console.log(" sdfsdf data : ",data);
         var controlFixedTable = new Table(data);
         // tableList.push(controlFixedTable);
         fixTableList.push(controlFixedTable);
@@ -154,10 +155,10 @@ function judgementLabel(data, divId, numOfData, band_name) {
     } else if (attr == 'ControlArrow') { // 화살표
         var figure = new ControlArrow(data);
         drawingArrow(figure, divId);
-    } else if(attr == 'ControlRadioButton') {
+    } else if (attr == 'ControlRadioButton') {
         var additionalControl = new ControlRadioButton(data);
         drawingRadioButton(additionalControl, divId);
-    } else if(attr == 'ControlCheckBoxButton') {
+    } else if (attr == 'ControlCheckBoxButton') {
         var additionalControl = new ControlCheckBoxButton(data);
         drawingCheckBox(additionalControl, divId);
     }
@@ -184,14 +185,13 @@ function judgementLabel(data, divId, numOfData, band_name) {
  Date : 2018-08-27
  From hagdung-i
  ******************************************************************/
-function drawingDynamicTable(table, tableLabel, divId, numOfData) {
+function drawingDynamicTable(table, tableLabel, divId, numOfData, band) {
     var div = $('#' + divId);
     div.append('<div id = "Table' + tableNum + '"></div>');
     var divIdTable = $('#Table' + tableNum);
     divIdTable.append('<div id="dynamicTable_resizing_div_packing' + dynamicTableNum + '"></div>');
     var dynamicTable_resizing_div_packing = $("#dynamicTable_resizing_div_packing" + dynamicTableNum);
     dynamicTable_resizing_div_packing.append('<div id="dynamicTable_resizing_div' + dynamicTableNum + '"></div>');
-
     var dynamicTable_resizing_div = $("#dynamicTable_resizing_div" + dynamicTableNum);
     var temp_table_class = table.id.substring(0, 4); // 임시로 table을 인식하기 위한 번호 - 전형준
     dynamicTable_resizing_div.append('<table id="dynamicTable' + dynamicTableNum + '" class="table table-' + temp_table_class + '"></table>');
@@ -212,7 +212,8 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData) {
     });
     tableId.append('<tr id = "dynamicTitleLabel' + dynamicTitleLabelNum + '"></tr>');
 
-    var dt = Object.values(dataTable.DataSetName)[0];
+    // var dt = Object.values(dataTable.DataSetName)[0]
+    var dt = dataTable.DataSetName[band.dataTableName];
     if (Array.isArray(tableLabel)) {
         tableLabel.forEach(function (label) {
             switch (label._attributes) {
@@ -223,14 +224,14 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData) {
                     drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table);
                     break;
                 default :
-                    console.log("case default");
                     break;
             }
         });
         tableId.css({
             'border': '1px solid red',
             'border-collapse': 'collapse',
-            'text-align': 'center'
+            'text-align': 'center',
+            'table-layout' : 'fixed'
         });
 
         tableNum++;
@@ -247,28 +248,65 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData) {
  만든이 : 구영준
  **************************************************************************************/
 function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId, numOfData, table) {
-    var rowLength = curDatarow + numOfData; //한 페이지에 마지막으로 출력해야할 row
-    for (var j = curDatarow; j < rowLength; j++) {
+    var rowLength = curDatarowInDataBand + numOfData; //한 페이지에 마지막으로 출력해야할 row
+    var thCnt = tableId.find('th').length;
+    var tempCurDataRow = curDatarow;
+    for (var j = curDatarowInDataBand; j < rowLength; j++) {
         var data = dt[j];
-        var valueTrId = $("#dynamicValueLabel" + j);
-        if (valueTrId.length < 1)
-            tableId.append('<tr id = "dynamicValueLabel' + j + '"></tr>');
+        var minimumRow = false;
+        var valueTrId = $("#dynamicValueLabel" + tempCurDataRow);
+        if (valueTrId.length < 1){
+            tableId.append('<tr id = "dynamicValueLabel' + tempCurDataRow + '"></tr>');
+        }
+        if ((j >= dt.length) && table.minimumRowCount !== undefined) { // 최소행 개수
+            if (table.minimumRowCount != 1) { // 최소행 개수 1이 기본 값임
+                data = dt[j - table.minimumRowCount];
+                minimumRow = true;
+            }
+        }
         for (var key in data) {
             if (label.fieldName == key) {
-                var valueTrId = $('#dynamicValueLabel' + j);
+                var valueTrId = $('#dynamicValueLabel' + tempCurDataRow);
                 var key_data = data[key]._text;
                 var table_reform = table_format_check(data, valueTrId, key_data, table);
                 var tdId = 'tableValueLabelNum' + tableValueLabelNum++;
-                if (label.labelTextType == 'Number' && label.format != undefined) {
-                    valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '">' + table_reform + '</td>');
-                } else {
-                    valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '">' + table_reform + '</td>');
+                if (!minimumRow) {
+                    if (label.labelTextType == 'Number' && label.format != undefined) {
+                        valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '">' + table_reform + '</td>');
+                    } else {
+                        valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '">' + table_reform + '</td>');
+                    }
+                } else { // 최소행 개수
+                    valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '"></td>');
                 }
 
                 valueTrId.css({
                     'width': label.rectangle.width,
                     'height': label.rectangle.height
                 });
+
+                if(label.dataType == 'GroupLabel' && j == numOfData - 1 && label.grouppingRule == 'Merge') { // 그룹 라벨
+                    var i = 0;
+                    var tableValueLabelNum2 = tableValueLabelNum - 1;
+
+                    for(i; i < j - groupDataRow; i++){
+                        var groupLabel = $('#tableValueLabelNum' + (tableValueLabelNum2 - i));
+                        var priorGroupLabel = $('#tableValueLabelNum' + (tableValueLabelNum2 - (i + 1)));
+
+                        if ((groupLabel.attr('class') == priorGroupLabel.attr('class')) && groupLabel.text() == priorGroupLabel.text()) {
+                            groupLabelNum++;
+                            groupLabel.remove();
+                            if(groupLabelNum == (j - groupDataRow + 1)) {
+                                priorGroupLabel.attr('rowspan', groupLabelNum);
+                            }
+                        } else {
+                            if (groupLabelNum != 1) {
+                                groupLabel.attr('rowspan', groupLabelNum);
+                                groupLabelNum = 1;
+                            }
+                        }
+                    }
+                }
                 var td = $('.' + key);
                 //// 추가 부분 18.08.28 YeSol
                 if (label.noBorder == 'true') {
@@ -293,11 +331,16 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
                     'font-size': label.fontSize,
                     'font-family': label.fontFamily,
                     'font-weight': label.fontStyle,
-                    'background-color': label.backGroundColor
+                    'font-color': label.textColor,
+                    // 'width': label.rectangle.width + 'px',
+                    // 'height': label.rectangle.height + 'px'
+                    'background-color': label.backGroundColor,
+                    'white-space': 'nowrap'
                 });
                 drd_javascript(label, tdId, label.startBindScript);
             }
         }
+        tempCurDataRow++;
     }
 }
 
@@ -306,34 +349,84 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
  DynamicTableValueLabel(동적 테이블 밸류 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 구영준
  **************************************************************************************/
-function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, numOfData) {
+function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, numOfData, table) {
+    var thCnt = tableId.find('th').length;
+    var minimumRow = false;
+    if (table.minimumRowCount !== undefined) {
+        var minimumCnt = Number(table.minimumRowCount);
+        if (minimumCnt != 1 && (numOfData - groupDataRow) < minimumCnt) { // 최소행 개수 적용
+            numOfData = numOfData + minimumCnt - (numOfData - groupDataRow);
+            minimumRow = true;
+        }
+    }
+    var groupLabelNum = 1;
     for (var j = groupDataRow; j < numOfData; j++) {
+        var temp = j;
         var data = groupFieldArray[groupFieldNum];
         var rowNum = curDatarow + j;
+
+        if (minimumRow && data[j] === undefined) {
+            temp = data.length - 1;
+            rowNum += 'min';
+        }
+
         var $trId = '#dynamicValueLabel' + rowNum;
         var valueTrId = $($trId);
-        if (valueTrId.length < 1)
+
+        if (valueTrId.length < 1) {
             tableId.append('<tr id =   "dynamicValueLabel' + rowNum + '"></tr>');
-        for (var key in data[j]) {
+        }
+
+        for (var key in data[temp]) {
             valueTrId = $($trId);
             if (label.fieldName == key) {
-                var key_data = data[j][key]._text;
+                var key_data = data[temp][key]._text;
                 var table_reform = table_format_check(data, valueTrId, key_data, label);
+
                 var tdId = 'tableValueLabelNum' + tableValueLabelNum++;
-                if (label.labelTextType == 'Number' && label.format != undefined) {
+                if (minimumRow && j >= data.length) {
                     valueTrId.append(
-                        '<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '">' + table_reform + '</td>'
+                        '<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '"></td>'
                     );
                 } else {
-                    valueTrId.append(
-                        '<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '">' + table_reform + '</td>'
-                    );
+                    if (label.labelTextType == 'Number' && label.format != undefined) {
+                        valueTrId.append(
+                            '<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '">' + table_reform + '</td>'
+                        );
+                    } else {
+                        valueTrId.append(
+                            '<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '">' + table_reform + '</td>'
+                        );
+                    }
                 }
                 valueTrId.css({
                     'width': label.rectangle.width,
                     'height': label.rectangle.height,
 
                 });
+                if(label.dataType == 'GroupLabel' && j == numOfData - 1 && label.grouppingRule == 'Merge') { // 그룹 라벨
+                    var i = 0;
+                    var tableValueLabelNum2 = tableValueLabelNum - 1;
+
+                    for(i; i < j - groupDataRow; i++){
+                        var groupLabel = $('#tableValueLabelNum' + (tableValueLabelNum2 - i));
+                        var priorGroupLabel = $('#tableValueLabelNum' + (tableValueLabelNum2 - (i + 1)));
+
+                        if ((groupLabel.attr('class') == priorGroupLabel.attr('class')) && groupLabel.text() == priorGroupLabel.text()) {
+                            groupLabelNum++;
+                            groupLabel.remove();
+                            if(groupLabelNum == (j - groupDataRow + 1)) {
+                                priorGroupLabel.attr('rowspan', groupLabelNum);
+                            }
+                        } else {
+                            if (groupLabelNum != 1) {
+                                groupLabel.attr('rowspan', groupLabelNum);
+                                groupLabelNum = 1;
+                            }
+                        }
+                    }
+                }
+
                 var td = $('.' + key);
                 //// 추가 부분 18.08.28 YeSol
                 if (label.noBorder == 'true') {
@@ -361,7 +454,8 @@ function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, nu
                     'font-size': label.fontSize,
                     'font-family': label.fontFamily,
                     'font-weight': label.fontStyle,
-                    'background-color': label.backGroundColor
+                    'background-color': label.backGroundColor,
+                    'white-space': 'nowrap'
                 });
                 drd_javascript(label, tdId, label.startBindScript);
             }
@@ -381,7 +475,7 @@ function drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table) {
     if (groupFieldArray == undefined || groupFieldArray.length == 0) {
         drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId, numOfData, table);
     } else {
-        drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, numOfData);
+        drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, numOfData, table);
     }
 }
 
@@ -394,6 +488,7 @@ function drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table) {
  From hagdung-i
  *******************************************************************/
 function drawingDynamicTableTitleLabel(label, dt) {
+    //ToDo 데이터 테이블이 없을 때, 데이터가 안보이도록
     var temp = Object.keys(dt[0]);
     var titleTrId = $('#dynamicTitleLabel' + dynamicTitleLabelNum);
     var header_Name_Number = 1;
@@ -432,7 +527,10 @@ function drawingDynamicTableTitleLabel(label, dt) {
                 'font-size': label.fontSize,
                 'font-family': label.fontFamily,
                 'font-weight': label.fontStyle,
-                'font-color': label.textColor
+                'font-color': label.textColor,
+                'width': label.rectangle.width + 'px',
+                'height': label.rectangle.height + 'px',
+                'white-space': 'nowrap'
             });
             thId.append(titleName);
             thId.addClass('Label DynamicTableHeader');
@@ -662,7 +760,7 @@ function drawingFixedTableValueLabelWithoutGroupFieldArray(label, dt, tableId, n
         var data = dt[j];
         var valueTrId = $("#fixedTableLabel" + j);
         if(valueTrId.length < 1)
-            console.log("!!!!!!!!!!!!!!!!!!!!!탄다 여기 .. ");
+            //console.log("!!!!!!!!!!!!!!!!!!!!!탄다 여기 .. ");
             tableId.append('<tr id = "fixedTableLabel' + j + '"></tr>');
         for (var key in data) {
             if (label.fieldName == key) {
@@ -890,7 +988,7 @@ function drawingSystemLabel(data, divId, band_name) {
         labelId: $('#' + data.dataType + systemLabelNum++),
         label_scope: "NormalLabel_scope",
         labelNum: systemLabelNum,
-        label_type : data.dataType
+        label_type: data.dataType
     }
     labelPropertyApply(labelNbandInfo);
 }
@@ -917,25 +1015,9 @@ function drawingSummaryLabel(data, divId, band_name) {
         labelId: $('#' + data.dataType + summaryLabelNum++),
         label_scope: "NormalLabel_scope",
         labelNum: summaryLabelNum,
-        label_type : data.dataType
+        label_type: data.dataType
     }
     labelPropertyApply(labelNbandInfo);
-
-    // 해당 부분은 아래 labelPropertyApply 함수에 중간에 정의할 것 !!
-
-    /////////////////// 샘플 받으면 수정하기 ///////////////////////////
-    switch (data.summaryType) {
-        case 'Sum' :
-            break;
-        case 'Avg' :
-            break;
-        case 'Max' :
-            break;
-        case 'Min' :
-            break;
-        case 'Cnt' :
-            break;
-    }
 }
 
 /******************************************************************
@@ -963,7 +1045,7 @@ function drawingDataLabel(data, divId, band_name) {
         labelId: $('#' + data.dataType + dataLabelNum++),
         label_scope: "NormalLabel_scope",
         labelNum: dataLabelNum,
-        label_type : data.dataType
+        label_type: data.dataType
     }
     labelPropertyApply(labelNbandInfo);
 }
@@ -985,6 +1067,7 @@ function drawingDataLabel(data, divId, band_name) {
  From hagdung-i
  ******************************************************************/
 function drawingNormalLabel(data, divId, band_name) {
+
     var labelNbandInfo = {
         data: data,
         divId: divId,
@@ -993,7 +1076,7 @@ function drawingNormalLabel(data, divId, band_name) {
         labelId: $('#' + data.dataType + normalLabelNum++),
         label_scope: "NormalLabel_scope",
         labelNum: normalLabelNum,
-        label_type : data.dataType
+        label_type: data.dataType
     }
     labelPropertyApply(labelNbandInfo);
 }
@@ -1019,7 +1102,7 @@ function drawingExpression(data, divId, band_name) {
         labelId: $('#' + data.dataType + expressionNum++),
         label_scope: "NormalLabel_scope",
         labelNum: expressionNum,
-        label_type : data.dataType
+        label_type: data.dataType
     }
     labelPropertyApply(labelNbandInfo);
 }
@@ -1044,7 +1127,7 @@ function drawingGroupLabel(data, divId, band_name) {
         labelId: $('#' + data.dataType + groupLabelNum++),
         label_scope: "NormalLabel_scope",
         labelNum: groupLabelNum,
-        label_type : data.dataType
+        label_type: data.dataType
     }
     labelPropertyApply(labelNbandInfo);
 }
@@ -1066,7 +1149,7 @@ function drawingParameterLabel(data, divId, band_name) {
         labelId: $('#ParameterLabel' + parameterLabelNum++),
         label_scope: "NormalLabel_scope",
         labelNum: parameterLabelNum,
-        label_type : data.dataType
+        label_type: data.dataType
     }
     labelPropertyApply(labelNbandInfo);
 }
@@ -1577,6 +1660,387 @@ function table_column_controller(resize_area, Unalterable_area) {
     });
 }
 
+
+/******************************************************************
+ 기능 : 이미지 라벨 추가.
+ Date : 2018-09-12
+ 만든이 : hagdung-i
+ ******************************************************************/
+function image_label_making(labelNbandInfo) {
+    var image_str = labelNbandInfo.data.base64ImageFromViewer;
+    var file_name = labelNbandInfo.data.text;
+    var div_id = labelNbandInfo.labelId[0].id;
+    var test2 = "%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M224%20387.814V512L32 320l192-192v126.912C447.375 260.152 437.794 103.016 380.93 0 521.287 151.707 491.48 394.785 224 387.814z'/%3E%3C/svg%3E";
+    var baseMaking = "data:image/svg;base64," + image_str.trim(); //base64 -> html 포맷으로 변경.
+    var test3 = "data:image/svg;base64," + test2;
+    var image_send = document.createElement("img");
+    image_send.id = "DRD_image" + div_id.replace(/[^0-9]/g, '');
+    image_send.className = "image";
+    image_send.style.width = "100%";
+    image_send.style.height = "100%";
+    image_send.style.color = "rgba(255, 151, 166, 0.5)";
+    image_send.src = baseMaking;
+    var image_div = document.getElementById(div_id); //추후 변경해야됨 해당 div의 id로
+    image_div.appendChild(image_send);
+
+    Transparent_Cloak(labelNbandInfo.data.imageTransparent, image_send);
+
+}
+
+/******************************************************************
+ 기능 : 이미지 투명도, 이미지 크기에 따른 이미지 조정 기능
+ Date : 2018-09-11
+ 만든이 : hagdung-i
+ ******************************************************************/
+function Transparent_Cloak(imageTransparent, image) {
+    if (imageTransparent.IsUseTransParent) { //투명도 관련 속성이 존재할 경우
+        var TransparentOX = imageTransparent.IsUseTransParent._text;
+        if (TransparentOX) {  //투명도 여부를 확인
+            var TransparentColor = imageTransparent.TransParentColor._text;
+            // image_id.css({'filter':'chroma(color=#FF97A6)'});
+            //#fb99a6
+            return TransparentColor;
+        }
+    }
+}
+
+/******************************************************************
+ 기능 : 라벨의 p태그 생성 및 각 가벨의 특성에 맞춰 커스텀하는 로직을 따로 추출.
+ 사유 : 이미지 같이 p태그가 들어가지 않는 라벨 작업을 위함.
+ Date : 2018-09-12
+ 만든이 : hagdung-i
+ ******************************************************************/
+function label_text_Setting(labelNbandInfo) {
+
+    labelNbandInfo.labelId.append('<p id = "P' + labelNbandInfo.label_type + labelNbandInfo.labelNum + '"></p>');
+    Lock_check(labelNbandInfo.data, labelNbandInfo.labelId, labelNbandInfo.div);
+
+    var pId = $('#P' + labelNbandInfo.label_type + labelNbandInfo.labelNum);
+
+
+    if (labelNbandInfo.label_type === "SystemLabel") {
+        var date = new Date();
+        switch (labelNbandInfo.data.systemFieldName) {
+            case 'Date' :
+                var year = date.getFullYear();
+                var month = plusZero(date.getMonth() + 1); // month는 0부터 시작
+                var day = plusZero(date.getDate());
+                labelNbandInfo.data.text = year + '-' + month + '-' + day;
+                pId.addClass("date");
+                break;
+            case 'Date/time' :
+                var year = date.getFullYear();
+                var month = plusZero(date.getMonth() + 1); // month는 0부터 시작
+                var day = plusZero(date.getDate());
+                var hour = plusZero(date.getHours());
+                var min = plusZero(date.getMinutes());
+                var sec = plusZero(date.getSeconds());
+                labelNbandInfo.data.text = year + '-' + month + '-' + day + ' ' + hour + ':' + min + ':' + sec;
+                pId.addClass("dateTime");
+                break;
+            case 'Time' :
+                var hour = plusZero(date.getHours());
+                var min = plusZero(date.getMinutes());
+                var sec = plusZero(date.getSeconds());
+                labelNbandInfo.data.text = hour + ':' + min + ':' + sec;
+                pId.addClass("time");
+                break;
+            case 'PageNumber' : // 현재 페이지 번호
+                pId.addClass("pageNumber");
+                labelNbandInfo.data.text = "tempStr";
+                break;
+            case 'TotalPage' : // 전체 페이지 번호
+                pId.addClass("totalPage");
+                labelNbandInfo.data.text = "tempStr";
+                break;
+            case 'PageNumber / TotalPage' :  // 현재 페이지 번호 / 전체 페이지 정보
+                pId.addClass("pageNumberTotalPage");
+                labelNbandInfo.data.text = "tempStr";
+                break;
+        }
+    }
+
+    // 요약라벨
+    if (labelNbandInfo.label_type === "SummaryLabel") {
+        var dt = Object.values(dataTable.DataSetName)[0];
+        var key_arr = Object.keys(dt[0]);
+
+        var key = null;
+        key_arr.forEach(function (obj) { // key 값 설정
+            if(labelNbandInfo.data.fieldName == obj) {
+                key = obj;
+                return;
+            }
+        });
+
+        switch (labelNbandInfo.data.summaryType) {
+            case 'Sum' :    // 합계
+                var summary_label_sum = 0;
+
+                if (groupFieldArray.length !== 0) { // 그룹 기준 필드가 있을 때
+                    for (var i = 0; i < groupFieldArray[groupFieldNum-1].length-1; i++) {
+                        summary_label_sum += Number(groupFieldArray[groupFieldNum-1][i+1][key]._text);
+                    }
+                } else{
+                    for(var i=0; i < dt.length; i++){
+                        summary_label_sum += Number(dt[i][key]._text);
+                    }
+                }
+
+                labelNbandInfo.data.text = summary_label_sum;
+                if(isNaN(Number(labelNbandInfo.data.text))) {
+                    labelNbandInfo.data.text = "오류!";
+                    pId.attr('title', '값이 숫자가 아닙니다');
+                }
+                break;
+            case 'Avg' :    // 평균
+                var summary_label_sum = 0;
+                var summary_label_avg = 0;
+
+                if (groupFieldArray.length !== 0) { // 그룹 기준 필드가 있을 때
+                    for (var i = 0; i < groupFieldArray[groupFieldNum-1].length-1; i++) {
+                        summary_label_sum += Number(groupFieldArray[groupFieldNum-1][i+1][key]._text);
+                    }
+                    summary_label_avg = summary_label_sum / (groupFieldArray[groupFieldNum-1].length-1);
+                } else{
+                    for(var i=0; i < dt.length; i++){
+                        summary_label_sum += Number(dt[i][key]._text);
+                    }
+                    summary_label_avg = summary_label_sum / dt.length;
+                }
+                labelNbandInfo.data.text = summary_label_avg;
+                if(isNaN(Number(labelNbandInfo.data.text))) {
+                    labelNbandInfo.data.text = "오류!";
+                    pId.attr('title', '값이 숫자가 아닙니다');
+                }
+                break;
+            case 'Max' :    // 최대값
+                var temp_arr = [];
+                if(groupFieldArray.length !== 0) { // 그룹 기준 필드가 있을 때
+                    for (var i = 0; i < groupFieldArray[groupFieldNum - 1].length - 1; i++) {
+                        temp_arr.push(Number(groupFieldArray[groupFieldNum - 1][i + 1][key]._text));
+                    }
+                    var summary_label_max = temp_arr.reduce(function (previous, current) {
+                        return previous > current ? previous : current;
+                    });
+                } else{
+                    for(var i=0; i < dt.length; i++){
+                        temp_arr.push(Number(dt[i][key]));
+                    }
+                    var summary_label_max = temp_arr.reduce(function (previous, current) {
+                        return previous > current ? previous : current;
+                    });
+                }
+                if(isNaN(Number(labelNbandInfo.data.text))){
+                    labelNbandInfo.data.text = "오류!";
+                    pId.attr('title', '값이 숫자가 아닙니다');
+                }
+                labelNbandInfo.data.text = summary_label_max;
+                break;
+            case 'Min' :    // 최소값
+                var temp_arr = [];
+                if(groupFieldArray.length !== 0) { // 그룹 기준 필드가 있을 때
+                    for (var i = 0; i < groupFieldArray[groupFieldNum - 1].length - 1; i++) {
+                        temp_arr.push(Number(groupFieldArray[groupFieldNum - 1][i + 1][key]._text));
+                    }
+                    var summary_label_min = temp_arr.reduce(function (previous, current) {
+                        return previous > current ? current : previous;
+                    });
+                } else{
+                    for(var i=0; i < dt.length; i++){
+                        temp_arr.push(Number(dt[i][key]));
+                    }
+                    var summary_label_min = temp_arr.reduce(function (previous, current) {
+                        return previous > current ? current : previous;
+                    });
+                }
+                labelNbandInfo.data.text = summary_label_min;
+                if(isNaN(Number(labelNbandInfo.data.text))) {
+                    labelNbandInfo.data.text = "오류!";
+                    pId.attr('title', '값이 숫자가 아닙니다');
+                }
+                break;
+            case 'Cnt' :    // 개수
+                var summary_label_cnt = 0;
+                if (groupFieldArray.length !== 0) { // 그룹 기준 필드가 있을 때
+                    summary_label_cnt = groupFieldArray[groupFieldNum-1].length-1;
+                } else{
+                    summary_label_cnt = dt.length;
+                }
+
+                labelNbandInfo.data.text = summary_label_cnt;
+                if(isNaN(Number(labelNbandInfo.data.text))) {
+                    labelNbandInfo.data.text = "오류!";
+                    pId.attr('title', '값이 숫자가 아닙니다');
+                }
+                break;
+            default :   // None
+                labelNbandInfo.data.text = '';
+                break;
+        }
+    }
+
+    // fontSize의 단위를 통일하기위해
+    var fontSizePt = changeFontUnit(labelNbandInfo.data.fontSize);
+    // console.log("pId : ",pId[0].clientWidth);
+    pId.css({
+        'font-size': fontSizePt,
+        'font-family': labelNbandInfo.data.fontFamily,
+        'font-weight': labelNbandInfo.data.fontWeight,
+        'font-style': labelNbandInfo.data.fontStyle,
+        'margin-top': '10px',
+        'margin-bottom': '10px',
+        'margin-right': '10px',
+        'margin-left': '10px'
+    });
+
+    // 금액 표시 방법 한글
+    // if (data.numberToTextType == 'KOR') {
+    //     var KOR = numberToKOR((data.text).replace(/[^0-9]/g, ""));
+    //     var tempKOR = (data.text).match(/[0-9]/gi);
+    //     var toStringKOR = tempKOR[0];
+    //     for (var i = 1; i < tempKOR.length; i++) {
+    //         toStringKOR += tempKOR[i];
+    //     }
+    //     toStringKOR = toStringKOR.toString();
+    // }
+    //
+    // // 금액 표시 방법 한자
+    // if (data.numberToTextType == 'CHN') {
+    //     var CHN = numberToCHN((data.text).replace(/[^0-9]/g, ""));
+    // }
+
+    if (labelNbandInfo.label_type === "ParameterLabel") {
+        paramTable.NewDataSet.Table1.forEach(function (paramData) {
+            if (labelNbandInfo.data.parameterName == paramData.Key._text) {
+                labelNbandInfo.data.text = paramData.Value._text;
+            }
+        });
+    }
+
+    /********************************************
+     한 그룹의 데이터 출력이 끝나면 groupFieldNum++를 어디선가 해줘야함..어떻게해야하지..모르겠담
+     *******************************************/
+    if (labelNbandInfo.label_type === "DataLabel") {
+        if (groupFieldArray !== undefined) {
+            pId.append(groupFieldArray[groupFieldNum][0]);
+            labelNbandInfo.data.text = pId.text();
+        }
+    }
+
+    // 0값 표시 여부가 NoShow(표시하지 않음) 이고 문자 형식이 숫자 일 때
+    if (labelNbandInfo.data.showZeroState == 'NoShow' && labelNbandInfo.data.labelTextType == 'Number') {
+        labelNbandInfo.data.text = (labelNbandInfo.data.text).replace(/(^0+)/, '');
+    }
+
+    if (labelNbandInfo.data.text !== undefined) {
+        pId.text('');
+        if (labelNbandInfo.data.textDirection == 'Vertical') {
+            textAlignVertical(labelNbandInfo.data.text, "P" + labelNbandInfo.label_type + labelNbandInfo.labelNum);
+        } else if (labelNbandInfo.data.textDirection == 'Horizontal') {
+            toStringFn(labelNbandInfo.data.text, "P" + labelNbandInfo.label_type + labelNbandInfo.labelNum);
+        }
+    }
+
+    // 자간 속성
+    if (labelNbandInfo.data.characterSpacing !== undefined) {
+        characterSpacing(labelNbandInfo.data.text, labelNbandInfo.data.characterSpacing,
+            "P" + labelNbandInfo.label_type + labelNbandInfo.labelNum);
+    }
+
+    // 줄 간격 속성
+    if (labelNbandInfo.data.lineSpacing !== undefined) {
+        lineSpacing(labelNbandInfo.data.text,
+            labelNbandInfo.data.lineSpacing, "P" + labelNbandInfo.label_type + labelNbandInfo.labelNum);
+    }
+    var test = $('#' + "P" + labelNbandInfo.label_type + labelNbandInfo.labelNum + ' br');
+    // Clipping 속성
+    if (labelNbandInfo.data.clipping == 'true') {
+        labelNbandInfo.labelId.css({
+            'text-overflow': 'clip',
+            'overflow': 'hidden'
+        });
+        clipping(labelNbandInfo.data.text, labelNbandInfo.label_type + labelNbandInfo.labelNum,
+            'P' + labelNbandInfo.label_type + labelNbandInfo.labelNum);
+    }
+
+    if (labelNbandInfo.data.autosize == true) { // 자동 높이 조절
+        autoSizeTrue('P' + labelNbandInfo.label_type + labelNbandInfo.labelNum);
+    } else {
+        if (labelNbandInfo.data.text !== undefined) {
+            switch (labelNbandInfo.data.horizontalTextAlignment) {
+                case 'Center' :
+                    textAlignCenter(labelNbandInfo.data.text, "P" + labelNbandInfo.label_type + labelNbandInfo.labelNum,
+                        labelNbandInfo.data.wordWrap, labelNbandInfo.data.textDirection);
+                    break;
+                case 'Left' :
+                    pId.css('text-align', 'left');
+                    break;
+                case 'Right' :
+                    pId.css('text-align', 'right');
+                    break;
+                case 'Distributed' :
+                    pId.text('');
+                    textEqualDivision(labelNbandInfo.data.text, "P" + labelNbandInfo.label_type + labelNbandInfo.labelNum); // 텍스트 수평 정렬이 균등 분할인 경우
+                    break;
+            }
+            switch (labelNbandInfo.data.verticalTextAlignment) {
+                case 'Center' :
+                    verticalCenter("P" + labelNbandInfo.label_type + labelNbandInfo.labelNum); // 텍스트 수직 정렬이 중간인 경우
+                    break;
+                case 'Top' :
+                    verticalTop("P" + labelNbandInfo.label_type + labelNbandInfo.labelNum); // 텍스트 수직 정렬이 위쪽인 경우
+                    break;
+                case 'Bottom' :
+                    verticalBottom("P" + labelNbandInfo.label_type + labelNbandInfo.labelNum); // 텍스트 수직 정렬이 아래쪽인 경우
+                    break;
+                case 'Distributed' :
+                    verticalCenterEqualDivision(labelNbandInfo.data.text, "P" + labelNbandInfo.label_type
+                        + labelNbandInfo.labelNum, labelNbandInfo.data.textDirection); // 텍스트 수직 정렬이 균등 분할인 경우
+                    break;
+            }
+        }
+    }
+    // 폰트크기 자동 줄어듦
+    if (labelNbandInfo.data.autoFontType == 'AutoSmall') {
+        fontSizeAutoSmall(labelNbandInfo.data.text, "P" + labelNbandInfo.label_type + labelNbandInfo.labelNum);
+    }
+
+    // 기본 여백 미사용
+    if (labelNbandInfo.data.isUseBasicInnerMargin == 'false') {
+        pId.css({
+            'margin-left': labelNbandInfo.data.interMargin.left + 'px',
+            'margin-right': labelNbandInfo.data.interMargin.right + 'px',
+            'margin-top': labelNbandInfo.data.interMargin.top + 'px',
+            'margin-bottom': labelNbandInfo.data.interMargin.bottom + 'px',
+        });
+    }
+
+    // 중간 줄 그리기
+    if (labelNbandInfo.data.isDrawStrikeOutLine == 'true') {
+        pId.css('text-decoration', 'line-through');
+    }
+
+    // 밑줄 그리기
+    if (labelNbandInfo.data.isDrawUnderLine == 'true') {
+        pId.css('text-decoration', 'underline');
+    }
+
+    // 중간 줄과 밑줄 모두 그릴 때
+    if (labelNbandInfo.data.isDrawStrikeOutLine == 'true' && labelNbandInfo.data.isDrawUnderLine == 'true') {
+        pId.css('text-decoration', 'line-through underline');
+    }
+
+    // 글자 크기 동일하게 하기
+    if (labelNbandInfo.data.isSameWidth == 'true') {
+        var fontSize = (pId.css('font-size')).split('p');
+        pId.css('word-spacing', (fontSize[0] - 1.181) + 'px');
+    }
+    drd_javascript(labelNbandInfo.data, labelNbandInfo.labelId, labelNbandInfo.data.startBindScript);
+    pId.addClass('Label');
+    pId.addClass(labelNbandInfo.label_type);
+}
+
 /******************************************************************
  기능 : 그라데이션의 시작방향, 방향 등을 판단하여 CSS 속성을 줄 함수를 만든다.
  만든이 : 안예솔
@@ -1846,6 +2310,7 @@ function labelPropertyApply(labelNbandInfo) {
     labelNbandInfo.labelId = $('#' + labelNbandInfo.label_type + labelNbandInfo.labelNum);
 
     labelNbandInfo.labelId.addClass(labelNbandInfo.label_scope);
+    Lock_check(labelNbandInfo.data, labelNbandInfo.labelId, labelNbandInfo.div);
 
     // visible 속성
     if (labelNbandInfo.data.visible == 'false') {
@@ -1890,7 +2355,7 @@ function labelPropertyApply(labelNbandInfo) {
         'color': labelNbandInfo.data.textColor // 글자 색
     });
 
-    // 바코드 - 사용한 코드 때문에 크기가 마음대로 줄어듦..
+    // 바코드
     if (labelNbandInfo.data.drawingType !== undefined && labelNbandInfo.data.drawingType === "Barcode") {
         var barcode_text = labelNbandInfo.data.text === undefined ? 'ERROR' : labelNbandInfo.data.text;
         var barcode_type = labelNbandInfo.data.barcodeType === undefined ? 'code39' : labelNbandInfo.data.barcodeType.toLowerCase();
@@ -1904,20 +2369,20 @@ function labelPropertyApply(labelNbandInfo) {
         );
 
         var changeRatio = Number(labelNbandInfo.data.rectangle.width)
-            / Number(labelNbandInfo.labelId.css('width').substring(0, labelNbandInfo.labelId.css('width').length-2));
+            / Number(labelNbandInfo.labelId.css('width').substring(0, labelNbandInfo.labelId.css('width').length - 2));
 
-        for(var i=0; i<labelNbandInfo.labelId.children('div:not(:last-child)').length; i++){
-            if(labelNbandInfo.labelId.children('div:not(:last-child)').eq(i).css('width') !== "0px"){
+        for (var i = 0; i < labelNbandInfo.labelId.children('div:not(:last-child)').length; i++) {
+            if (labelNbandInfo.labelId.children('div:not(:last-child)').eq(i).css('width') !== "0px") {
                 labelNbandInfo.labelId.children('div:not(:last-child)').eq(i).css(
                     'width',
                     labelNbandInfo.labelId.children('div:not(:last-child)').eq(i).css('width').substring(
-                        0, labelNbandInfo.labelId.children('div:not(:last-child)').eq(i).css('width').length-2
+                        0, labelNbandInfo.labelId.children('div:not(:last-child)').eq(i).css('width').length - 2
                     ) * changeRatio + 'px');
-            } else{
+            } else {
                 labelNbandInfo.labelId.children('div:not(:last-child)').eq(i).css(
                     'border-left-width',
                     labelNbandInfo.labelId.children('div:not(:last-child)').eq(i).css('border-left-width').substring(
-                        0, labelNbandInfo.labelId.children('div:not(:last-child)').eq(i).css('border-left-width').length-2
+                        0, labelNbandInfo.labelId.children('div:not(:last-child)').eq(i).css('border-left-width').length - 2
                     ) * changeRatio + 'px');
             }
         }
@@ -1940,7 +2405,6 @@ function labelPropertyApply(labelNbandInfo) {
             + Number(labelNbandInfo.labelId.children('div:last-child').css('height')
                 .substring(0, labelNbandInfo.labelId.children('div:last-child').css('height').length - 2)) + 'px'
         );
-        Lock_check(labelNbandInfo.data, labelNbandInfo.labelId, labelNbandInfo.div);
         return;
     }
 
@@ -1984,209 +2448,9 @@ function labelPropertyApply(labelNbandInfo) {
         labelNbandInfo.labelId.css('white-space', 'normal');
     }
 
-    labelNbandInfo.labelId.append('<p id = "P' + labelNbandInfo.label_type + labelNbandInfo.labelNum + '"></p>');
-    Lock_check(labelNbandInfo.data, labelNbandInfo.labelId, labelNbandInfo.div);
-
-    var pId = $('#P' + labelNbandInfo.label_type + labelNbandInfo.labelNum);
-
-    if (labelNbandInfo.label_type === "SystemLabel") {
-        var date = new Date();
-        switch (labelNbandInfo.data.systemFieldName) {
-            case 'Date' :
-                var year = date.getFullYear();
-                var month = plusZero(date.getMonth() + 1); // month는 0부터 시작
-                var day = plusZero(date.getDate());
-                labelNbandInfo.data.text = year + '-' + month + '-' + day;
-                pId.addClass("date");
-                break;
-            case 'Date/time' :
-                var year = date.getFullYear();
-                var month = plusZero(date.getMonth() + 1); // month는 0부터 시작
-                var day = plusZero(date.getDate());
-                var hour = plusZero(date.getHours());
-                var min = plusZero(date.getMinutes());
-                var sec = plusZero(date.getSeconds());
-                labelNbandInfo.data.text = year + '-' + month + '-' + day + ' ' + hour + ':' + min + ':' + sec;
-                pId.addClass("dateTime");
-                break;
-            case 'Time' :
-                var hour = plusZero(date.getHours());
-                var min = plusZero(date.getMinutes());
-                var sec = plusZero(date.getSeconds());
-                labelNbandInfo.data.text = hour + ':' + min + ':' + sec;
-                pId.addClass("time");
-                break;
-            case 'PageNumber' : // 현재 페이지 번호
-                pId.addClass("pageNumber");
-                labelNbandInfo.data.text = "tempStr";
-                break;
-            case 'TotalPage' : // 전체 페이지 번호
-                pId.addClass("totalPage");
-                labelNbandInfo.data.text = "tempStr";
-                break;
-            case 'PageNumber / TotalPage' :  // 현재 페이지 번호 / 전체 페이지 정보
-                pId.addClass("pageNumberTotalPage");
-                labelNbandInfo.data.text = "tempStr";
-                break;
-        }
-    }
-
-    // fontSize의 단위를 통일하기위해
-    var fontSizePt = changeFontUnit(labelNbandInfo.data.fontSize);
-    // console.log("pId : ",pId[0].clientWidth);
-    pId.css({
-        'font-size': fontSizePt,
-        'font-family': labelNbandInfo.data.fontFamily,
-        'font-weight': labelNbandInfo.data.fontWeight,
-        'font-style': labelNbandInfo.data.fontStyle,
-        'margin-top': '10px',
-        'margin-bottom': '10px',
-        'margin-right': '10px',
-        'margin-left': '10px'
-    });
-
-    // 금액 표시 방법 한글
-    // if (data.numberToTextType == 'KOR') {
-    //     var KOR = numberToKOR((data.text).replace(/[^0-9]/g, ""));
-    //     var tempKOR = (data.text).match(/[0-9]/gi);
-    //     var toStringKOR = tempKOR[0];
-    //     for (var i = 1; i < tempKOR.length; i++) {
-    //         toStringKOR += tempKOR[i];
-    //     }
-    //     toStringKOR = toStringKOR.toString();
-    // }
-    //
-    // // 금액 표시 방법 한자
-    // if (data.numberToTextType == 'CHN') {
-    //     var CHN = numberToCHN((data.text).replace(/[^0-9]/g, ""));
-    // }
-
-    if (labelNbandInfo.label_type === "ParameterLabel") {
-        paramTable.NewDataSet.Table1.forEach(function (paramData) {
-            if (labelNbandInfo.data.parameterName == paramData.Key._text) {
-                labelNbandInfo.data.text = paramData.Value._text;
-            }
-        });
-    }
-    /********************************************
-     한 그룹의 데이터 출력이 끝나면 groupFieldNum++를 어디선가 해줘야함..어떻게해야하지..모르겠담
-     *******************************************/
-    if (labelNbandInfo.label_type === "DataLabel") {
-        if (groupFieldArray !== undefined) {
-            pId.append(groupFieldArray[groupFieldNum][0]);
-            labelNbandInfo.data.text = pId.text();
-        }
-    }
-
-    // 0값 표시 여부가 NoShow(표시하지 않음) 이고 문자 형식이 숫자 일 때
-    if (labelNbandInfo.data.showZeroState == 'NoShow' && labelNbandInfo.data.labelTextType == 'Number') {
-        labelNbandInfo.data.text = (labelNbandInfo.data.text).replace(/(^0+)/, '');
-    }
-
-    if (labelNbandInfo.data.text !== undefined) {
-        pId.text('');
-        if (labelNbandInfo.data.textDirection == 'Vertical') {
-            textAlignVertical(labelNbandInfo.data.text, "P" + labelNbandInfo.label_type + labelNbandInfo.labelNum);
-        } else if (labelNbandInfo.data.textDirection == 'Horizontal') {
-            toStringFn(labelNbandInfo.data.text, "P" + labelNbandInfo.label_type + labelNbandInfo.labelNum);
-        }
-    }
-
-    // 자간 속성
-    if (labelNbandInfo.data.characterSpacing !== undefined) {
-        characterSpacing(labelNbandInfo.data.text, labelNbandInfo.data.characterSpacing,
-            "P" + labelNbandInfo.label_type + labelNbandInfo.labelNum);
-    }
-
-    // 줄 간격 속성
-    if (labelNbandInfo.data.lineSpacing !== undefined) {
-        lineSpacing(labelNbandInfo.data.text,
-            labelNbandInfo.data.lineSpacing, "P" + labelNbandInfo.label_type + labelNbandInfo.labelNum);
-    }
-    var test = $('#' + "P" + labelNbandInfo.label_type + labelNbandInfo.labelNum + ' br');
-    // Clipping 속성
-    if (labelNbandInfo.data.clipping == 'true') {
-        labelNbandInfo.labelId.css({
-            'text-overflow': 'clip',
-            'overflow': 'hidden'
-        });
-        clipping(labelNbandInfo.data.text, labelNbandInfo.label_type + labelNbandInfo.labelNum,
-            'P' + labelNbandInfo.label_type + labelNbandInfo.labelNum);
-    }
-
-    if (labelNbandInfo.data.autosize == true) { // 자동 높이 조절
-        autoSizeTrue('P' + labelNbandInfo.label_type + labelNbandInfo.labelNum);
+    if (labelNbandInfo.data.base64ImageFromViewer) {
+        image_label_making(labelNbandInfo);
     } else {
-        if (labelNbandInfo.data.text !== undefined) {
-            switch (labelNbandInfo.data.horizontalTextAlignment) {
-                case 'Center' :
-                    textAlignCenter(labelNbandInfo.data.text, "P" + labelNbandInfo.label_type + labelNbandInfo.labelNum,
-                        labelNbandInfo.data.wordWrap, labelNbandInfo.data.textDirection);
-                    break;
-                case 'Left' :
-                    pId.css('text-align', 'left');
-                    break;
-                case 'Right' :
-                    pId.css('text-align', 'right');
-                    break;
-                case 'Distributed' :
-                    pId.text('');
-                    textEqualDivision(labelNbandInfo.data.text, "P" + labelNbandInfo.label_type + labelNbandInfo.labelNum); // 텍스트 수평 정렬이 균등 분할인 경우
-                    break;
-            }
-            switch (labelNbandInfo.data.verticalTextAlignment) {
-                case 'Center' :
-                    verticalCenter("P" + labelNbandInfo.label_type + labelNbandInfo.labelNum); // 텍스트 수직 정렬이 중간인 경우
-                    break;
-                case 'Top' :
-                    verticalTop("P" + labelNbandInfo.label_type + labelNbandInfo.labelNum); // 텍스트 수직 정렬이 위쪽인 경우
-                    break;
-                case 'Bottom' :
-                    verticalBottom("P" + labelNbandInfo.label_type + labelNbandInfo.labelNum); // 텍스트 수직 정렬이 아래쪽인 경우
-                    break;
-                case 'Distributed' :
-                    verticalCenterEqualDivision(labelNbandInfo.data.text, "P" + labelNbandInfo.label_type
-                        + labelNbandInfo.labelNum, labelNbandInfo.data.textDirection); // 텍스트 수직 정렬이 균등 분할인 경우
-                    break;
-            }
-        }
+        label_text_Setting(labelNbandInfo);
     }
-    // 폰트크기 자동 줄어듦
-    if (labelNbandInfo.data.autoFontType == 'AutoSmall') {
-        fontSizeAutoSmall(labelNbandInfo.data.text, "P" + labelNbandInfo.label_type + labelNbandInfo.labelNum);
-    }
-
-    // 기본 여백 미사용
-    if (labelNbandInfo.data.isUseBasicInnerMargin == 'false') {
-        pId.css({
-            'margin-left': labelNbandInfo.data.interMargin.left + 'px',
-            'margin-right': labelNbandInfo.data.interMargin.right + 'px',
-            'margin-top': labelNbandInfo.data.interMargin.top + 'px',
-            'margin-bottom': labelNbandInfo.data.interMargin.bottom + 'px',
-        });
-    }
-
-    // 중간 줄 그리기
-    if (labelNbandInfo.data.isDrawStrikeOutLine == 'true') {
-        pId.css('text-decoration', 'line-through');
-    }
-
-    // 밑줄 그리기
-    if (labelNbandInfo.data.isDrawUnderLine == 'true') {
-        pId.css('text-decoration', 'underline');
-    }
-
-    // 중간 줄과 밑줄 모두 그릴 때
-    if (labelNbandInfo.data.isDrawStrikeOutLine == 'true' && labelNbandInfo.data.isDrawUnderLine == 'true') {
-        pId.css('text-decoration', 'line-through underline');
-    }
-
-    // 글자 크기 동일하게 하기
-    if (labelNbandInfo.data.isSameWidth == 'true') {
-        var fontSize = (pId.css('font-size')).split('p');
-        pId.css('word-spacing', (fontSize[0] - 1.181) + 'px');
-    }
-    drd_javascript(labelNbandInfo.data, labelNbandInfo.labelId, labelNbandInfo.data.startBindScript);
-    pId.addClass('Label');
-    pId.addClass(labelNbandInfo.label_type);
 }

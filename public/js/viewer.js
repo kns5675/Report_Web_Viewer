@@ -14,23 +14,24 @@ function beginLoading(imageName){
  기능 : 이미지 내보내기, PDF내보내기, HTML내보내기 시 필요한 로딩화면 없애기
  작성자 : 하지연
  ******************************************************************/
-function endingLoading(){
-    console.log("불끄기 들어왔다.");
-    $("#loadingModal").css("display","none");
+function endingLoading() {
+    //console.log("불끄기 들어왔다.");
+    $("#loadingModal").css("display", "none");
 }
+
 /******************************************************************
  기능 : 리포트 리스트의 리포트들을 하나의 pdf 파일로 저장.
  작성자 : 하지연
  ******************************************************************/
 async function makePdf() {
-    return new Promise(function(resolve){
+    return new Promise(function (resolve) {
         var docwidth1 = Number(($("#page1").css("width")).replace(/[^0-9]/g, ''));
         var docheight1 = Number(($("#page1").css("height")).replace(/[^0-9]/g, ''));
         docwidth1 = ((docwidth1 / 96) * 25.4).toFixed(1);
         docheight1 = ((docheight1 / 96) * 0.254).toFixed(1);
         docwidth1 = Math.floor(Number(docwidth1)) - 1;
         docheight1 = Math.floor(Number(docheight1)) - 1;
-        var data=100;
+        var data = 100;
         //Dr Viewer의 고급인쇄에서 용지방향을 바꿨을 경우 pdf orientation값 변경 처리
         var pageOrientation;
         var area = [];
@@ -52,26 +53,27 @@ async function makePdf() {
 
 async function beforeSaving(pageOrientation, docwidth1, docheight1) {
 
-    return new Promise(function(resolve){
+    return new Promise(function (resolve) {
         var area;
         if (pageOrientation == 'p') {
-        } else{
+        } else {
             pageOrientation == 'l'
         }
         area = [pageOrientation, docwidth1, docheight1];
         resolve(area);
     });
 }
-function createPdf(pageOrientation,docwidth1,docheight1){
-    return new Promise(function(resolve){
-        doc = new jsPDF(pageOrientation,'mm',[docheight1,docwidth1]);
+
+function createPdf(pageOrientation, docwidth1, docheight1) {
+    return new Promise(function (resolve) {
+        doc = new jsPDF(pageOrientation, 'mm', [docheight1, docwidth1]);
         //console.log("docheight1 : "+docheight1 + " docwidth1 : "+docwidth1);
         var area;
         var totalnum = $(".pageforcopyratio").length;
         $(".pageforcopyratio").each(function (i, e) {
-            docheight = (e.style.height).replace(/[^0-9]/g,'');
-            docheight = (((Number(docheight))/96)*2.54).toFixed(1);
-            docheight = Math.floor(Number(docheight))-1;
+            docheight = (e.style.height).replace(/[^0-9]/g, '');
+            docheight = (((Number(docheight)) / 96) * 2.54).toFixed(1);
+            docheight = Math.floor(Number(docheight)) - 1;
 
             docwidth = (e.style.width).replace(/[^0-9]/g,'');
             docwidth = (((Number(docwidth))/96)*25.4).toFixed(1);
@@ -457,11 +459,12 @@ function saveSaveSave1(canvas, typeofimages, enumber){
     if(typeofimages == 'png'){
         console.log("png임");
         return Canvas2Image.saveAsPNG(canvas);
-    }else{
+    } else {
         console.log("jpeg임");
         return Canvas2Image.saveAsJPEG(canvas);
     }
 }
+
 jQuery.browser = {}; //jQuery.browser.msie 사용 위함.
 (function () {
     jQuery.browser.msie = false;
@@ -480,7 +483,7 @@ function howmanyPages(thisvalue){
 function band_dbclick_event(data) {
     if (data.ReportTemplate.ReportList.anyType.Editable !== undefined) {
         var Editable = data.ReportTemplate.ReportList.anyType.Editable._text;
-        if(Editable == "true"){
+        if (Editable == "true") {
             $(".NormalLabel_scope").on({
                 "dblclick": function () {
                     var this_id = this.children[0].id;
@@ -512,17 +515,17 @@ function band_dbclick_event(data) {
                 },
                 "keydown": function (key) {
                     if (key.keyCode === 13) { //enter 처리
-                        if(!key.shiftKey){  //shift + enter 처리
+                        if (!key.shiftKey) {  //shift + enter 처리
                             var insert_text = $("#text_area").val();
                             var text_convert = insert_text.replace(/(?:\r\n|\r|\n)/g, '<br />'); // html 문법으로 변환.
                             var this_id = this.children[0].id;
-                            $("#"+this_id)[0].innerHTML = text_convert;
+                            $("#" + this_id)[0].innerHTML = text_convert;
                             $("#text_div").remove();
                             this.style.borderWidth = "1px";
                             this.style.borderColor = "black";
                             this.style.borderStyle = "solid";
                         }
-                    }else if (key.keyCode === 27){ //esc 처리
+                    } else if (key.keyCode === 27) { //esc 처리
                         $("#text_div").remove();
                         this.style.borderWidth = "1px";
                         this.style.borderColor = "black";
@@ -560,16 +563,16 @@ function band_dbclick_event(data) {
                 },
                 "keydown": function (key) {
                     if (key.keyCode === 13) {
-                        if(!key.shiftKey){
+                        if (!key.shiftKey) {
                             var insert_text = $("#text_area").val();
                             var text_convert = insert_text.replace(/(?:\r\n|\r|\n)/g, '<br />'); // html 문법으로 변환.
-                            $("#"+this.id)[0].innerHTML = text_convert;
+                            $("#" + this.id)[0].innerHTML = text_convert;
                             $("#text_div").remove();
                             this.style.borderWidth = "1px";
                             this.style.borderColor = "black";
                             this.style.borderStyle = "solid";
                         }
-                    }else if (key.keyCode === 27){
+                    } else if (key.keyCode === 27) {
                         $("#text_div").remove();
                         this.style.borderWidth = "1px";
                         this.style.borderColor = "black";
@@ -592,8 +595,8 @@ function print_test() {
 /******************************************************************
  기능 : 라벨 클릭시 자동 사이즈 조절 기능 추가.
  이슈 : 문자 크기 기준으로 글자수를 확인해서 가로/세로 크기를 조정해주는데, 문자가 영어/한국어 사이즈가 다른데 해당 처리가 안되어 있으며,
-        p태그 내부에 또 p태그가 있을 경우 해당 태그를 모두 텍스트로 구분해서 너무 긴 라벨이 생성되는 문제가 생김.
-        일단은 최대 크기를 조정해두는 방식으로 묶어둠.
+ p태그 내부에 또 p태그가 있을 경우 해당 태그를 모두 텍스트로 구분해서 너무 긴 라벨이 생성되는 문제가 생김.
+ 일단은 최대 크기를 조정해두는 방식으로 묶어둠.
  날짜 : 2018-09-07
  만든이 : 김학준
  ******************************************************************/
@@ -604,7 +607,7 @@ function autoSize(pTagId) {
     var big_row = 1;
     tag_row.forEach(function (e) {
         var cutting_row = e.replace(/(^\s*)|(\s*$)/, '');
-        if(big_row < cutting_row.length){
+        if (big_row < cutting_row.length) {
             big_row = cutting_row.length;
         }
     });
@@ -612,25 +615,25 @@ function autoSize(pTagId) {
     var brTag = $('#' + pTagId + ' br');
     var brCount = brTag.length;
     var one_line = 0;
-    if(brCount == 0){//텍스트가 한줄일 경우를 위해 마진 값을 추가.
+    if (brCount == 0) {//텍스트가 한줄일 경우를 위해 마진 값을 추가.
         one_line = 6;
     }
     // text중에서 <br/>의 개수를 구함
     var widths;
-    if(fontSize[0] > 20){
+    if (fontSize[0] > 20) {
         widths = (fontSize[0]) * big_row;
-    }else if(fontSize[0] < 10){
-        widths = (fontSize[0]+2) * big_row;
-    }else{
-        widths = (fontSize[0]-3) * big_row;
+    } else if (fontSize[0] < 10) {
+        widths = (fontSize[0] + 2) * big_row;
+    } else {
+        widths = (fontSize[0] - 3) * big_row;
     }
     var designLayerSize = $(".designLayer")[0].style.width.split('p');
-    if(widths>designLayerSize[0]){
+    if (widths > designLayerSize[0]) {
         widths = designLayerSize;
     }
     var height = fontSize[0] * (brCount + 1) + brCount + one_line;
     tag.parent().css({
-        'width' : widths + 'px',
+        'width': widths + 'px',
         'height': height + 'px'
         // 'top': (height*1 + fontSize[0]*1) + 'px'
     });

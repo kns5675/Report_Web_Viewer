@@ -153,6 +153,9 @@ function Label(data){
     this.horizontalTextAlignment = data.HorizontalTextAlignment === undefined ? 'Center' : data.HorizontalTextAlignment._text; // 텍스트 수평 정렬
     this.verticalTextAlignment = data.VerticalTextAlignment === undefined ? 'Center' : data.VerticalTextAlignment._text; // 텍스트 수직 정렬
     this.textDirection = data.TextDirection === undefined ? 'Horizontal' : data.TextDirection._text; // 텍스트 방향 아마도 default horizontal
+
+    // this.grouppingRule = data.GroupingRule === undefined ? 'Merge' : data.GroupingRule._text; // 그룹핑규칙
+    this.grouppingRule = 'Merge'; // 그룹핑 규칙 (일단은 Merge만 될 거라고 해서 Merge로 해놓음)
 }
 
 
@@ -179,9 +182,9 @@ function Table(data){ // ControlList 밑에 anyType이 ControlFixedTable, Contro
     this.isApprovalBox = data.IsApprovalBox === undefined ? undefined : data.IsApprovalBox._text;
     this.relateTableList = data.RelateTableList === undefined ? 0 : data.RelateTableList._text; // 연결된 테이블
     this.forceAnnex = data.ForceAnnex === undefined ? 0 : data.ForceAnnex._text;
-    this.minimumRowCount = data.MinimumRowCount === undefined ? 1 : data.MinimumRowCount._text; // 최소 행 개수 (DRD에서 Default값이 1임)
+    this.minimumRowCount = data.MinimumRowCount === undefined ? undefined : data.MinimumRowCount._text; // 최소 행 개수 (DRD에서 Default값이 1임)
     this.fixRowCount = data.FixRowCount === undefined ? 0 : data.FixRowCount._text; // 최대 행 개수 (DRD에서 Default값이 0임)
-    this.isForceOverRow = data.IsForceOverRow === undefined ? true : data.IsForceOverRow._text; // 최대 행 이후의 데이터 true 일 때는 페이지 넘기기 false일 때는 제거(별지 출력)
+    this.isForceOverRow = data.IsForceOverRow === undefined ? false : data.IsForceOverRow._text; // 최대 행 이후의 데이터 true 일 때는 페이지 넘기기 false일 때는 제거(별지 출력)
     this.isAnnexMark = data.isAnnexMark === undefined ? 0 : data.isAnnexMark._text; // 별지 마크 표시 여부
     this.annexReportName = data.AnnextReportName === undefined ? undefined : data.AnnextReportName._text; // 별지 리포트 명
     this.isFirstPagePrint = data.IsFirstPagePrint === undefined ? undefined : data.IsFirstPagePrint._text; // 첫 페이지만 출력, 결재란 여부가 예 일때 결재란을 첫페이지에만 출력할것인지, 전체 페이지에 출력할것인지 판단하는 값
@@ -243,6 +246,7 @@ function SummaryLabel(data){
      ***************************************/
     this.summaryType = data.SummaryType === undefined ? 'Sum' : data.SummaryType._text; // 요약 타입
     this.detailWhere = data.DetailWhere === undefined ? undefined : data.DetailWhere._text; // 요약 라벨 조건절
+    this.fieldName = data.FieldName === undefined ? undefined : data.FieldName._text; // 필드 이름
 }
 
 /******************************************************************
@@ -278,7 +282,7 @@ function Expression(data){
 function GroupLabel(data){
     Label.apply(this, arguments);
 
-    this.grouppingRule = data.GroupingRule === undefined ? undefined : data.GroupingRule._text; // 그룹핑규칙
+
 
 }
 
