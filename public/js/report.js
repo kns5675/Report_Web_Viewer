@@ -7,6 +7,7 @@ var groupFieldArray = [];
 var remainFooterBand = [];
 var isDynamicTable = false;
 var tableLabelList = [];
+var completeDataBand = []; // 0918 예솔 추가 : 출력이 끝난 데이터 밴드의 id를 담는 배열
 
 /******************************************************************
  기능 : 하나의 리포트를 다 출력 시킨 후에 사용한 전역 변수들 초기화
@@ -38,29 +39,27 @@ function makeReportTemplate(data, subReport) {
         var report = reportTemplate.reportList[i];
         var bands = report.layers.designLayer.bands;
         var dataBands = [];
-        var dataBandCnt = 0;
         bands.forEach(function (band) {
             if (band.attributes['xsi:type'] == 'BandData') {
-
                 dataBands.push(band);
-                dataBandCnt++;
             }
         });
 
-        subReport_click = report.layers.designLayer.bands;
-        subReport_click.forEach(function (value, j) {
-            if (subReport_click[j].attributes["xsi:type"] === "BandSubReport") {
-                subReport_yes = subReport_click[j];
-                console.log("subReport_click[j] : ",subReport_click[j]);
-            }
-        });
+        // subReport_click = report.layers.designLayer.bands;
+        // subReport_click.forEach(function (value, j) {
+        //     if (subReport_click[j].attributes["xsi:type"] === "BandSubReport") {
+        //         subReport_yes = subReport_click[j];
+        //         console.log("subReport_click[j] : ",subReport_click[j]);
+        //     }
+        // });
         dataBands.forEach(function(dataBand, index){
             makeReport(report, dataBand);
+            completeDataBand.push(dataBand.id);
             initializeVariable();
         });
     });
 
-    //
+
     // if (subReport_yes) {
     //     var SubreportTemplate = new ReportTemplate(subReport);
     //
@@ -82,22 +81,10 @@ function makeReport(report, dataBand) {
     if (pageNum === '1') {
 
     }
-
     // 180910 YeSol 추가
     var controlLists = [];
-    // var dt = Object.values(dataTable.DataSetName);
     var bands = report.layers.designLayer.bands;
-    // var dataBand= [];
 
-
-    // bands.forEach(function (band) {
-    //     if (band.attributes['xsi:type'] == 'BandData') {
-    //
-    //         controlLists.push(band.controlList.anyType); // dataBand의 controlList배열
-    //         key.push(band);
-    //         dataBandCnt++;
-    //     }
-    // });
     bands.forEach(function (band) {
         if (band.attributes['xsi:type'] == 'BandData') {
             controlLists.push(band.controlList.anyType); // dataBand의 controlList배열
@@ -111,9 +98,12 @@ function makeReport(report, dataBand) {
                     isDynamicTable = true;
                 }
             }
+            isDynamicTable = false;
         } else {
             if (controlList._attributes['xsi:type'] == 'ControlDynamicTable') {
                 isDynamicTable = true;
+            }else{
+                isDynamicTable = false;
             }
         }
     });
@@ -347,7 +337,8 @@ function setDesignLayer(report, dataBand) {
         var bands = report.layers.designLayer.bands;
         var dataBandIndex = 0;
 
-        //ToDo BandData가 n개 있을 때 에러
+        //ToDo BandData가 n개 있을 때 에러날 수도 있을 것 같음
+        // 아마 아이디로 비교하면 될 것 같은데 Test 해보고 수정 예정
         bands.forEach(function (band, i) {
             if (band.attributes["xsi:type"] == "BandData") {
                 dataBandIndex = i;
@@ -369,13 +360,6 @@ function setDesignLayer(report, dataBand) {
     } else {
         drawBand(report.layers.designLayer.bands, dataBand, layerName, reportHeight); // 추가 - 전형준
     }
-    // if(report){
-    //     drawSubReport(report.layers.designLayer.bands, layerName, reportHeight);
-    // }else{
-    //     drawBand(report.layers.designLayer.bands, layerName, reportHeight); // 추가 - 전형준
-    // }
-
-
 }
 
 /******************************************************************
@@ -503,7 +487,7 @@ function setForeGroundLayerDirection(report) {
  수정 : 하지연
  날짜 : 2018 - 09 - 03
  내용 : #page 하위에 forcopyratio라는 인쇄배율 조정을 위한 div를 생성하고
- forcopyratio라는 클래스 부여 & 스타일 생성
+        forcopyratio라는 클래스 부여 & 스타일 생성
  ******************************************************************/
 function setReport(report, dataBand) {
     $(('#page' + pageNum)).append('<div id="forcopyratio' + pageNum + '"class = forcopyratio' + '></div>');//추가 - 하지연
@@ -542,39 +526,6 @@ function setReport(report, dataBand) {
     // drawBand(report); // 추가 - 전형준
 
     // reportNum++; // pageNum으로 대체되어 본 함수 빠져나간 뒤에 pageNum++만 - 형준
-}
-
-/******************************************************************
- 기능 : 테이블안에 데이터를 바인딩함(사용 안함)
- author : powerku
- ******************************************************************/
-function makeTableByData() {
-
-    let html = '<table><thead>';
-    var fieldLength = Object.keys(dataTable.DataSetName.dt[0]).length;
-
-    Object.keys(dataTable.DataSetName.dt[0]).forEach(function (field) { //Header
-        if (field == 'DRDSEQ') {
-            html += '<th clsss = "DRDSEQ">' + field + '</th>';
-        } else {
-            html += '<th>' + field + '</th>';
-        }
-
-    });
-    html += '</thead><tbody>';
-    dataTable.DataSetName.dt.forEach(function (data) { //Body
-        html += '<tr>';
-        for (var key in data) {
-            html += '<td>' + data[key]._text + '</td>';
-        }
-
-        +'</tr>';
-    });
-
-    html += '</tbody></table>';
-
-    $('#designLayer1').html(html);
-    $('td:nth-child(' + fieldLength + '),th:nth-child(' + fieldLength + ')').hide(); //DRDSEQ 컬럼 숨기기
 }
 
 /******************************************************************
