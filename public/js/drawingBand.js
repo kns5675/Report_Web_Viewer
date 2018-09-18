@@ -391,8 +391,6 @@ function drawBand(bands, dataBand, layerName, reportHeight, parentBand) {
             }
         }
 
-
-
         if (band.childFooterBands !== null) { // 자식 풋터 밴드에서 재호출
             drawChildFooterBand(band.childFooterBands, dataBand, layerName, reportHeight); // 자식 밴드를 그려주는 함수 호출
         }
@@ -600,7 +598,7 @@ function drawChildFooterBand(childBands, dataBand, layerName, reportHeight) {
 
 /***********************************************************
  기능 : 데이터밴드 childHeaderBand 길이 구함
- * *********************************************************/
+ **********************************************************/
 function getChildHeaderBandHeight(band) {
     var childHeaderBandsHeight = 0;
     var childBands = band.childHeaderBands;

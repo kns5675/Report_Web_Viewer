@@ -169,8 +169,8 @@ function Table(data){ // ControlList 밑에 anyType이 ControlFixedTable, Contro
     this.rectangle = {
         x : (data.Rectangle.X === undefined ? 0 : data.Rectangle.X._text),
         y : (data.Rectangle.Y === undefined ? 0 : data.Rectangle.Y._text),
-        width : data.Rectangle.Width._text,
-        height : data.Rectangle.Height._text
+        width : (data.Rectangle.Width === undefined ? undefined : data.Rectangle.Width._text),//학준추가
+        height : (data.Rectangle.Height === undefined ? undefined : data.Rectangle.Height._text)//학준추가
     };
     this.name = data.Name._text;
 
@@ -190,6 +190,7 @@ function Table(data){ // ControlList 밑에 anyType이 ControlFixedTable, Contro
     this.isFirstPagePrint = data.IsFirstPagePrint === undefined ? undefined : data.IsFirstPagePrint._text; // 첫 페이지만 출력, 결재란 여부가 예 일때 결재란을 첫페이지에만 출력할것인지, 전체 페이지에 출력할것인지 판단하는 값
     this.IsdynamicBinding = data.IsdynamicBinding === undefined ? undefined : data.IsdynamicBinding._text; // 결재란의 컬럼을 동적으로 (수정 못하니까 신경 안써도 됨)
 
+
     this.isPrintColumn = data.IsPrintColumn === undefined ? true : data.IsPrintColumn._text; // 테이블의 컬럼 출력 여부
 }
 
@@ -205,6 +206,8 @@ function FixedTableLabel(data, i){
     this._attributes = data._attributes["xsi:type"];
 
     this.selected = data.Selected._text; // 테이블 라벨에만 있는 것 같음
+    this.fieldName = data.FieldName === undefined ? 0 : data.FieldName._text;
+
 }
 
 
