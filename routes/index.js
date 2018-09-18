@@ -8,17 +8,11 @@ var xml = fs.readFileSync('xml/20180827.xml', 'utf-8');
 var json_origin = convert.xml2json(xml, {compact: true});
 var json = json_origin.replace(/\\r/gi, '<br/>'); // 엔터키(\r)를 <br/>로 치환
 
-var tempData = fs.readFileSync('xml/TempData.xml', 'utf-8');
+var tempData = fs.readFileSync('xml/db_TestSample.xml', 'utf-8');
 var dataTable = convert.xml2json(tempData, {compact: true});
 
 var paramData = fs.readFileSync('xml/GroupParameterData_Param.xml', 'utf-8');
 var paramTable = convert.xml2json(paramData, {compact: true});
-
-var SubReport = fs.readFileSync('xml/SubReportTest.xml', 'utf-8');
-var dataTable2 = convert.xml2json(SubReport, {compact: true});
-
-var SubReport_db = fs.readFileSync('xml/db_subReportTest.xml', 'utf-8');
-var dataTable3 = convert.xml2json(SubReport_db, {compact : true});
 
 
 /* GET home page. */
@@ -27,9 +21,7 @@ router.get('/', function (req, res) {
         layout: false,
         data: json,
         dataTable: dataTable,
-        paramTable: paramTable,
-        subReport: dataTable2,
-        dataTable2: dataTable3
+        paramTable: paramTable
     });
 });
 

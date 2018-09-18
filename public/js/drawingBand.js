@@ -10,6 +10,7 @@ var SubReport_Report_Count = 1;
 var SubReport_Report_Size;
 var isMaximumRowCount = false;
 var isMinimumRowCount = false;
+var isBandGroupHeader = false;
 
 /***********************************************************
  * 기능 : 최소 그룹 데이터 길이
@@ -176,17 +177,17 @@ function drawBand(bands, dataBand, layerName, reportHeight, parentBand) {
             var div_id = 'band' + (bandNum++);
 
             // if (band.attributes["xsi:type"] !== "BandSubReport") {
-                $('#' + layerName).append("<div id='" + div_id + "' class='Band " + band.attributes["xsi:type"] + "'>" + band.name + "</div>");
-                // $("#"+div_id).css('pointer-events', 'none');
-            if(SubReport_Report_YN){    //서브리포트가 있을 경우
-                if(band.attributes["xsi:type"] === "BandData"){
+            $('#' + layerName).append("<div id='" + div_id + "' class='Band " + band.attributes["xsi:type"] + "'>" + band.name + "</div>");
+            // $("#"+div_id).css('pointer-events', 'none');
+            if (SubReport_Report_YN) {    //서브리포트가 있을 경우
+                if (band.attributes["xsi:type"] === "BandData") {
                     // console.log("BandData", band);//데이터 밴드 아래에 해당 데이터를 붙여넣는다.
                 }
-                if(band.joinString){ //디테일 Where절이 있을 경우 기존 데이터 라벨 밑에 붙여야함.
+                if (band.joinString) { //디테일 Where절이 있을 경우 기존 데이터 라벨 밑에 붙여야함.
                     judgementControlList(band, div_id, numofData); // 라벨을 그려줌
                 }
             }
-            if(band.attributes["xsi:type"] === "BandSubReport"){  // 서브리포트가 있으면 서브리포트를 카운트하고 해당 페이지 다음 페이지부터 서브리포트에 들어갈 리포트로 판단.
+            if (band.attributes["xsi:type"] === "BandSubReport") {  // 서브리포트가 있으면 서브리포트를 카운트하고 해당 페이지 다음 페이지부터 서브리포트에 들어갈 리포트로 판단.
                 SubReport_Report_YN = true;
                 SubReport_Report_Count++;
                 SubReport_Report_Size = band.rectangle.height;
@@ -441,11 +442,12 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
                     if (numofData > groupRemainData) { // 마지막 페이지
                         curDatarow += groupFieldArray[groupFieldNum].length - 1;
                         curDatarowInDataBand += groupFieldArray[groupFieldNum].length - 1;
+                        // groupFieldNum++;
                         remainData = false;
-                        groupDataRow = 1;
+                        // groupDataRow = 1;
                     } else { //마지막 페이지가 아닌 경우
                         remainData = true;
-                        if(numofData > groupDataRow) {
+                        if (numofData > groupDataRow) {
                             groupDataRow += (numofData - groupDataRow);
                         } else {
                             groupDataRow += numofData - 1;
@@ -475,6 +477,8 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
 
                     if (numofData >= groupRemainData) { // 마지막 페이지
                         groupFieldNum++;
+                        groupDataRow = 1;
+                        isBandGroupHeader = false;
                     }
                 }
             }
@@ -496,7 +500,7 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
              * 만든 사람 : 구영준...
              *
              **************************************************************************************/
-            if(dt != undefined){
+            if (dt != undefined) {
                 if (curDatarowInDataBand < dt.length) {
                     if (band.forceNewPage === 'true') { //페이지 넘기기
 
@@ -522,7 +526,7 @@ function inVisible(div_id, band) {
         $('#' + div_id).css({
             'width': band.rectangle.width,
             'height': 0,
-            'display' : 'none'
+            'display': 'none'
         });
 
     }
@@ -543,7 +547,7 @@ function setWidthHeightInBand(div_id, band) {
 /***********************************************************
  기능 : 밴드들의 childHeaderBand를 그린다.
  만든이 : 안예솔
- * *********************************************************/
+ ***********************************************************/
 function drawChildHeaderBand(childBands, dataBand, layerName, reportHeight) {
     var childHeaderBandArray = new Array();
 
@@ -551,7 +555,10 @@ function drawChildHeaderBand(childBands, dataBand, layerName, reportHeight) {
         switch (childBand.attributes["xsi:type"]) {
             case 'BandGroupHeader' :
                 if (!remainData) {
-                    childHeaderBandArray.push(childBand);
+                    if(!isBandGroupHeader) {
+                        childHeaderBandArray.push(childBand);
+                    }
+                    isBandGroupHeader = true;
                 } else {
                     if (dataBand.fixPriorGroupHeader === 'true') { //그룹 헤더 고정
                         childHeaderBandArray.push(childBand);

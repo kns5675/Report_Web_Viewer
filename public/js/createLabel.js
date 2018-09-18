@@ -2137,8 +2137,8 @@ function label_text_Setting(labelNbandInfo) {
 
     if (labelNbandInfo.label_type === "DataLabel") {
         if (groupFieldArray !== undefined) {
-            // pId.append(groupFieldArray[groupFieldNum][0]);
-            // labelNbandInfo.data.text = pId.text();
+            pId.append(groupFieldArray[groupFieldNum][0]);
+            labelNbandInfo.data.text = pId.text();
         }
     }
 
