@@ -404,8 +404,11 @@ function drawBand(bands, dataBand, layerName, reportHeight, parentBand) {
 function afterjudgementControlListAction(band, div_id, layerName, reportHeight, dataBand, dt) {
     switch (band.attributes["xsi:type"]) {
         case 'BandData' :
+
+            break;
+        case 'BandGroupFooter' :
             if (groupFieldArray.length > 0 && band.childHeaderBands !== null) {
-                 if (isDynamicTable == true && dt != undefined) {
+                if (isDynamicTable == true && dt != undefined) {
                     var dataCount = groupFieldArray[groupFieldNum].length;
                     var groupRemainData = (dataCount - groupDataRow);
 
@@ -433,9 +436,6 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
                     }
                 }
             }
-            break;
-
-        case 'BandGroupFooter' :
             /**************************************************************************************
              * 그룹 풋터 일 경우
              *
