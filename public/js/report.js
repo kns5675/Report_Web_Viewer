@@ -58,14 +58,26 @@ function makeReportTemplate(data, subReport) {
             initializeVariable();
         });
     });
-
-
-    // if (subReport_yes) {
+    // 서브리포트 밴드가 있을 경우 사이즈를 확인해서 너무 큰 경우 마지막 페이지에 추가됨.
+    // if(subReport_yes){
     //     var SubreportTemplate = new ReportTemplate(subReport);
     //
     //     SubreportTemplate.reportList.forEach(function (value, i) {
+    //         ++reportNum;
+    //         var report = reportTemplate.reportList[i];
+    //         var bands = report.layers.designLayer.bands;
+    //         var dataBands = [];
+    //         bands.forEach(function (band) {
+    //             if (band.attributes['xsi:type'] == 'BandData') {
+    //                 dataBands.push(band);
+    //             }
+    //         });
+    //
     //         var report = SubreportTemplate.reportList[i];
-    //         makeReport(report);
+    //         dataBands.forEach(function(dataBand, index){
+    //             makeReport(report, dataBand);
+    //             initializeVariable();
+    //         });
     //     });
     // }
 
