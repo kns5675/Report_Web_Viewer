@@ -44,13 +44,13 @@ function makeReportTemplate(data, subReport) {
             }
         });
 
-        subReport_click = report.layers.designLayer.bands;
-        subReport_click.forEach(function (value, j) {
-            if (subReport_click[j].attributes["xsi:type"] === "BandSubReport") {
-                subReport_yes = subReport_click[j];
-                console.log("subReport_click[j] : ",subReport_click[j]);
-            }
-        });
+        // subReport_click = report.layers.designLayer.bands;
+        // subReport_click.forEach(function (value, j) {
+        //     if (subReport_click[j].attributes["xsi:type"] === "BandSubReport") {
+        //         subReport_yes = subReport_click[j];
+        //         console.log("subReport_click[j] : ",subReport_click[j]);
+        //     }
+        // });
         dataBands.forEach(function(dataBand, index){
             makeReport(report, dataBand);
             initializeVariable();
@@ -58,14 +58,14 @@ function makeReportTemplate(data, subReport) {
     });
 
 
-    if (subReport_yes) {
-        var SubreportTemplate = new ReportTemplate(subReport);
-
-        SubreportTemplate.reportList.forEach(function (value, i) {
-            var report = SubreportTemplate.reportList[i];
-            makeReport(report);
-        });
-    }
+    // if (subReport_yes) {
+    //     var SubreportTemplate = new ReportTemplate(subReport);
+    //
+    //     SubreportTemplate.reportList.forEach(function (value, i) {
+    //         var report = SubreportTemplate.reportList[i];
+    //         makeReport(report);
+    //     });
+    // }
 
 }
 
@@ -96,9 +96,12 @@ function makeReport(report, dataBand) {
                     isDynamicTable = true;
                 }
             }
+            isDynamicTable = false;
         } else {
             if (controlList._attributes['xsi:type'] == 'ControlDynamicTable') {
                 isDynamicTable = true;
+            }else{
+                isDynamicTable = false;
             }
         }
     });
