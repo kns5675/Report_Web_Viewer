@@ -296,7 +296,7 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData, band) {
                     break;
                 case "DynamicTableValueLabel" :
                     drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table);
-                    break;
+                 break;
             }
         });
         tableId.css({
@@ -1195,6 +1195,10 @@ function drawingSystemLabel(data, divId, band_name) {
  수정 : SummaryLabel의 크기 조정, 위치 이동, 내용 수정 추가.
  Date : 2018-08-27
  From hagdung-i
+
+ 수정 : DataTableName 추가
+ Date : 2018-09-18
+ From Mr.Koo
  ******************************************************************/
 function drawingSummaryLabel(data, divId, band_name) {
     var labelNbandInfo = {
@@ -1205,7 +1209,8 @@ function drawingSummaryLabel(data, divId, band_name) {
         labelId: $('#' + data.dataType + summaryLabelNum++),
         label_scope: "NormalLabel_scope",
         labelNum: summaryLabelNum,
-        label_type: data.dataType
+        label_type: data.dataType,
+        dataTableName : data.dataTableName
     }
     labelPropertyApply(labelNbandInfo);
 }
@@ -1225,6 +1230,10 @@ function drawingSummaryLabel(data, divId, band_name) {
  수정 : DataLabel의 크기 조정, 위치 이동이 lock 속성이 있을 경우 수정 불가한 로직 추가.
  Date : 2018-08-28
  From hagdung-i
+
+ 수정 : DataTableName 추가
+ Date : 2018-09-18
+ From Mr.Koo
  ******************************************************************/
 function drawingDataLabel(data, divId, band_name) {
     var labelNbandInfo = {
@@ -1235,7 +1244,8 @@ function drawingDataLabel(data, divId, band_name) {
         labelId: $('#' + data.dataType + dataLabelNum++),
         label_scope: "NormalLabel_scope",
         labelNum: dataLabelNum,
-        label_type: data.dataType
+        label_type: data.dataType,
+        dataTableName : data.dataTableName
     }
     labelPropertyApply(labelNbandInfo);
 }
@@ -1979,7 +1989,7 @@ function label_text_Setting(labelNbandInfo) {
 
     // 요약라벨
     if (labelNbandInfo.label_type === "SummaryLabel") {
-        var dt = Object.values(dataTable.DataSetName)[0];
+        var dt = dataTable.DataSetName[labelNbandInfo.dataTableName];
         var key_arr = Object.keys(dt[0]);
 
         var key = null;
@@ -1995,8 +2005,8 @@ function label_text_Setting(labelNbandInfo) {
                 var summary_label_sum = 0;
 
                 if (groupFieldArray.length !== 0) { // 그룹 기준 필드가 있을 때
-                    for (var i = 0; i < groupFieldArray[groupFieldNum - 1].length - 1; i++) {
-                        summary_label_sum += Number(groupFieldArray[groupFieldNum - 1][i + 1][key]._text);
+                    for (var i = 0; i < groupFieldArray[groupFieldNum].length - 1; i++) {
+                        summary_label_sum += Number(groupFieldArray[groupFieldNum][i + 1][key]._text);
                     }
                 } else {
                     for (var i = 0; i < dt.length; i++) {
@@ -2015,10 +2025,10 @@ function label_text_Setting(labelNbandInfo) {
                 var summary_label_avg = 0;
 
                 if (groupFieldArray.length !== 0) { // 그룹 기준 필드가 있을 때
-                    for (var i = 0; i < groupFieldArray[groupFieldNum - 1].length - 1; i++) {
-                        summary_label_sum += Number(groupFieldArray[groupFieldNum - 1][i + 1][key]._text);
+                    for (var i = 0; i < groupFieldArray[groupFieldNum].length - 1; i++) {
+                        summary_label_sum += Number(groupFieldArray[groupFieldNum][i + 1][key]._text);
                     }
-                    summary_label_avg = summary_label_sum / (groupFieldArray[groupFieldNum - 1].length - 1);
+                    summary_label_avg = summary_label_sum / (groupFieldArray[groupFieldNum].length - 1);
                 } else {
                     for (var i = 0; i < dt.length; i++) {
                         summary_label_sum += Number(dt[i][key]._text);
@@ -2034,8 +2044,8 @@ function label_text_Setting(labelNbandInfo) {
             case 'Max' :    // 최대값
                 var temp_arr = [];
                 if (groupFieldArray.length !== 0) { // 그룹 기준 필드가 있을 때
-                    for (var i = 0; i < groupFieldArray[groupFieldNum - 1].length - 1; i++) {
-                        temp_arr.push(Number(groupFieldArray[groupFieldNum - 1][i + 1][key]._text));
+                    for (var i = 0; i < groupFieldArray[groupFieldNum].length - 1; i++) {
+                        temp_arr.push(Number(groupFieldArray[groupFieldNum][i + 1][key]._text));
                     }
                     var summary_label_max = temp_arr.reduce(function (previous, current) {
                         return previous > current ? previous : current;
@@ -2057,8 +2067,8 @@ function label_text_Setting(labelNbandInfo) {
             case 'Min' :    // 최소값
                 var temp_arr = [];
                 if (groupFieldArray.length !== 0) { // 그룹 기준 필드가 있을 때
-                    for (var i = 0; i < groupFieldArray[groupFieldNum - 1].length - 1; i++) {
-                        temp_arr.push(Number(groupFieldArray[groupFieldNum - 1][i + 1][key]._text));
+                    for (var i = 0; i < groupFieldArray[groupFieldNum].length - 1; i++) {
+                        temp_arr.push(Number(groupFieldArray[groupFieldNum][i + 1][key]._text));
                     }
                     var summary_label_min = temp_arr.reduce(function (previous, current) {
                         return previous > current ? current : previous;
@@ -2080,7 +2090,7 @@ function label_text_Setting(labelNbandInfo) {
             case 'Cnt' :    // 개수
                 var summary_label_cnt = 0;
                 if (groupFieldArray.length !== 0) { // 그룹 기준 필드가 있을 때
-                    summary_label_cnt = groupFieldArray[groupFieldNum - 1].length - 1;
+                    summary_label_cnt = groupFieldArray[groupFieldNum].length - 1;
                 } else {
                     summary_label_cnt = dt.length;
                 }
@@ -2136,9 +2146,11 @@ function label_text_Setting(labelNbandInfo) {
     }
 
     if (labelNbandInfo.label_type === "DataLabel") {
-        if (groupFieldArray !== undefined) {
-            // pId.append(groupFieldArray[groupFieldNum][0]);
-            // labelNbandInfo.data.text = pId.text();
+        if(dt != undefined){
+            if (groupFieldArray !== undefined) {
+                pId.append(groupFieldArray[groupFieldNum][0]);
+                labelNbandInfo.data.text = pId.text();
+            }
         }
     }
 
