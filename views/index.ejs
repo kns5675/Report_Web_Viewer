@@ -46,11 +46,12 @@
             $("#loadingModal").load("/include/loading.ejs");
             $('#modalTableChoice').load("/include/modalTableChoice.ejs");
             makeReportTemplate(data);
-            drawPageNumberInSystemLabel();
             band_dbclick_event(data);
             image_setting();
             $('.BandPageFooter').css('position', 'absolute');
             // temp_to_reportTemplate();
+
+            drawPageNumberInSystemLabel();
         });
     </script>
     <style>
