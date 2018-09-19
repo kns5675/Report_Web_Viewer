@@ -158,6 +158,28 @@ function drawBand(bands, dataBand, layerName, reportHeight, parentBand) {
                         return false;
                     }
                     break;
+                case 'BandData' :
+                    // 180910 YeSol 추가
+                    var controlLists = [];
+                    // var bands = report.layers.designLayer.bands;
+
+                    controlLists.push(band.controlList.anyType); // dataBand의 controlList배열
+
+                    isDynamicTable = false;
+                    controlLists.forEach(function (controlList) {
+                        if (controlList.length !== undefined) {
+                            for (var i = 0; i < controlList.length; i++) {
+                                if (controlList[i]._attributes['xsi:type'] == 'ControlDynamicTable') {
+                                    isDynamicTable = true;
+                                }
+                            }
+                        } else {
+                            if (controlList._attributes['xsi:type'] == 'ControlDynamicTable') {
+                                isDynamicTable = true;
+                            }
+                        }
+                    });
+                    break;
                 case 'BandSummary' :
                     if (dt != undefined) {
                         if (band.isBottom == 'false') { // isBottom이 false면 맨 마지막 페이지에만 나옴
@@ -178,12 +200,12 @@ function drawBand(bands, dataBand, layerName, reportHeight, parentBand) {
             }
             var div_id = 'band' + (bandNum++);
 
+
             // if (band.attributes["xsi:type"] !== "BandSubReport") {
             $('#' + layerName).append("<div id='" + div_id + "' class='Band " + band.attributes["xsi:type"] + "'>" + band.name + "</div>");
             // $("#"+div_id).css('pointer-events', 'none');
             if (SubReport_Report_YN) {    //서브리포트가 있을 경우
                 if (band.attributes["xsi:type"] === "BandData") {
-                    // console.log("BandData", band);//데이터 밴드 아래에 해당 데이터를 붙여넣는다.
                 }
                 if (band.joinString) { //디테일 Where절이 있을 경우 기존 데이터 라벨 밑에 붙여야함.
                     judgementControlList(band, div_id, numofData); // 라벨을 그려줌
@@ -458,8 +480,12 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
                 }
             } else { //그룹 필드가 아닐 경우
                 if (isDynamicTable == true && dt != undefined) {
+                    if(isRegion){
+                        curDatarowInRegion += numofData;
+                    } else{
+                        curDatarowInDataBand += numofData;
+                    }
                     curDatarow += numofData;
-                    curDatarowInDataBand += numofData;
 
                     if (band.controlList.anyType.MinimumRowCount !== undefined) {
                         var minimumRowCount = Number(band.controlList.anyType.MinimumRowCount._text);
@@ -469,7 +495,6 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
                     }
                 }
             }
-
             break;
         case 'BandGroupFooter' :
             if (groupFieldArray.length > 0) /*&& band.childHeaderBands !== null)*/ {
@@ -557,7 +582,7 @@ function drawChildHeaderBand(childBands, dataBand, layerName, reportHeight) {
         switch (childBand.attributes["xsi:type"]) {
             case 'BandGroupHeader' :
                 if (!remainData) {
-                    if(!isBandGroupHeader) {
+                    if (!isBandGroupHeader) {
                         childHeaderBandArray.push(childBand);
                     }
                     isBandGroupHeader = true;

@@ -3,9 +3,11 @@ var reportNum = 0;
 var reportPageCnt = 0;
 var curDatarow = 0;
 var curDatarowInDataBand = 0;
+var curDatarowInRegion = 0;
 var groupFieldArray = [];
 var remainFooterBand = [];
 var isDynamicTable = false;
+var isRegion = false;
 var tableLabelList = [];
 var completeDataBand = []; // 0918 예솔 추가 : 출력이 끝난 데이터 밴드의 id를 담는 배열
 
@@ -52,8 +54,24 @@ function makeReportTemplate(data, subReport) {
         //         console.log("subReport_click[j] : ",subReport_click[j]);
         //     }
         // });
+        //ToDo 하나의 페이지에 여러개의 데이터 밴드 가능 수정 필요
         dataBands.forEach(function(dataBand, index){
-            makeReport(report, dataBand);
+            var controlLists = dataBand.controlList;
+            var arrRegion = [];
+
+            if (controlLists.length !== undefined) {
+                controlLists.forEach(function(controlList) {
+                    if(controlList.anyType._attributes["xsi:type"] == "ControlRegion"){
+                        arrRegion.push(controlList.anyType);
+                    }
+                });
+            }else{
+                if(controlLists.anyType._attributes["xsi:type"] == "ControlRegion"){
+                    arrRegion.push(controlLists.anyType);
+                }
+
+            }
+            makeReport(report, dataBand, arrRegion);
             completeDataBand.push(dataBand.id);
             initializeVariable();
         });
@@ -87,39 +105,11 @@ function makeReportTemplate(data, subReport) {
  기능 : make report in function makeReportTemplate
  author : powerku
  ******************************************************************/
-function makeReport(report, dataBand) {
+function makeReport(report, dataBand, arrRegion) {
     reportPageCnt++;
-
     if (pageNum === '1') {
 
     }
-    // 180910 YeSol 추가
-    var controlLists = [];
-    var bands = report.layers.designLayer.bands;
-
-    bands.forEach(function (band) {
-        if (band.attributes['xsi:type'] == 'BandData') {
-            controlLists.push(band.controlList.anyType); // dataBand의 controlList배열
-        }
-    });
-
-    controlLists.forEach(function (controlList) {
-        if (controlList.length !== undefined) {
-            for (var i = 0; i < controlList.length; i++) {
-                if (controlList[i]._attributes['xsi:type'] == 'ControlDynamicTable') {
-                    isDynamicTable = true;
-                }
-            }
-            isDynamicTable = false;
-        } else {
-            if (controlList._attributes['xsi:type'] == 'ControlDynamicTable') {
-                isDynamicTable = true;
-            }else{
-                isDynamicTable = false;
-            }
-        }
-    });
-
     setPage(report);
     setReport(report, dataBand);
 
@@ -130,7 +120,16 @@ function makeReport(report, dataBand) {
     if (dataTable.DataSetName[dataBand.dataTableName] != undefined) {
         if (curDatarowInDataBand < dataTable.DataSetName[dataBand.dataTableName].length && isDynamicTable == true) {
             reportPageCnt++;
-            makeReport(report, dataBand);
+            if(arrRegion[0] != undefined){
+                if(curDatarowInRegion < dataTable.DataSetName[arrRegion[0].Layers.anyType.Bands.anyType.DataTableName._text].length && isDynamicTable == true){
+                    makeReport(report, dataBand, arrRegion);
+                } else {
+                    reportPageCnt = 1;
+                    completeDataBand.push(arrRegion[0].Id._text);
+                }
+            } else {
+                makeReport(report, dataBand, arrRegion);
+            }
         } else {
             reportPageCnt = 1;
         }
