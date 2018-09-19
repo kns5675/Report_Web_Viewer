@@ -7,6 +7,7 @@ var count = 0;
 var imagedivid;
 var set_buttonid;
 var imagezIndex = 401;
+
 /******************************************************************
  기능 : 첫 페이지 버튼 기능 함수.
  만든이 : hagdung-i
@@ -158,7 +159,6 @@ function readURL(input) {
     tag_Making(scope).then(function (resolve) {
         image_setting();
     });
-    console.log("input : ", input.files[0]);
     /******************************************************************
      기능 : 실제 url 가져오는 기능.
      만든이 : hagdung-i

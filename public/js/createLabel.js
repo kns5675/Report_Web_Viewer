@@ -272,7 +272,7 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData, band) {
                     break;
                 case "DynamicTableValueLabel" :
                     drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table);
-                 break;
+                    break;
             }
         });
         tableId.css({

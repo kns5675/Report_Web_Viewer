@@ -195,7 +195,7 @@ function BandGroupHeader(band){
 function BandGroupFooter(band){
     Band.apply(this, arguments);
     this.subBand = band.SubBand._text; // 서브 밴드
-    this.forceNextReport = band.ForceNextReport._text; // 리포트 넘기기
+    this.forceNextReport = band.ForceNextReport._text === 'true' ? true : false; // 리포트 넘기기
     this.forceNewPage = band.ForceNewPage._text; // 페이지 넘기기
     this.repeatNumber = band.RepeatNumber._text; // 반복 횟수
     this.invisible = band.Invisible._text; // 감추기

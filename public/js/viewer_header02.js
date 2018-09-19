@@ -298,3 +298,10 @@ function tableChoice() {
         modalLayer.fadeOut("slow"); // 창 닫기
     });
 }
+
+function report_choice(){
+
+    var modalLayer = $('#reportChoice');
+
+
+}

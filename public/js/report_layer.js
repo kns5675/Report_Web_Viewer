@@ -76,7 +76,7 @@ function Report(data){
     // true로 하게 되면 데이터 유무와 관계없이 해당 리포트는 인쇄 미리보기에서 제외함
     this.isIgnore = data.IsIgnore._text; // 인쇄 무시하기
     this.forceNewPage = data.ForceNewPage._text; // 페이지 넘기기
-    this.forceNextReport = data.ForceNextReport._text; // 리포트 넘기기
+    this.forceNextReport = data.ForceNextReport._text === 'true' ? true : false // 리포트 넘기기
     this.multyFormCount = data.MultyFormCount._text; // 다단 전표 수
     this.annexPaper = data.AnnexPaper._text; // 별지(서브리포트)
     this.noPrintIfNoData = data.NoPrintIfNoData._text; // 데이터 테이블에 따른 인쇄 유무
