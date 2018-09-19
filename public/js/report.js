@@ -608,7 +608,8 @@ function setPage(report, width, height) {
     // $("#reportTemplate").css('pointer-events', 'none');//학준추가
     // $("#pageForCopyRatio"+pageNum).css('pointer-events', 'none');//학준추가
     // $("#page"+pageNum).css('pointer-events', 'none');//학준추가
-
+    $('#pageForCopyRatio' + pageNum).addClass('report' + reportNum); // 형준추가
+    
     setPageDirection(report);
     setPageForCopyRatioDirection(report);//추가 - 하지연
 
@@ -695,7 +696,7 @@ function temp_to_reportTemplate(){
     }
     $('#temp_reportTemplate').remove();
     reportTemplate_div.html(str);
-
+    reNumbering();
 }
 
 /***********************************************************************
@@ -742,4 +743,19 @@ function check_forceNextReport(report){
        }
     });
     return report.forceNextReport + bandGroupFooterIsTrue > 0 ? true : false;
+}
+
+/***********************************************************************
+ 기능 : 리포트 넘기기가 됐을시 temp_reportTemplate에서 생성되어 뒤섞인
+        pageforcopyratio와 page를 다시 새로 넘버링해줌
+ 만든이 : 전형준
+ ***********************************************************************/
+function reNumbering(){
+    var pageforcopyratio_div_arr = $('.pageforcopyratio');
+    var page_div_arr = $('.page');
+
+    for(var i=0; i<pageforcopyratio_div_arr.length; i++){
+        pageforcopyratio_div_arr.eq(i).attr('id', 'pageforcopyratio'+(i+1));
+        page_div_arr.eq(i).attr('id', 'page'+(i+1));
+    }
 }
