@@ -55,18 +55,19 @@ function makeReportTemplate(data, subReport) {
         //     }
         // });
         //ToDo 하나의 페이지에 여러개의 데이터 밴드 가능 수정 필요
-        dataBands.forEach(function(dataBand, index){
-            var controlLists = dataBand.controlList;
+        dataBands.forEach(function(dataBand){
+            var controlLists = dataBand.controlList.anyType;
             var arrRegion = [];
 
             if (controlLists.length !== undefined) {
                 controlLists.forEach(function(controlList) {
-                    if(controlList.anyType._attributes["xsi:type"] == "ControlRegion"){
+                    if(controlList._attributes["xsi:type"] == "ControlRegion"){
                         arrRegion.push(controlList.anyType);
                     }
                 });
             }else{
-                if(controlLists.anyType._attributes["xsi:type"] == "ControlRegion"){
+                console.log(controlLists);
+                if(controlLists._attributes["xsi:type"] == "ControlRegion"){
                     arrRegion.push(controlLists.anyType);
                 }
 
@@ -175,47 +176,59 @@ function getNumOfPage(report) {
     }
 }
 
-/***********************************************************
- 기능 : 그룹 헤더/풋터 일 경우 데이터 밴드 길이 계산
- 1. 그룹 헤더/풋터 일 경우 그룹 데이터의 길이 만큼의 데이터 길이
- 2. th 길이 + td길이 * 데이터 개수 + 테이블 라벨의 두께의 합
+/********************************************************************************************
+ 기능 :  데이터 밴드 길이 계산
+ 1. 데이터밴드가 데이터에 따라 동적으로 늘어나는 길이를 계산
+ 2. 데이터 밴드 길이 + 라벨 두께 + TableValueLabel 길이 + 한 페이지에 들어가는 데이터 갯수
  만든이 : 구영준
- * *********************************************************/
-function getBandHeightWithGroupField(band, numOfData) {
-    var labels = band.controlList.anyType.Labels.TableLabel;
-    var tableSpacing = 0;
+ ********************************************************************************************/
+function getBandHeightOfDataBand(band, numOfData) {
+
+    var controlLists = band.controlList.anyType;
+    var bandHeight = Number(band.rectangle.height);
+    var labels = [];
+    var valueHeight = 0;
     var titleBorderTopThickness = 0;
     var titleBorderBottomThickness = 0;
     var valueBorderBottomThickness = 0;
-    var titleHeight = Number(labels[0].Rectangle.Height._text);
-    var valueHeight = Number(labels[labels.length - 1].Rectangle.Height._text);
     var allLabelBorderThickness;
 
-    if (band.controlList.anyType.Rectangle.Y !== undefined) {
-        tableSpacing = Number(band.controlList.anyType.Rectangle.Y._text);
-    }
-
-    labels.forEach(function (label) {
-        if (label._attributes["xsi:type"] == "DynamicTableTitleLabel") {
-            var labelBottom = Number(label.BorderThickness.Bottom._text);
-            var labelTop = Number(label.BorderThickness.Top._text);
-
-            if (titleBorderBottomThickness < Number(label.BorderThickness.Bottom._text))
-                titleBorderBottomThickness = labelBottom;
-
-            if (titleBorderTopThickness < Number(label.BorderThickness.Top._text))
-                titleBorderTopThickness = labelTop;
-
-        } else {
-            var labelBottom = Number(label.BorderThickness.Bottom._text)
-            if (valueBorderBottomThickness < Number(label.BorderThickness.Bottom._text))
-                valueBorderBottomThickness = labelBottom;
+    if(controlLists.length > 1){
+        controlLists.forEach(function(controlList){
+           if(controlList._attributes["xsi:type"] == "ControlDynamicTable"){
+               labels.push(controlList);
+           }
+        });
+    }else{
+        if(controlLists._attributes["xsi:type"] == "ControlDynamicTable") {
+            labels.push(controlLists);
         }
+    }
+    labels.forEach(function(label){
+        var tableLabels = label.Labels.TableLabel;
+        valueHeight += Number(tableLabels[tableLabels.length - 1].Rectangle.Height._text);
+        tableLabels.forEach(function (tableLabel){
+            if (label._attributes["xsi:type"] == "DynamicTableTitleLabel") {
+                var labelBottom = Number(tableLabel.BorderThickness.Bottom._text);
+                var labelTop = Number(tableLabel.BorderThickness.Top._text);
+
+                if (titleBorderBottomThickness < Number(tableLabel.BorderThickness.Bottom._text))
+                    titleBorderBottomThickness = labelBottom;
+
+                if (titleBorderTopThickness < Number(tableLabel.BorderThickness.Top._text))
+                    titleBorderTopThickness = labelTop;
+            } else {
+                var labelBottom = Number(tableLabel.BorderThickness.Bottom._text)
+                if (valueBorderBottomThickness < Number(tableLabel.BorderThickness.Bottom._text))
+                    valueBorderBottomThickness = labelBottom;
+            }
+        });
     });
 
-    allLabelBorderThickness = titleBorderBottomThickness * numOfData + titleBorderBottomThickness + titleBorderTopThickness;
+    allLabelBorderThickness = titleBorderBottomThickness * (numOfData-1) + titleBorderBottomThickness + titleBorderTopThickness;
 
-    return tableSpacing + titleHeight + valueHeight * numOfData + allLabelBorderThickness;
+    return bandHeight + (valueHeight * (numOfData-1)) + allLabelBorderThickness;
+
 }
 
 /***********************************************************
@@ -276,6 +289,8 @@ function getNumOfDataInOnePage(tableLabel, divId) {
  만든이 : 구영준
  * *********************************************************/
 function getNumOfDataInOnePageNonObject(band, divId) {
+
+    var dt = dataTable.DataSetName[band.dataTableName];
     var bandDataHeight = 0;
     if (typeof divId == 'string') {
         bandDataHeight = $('#' + divId).height();
@@ -303,7 +318,13 @@ function getNumOfDataInOnePageNonObject(band, divId) {
     var firstLine = Number(tableLabel[0].Rectangle.Height._text);
     var dataLine = Number(tableLabel[tableLabel.length - 1].Rectangle.Height._text);
 
-    return Math.floor((bandDataHeight - firstLine - tableSpacing) / dataLine);
+    var numofData =  Math.floor((bandDataHeight - firstLine - tableSpacing) / dataLine);
+
+    if(numofData > dt.length){
+        return dt.length;
+    }else{
+        return numofData;
+    }
 }
 
 /****************************************************************

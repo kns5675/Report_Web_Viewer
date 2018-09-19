@@ -267,23 +267,24 @@ function drawBand(bands, dataBand, layerName, reportHeight, parentBand) {
                             if (dataBand.controlList.anyType.MinimumRowCount !== undefined) {
                                 var minimumCnt = Number(dataBand.controlList.anyType.MinimumRowCount._text);
                                 if (minimumCnt != 1 && (numofData - groupDataRow) < minimumCnt) { // 최소행 개수 적용
-                                    dataBandHeight = getBandHeightWithGroupField(dataBand, minimumCnt);
+                                    dataBandHeight = getBandHeightOfDataBand(dataBand, minimumCnt);
                                     isMinimumRowCount = true;
                                 } else {
                                     if (remainData) {
-                                        dataBandHeight = getBandHeightWithGroupField(dataBand, numofData - groupDataRow);
+                                        dataBandHeight = getBandHeightOfDataBand(dataBand, numofData - groupDataRow);
                                     } else {
-                                        dataBandHeight = getBandHeightWithGroupField(dataBand, numofData - 1);
+                                        dataBandHeight = getBandHeightOfDataBand(dataBand, numofData - 1);
                                     }
                                 }
                             } else {
                                 if (remainData) {
-                                    dataBandHeight = getBandHeightWithGroupField(dataBand, numofData - groupDataRow);
+                                    dataBandHeight = getBandHeightOfDataBand(dataBand, numofData - groupDataRow);
                                 } else {
-                                    dataBandHeight = getBandHeightWithGroupField(dataBand, numofData - 1);
+                                    dataBandHeight = getBandHeightOfDataBand(dataBand, numofData - 1);
                                 }
                             }
-
+                            console.log(numofData);
+                            console.log(dataBandHeight);
                             $('#' + div_id).css({
                                 'width': dataBand.rectangle.width,
                                 'height': dataBandHeight,
@@ -303,7 +304,6 @@ function drawBand(bands, dataBand, layerName, reportHeight, parentBand) {
                             if (dataBand.childFooterBands !== null) { // 자식 풋터 밴드에서 재호출
                                 dataBandFooterHeight = getChildBandHeight(dataBand);
                             }
-
                             $('#' + div_id).css({
                                 'width': dataBand.rectangle.width,
                                 'height': dataBandHeight - dataBandFooterHeight,
@@ -352,6 +352,13 @@ function drawBand(bands, dataBand, layerName, reportHeight, parentBand) {
                                     }
                                 }
                             }
+                            dataBandHeight = getBandHeightOfDataBand(dataBand, numofData);
+
+                            $('#' + div_id).css({
+                                'width': dataBand.rectangle.width,
+                                'height': dataBandHeight,
+                            });
+
                         } else { // 동적 테이블이 없을 때
                             setWidthHeightInBand(div_id, band);
                         }
