@@ -1,3 +1,4 @@
+var reportTemplate = null;
 var pageNum = 1;
 var reportNum = 0;
 var reportPageCnt = 0;
@@ -9,6 +10,7 @@ var remainFooterBand = [];
 var isDynamicTable = false;
 var isRegion = false;
 var tableLabelList = [];
+var report_wrap_arr_html = null;
 var completeDataBand = []; // 0918 예솔 추가 : 출력이 끝난 데이터 밴드의 id를 담는 배열
 
 /******************************************************************
@@ -32,12 +34,14 @@ function initializeVariable() {
  만든이 : 김학준
  ******************************************************************/
 function makeReportTemplate(data, subReport) {
-    var reportTemplate = new ReportTemplate(data);
+    reportTemplate = new ReportTemplate(data);
     var subReport_click;
     var subReport_yes = false;
 
     reportTemplate.reportList.forEach(function (value, i) {
         ++reportNum;
+        $('#temp_reportTemplate').append("<div id='report_wrap" + reportNum + "' class='report_wrap'></div>");
+
         var report = reportTemplate.reportList[i];
         var bands = report.layers.designLayer.bands;
         var dataBands = [];
@@ -596,7 +600,7 @@ function setForCopyRatioDirection(report) {  //추가 - 하지연
 function setPage(report, width, height) {
     var paperType = report.paperType;
 
-    $('#reportTemplate').append('<div id="pageForCopyRatio' + pageNum + '" class="pageforcopyratio paperType-' + paperType + '"></div>');//수정 - 하지연
+    $('#report_wrap' + reportNum).append('<div id="pageForCopyRatio' + pageNum + '" class="pageforcopyratio paperType-' + paperType + '"></div>');//수정 - 하지연
     $('#pageForCopyRatio' + pageNum).append('<div id="page' + pageNum + '" class="page paperType-' + paperType + '"></div>');//수정 - 하지연
     // $(('#forcopyratio' + pageNum)).append('<div id="report' + pageNum + '"class = report' +'></div>');
     // $(document.html).css('pointer-events', 'none');//학준추가
@@ -658,4 +662,84 @@ function setPageDirection(report) {
 
     page.css('width', '100%');
     page.css('height', '100%');
+}
+
+/***********************************************************************
+ 기능 : temp_reportTemplate div에 담은 엘리먼트들을 reportTemplate div에 넣어줌
+        ( 리포트 넘기기, 리포트 선택 기능 구현을 위함 )
+ 만든이 : 전형준
+ ***********************************************************************/
+function temp_to_reportTemplate(){
+    var reportTemplate_div = $('#reportTemplate');
+    var wrap_arr_clone = report_backup(); // report_wrap_arr_html 변수 세팅
+    var str = "";
+
+    for(var i=0; i<wrap_arr_clone.length; i++){
+        if(wrap_arr_clone[i].length > 0 && check_forceNextReport(reportTemplate.reportList[i])){ // 리포트 넘기기일 때
+            str += wrap_arr_clone[i][0];
+            wrap_arr_clone[i].shift();
+        } else{
+            for(var j=0; j<wrap_arr_clone[i].length; j++){
+                str += wrap_arr_clone[i][j];
+            }
+            wrap_arr_clone[i] = [];
+        }
+
+        var remain_wrap_count = 0;
+        for(var j=0; j<wrap_arr_clone.length; j++){
+            remain_wrap_count += wrap_arr_clone[j].length;
+        }
+        if((i === wrap_arr_clone.length-1) && (remain_wrap_count > 0)){
+            i = -1;
+        }
+    }
+    $('#temp_reportTemplate').remove();
+    reportTemplate_div.html(str);
+
+}
+
+/***********************************************************************
+ 기능 : 리포트 넘기기와 리포트 선택 기능 구현 중,
+        리포트 백업 기능 구현(html 따로 저장)
+ 만든이 : 전형준
+ ***********************************************************************/
+function report_backup(){
+    var temp_arr= [];
+    var report_wrap_arr = $('.report_wrap');
+    var pageInReport;
+
+    for(var i=0; i<report_wrap_arr.length; i++){
+        temp_arr[i] = [];
+        pageInReport = report_wrap_arr.eq(i).find('.pageforcopyratio');
+        for(var j=0; j<pageInReport.length; j++){
+            temp_arr[i].push(
+                $('<div>').append(pageInReport.eq(j).clone()).html()
+            );
+        }
+    }
+
+    report_wrap_arr_html = temp_arr;
+    return report_wrap_arr_html;
+}
+
+/***********************************************************************
+ 기능 : '리포트 넘기기' 속성이 true 인지 확인
+        >> 속성이 리포트에만 있는 것이 아니라,
+           '그룹풋터밴드'에도 존재하며 그 속성이 true라면
+           리포트 넘기기의 기능이 정상작동 하므로 둘 모두 체크해줌
+ 만든이 : 전형준
+ ***********************************************************************/
+function check_forceNextReport(report){
+    var bandGroupFooterIsTrue = false;
+    report.layers.designLayer.bands.forEach(function(band){
+       if(band instanceof BandData && band.childFooterBands !== null){
+            band.childFooterBands.forEach(function(childBand){
+                if(childBand instanceof BandGroupFooter && childBand.forceNextReport === true)
+                    bandGroupFooterIsTrue = true;
+                else
+                    bandGroupFooterIsTrue = false;
+            });
+       }
+    });
+    return report.forceNextReport + bandGroupFooterIsTrue > 0 ? true : false;
 }

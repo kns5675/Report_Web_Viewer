@@ -49,27 +49,26 @@
             drawPageNumberInSystemLabel();
             band_dbclick_event(data);
             image_setting();
-
+            $('.BandPageFooter').css('position', 'absolute');
+            // temp_to_reportTemplate();
         });
     </script>
     <style>
         *{
             letter-spacing: -1.181pt;
         }
-        canvas{
-            max-width: 100%;
-            max-height: 100%;
-        }
     </style>
 </head>
 <body>
-<div id="header" style="/*pointer-events: auto;*/"></div>
+<div id="header" style="padding-top:30px;/*pointer-events: auto;*/"></div>
 <div id="myModal" class="modal" style="/*pointer-events: auto;*/"></div><!-- 고급인쇄 모달창 -->
 <div id="loadingModal" class="modal" style="/*pointer-events: auto;*/"></div><!-- pdf,html등 내보내기에 필요한 로딩창 -->
 
 <div id="modalTableChoice" class="modal" style="/*pointer-events: auto;*/"></div>
+<div id="report_choice" class="modal"></div>
 
 <div id="reportTemplate"></div>
+<div id="temp_reportTemplate"></div>
 <div id="Image_Modal" style="/*pointer-events: auto;*/"><!--이미지 추가 모달창-->
     <div id="modalLayer" class="modalLayer">
         <div class="modalContent modal-content">
