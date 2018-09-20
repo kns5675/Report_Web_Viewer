@@ -913,135 +913,156 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
         'left': controlFixedTable.rectangle.x + 'px',
         'top': controlFixedTable.rectangle.y + 'px'
     });
+         var dt = Object.values(dataTable.DataSetName)[0];
 
-    if(groupFieldArray.length < 1) {
-        numOfData = getNumOfDataInOnePage(fixTableLabelList, divId); //한 페이지에 들어갈 데이터 개수라는데 잘 모르게씀.
-    }else{
-        var dt = Object.values(dataTable.DataSetName)[0];
+         var fixTableWidth = controlFixedTable.rectangle.width;//고정테이블 width 값
+         var fixTableHeight = controlFixedTable.rectangle.height;
+         var fixTableLabelListLength = Number(fixTableLabelList.length);//고정테이블 라벨리스트 라벨 갯수
 
-        var fixTableWidth = Number((fixTableId.css('width')).replace(/[^0-9]/g,""));//고정테이블 width 값
-        var fixTableLabelListLength = Number(fixTableLabelList.length);//고정테이블 라벨리스트 라벨 갯수
+         function setRowCount() {
+             var totalLabelWidth = 0;//라벨너비
+             var labelCount = 0;//라벨개수
+             var rowCount = 0;//row개수
 
-        function setRowCount(){
-            var labelWidth =0;//라벨너비
-            var labelCount = 0;//라벨개수
-            var rowCount = 0;//row개수
+             if (data.Labels) {//라벨 리스트 라벨 width, height값 가져오기
+                 for (var i = 0; i < fixTableLabelListLength; i++) {
+                     var thisLabelWidth = Number(fixTableLabelList[i].rectangle.width);
+                     var thisLabelHeight = Number(fixTableLabelList[i].rectangle.height);
+                     labelCount++;
 
-            if(data.Labels) {//라벨 리스트 라벨 width, height값 가져오기
-                for (var i = 0; i < fixTableLabelListLength; i++) {
-                    var thisWidth = Number(fixTableLabelList[i].rectangle.width);
-                    var thisHeight = Number(fixTableLabelList[i].rectangle.height);
-                    labelCount++;
+                     totalLabelWidth += thisLabelWidth;
+                     if (labelCount == fixTableLabelListLength) {
 
-                    labelWidth += thisWidth;
-                    if (fixTableWidth == (labelWidth)) {
-                        rowCount++;
+                         rowCount++;
 
-                        for (var rC = 1; rC <= rowCount; rC++) {
-                            fixTableId.append('<tr id = "fixedTableRow' + fixTableRowCount + '"></tr>');
-                            var ThisfixedTableRow = $("#fixedTableRow" + fixTableRowCount);
+                         for (var rC = 1; rC <= rowCount; rC++) {
+                             fixTableId.append('<tr id = "fixedTableRow' + fixTableRowCount + '"></tr>');
+                             var ThisfixedTableRow = $("#fixedTableRow" + fixTableRowCount);
 
-                            ThisfixedTableRow.css({
-                                'border-spacing': 0,
-                                'margin': 0,
-                                'padding': 0,
-                                'top': 0,
-                                'width': '100%',
-                                'height': thisHeight,
-                            });
-                            var tdId = 'FixedTableLabel_';
-                            for (var rC2 = 1; rC2 <= labelCount; rC2++) {
-                                var fromData = fixTableLabelList[rC2 - 1];
-                                switch (fromData.dataType) {
-                                    case  "DataLabel" :
-                                        if (groupFieldArray !== undefined) {
-                                            ThisfixedTableRow.append('<td class="DataLabel" id = "' + tdId + rC2 +'_'+fixedTableNum+'"><p id="'+tdId + rC2 +'_p_'+fixedTableNum+'">' + groupFieldArray[groupFieldNum][0] + '</p></td>');
-                                            //ThisfixedTableRow.append(groupFieldArray[groupFieldNum][0]);
-                                            settingAttribute(fromData, tdId, rC2, thisWidth, thisHeight);
-                                        }
-                                        break;
-                                    case  "NormalLabel" :
-                                            ThisfixedTableRow.append('<td class="NormalLabel" id = "' + tdId + rC2 +'_'+fixedTableNum+'"><p id="'+tdId + rC2 +'_p_'+fixedTableNum+'">' + fromData.text + '</p></td>');
-                                            //ThisfixedTableRow.append(groupFieldArray[groupFieldNum][0]);
-                                            settingAttribute(fromData, tdId, rC2, thisWidth, thisHeight);
-                                        break;
-                                }
-                            }
-                        }
-                        fixTableRowCount++;
-                    }
-                }
-            }
-        }
+                             ThisfixedTableRow.css({
+                                 'border-spacing': 0,
+                                 'margin': 0,
+                                 'padding': 0,
+                                 'top': 0,
+                                 'width': fixTableWidth,
+                                 'height': thisLabelHeight,
+                                 'overflow':'visible'
+                             });
+                             var tdId = 'FixedTableLabel_';
+                             for (var rC2 = 1; rC2 <= labelCount; rC2++) {
+                                 var fromData = fixTableLabelList[rC2 - 1];
+                                 switch (fromData.dataType) {
+                                     case  "DataLabel" :
+                                         if (groupFieldArray !== undefined) {
+                                             ThisfixedTableRow.append('<td class="DataLabel" id = "' + tdId + rC2 + '_' + fixedTableNum + '"><p id="' + tdId + rC2 + '_p_' + fixedTableNum + '">' + groupFieldArray[groupFieldNum][0] + '</p></td>');
+                                             settingAttribute(fromData, tdId, rC2, thisLabelWidth, thisLabelHeight);
+                                         }
+                                         break;
+                                     case  "NormalLabel" :
+                                         ThisfixedTableRow.append('<td class="NormalLabel" id = "' + tdId + rC2 + '_' + fixedTableNum + '"><p id="' + tdId + rC2 + '_p_' + fixedTableNum + '">' + fromData.text + '</p></td>');
+                                         settingAttribute(fromData, tdId, rC2, thisLabelWidth, thisLabelHeight);
+                                         break;
+                                 }
+                             }
+                         }
+                         fixTableRowCount++;
+                     }
+                 }
+             }
+         }
 
-        setRowCount();
+         setRowCount();
 
 
-        if (Array.isArray(fixTableLabelList)) {
-            fixTableLabelList.forEach(function (label) {
-                switch (label._attributes) {
-                    case "FixedTableLabel" :
-                        var temp = Object.keys(dt[0]);
-                        var titleTrId = $('#fixedTableLabel' + fixedTableLabelNum);
-                        var header_Name_Number = 1;
-                        temp.forEach(function (titleName) {
+         if (Array.isArray(fixTableLabelList)) {
+             fixTableId.css({
+                 'position': 'absolute',
+                 'z-index': 999,
+                 'width': Math.round(fixTableWidth),//어쩔수없었음 round안하면 테이블 width 소수점 자동으로 없애버림..
+                 'height': fixTableHeight,
+                 'left': controlFixedTable.rectangle.x + 'px',
+                 'top': controlFixedTable.rectangle.y + 'px',
+                 'border': 'collapse',
+             });
 
-                        });
-                        if (groupFieldArray == undefined || groupFieldArray.length == 0) {
-                            drawingFixedTableValueLabelWithoutGroupFieldArray(label, dt, fixTableId, numOfData, controlFixedTable);
-                        } else {
-                            drawingFixedTableValueLabelWithGroupFieldArray(label, dt, fixTableId, numOfData);
-                        }
-                        break;
-
-                    default :
-                        break;
-                }
-            });
-            fixTableId.css({
-                'position':'absolute',
-                'text-align': 'center',
-                'z-index' :999,
-                'width': controlFixedTable.rectangle.width,
-                'height': controlFixedTable.rectangle.height,
-                'left': controlFixedTable.rectangle.x + 'px',
-                'top': controlFixedTable.rectangle.y + 'px',
-                'border':'collapse'
-            });
-
-            tableNum++;
-            fixedTableNum++;
-            thNum++;
-            fixedTableLabelNum++;
-        }
-    }
+             tableNum++;
+             fixedTableNum++;
+             thNum++;
+             fixedTableLabelNum++;
+         }
 }
 /******************************************************************
  기능 : 고정테이블 안의 FixedTableLabel의 속성을 구현하고, 적용시킨다.
  만든이 : 하지연
  ******************************************************************/
-function settingAttribute(fromData, tdId, rC2, thisWidth, thisHeight){
-    var ThisFixedTableData = $("#" + tdId + rC2+'_'+fixedTableNum);
-    var ThisFixedTableDataP = $("#"+tdId+rC2+'_p_'+fixedTableNum);
+function settingAttribute(fromData, tdId, rC2, thisLabelWidth, thisLabelHeight){
+    var ThisFixedTableData = $("#" + tdId + rC2 + '_' + fixedTableNum);
+    var ThisFixedTableDataP = $("#"+ tdId + rC2 + '_p_' + fixedTableNum);
+    ThisFixedTableData.css({
+        'width': fromData.rectangle.width,
+        'height': fromData.rectangle.height,
+        'overflow':'visible'
+    });
+    ThisFixedTableDataP.css({
+        'top': 0,
+        'left': 0,
+    });
 
-    if(fromData.visible =='false'){
-        ThisFixedTableData.css('display','none');
-    }if(fromData.visible =='false'){//visible 속성
+    if(fromData.visible =='false'){//visible 속성
         ThisFixedTableData.css('display', 'none');
     }
+    var VTextAlignment = fromData.verticalTextAlignment;
+    function settingVerticalTextAlignment(VTextAlignment){
+        if(VTextAlignment!== undefined){
+            var tagPHeight = (ThisFixedTableDataP.css('height')).split('px')[0];
+            var tagPmarginTop=(fromData.rectangle.height - tagPHeight)/2;
+            switch (VTextAlignment) {
+                case "Center":{
+                    ThisFixedTableDataP.css({
+                        '-webkit-margin-before':tagPmarginTop,
+                        'top':tagPmarginTop,
+                    });
+                }break;
+                case "Top":{
+                    ThisFixedTableDataP.css({
+                        '-webkit-margin-before':0,
+                        'top':0,
+                    });
+                }break;
+                case "Bottom":{
+                    console.log("bottom");
+                    ThisFixedTableDataP.css({
+                        '-webkit-margin-before':tagPmarginTop*2,
+                        'top':tagPmarginTop*2,
+                    });
+                }break;
+            }
+        }
+    }
+    settingVerticalTextAlignment(VTextAlignment);
+    var HTextAlignment = fromData.horizontalTextAlignment;
+    function settingHorizontalTextAlignment(HTextAlignment){
+        if(HTextAlignment!== undefined){
+            ThisFixedTableData.css("text-align",HTextAlignment);
+        }
+
+    }
+    settingHorizontalTextAlignment(HTextAlignment);
+
     if (fromData.noBorder == 'true') {//border 없을때
         ThisFixedTableData.css('border', 'none');
 
         ThisFixedTableData.css({
-            'width': thisWidth,
-            'height': thisHeight,
+            'width': fromData.rectangle.width,
+            'height': fromData.rectangle.height,
             'float': 'left',
             'background-color': fromData.backGroundColor,
             'font-size': fromData.fontSize,
             'font-family': fromData.fontFamily,
             'font-weight': fromData.fontStyle,
             'padding': 0,
-            'white-space': 'nowrap'
+            'white-space': 'nowrap',
+            'color':fromData.textColor
         });
     } else {//border 있을때
         if (fromData.borderThickness !== undefined) {
@@ -1062,8 +1083,8 @@ function settingAttribute(fromData, tdId, rC2, thisWidth, thisHeight){
             var borderBWidth = Number((ThisFixedTableData.css('border-bottom-width')).replace(/[^0-9]/g, ""));
 
             ThisFixedTableData.css({
-                'width': thisWidth - borderLWidth - borderRWidth,
-                'height': thisHeight - borderTWidth - borderBWidth,
+                'width': fromData.rectangle.width - fromData.borderThickness.left - fromData.borderThickness.right,
+                'height': fromData.rectangle.height - fromData.borderThickness.top - fromData.borderThickness.bottom,
                 'float': 'left',
                 'background-color': fromData.backGroundColor,
                 'font-size': fromData.fontSize,
@@ -1071,7 +1092,9 @@ function settingAttribute(fromData, tdId, rC2, thisWidth, thisHeight){
                 'font-weight': fromData.fontStyle,
                 'padding':0,
                 'border-collapse': 'collapse',
-                'white-space': 'nowrap'
+                'white-space': 'nowrap',
+                'color':fromData.textColor,
+                'overflow':'visible'
             });
         }
     }
@@ -1084,7 +1107,7 @@ function settingAttribute(fromData, tdId, rC2, thisWidth, thisHeight){
  FixedTableValueLabel(고정 테이블 밸류 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 하지연
  **************************************************************************************/
-function drawingFixedTableValueLabelWithoutGroupFieldArray(label, dt, tableId, numOfData, table){
+/*function drawingFixedTableValueLabelWithoutGroupFieldArray(label, dt, tableId, numOfData, table){
     var rowLength = curDatarow + numOfData; //한 페이지에 마지막으로 출력해야할 row
     for (var j = curDatarow; j < rowLength; j++) {
         var data = dt[j];
@@ -1137,14 +1160,14 @@ function drawingFixedTableValueLabelWithoutGroupFieldArray(label, dt, tableId, n
             }
         }
     }
-}
+}*/
 
 /**************************************************************************************
  기능 : GroupFieldArray가 있을 경우
  FixedTableValueLabel(고정 테이블 밸류 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 하지연
  **************************************************************************************/
-function drawingFixedTableValueLabelWithGroupFieldArray(label, dt, tableId, numOfData){
+/*function drawingFixedTableValueLabelWithGroupFieldArray(label, dt, tableId, numOfData){
     for (var j = groupDataRow; j < numOfData; j++) {
         var data = groupFieldArray[groupFieldNum];
         var rowNum = curDatarow + j;
@@ -1202,32 +1225,32 @@ function drawingFixedTableValueLabelWithGroupFieldArray(label, dt, tableId, numO
             }
         }
     }
-}
+}*/
 
 /******************************************************************
  기능 : FixedTableValueLabel(고정 테이블 밸류 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 하지연
  *******************************************************************/
-function drawingFixedTableValueLabel(label, dt, tableId, numOfData, table) {
+/*function drawingFixedTableValueLabel(label, dt, tableId, numOfData, table) {
     if (groupFieldArray == undefined || groupFieldArray.length == 0) {
         drawingFixedTableValueLabelWithoutGroupFieldArray(label, dt, tableId, numOfData, table);
     } else {
         drawingFixedTableValueLabelWithGroupFieldArray(label, dt, tableId, numOfData);
     }
-}
+}*/
 
 /******************************************************************
  기능 : FixedTableLabel(고정 테이블 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 하지연
  *******************************************************************/
-function drawingFixedTableLabel(label, dt, tableId, numOfData, table) {
+/*function drawingFixedTableLabel(label, dt, tableId, numOfData, table) {
     var temp = Object.keys(dt[0]);
     var titleTrId = $('#fixedTableLabel' + fixedTableLabelNum);
     var header_Name_Number = 1;
     temp.forEach(function (titleName) {
     });
     drawingFixedTableValueLabel(label, dt, tableId, numOfData, table);
-        /*if (label.text == titleName) {
+        /!*if (label.text == titleName) {
             console.log("1 + if들옴.");
             titleArray.push(titleName);
             titleTrId.append('<th id = "FixedTableLabel' + header_Name_Number + '_View_Page_Number' + thNum + '"></th>');
@@ -1269,10 +1292,10 @@ function drawingFixedTableLabel(label, dt, tableId, numOfData, table) {
             thId.addClass(label._attributes);
             table_column_controller(thId, titleTrId);
         }
-        header_Name_Number++;*/
+        header_Name_Number++;*!/
         //console.log("할일 끝?");
 
-}
+}*/
 
 /******************************************************************
  기능 : SystemLabel(시스템 라벨)을 화면에 그려주는 함수를 만든다.
