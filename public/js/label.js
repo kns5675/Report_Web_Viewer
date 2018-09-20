@@ -304,7 +304,7 @@ function ControlRegion(data){
     Report.apply(this, arguments);
     this.layer = new Layer(data.Layers.anyType);
     this.regionRepeatFile = data.RegionRepeatFill._text;
-    this.zOrder = data.ZOrder._text;
+    this.zOrder = data.ZOrder === undefined ? undefined : data.ZOrder._text;
     this.printDirection = data.PrintDirection._text;
     this.offsetBetweentResion = {
         width : data.OffsetBetweenResion.Width._text,
