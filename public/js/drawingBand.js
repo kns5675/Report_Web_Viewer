@@ -303,6 +303,9 @@ function drawBand(bands, dataBand, layerName, reportHeight, parentBand) {
                             getFooterHeightInRegion(bands, dataBand);
                         } else { // 리전이 아닐 때
                             getFooterHeight(bands, dataBand);
+                            if(dataBand.childHeaderBands[0].startBindScript){
+                                drd_javascript(undefined, div_id, dataBand.childHeaderBands[0].startBindScript);
+                            }
                         }
                     }
                     if (isRegion) { // 리전일 때

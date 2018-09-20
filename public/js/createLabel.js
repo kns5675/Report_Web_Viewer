@@ -340,8 +340,8 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData, band) {
         tableId.css({
             'border': '1px solid red',
             'border-collapse': 'collapse',
-            'text-align': 'center',
-            'table-layout': 'fixed'
+            'text-align': 'center'
+            // 'table-layout': 'fixed'
         });
 
         tableNum++;
@@ -663,7 +663,7 @@ function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, nu
                         'background-color': label.backGroundColor,
                         'white-space': 'nowrap'
                     });
-                    drd_javascript(label, tdId, label.startBindScript);
+                    drd_javascript(label, tdId, label.startBindScript, key, data[temp]);
                 }
             }
         }
@@ -1027,7 +1027,6 @@ function drawingDynamicTableValueLabelWithOutDataTable(label, tableId) {
     tdId.append(label.text);
     tdId.addClass('Label DynamicTableHeader');
     tdId.addClass(label._attributes);
-
     drd_javascript(label, tdId, label.startBindScript);
 
 }
@@ -1101,7 +1100,6 @@ function drawingDynamicTableTitleLabel(label, header_Name_Number) {
     thId.addClass('Label DynamicTableHeader');
     thId.addClass(label._attributes);
     table_column_controller(thId, titleTrId);
-
     drd_javascript(label, thId, label.startBindScript);
 }
 
@@ -1172,18 +1170,26 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                              var tdId = 'FixedTableLabel_';
                              for (var rC2 = 1; rC2 <= labelCount; rC2++) {
                                  var fromData = fixTableLabelList[rC2 - 1];
+                                 var tdIDMaking = tdId+rC2+ '_' + fixedTableNum;
                                  switch (fromData.dataType) {
                                      case  "DataLabel" :
                                          if (groupFieldArray !== undefined) {
                                              ThisfixedTableRow.append('<td class="DataLabel" id = "' + tdId + rC2 + '_' + fixedTableNum + '"><p id="' + tdId + rC2 + '_p_' + fixedTableNum + '">' + groupFieldArray[groupFieldNum][0] + '</p></td>');
                                              settingAttribute(fromData, tdId, rC2, thisLabelWidth, thisLabelHeight);
+                                             var tdId_javascript = $("#"+tdIDMaking);
+                                             console.log("groupFieldArray[groupFieldNum][0] : ",groupFieldArray[groupFieldNum][0]);
                                          }
                                          break;
                                      case  "NormalLabel" :
                                          ThisfixedTableRow.append('<td class="NormalLabel" id = "' + tdId + rC2 + '_' + fixedTableNum + '"><p id="' + tdId + rC2 + '_p_' + fixedTableNum + '">' + fromData.text + '</p></td>');
                                          settingAttribute(fromData, tdId, rC2, thisLabelWidth, thisLabelHeight);
+                                         var tdId_javascript = $("#"+tdIDMaking);
+                                         console.log("fromData.text  : ",fromData.text);
                                          break;
                                  }
+                                 // drd_javascript(label, tdId_javascript, label.startBindScript, rC2, data[temp]);
+                                 console.log("tdIDMaking : ",tdIDMaking);
+                                 console.log("tdId_javascript : ",tdId_javascript);
                              }
                          }
                          fixTableRowCount++;
@@ -2149,7 +2155,8 @@ function Lock_Check_Table(data, drag, resize, div) { //테이블 데이터, 드�
         drag.draggable({containment: "#" + div[0].id, zIndex: 999});
         var width;
         resize.resizable({
-            containment: "#" + div[0].id, autoHide: true,
+            containment: "#" + div[0].id,
+            autoHide: true,
             resize: function (event, ui) {   //테이블사이즈는 가로만 조정 가능하도록.
                 ui.size.height = ui.originalSize.height;
                 width = ui.size.width;
@@ -2187,6 +2194,10 @@ function format_check(data) {
 /******************************************************************
  기능 : 테이블 안의 데이터 포맷을 확인해서 소수점 자릿수 설정 값에 따라 해당 형태로 변경 로직 추가.
  Date : 2018-08-24
+ 만든이 : hagdung-i
+
+ 수정 : 사이즈 조정시 전체 페이지의 해당 테이블은 모두 수정되도록 수정.
+ Date : 2018-09-12
  만든이 : hagdung-i
  ******************************************************************/
 function table_format_check(data, Label_id, key, table) {
@@ -2232,7 +2243,8 @@ function table_column_controller(resize_area, Unalterable_area) {
     var width;
     if (Unalterable_area[0]) {
         resize_area.resizable({
-            containment: "#" + Unalterable_area[0].id, autoHide: true,
+            containment: "#" + Unalterable_area[0].id,
+            autoHide: true,
             resize: function (event, ui) {   //테이블사이즈는 가로만 조정 가능하도록.
                 ui.size.height = ui.originalSize.height;
                 width = ui.size.width;
@@ -2867,12 +2879,28 @@ function z_index_setting(band_name) {
 /*************************
  * DRD 자바스크립트 구현
  *************************/
-function drd_javascript(label, labelId, script) {
+function drd_javascript(label, labelId, script, key, data) {
+    console.log("label : ",label);
+    console.log("labelId : ",labelId);
+    console.log("script : ",script);
+    console.log("key : ",key);
+    console.log("data : ",data);
     if (labelId !== undefined && script !== undefined) {
-        script = str_replace(script, '<br/>', '\n');
-        script = str_replace(script, 'TextColor', 'color');
-        script = str_replace(script, 'Color.', '');
-        script = str_replace(script, 'This.', '$("#' + labelId + '").css(');
+        var making_script;
+        making_script = str_replace(script, '<br/>', '\n');
+        making_script = str_replace(making_script, 'TextColor', 'color');
+        making_script = str_replace(making_script, 'Color.', '');
+        making_script = str_replace(making_script, '"]', '"]._text');
+        making_script = str_replace(making_script, 'This.Text', '$("#' + labelId + '")[0].innerText');
+        making_script = str_replace(making_script, 'DataSource.GetDataRow()', "GetDataRow");
+
+        var var_Y = making_script.indexOf("var");
+        if(var_Y !== -1){
+            var variable = making_script.split("var")[1];
+             eval(variable);
+        }
+        DataSource(data);
+        eval(making_script);
     }
 }
 
@@ -2882,7 +2910,10 @@ function drd_javascript(label, labelId, script) {
 function str_replace(str, searchStr, replaceStr) {
     return str.split(searchStr).join(replaceStr);
 }
-
+function DataSource(data, variable_name, variable_value){
+    this.GetDataRow = data;
+    // this.variable_name = variable_value;
+};
 
 // var labelNbandInfo = {
 //     data : data,
