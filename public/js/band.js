@@ -153,7 +153,7 @@ function BandGroupHeader(band){
 
     var dt = dataTable.DataSetName[this.dataTableName];
 
-    if(dt != undefined){
+    if(dt != undefined && groupFieldName != undefined){
         dt.forEach(function (data) {
             var comparison = groupFieldArray.some(function (arr) {
                 if (arr[0] == data[groupFieldName]._text) {
@@ -176,7 +176,6 @@ function BandGroupHeader(band){
         if(data.GroupingFieldSort !== undefined && data.GroupingFieldSort._text == 'ASC') {
             // 기준 필드 정렬 순서가 오름차순일 때!
             groupFieldArray.sort();
-            // console.log(groupFieldArray);
         }
         if(data.GroupingFieldSort !== undefined && data.GroupingFieldSort._text == 'DESC') {
             // 기준 필드 정렬 순서가 내림차순일 때!
