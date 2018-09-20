@@ -675,9 +675,12 @@ function drawChildFooterBand(childBands, dataBand, layerName, reportHeight) {
                             childFooterBandArray.push(childBand);
                         }
                     } else { // 그룹 헤더가 없을 때는 인쇄물의 마지막 페이지에만 출력
-                        if (curDatarow > dt.length) { // 데이터 출력이 끝났을 때 나옴
-                            childFooterBandArray.push(childBand);
+                        if(dt){//지연추가 dt.length의 length를 못읽는 경우 있음.
+                            if (curDatarow > dt.length) { // 데이터 출력이 끝났을 때 나옴
+                                childFooterBandArray.push(childBand);
+                            }
                         }
+
                     }
                     break;
             }
