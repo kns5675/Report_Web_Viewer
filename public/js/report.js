@@ -7,6 +7,7 @@ var curDatarowInDataBand = 0;
 var curDatarowInRegion = 0;
 var groupFieldArray = [];
 var remainFooterBand = [];
+var remainFooterBandInRegion = [];
 var isDynamicTable = false;
 var isRegion = false;
 var tableLabelList = [];

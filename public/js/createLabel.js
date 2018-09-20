@@ -23,6 +23,7 @@ var pageNumberNum = 1;
 var pageNumTotalPageNum = 1;
 var totalPageNum = 1;
 var groupFieldNum = 0; // 그룹으로 묶었을 경우 BandGroupHeader에서 DataLabel을 사용했을 때 몇 번째 그룹이 출력중인지 알 수 있는 변수
+var groupFieldNumInRegion = 0;
 var tableNum = 1;
 var dynamicTableNum = 1;
 var fixedTableNum = 1; // 지연추가
@@ -41,6 +42,8 @@ var fixTableRowCount = 0;
 var row = 0;
 var verticalPNum = 0;
 var plusRowNum = 0;
+
+var groupFieldArrayInRegion = [];
 
 /******************************************************************
  기능 : ControlList의 유무를 판단하는 함수를 만든다.
@@ -95,7 +98,7 @@ function judgementLabel(data, divId, numOfData, band) {
         var fixTableLabels = data.Labels.TableLabel;
         var fixTableLabelList = [];
 
-        if(fixTableLabels){
+        if (fixTableLabels) {
             fixTableLabels.forEach(function (label, i) {
                 var fixtableLabel = new FixedTableLabel(label, i);
                 if (fixTableLabelList.length < fixTableLabels.length) { // 수정 : 하지연
@@ -103,7 +106,7 @@ function judgementLabel(data, divId, numOfData, band) {
                 }
             });
         }
-        drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, numOfData,fixTableList);//numOfData추가.
+        drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList);//numOfData추가.
     } else if (attr == "ControlLabel") {
         if (!(data.DataType === undefined)) {
             switch (data.DataType._text) {
@@ -168,9 +171,12 @@ function judgementLabel(data, divId, numOfData, band) {
     }
 }
 
+/******************************************************************
+ 기능 : 리전을 그려주는 함수를 만든다.
+ 만든이 : 안예솔
+ ******************************************************************/
 function drawingRegion(data, divId) {
     var div = $('#' + divId);
-    var controlLists = [];
 
     div.css('position', 'relative');
 
@@ -188,11 +194,11 @@ function drawingRegion(data, divId) {
         'border': '1px solid black',
         'z-index': 0
     });
+
     var regionName = 'region' + regionNum;
     var regionHeight = data.rectangle.height;
 
     var bands = data.layer.bands;
-    var dataBandIndex = 0;
 
     var dataBands = [];
     bands.forEach(function (band) {
@@ -201,9 +207,65 @@ function drawingRegion(data, divId) {
         }
     });
 
-
     dataBands.forEach(function (dataBand) {
         isRegion = true;
+        var dt;
+        var groupFieldNameInRegion;
+        groupFieldArrayInRegion = [];
+        var childHeaderBands = dataBand.childHeaderBands;
+        var sort;
+        var i = 0;
+        if (Array.isArray(childHeaderBands)) {
+            childHeaderBands.forEach(function (childHeaderBand) {
+                if (childHeaderBand.attributes["xsi:type"] == 'BandGroupHeader') {
+                    dt = dataTable.DataSetName[dataBand.dataTableName];
+                    groupFieldNameInRegion = childHeaderBand.groupFiledName;
+                    sort = childHeaderBand.groupingFieldSort;
+                }
+            });
+        } else {
+            if (childHeaderBands.attributes["xsi:type"] == 'BandGroupHeader') {
+                dt = dataTable.DataSetName[dataBand.dataTableName];
+                groupFieldNameInRegion = childHeaderBands.groupFiledName;
+                sort = childHeaderBands.groupingFieldSort;
+            }
+        }
+        if (dt != undefined && groupFieldNameInRegion != undefined) {
+            dt.forEach(function (data) {
+                // console.log(data[groupFieldNameInRegion]);
+                var comparison = groupFieldArrayInRegion.some(function (arr) {
+                    if (arr[0] == data[groupFieldNameInRegion]._text) {
+                        arr.push(data);
+                        return true; // 배열 중 같은 이름이 있으면 break;
+                    } else {
+                        return false; // continue;
+                    }
+                });
+                if (!comparison) {
+                    if (data[groupFieldNameInRegion]) { //학준 추가 groupFieldName이 없을 경우 제외.
+                        groupFieldArrayInRegion[i] = [];
+                        groupFieldArrayInRegion[i].push(data[groupFieldNameInRegion]._text);
+                        groupFieldArrayInRegion[i].push(data);
+                        i++;
+                    }
+                }
+            });
+
+            if (sort == 'ASC') {
+                // 기준 필드 정렬 순서가 오름차순일 때!
+                groupFieldArrayInRegion.sort();
+            }
+            if (sort == 'DESC') {
+                // 기준 필드 정렬 순서가 내림차순일 때!
+                groupFieldArrayInRegion.sort(descSorting);
+
+                function descSorting(a, b) {
+                    if (a > b) return -1;
+                    if (b > a) return 1;
+                    return 0;
+                }
+            }
+        }
         drawBand(bands, dataBand, regionName, regionHeight, undefined);
         isRegion = false;
     });
@@ -272,7 +334,7 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData, band) {
                     break;
                 case "DynamicTableValueLabel" :
                     drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table);
-                    break;
+                 break;
             }
         });
         tableId.css({
@@ -617,9 +679,9 @@ function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, nu
  From hagdung-i
  *******************************************************************/
 function drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table) {
-    if(dt == undefined) { //without DataTable in DataBand
+    if (dt == undefined) { //without DataTable in DataBand
         drawingDynamicTableValueLabelWithOutDataTable(label, tableId);
-    }else if(isRegion == true){
+    } else if (isRegion == true) {
         if (groupFieldArray == undefined || groupFieldArray.length == 0) {
             //리전 인 경우, 그룹 필드가 없는 경우
             drawingDynamicTableValueLabelWithoutGroupFieldArrayWithRegion(label, dt, tableId, numOfData, table);
@@ -627,7 +689,7 @@ function drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table) {
             //리전인 경우, 그룹필드가 있는 경우
             drawingDynamicTableValueLabelWithGroupFieldArrayWithRegion(label, dt, tableId, numOfData, table);
         }
-    }else{
+    } else {
         if (groupFieldArray == undefined || groupFieldArray.length == 0) {
             drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId, numOfData, table);
         } else {
@@ -636,11 +698,170 @@ function drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table) {
     }
 }
 
-function drawingDynamicTableValueLabelWithGroupFieldArrayWithRegion(){
+function drawingDynamicTableValueLabelWithGroupFieldArrayWithRegion(label, dt, tableId, numOfData, table) {
+    var minimumRow = false;
+    var data = groupFieldArrayInRegion[groupFieldNumInRegion];
+    if (table.minimumRowCount !== undefined && isMinimumRowCount == true) {
+        var minimumCnt = Number(table.minimumRowCount);
+        if (minimumCnt != 1 && (numOfData - groupDataRowInRegion) < minimumCnt) { // 최소행 개수 적용
+            numOfData = numOfData + minimumCnt - (numOfData - groupDataRowInRegion);
+            minimumRow = true;
+        }
+    }
+    var groupLabelNum = 1;
+    for (var j = groupDataRowInRegion; j < numOfData; j++) {
+        var temp = j;
 
+        var rowNum = curDatarow + j;
+
+        if (minimumRow && data[j] === undefined) {
+            temp = data.length - 1;
+            rowNum += 'min';
+        }
+
+        var $trId = '#dynamicValueLabel' + rowNum;
+        var valueTrId = $($trId);
+
+        if (valueTrId.length < 1) {
+            tableId.append('<tr id =   "dynamicValueLabel' + rowNum + '"></tr>');
+        }
+        // TODO 수정 해야할 부분이 있을 것 같음
+        if (label.dataType === 'ParameterLabel') {
+            paramTable.NewDataSet.Table1.forEach(function (paramData) {
+                if (label.parameterName == paramData.Key._text) {
+                    label.text = paramData.Value._text;
+                }
+            });
+            // var valueTrId = $('#dynamicValueLabel' + tempCurDataRow);
+            var tdId = 'tableValueLabelNum' + tableValueLabelNum++;
+            var key = label.parameterName;
+            if (!minimumRow) {
+                valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '">' + label.text + '</td>');
+            } else { // 최소행 개수
+                valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '"></td>');
+            }
+            valueTrId.css({
+                'width': label.rectangle.width,
+                'height': label.rectangle.height
+            });
+            var td = $('.' + key);
+            //// 추가 부분 18.08.28 YeSol
+            if (label.noBorder == 'true') {
+                td.css('border', 'none');
+            } else {
+                if (label.borderThickness !== undefined) {
+                    var leftBorder = borderDottedLine(label.borderDottedLines.leftDashStyle);
+                    var rightBorder = borderDottedLine(label.borderDottedLines.rightDashStyle);
+                    var bottomBorder = borderDottedLine(label.borderDottedLines.bottomDashStyle);
+                    var topBorder = borderDottedLine(label.borderDottedLines.topDashStyle);
+                    td.css({
+                        'border-left': label.borderThickness.left + 'px ' + leftBorder + ' ' + label.leftBorderColor,
+                        'border-right': label.borderThickness.right + 'px ' + rightBorder + ' ' + label.rightBorderColor,
+                        'border-bottom': label.borderThickness.bottom + 'px ' + bottomBorder + ' ' + label.bottomBorderColor,
+                        'border-top': label.borderThickness.top + 'px ' + topBorder + ' ' + label.topBorderColor
+                    });
+                } else {
+                    td.css('border', '1px solid black');
+                }
+            }
+            td.css({
+                'font-size': label.fontSize,
+                'font-family': label.fontFamily,
+                'font-weight': label.fontStyle,
+                'font-color': label.textColor,
+                'background-color': label.backGroundColor,
+                'white-space': 'nowrap'
+            });
+            drd_javascript(label, tdId, label.startBindScript);
+        } else {
+            for (var key in data[temp]) {
+                valueTrId = $($trId);
+                if (label.fieldName == key) {
+                    var key_data = data[temp][key]._text;
+                    var table_reform = table_format_check(data, valueTrId, key_data, label);
+
+                    var tdId = 'tableValueLabelNum' + tableValueLabelNum++;
+                    if (minimumRow && (j > data.length)) {
+                        valueTrId.append(
+                            '<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '"></td>'
+                        );
+                    } else {
+                        if (label.labelTextType == 'Number' && label.format != undefined) {
+                            valueTrId.append(
+                                '<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '">' + table_reform + '</td>'
+                            );
+                        } else {
+                            valueTrId.append(
+                                '<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '">' + table_reform + '</td>'
+                            );
+                        }
+                    }
+                    valueTrId.css({
+                        'width': label.rectangle.width,
+                        'height': label.rectangle.height,
+
+                    });
+                    if (label.dataType == 'GroupLabel' && j == numOfData - 1 && label.grouppingRule == 'Merge') { // 그룹 라벨
+                        var i = 0;
+                        var tableValueLabelNum2 = tableValueLabelNum - 1;
+
+                        for (i; i <= j - groupDataRow; i++) {
+                            var groupLabel = $('#tableValueLabelNum' + (tableValueLabelNum2 - i));
+                            var priorGroupLabel = $('#tableValueLabelNum' + (tableValueLabelNum2 - (i + 1)));
+
+                            if ((groupLabel.attr('class') == priorGroupLabel.attr('class')) && groupLabel.text() == priorGroupLabel.text()) {
+                                groupLabelNum++;
+                                groupLabel.remove();
+                                if (groupLabelNum == (j - groupDataRow + 1)) {
+                                    priorGroupLabel.attr('rowspan', groupLabelNum);
+                                }
+                            } else {
+                                if (groupLabelNum != 1) {
+                                    groupLabel.attr('rowspan', groupLabelNum);
+                                    groupLabelNum = 1;
+                                }
+                            }
+                        }
+                    }
+
+                    var td = $('.' + key);
+                    //// 추가 부분 18.08.28 YeSol
+                    if (label.noBorder == 'true') {
+                        td.css('border', 'none');
+                    } else {
+                        if (label.borderThickness !== undefined) {
+                            var leftBorder = borderDottedLine(label.borderDottedLines.leftDashStyle);
+                            var rightBorder = borderDottedLine(label.borderDottedLines.rightDashStyle);
+                            var bottomBorder = borderDottedLine(label.borderDottedLines.bottomDashStyle);
+                            var topBorder = borderDottedLine(label.borderDottedLines.topDashStyle);
+
+                            td.css({
+                                'border-left': label.borderThickness.left + 'px ' + leftBorder + ' ' + label.leftBorderColor,
+                                'border-right': label.borderThickness.right + 'px ' + rightBorder + ' ' + label.rightBorderColor,
+                                'border-bottom': label.borderThickness.bottom + 'px ' + bottomBorder + ' ' + label.bottomBorderColor,
+                                'border-top': label.borderThickness.top + 'px ' + topBorder + ' ' + label.topBorderColor
+                            });
+                        } else {
+                            td.css('border', '1px solid black');
+                        }
+                    }
+
+                    td.css({
+                        // 'border': '1px solid black',
+                        'font-size': label.fontSize,
+                        'font-family': label.fontFamily,
+                        'font-weight': label.fontStyle,
+                        'background-color': label.backGroundColor,
+                        'white-space': 'nowrap'
+                    });
+                    drd_javascript(label, tdId, label.startBindScript);
+                }
+            }
+        }
+    }
 }
 
-function drawingDynamicTableValueLabelWithoutGroupFieldArrayWithRegion(label, dt, tableId, numOfData, table){
+function drawingDynamicTableValueLabelWithoutGroupFieldArrayWithRegion(label, dt, tableId, numOfData, table) {
     var rowLength = curDatarowInRegion + numOfData; //한 페이지에 마지막으로 출력해야할 row
     // var thCnt = tableId.find('th').length;
     var tempCurDataRow = curDatarow;
@@ -789,7 +1010,7 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArrayWithRegion(label, dt
  기능 : 동적테이블이에 데이터 테이블이 없을 경우 데이터 바인딩 없이 ValueLabel을 그려줌
  만든이 : 구영준
  **************************************************************************************/
-function drawingDynamicTableValueLabelWithOutDataTable(label, tableId){
+function drawingDynamicTableValueLabelWithOutDataTable(label, tableId) {
     tableId.append('<tr id = "dynamicValueLabel' + dynamicValueLabelNum + '"></tr>');
     var valueTrId = $("#dynamicValueLabel" + dynamicValueLabelNum);
 
@@ -815,7 +1036,7 @@ function drawingDynamicTableValueLabelWithOutDataTable(label, tableId){
  기능 : 동적테이블이에 Css  세팅
  만든이 : 구영준
  **************************************************************************************/
-function setCssInTable(label, tdId){
+function setCssInTable(label, tdId) {
     //// 추가 부분 18.08.28 YeSol
     if (label.noBorder == 'true') {
         tdId.css('border', 'none');
@@ -888,17 +1109,17 @@ function drawingDynamicTableTitleLabel(label, header_Name_Number) {
  기능 : FixedTable(고정 테이블)을 화면에 그려주는 함수를 만든다.
  만든이 : 하지연
  ******************************************************************/
-function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, numOfData,fixTableList) {
+function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList) {
 
     var div = $('#' + divId);//divId = 밴드
     div.css('position', 'relative');
-    div.css('border','1px solid blue');
+    div.css('border', '1px solid blue');
 
     div.append('<div id = "Table' + tableNum + '"></div>');//무의미한 테이블 div
     var divIdTable = $('#Table' + tableNum);
     divIdTable.css({
-        'position':'absolute',
-        'top':0
+        'position': 'absolute',
+        'top': 0
     });
 
     var temp_table_class = controlFixedTable.id.substring(0, 4); // 임시로 table을 인식하기 위한 번호 - 전형준
@@ -908,141 +1129,162 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
     fixTableId.css({
         'width': controlFixedTable.rectangle.width,
         'height': controlFixedTable.rectangle.height,
-        'border-spacing':0,
-        'padding':0,
+        'border-spacing': 0,
+        'padding': 0,
         'left': controlFixedTable.rectangle.x + 'px',
         'top': controlFixedTable.rectangle.y + 'px'
     });
+         var dt = Object.values(dataTable.DataSetName)[0];
 
-    if(groupFieldArray.length < 1) {
-        numOfData = getNumOfDataInOnePage(fixTableLabelList, divId); //한 페이지에 들어갈 데이터 개수라는데 잘 모르게씀.
-    }else{
-        var dt = Object.values(dataTable.DataSetName)[0];
+         var fixTableWidth = controlFixedTable.rectangle.width;//고정테이블 width 값
+         var fixTableHeight = controlFixedTable.rectangle.height;
+         var fixTableLabelListLength = Number(fixTableLabelList.length);//고정테이블 라벨리스트 라벨 갯수
 
-        var fixTableWidth = Number((fixTableId.css('width')).replace(/[^0-9]/g,""));//고정테이블 width 값
-        var fixTableLabelListLength = Number(fixTableLabelList.length);//고정테이블 라벨리스트 라벨 갯수
+         function setRowCount() {
+             var totalLabelWidth = 0;//라벨너비
+             var labelCount = 0;//라벨개수
+             var rowCount = 0;//row개수
 
-        function setRowCount(){
-            var labelWidth =0;//라벨너비
-            var labelCount = 0;//라벨개수
-            var rowCount = 0;//row개수
+             if (data.Labels) {//라벨 리스트 라벨 width, height값 가져오기
+                 for (var i = 0; i < fixTableLabelListLength; i++) {
+                     var thisLabelWidth = Number(fixTableLabelList[i].rectangle.width);
+                     var thisLabelHeight = Number(fixTableLabelList[i].rectangle.height);
+                     labelCount++;
 
-            if(data.Labels) {//라벨 리스트 라벨 width, height값 가져오기
-                for (var i = 0; i < fixTableLabelListLength; i++) {
-                    var thisWidth = Number(fixTableLabelList[i].rectangle.width);
-                    var thisHeight = Number(fixTableLabelList[i].rectangle.height);
-                    labelCount++;
+                     totalLabelWidth += thisLabelWidth;
+                     if (labelCount == fixTableLabelListLength) {
 
-                    labelWidth += thisWidth;
-                    if (fixTableWidth == (labelWidth)) {
-                        rowCount++;
+                         rowCount++;
 
-                        for (var rC = 1; rC <= rowCount; rC++) {
-                            fixTableId.append('<tr id = "fixedTableRow' + fixTableRowCount + '"></tr>');
-                            var ThisfixedTableRow = $("#fixedTableRow" + fixTableRowCount);
+                         for (var rC = 1; rC <= rowCount; rC++) {
+                             fixTableId.append('<tr id = "fixedTableRow' + fixTableRowCount + '"></tr>');
+                             var ThisfixedTableRow = $("#fixedTableRow" + fixTableRowCount);
 
-                            ThisfixedTableRow.css({
-                                'border-spacing': 0,
-                                'margin': 0,
-                                'padding': 0,
-                                'top': 0,
-                                'width': '100%',
-                                'height': thisHeight,
-                            });
-                            var tdId = 'FixedTableLabel_';
-                            for (var rC2 = 1; rC2 <= labelCount; rC2++) {
-                                var fromData = fixTableLabelList[rC2 - 1];
-                                ' + fixedTableNum + '
-                                switch (fromData.dataType) {
-                                    case  "DataLabel" :
-                                        if (groupFieldArray !== undefined) {
-                                            ThisfixedTableRow.append('<td class="DataLabel" id = "' + tdId + rC2 +'_'+fixedTableNum+'">' + groupFieldArray[groupFieldNum][0] + '</td>');
-                                            //ThisfixedTableRow.append(groupFieldArray[groupFieldNum][0]);
-                                            settingAttribute(fromData, tdId, rC2, thisWidth, thisHeight);
-                                        }
-                                        break;
-                                    case  "NormalLabel" :
-                                        if (groupFieldArray !== undefined) {
-                                            ThisfixedTableRow.append('<td class="NormalLabel" id = "' + tdId + rC2 +'_'+fixedTableNum+'">' + fromData.text + '</td>');
-                                            //ThisfixedTableRow.append(groupFieldArray[groupFieldNum][0]);
-                                            settingAttribute(fromData, tdId, rC2, thisWidth, thisHeight);
-                                        }
-                                        break;
-                                }
-                            }
-                        }
-                        fixTableRowCount++;
-                    }
-                }
-            }
-        }
+                             ThisfixedTableRow.css({
+                                 'border-spacing': 0,
+                                 'margin': 0,
+                                 'padding': 0,
+                                 'top': 0,
+                                 'width': fixTableWidth,
+                                 'height': thisLabelHeight,
+                                 'overflow':'visible'
+                             });
+                             var tdId = 'FixedTableLabel_';
+                             for (var rC2 = 1; rC2 <= labelCount; rC2++) {
+                                 var fromData = fixTableLabelList[rC2 - 1];
+                                 switch (fromData.dataType) {
+                                     case  "DataLabel" :
+                                         if (groupFieldArray !== undefined) {
+                                             ThisfixedTableRow.append('<td class="DataLabel" id = "' + tdId + rC2 + '_' + fixedTableNum + '"><p id="' + tdId + rC2 + '_p_' + fixedTableNum + '">' + groupFieldArray[groupFieldNum][0] + '</p></td>');
+                                             settingAttribute(fromData, tdId, rC2, thisLabelWidth, thisLabelHeight);
+                                         }
+                                         break;
+                                     case  "NormalLabel" :
+                                         ThisfixedTableRow.append('<td class="NormalLabel" id = "' + tdId + rC2 + '_' + fixedTableNum + '"><p id="' + tdId + rC2 + '_p_' + fixedTableNum + '">' + fromData.text + '</p></td>');
+                                         settingAttribute(fromData, tdId, rC2, thisLabelWidth, thisLabelHeight);
+                                         break;
+                                 }
+                             }
+                         }
+                         fixTableRowCount++;
+                     }
+                 }
+             }
+         }
 
-        setRowCount();
+         setRowCount();
 
 
-        if (Array.isArray(fixTableLabelList)) {
-            fixTableLabelList.forEach(function (label) {
-                switch (label._attributes) {
-                    case "FixedTableLabel" :
-                        var temp = Object.keys(dt[0]);
-                        var titleTrId = $('#fixedTableLabel' + fixedTableLabelNum);
-                        var header_Name_Number = 1;
-                        temp.forEach(function (titleName) {
+         if (Array.isArray(fixTableLabelList)) {
+             fixTableId.css({
+                 'position': 'absolute',
+                 'z-index': 999,
+                 'width': Math.round(fixTableWidth),//어쩔수없었음 round안하면 테이블 width 소수점 자동으로 없애버림..
+                 'height': fixTableHeight,
+                 'left': controlFixedTable.rectangle.x + 'px',
+                 'top': controlFixedTable.rectangle.y + 'px',
+                 'border': 'collapse',
+             });
 
-                        });
-                        if (groupFieldArray == undefined || groupFieldArray.length == 0) {
-                            drawingFixedTableValueLabelWithoutGroupFieldArray(label, dt, fixTableId, numOfData, controlFixedTable);
-                        } else {
-                            drawingFixedTableValueLabelWithGroupFieldArray(label, dt, fixTableId, numOfData);
-                        }
-                        break;
-
-                    default :
-                        break;
-                }
-            });
-            fixTableId.css({
-                'position':'absolute',
-                'text-align': 'center',
-                'z-index' :999,
-                'width': controlFixedTable.rectangle.width,
-                'height': controlFixedTable.rectangle.height,
-                'left': controlFixedTable.rectangle.x + 'px',
-                'top': controlFixedTable.rectangle.y + 'px'
-            });
-
-            tableNum++;
-            fixedTableNum++;
-            thNum++;
-            fixedTableLabelNum++;
-        }
-    }
+             tableNum++;
+             fixedTableNum++;
+             thNum++;
+             fixedTableLabelNum++;
+         }
 }
+
 /******************************************************************
  기능 : 고정테이블 안의 FixedTableLabel의 속성을 구현하고, 적용시킨다.
  만든이 : 하지연
  ******************************************************************/
-function settingAttribute(fromData, tdId, rC2, thisWidth, thisHeight){
-    var ThisFixedTableData = $("#" + tdId + rC2+'_'+fixedTableNum);
+function settingAttribute(fromData, tdId, rC2, thisLabelWidth, thisLabelHeight){
+    var ThisFixedTableData = $("#" + tdId + rC2 + '_' + fixedTableNum);
+    var ThisFixedTableDataP = $("#"+ tdId + rC2 + '_p_' + fixedTableNum);
+    ThisFixedTableData.css({
+        'width': fromData.rectangle.width,
+        'height': fromData.rectangle.height,
+        'overflow':'visible'
+    });
+    ThisFixedTableDataP.css({
+        'top': 0,
+        'left': 0,
+    });
 
-    if(fromData.visible =='false'){
-        ThisFixedTableData.css('display','none');
-    }if(fromData.visible =='false'){//visible 속성
+    if(fromData.visible =='false'){//visible 속성
         ThisFixedTableData.css('display', 'none');
     }
+    var VTextAlignment = fromData.verticalTextAlignment;
+    function settingVerticalTextAlignment(VTextAlignment){
+        if(VTextAlignment!== undefined){
+            var tagPHeight = (ThisFixedTableDataP.css('height')).split('px')[0];
+            var tagPmarginTop=(fromData.rectangle.height - tagPHeight)/2;
+            switch (VTextAlignment) {
+                case "Center":{
+                    ThisFixedTableDataP.css({
+                        '-webkit-margin-before':tagPmarginTop,
+                        'top':tagPmarginTop,
+                    });
+                }break;
+                case "Top":{
+                    ThisFixedTableDataP.css({
+                        '-webkit-margin-before':0,
+                        'top':0,
+                    });
+                }break;
+                case "Bottom":{
+                    console.log("bottom");
+                    ThisFixedTableDataP.css({
+                        '-webkit-margin-before':tagPmarginTop*2,
+                        'top':tagPmarginTop*2,
+                    });
+                }break;
+            }
+        }
+    }
+    settingVerticalTextAlignment(VTextAlignment);
+    var HTextAlignment = fromData.horizontalTextAlignment;
+    function settingHorizontalTextAlignment(HTextAlignment){
+        if(HTextAlignment!== undefined){
+            ThisFixedTableData.css("text-align",HTextAlignment);
+        }
+
+    }
+    settingHorizontalTextAlignment(HTextAlignment);
+
     if (fromData.noBorder == 'true') {//border 없을때
         ThisFixedTableData.css('border', 'none');
 
         ThisFixedTableData.css({
-            'width': thisWidth,
-            'height': thisHeight,
+            'width': fromData.rectangle.width,
+            'height': fromData.rectangle.height,
             'float': 'left',
             'background-color': fromData.backGroundColor,
             'font-size': fromData.fontSize,
             'font-family': fromData.fontFamily,
             'font-weight': fromData.fontStyle,
             'padding': 0,
-            'white-space': 'nowrap'
+            'white-space': 'nowrap',
+            'color':fromData.textColor
         });
     } else {//border 있을때
         if (fromData.borderThickness !== undefined) {
@@ -1057,36 +1299,38 @@ function settingAttribute(fromData, tdId, rC2, thisWidth, thisHeight){
                 'border-bottom': fromData.borderThickness.bottom + 'px ' + bottomBorder + ' ' + fromData.bottomBorderColor,
                 'border-top': fromData.borderThickness.top + 'px ' + topBorder + ' ' + fromData.topBorderColor
             });
-            var borderWidth = Number((ThisFixedTableData.css('border-width')).replace(/[^0-9]/g, ""));
             var borderLWidth = Number((ThisFixedTableData.css('border-left-width')).replace(/[^0-9]/g, ""));
             var borderRWidth = Number((ThisFixedTableData.css('border-right-width')).replace(/[^0-9]/g, ""));
             var borderTWidth = Number((ThisFixedTableData.css('border-top-width')).replace(/[^0-9]/g, ""));
             var borderBWidth = Number((ThisFixedTableData.css('border-bottom-width')).replace(/[^0-9]/g, ""));
 
             ThisFixedTableData.css({
-                'width': thisWidth - borderLWidth - borderRWidth,
-                'height': thisHeight - borderTWidth - borderBWidth,
+                'width': fromData.rectangle.width - fromData.borderThickness.left - fromData.borderThickness.right,
+                'height': fromData.rectangle.height - fromData.borderThickness.top - fromData.borderThickness.bottom,
                 'float': 'left',
                 'background-color': fromData.backGroundColor,
                 'font-size': fromData.fontSize,
                 'font-family': fromData.fontFamily,
                 'font-weight': fromData.fontStyle,
-                'padding': 0,
+                'padding':0,
                 'border-collapse': 'collapse',
-                'white-space': 'nowrap'
+                'white-space': 'nowrap',
+                'color':fromData.textColor,
+                'overflow':'visible'
             });
         }
     }
-    if(fromData.wordWrap=='true'){
-        ThisFixedTableData.css('white-space','normal');
+    if (fromData.wordWrap == 'true') {
+        ThisFixedTableData.css('white-space', 'normal');
     }
 }
+
 /**************************************************************************************
  기능 : GroupFieldArray가 없을 경우
  FixedTableValueLabel(고정 테이블 밸류 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 하지연
  **************************************************************************************/
-function drawingFixedTableValueLabelWithoutGroupFieldArray(label, dt, tableId, numOfData, table){
+/*function drawingFixedTableValueLabelWithoutGroupFieldArray(label, dt, tableId, numOfData, table){
     var rowLength = curDatarow + numOfData; //한 페이지에 마지막으로 출력해야할 row
     for (var j = curDatarow; j < rowLength; j++) {
         var data = dt[j];
@@ -1139,14 +1383,14 @@ function drawingFixedTableValueLabelWithoutGroupFieldArray(label, dt, tableId, n
             }
         }
     }
-}
+}*/
 
 /**************************************************************************************
  기능 : GroupFieldArray가 있을 경우
  FixedTableValueLabel(고정 테이블 밸류 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 하지연
  **************************************************************************************/
-function drawingFixedTableValueLabelWithGroupFieldArray(label, dt, tableId, numOfData){
+/*function drawingFixedTableValueLabelWithGroupFieldArray(label, dt, tableId, numOfData){
     for (var j = groupDataRow; j < numOfData; j++) {
         var data = groupFieldArray[groupFieldNum];
         var rowNum = curDatarow + j;
@@ -1204,32 +1448,32 @@ function drawingFixedTableValueLabelWithGroupFieldArray(label, dt, tableId, numO
             }
         }
     }
-}
+}*/
 
 /******************************************************************
  기능 : FixedTableValueLabel(고정 테이블 밸류 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 하지연
  *******************************************************************/
-function drawingFixedTableValueLabel(label, dt, tableId, numOfData, table) {
+/*function drawingFixedTableValueLabel(label, dt, tableId, numOfData, table) {
     if (groupFieldArray == undefined || groupFieldArray.length == 0) {
         drawingFixedTableValueLabelWithoutGroupFieldArray(label, dt, tableId, numOfData, table);
     } else {
         drawingFixedTableValueLabelWithGroupFieldArray(label, dt, tableId, numOfData);
     }
-}
+}*/
 
 /******************************************************************
  기능 : FixedTableLabel(고정 테이블 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 하지연
  *******************************************************************/
-function drawingFixedTableLabel(label, dt, tableId, numOfData, table) {
+/*function drawingFixedTableLabel(label, dt, tableId, numOfData, table) {
     var temp = Object.keys(dt[0]);
     var titleTrId = $('#fixedTableLabel' + fixedTableLabelNum);
     var header_Name_Number = 1;
     temp.forEach(function (titleName) {
     });
     drawingFixedTableValueLabel(label, dt, tableId, numOfData, table);
-        /*if (label.text == titleName) {
+        /!*if (label.text == titleName) {
             console.log("1 + if들옴.");
             titleArray.push(titleName);
             titleTrId.append('<th id = "FixedTableLabel' + header_Name_Number + '_View_Page_Number' + thNum + '"></th>');
@@ -1271,10 +1515,10 @@ function drawingFixedTableLabel(label, dt, tableId, numOfData, table) {
             thId.addClass(label._attributes);
             table_column_controller(thId, titleTrId);
         }
-        header_Name_Number++;*/
+        header_Name_Number++;*!/
         //console.log("할일 끝?");
 
-}
+}*/
 
 /******************************************************************
  기능 : SystemLabel(시스템 라벨)을 화면에 그려주는 함수를 만든다.
@@ -1329,7 +1573,7 @@ function drawingSummaryLabel(data, divId, band_name) {
         label_scope: "NormalLabel_scope",
         labelNum: summaryLabelNum,
         label_type: data.dataType,
-        dataTableName : data.dataTableName
+        dataTableName: data.dataTableName
     }
     labelPropertyApply(labelNbandInfo);
 }
@@ -1364,7 +1608,7 @@ function drawingDataLabel(data, divId, band_name) {
         label_scope: "NormalLabel_scope",
         labelNum: dataLabelNum,
         label_type: data.dataType,
-        dataTableName : data.dataTableName
+        dataTableName: data.dataTableName
     }
     labelPropertyApply(labelNbandInfo);
 }
@@ -1877,7 +2121,7 @@ function Lock_check(data, Label_id, div) { //라벨 데이터, 드래그 리사�
             Lock_check = data.Lock._text;
         }
         if (!Lock_check) {
-            if(div){
+            if (div) {
                 Label_id.draggable({containment: "#" + div[0].id, zIndex: 999});
                 Label_id.resizable({containment: "#" + div[0].id, autoHide: true});
             }
@@ -1909,11 +2153,11 @@ function Lock_Check_Table(data, drag, resize, div) { //테이블 데이터, 드�
             resize: function (event, ui) {   //테이블사이즈는 가로만 조정 가능하도록.
                 ui.size.height = ui.originalSize.height;
                 width = ui.size.width;
-                var select_label = $("#"+this.id)[0].className.split(" ")[1];
+                var select_label = $("#" + this.id)[0].className.split(" ")[1];
                 $(".table").each(function (i, e) {
-                    var total_col = $("#"+e.id)[0].className.split(" ")[1];
-                    if(total_col === select_label){
-                        e.style.width = width+"px";
+                    var total_col = $("#" + e.id)[0].className.split(" ")[1];
+                    if (total_col === select_label) {
+                        e.style.width = width + "px";
                     }
                 });
             }
@@ -1986,18 +2230,18 @@ function table_format_check(data, Label_id, key, table) {
  ******************************************************************/
 function table_column_controller(resize_area, Unalterable_area) {
     var width;
-    if(Unalterable_area[0]){
+    if (Unalterable_area[0]) {
         resize_area.resizable({
             containment: "#" + Unalterable_area[0].id, autoHide: true,
             resize: function (event, ui) {   //테이블사이즈는 가로만 조정 가능하도록.
                 ui.size.height = ui.originalSize.height;
                 width = ui.size.width;
                 var resizing_label = this;
-                var select_label = $("#"+resizing_label.id).text();
+                var select_label = $("#" + resizing_label.id).text();
                 $(".DynamicTableHeader").each(function (i, e) {
-                    var total_col = $("#"+e.id).text();
-                    if(total_col === select_label){
-                        e.style.width = width+"px";
+                    var total_col = $("#" + e.id).text();
+                    if (total_col === select_label) {
+                        e.style.width = width + "px";
                     }
                 });
             }
@@ -2019,7 +2263,7 @@ function image_label_making(labelNbandInfo) {
     // 이미지 svg 변환을 위한 후에 손봐야하니 주석 지우지 말아주세요..
     // var test2 = "%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath d='M224%20387.814V512L32 320l192-192v126.912C447.375 260.152 437.794 103.016 380.93 0 521.287 151.707 491.48 394.785 224 387.814z'/%3E%3C/svg%3E";
     // var test3 = "data:image/svg;base64,"+test2;
-    var baseMaking = "data:image/svg;base64,"+image_str.trim(); //base64 -> html 포맷으로 변경.
+    var baseMaking = "data:image/svg;base64," + image_str.trim(); //base64 -> html 포맷으로 변경.
     var image_send = document.createElement("img");
     image_send.id = "DRD_image" + div_id.replace(/[^0-9]/g, '');
     image_send.className = "image";
@@ -2267,7 +2511,7 @@ function label_text_Setting(labelNbandInfo) {
     if (labelNbandInfo.label_type === "DataLabel") {
         var dt = dataTable.DataSetName[labelNbandInfo.dataTableName];
 
-        if(dt != undefined){
+        if (dt != undefined) {
             if (groupFieldArray !== undefined) {
                 pId.append(groupFieldArray[groupFieldNum][0]);
                 labelNbandInfo.data.text = pId.text();
@@ -2794,7 +3038,7 @@ function labelPropertyApply(labelNbandInfo) {
     if (labelNbandInfo.data.wordWrap == 'true') {
         labelNbandInfo.labelId.css('white-space', 'normal');
     }
-    if(labelNbandInfo.data.drawingType === "Image"){
+    if (labelNbandInfo.data.drawingType === "Image") {
         image_label_making(labelNbandInfo);
     } else {
         label_text_Setting(labelNbandInfo);
