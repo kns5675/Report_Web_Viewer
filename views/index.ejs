@@ -39,40 +39,37 @@
         var data = <%-data%>;  //xml json 데이터
         var dataTable = <%- dataTable %>; //임시 데이터 dataTable
         var paramTable = <%- paramTable %>; // 임시 파라미터 데이터 paramTable
-        var paramTable = <%- paramTable %>; // 임시 파라미터 데이터 paramTable
-        var subReport = <%- subReport %>; //서브리포트에 뿌릴 데이터 가져옴 나중에 xml을 넣는 로직도 하나 만들어서 xml 파일을 드래그하면 해당 xml을 추가할 수 있도록 수정 필요.
-        var dataTable2 = <%- dataTable2 %>
 
         $(document).ready(function () {
             $("#header").load("/include/header.ejs");
             $("#myModal").load("/include/modal.ejs");
             $("#loadingModal").load("/include/loading.ejs");
             $('#modalTableChoice').load("/include/modalTableChoice.ejs");
-            makeReportTemplate(data, subReport);
-            drawPageNumberInSystemLabel();
+            makeReportTemplate(data);
             band_dbclick_event(data);
             image_setting();
+            $('.BandPageFooter').css('position', 'absolute');
+            // temp_to_reportTemplate();
 
+            drawPageNumberInSystemLabel();
         });
     </script>
     <style>
         *{
             letter-spacing: -1.181pt;
         }
-        canvas{
-            max-width: 100%;
-            max-height: 100%;
-        }
     </style>
 </head>
 <body>
-<div id="header" style="/*pointer-events: auto;*/"></div>
+<div id="header" style="padding-top:30px;/*pointer-events: auto;*/"></div>
 <div id="myModal" class="modal" style="/*pointer-events: auto;*/"></div><!-- 고급인쇄 모달창 -->
 <div id="loadingModal" class="modal" style="/*pointer-events: auto;*/"></div><!-- pdf,html등 내보내기에 필요한 로딩창 -->
 
 <div id="modalTableChoice" class="modal" style="/*pointer-events: auto;*/"></div>
+<div id="report_choice" class="modal"></div>
 
 <div id="reportTemplate"></div>
+<div id="temp_reportTemplate"></div>
 <div id="Image_Modal" style="/*pointer-events: auto;*/"><!--이미지 추가 모달창-->
     <div id="modalLayer" class="modalLayer">
         <div class="modalContent modal-content">
