@@ -5,6 +5,9 @@ var minGroupBandDataHeight = 0;
 var remainData = false;
 var numofData = 0;
 var groupDataRow = 1;
+var SubReport_Report_YN = false;
+var SubReport_Report_Count = 1;
+var SubReport_Report_Size;
 var isMaximumRowCount = false;
 var isMinimumRowCount = false;
 
@@ -172,9 +175,21 @@ function drawBand(bands, dataBand, layerName, reportHeight, parentBand) {
             }
             var div_id = 'band' + (bandNum++);
 
-            if (band.attributes["xsi:type"] !== "BandSubReport") {
+            // if (band.attributes["xsi:type"] !== "BandSubReport") {
                 $('#' + layerName).append("<div id='" + div_id + "' class='Band " + band.attributes["xsi:type"] + "'>" + band.name + "</div>");
                 // $("#"+div_id).css('pointer-events', 'none');
+            if(SubReport_Report_YN){    //서브리포트가 있을 경우
+                if(band.attributes["xsi:type"] === "BandData"){
+                    // console.log("BandData", band);//데이터 밴드 아래에 해당 데이터를 붙여넣는다.
+                }
+                if(band.joinString){ //디테일 Where절이 있을 경우 기존 데이터 라벨 밑에 붙여야함.
+                    judgementControlList(band, div_id, numofData); // 라벨을 그려줌
+                }
+            }
+            if(band.attributes["xsi:type"] === "BandSubReport"){  // 서브리포트가 있으면 서브리포트를 카운트하고 해당 페이지 다음 페이지부터 서브리포트에 들어갈 리포트로 판단.
+                SubReport_Report_YN = true;
+                SubReport_Report_Count++;
+                SubReport_Report_Size = band.rectangle.height;
             }
 
             switch (band.attributes["xsi:type"]) {
@@ -426,7 +441,6 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
                     if (numofData > groupRemainData) { // 마지막 페이지
                         curDatarow += groupFieldArray[groupFieldNum].length - 1;
                         curDatarowInDataBand += groupFieldArray[groupFieldNum].length - 1;
-                        groupFieldNum++;
                         remainData = false;
                         groupDataRow = 1;
                     } else { //마지막 페이지가 아닌 경우
@@ -451,8 +465,19 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
                     }
                 }
             }
+
             break;
         case 'BandGroupFooter' :
+            if (groupFieldArray.length > 0) /*&& band.childHeaderBands !== null)*/ {
+                if (isDynamicTable == true && dt != undefined) {
+                    var dataCount = groupFieldArray[groupFieldNum].length;
+                    var groupRemainData = (dataCount - groupDataRow);
+
+                    if (numofData >= groupRemainData) { // 마지막 페이지
+                        groupFieldNum++;
+                    }
+                }
+            }
 
             /**************************************************************************************
              * 그룹 풋터 일 경우

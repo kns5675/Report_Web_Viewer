@@ -158,6 +158,7 @@ function readURL(input) {
     tag_Making(scope).then(function (resolve) {
         image_setting();
     });
+    console.log("input : ", input.files[0]);
     /******************************************************************
      기능 : 실제 url 가져오는 기능.
      만든이 : hagdung-i
@@ -179,7 +180,6 @@ async function tag_Making(scope, imgae_src, imgnum) {
     var nowpagenum = $("#NowPage").val();
     if(imgnum){
         var test = $("#image1")[0];
-        console.log("test : ",test);
         if(test){
             imgnum++;
         }

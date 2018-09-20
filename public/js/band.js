@@ -123,6 +123,7 @@ function BandData(band){
     this.isContainTypeChart = band.IsContainTypeChart._text; // 차트 보유 여부
     this.isContainTypeCrossTable = band.IsContainTypeCrossTable._text; // 크로스탭 테이블 보유 여부
     this.isContainTypeRegion = band.IsContainTypeRegion._text; // 리전 보유 여부
+    this.joinString = band.JoinString === undefined ? undefined : band.JoinString._text; // 디테일 Where절 조건
 }
 
 // 그룹 헤더 밴드
@@ -163,10 +164,12 @@ function BandGroupHeader(band){
                 }
             });
             if (!comparison) {
-                groupFieldArray[i] = [];
-                groupFieldArray[i].push(data[groupFieldName]._text);
-                groupFieldArray[i].push(data);
-                i++;
+                if(data[groupFieldName]){ //학준 추가 groupFieldName이 없을 경우 제외.
+                    groupFieldArray[i] = [];
+                    groupFieldArray[i].push(data[groupFieldName]._text);
+                    groupFieldArray[i].push(data);
+                    i++;
+                }
             }
         });
 

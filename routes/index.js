@@ -14,8 +14,12 @@ var dataTable = convert.xml2json(tempData, {compact: true});
 var paramData = fs.readFileSync('xml/GroupParameterData_Param.xml', 'utf-8');
 var paramTable = convert.xml2json(paramData, {compact: true});
 
-var SubReport = fs.readFileSync('xml/Sample01.xml', 'utf-8');
+var SubReport = fs.readFileSync('xml/SubReportTest.xml', 'utf-8');
 var dataTable2 = convert.xml2json(SubReport, {compact: true});
+
+var SubReport_db = fs.readFileSync('xml/db_subReportTest.xml', 'utf-8');
+var dataTable3 = convert.xml2json(SubReport_db, {compact : true});
+
 
 /* GET home page. */
 router.get('/', function (req, res) {
@@ -24,7 +28,8 @@ router.get('/', function (req, res) {
         data: json,
         dataTable: dataTable,
         paramTable: paramTable,
-        subReport: dataTable2
+        subReport: dataTable2,
+        dataTable2: dataTable3
     });
 });
 
