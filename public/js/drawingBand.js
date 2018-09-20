@@ -40,7 +40,7 @@ function getFooterHeight(bands, dataBand) {
     var bandDataIndex;
     var dt = dataTable.DataSetName[dataBand.dataTableName];
 
-    if(dt != undefined){
+    if (dt != undefined) {
         for (var i = 0; i < bands.length; i++) {
             if (bands[i].attributes["xsi:type"] === "BandData") {
                 bandDataIndex = i;
@@ -136,9 +136,10 @@ function getNumOfDataWithGroupField(band, avaHeight) {
  *  데이터밴드의 자식 밴드들을 함수로 빼서 구현
  * from 안예솔
  **********************************************************/
-function drawBand(bands, dataBand, layerName, reportHeight, parentBand) {
+function drawBand(bands, layerName, reportHeight, parentBand) {
     var avaHeight = 0;
-    var dt = dataTable.DataSetName[dataBand.dataTableName];
+
+    var dt;
     bands.some(function (band) {
         var doneDataBand = false;
         completeDataBand.forEach(function (compareDataBand) {
@@ -159,6 +160,7 @@ function drawBand(bands, dataBand, layerName, reportHeight, parentBand) {
                     }
                     break;
                 case 'BandData' :
+                    dt = dataTable.DataSetName[band.dataTableName];
                     // 180910 YeSol 추가
                     var controlLists = [];
                     // var bands = report.layers.designLayer.bands;
@@ -192,11 +194,7 @@ function drawBand(bands, dataBand, layerName, reportHeight, parentBand) {
             }
 
             if (band.childHeaderBands !== null) { // 자식헤더밴드에서 재호출
-                if (band.id === dataBand.id) {
-                    drawChildHeaderBand(dataBand.childHeaderBands, dataBand, layerName, reportHeight); // 자식 밴드를 그려주는 함수 호출
-                } else {
-                    drawChildHeaderBand(band.childHeaderBands, dataBand, layerName, reportHeight); // 자식 밴드를 그려주는 함수 호출
-                }
+                    drawChildHeaderBand(band.childHeaderBands, parentBand, layerName, reportHeight); // 자식 밴드를 그려주는 함수 호출
             }
             var div_id = 'band' + (bandNum++);
 
@@ -283,15 +281,11 @@ function drawBand(bands, dataBand, layerName, reportHeight, parentBand) {
                                     dataBandHeight = getBandHeightOfDataBand(dataBand, numofData - 1);
                                 }
                             }
-                            console.log(numofData);
-                            console.log(dataBandHeight);
                             $('#' + div_id).css({
                                 'width': dataBand.rectangle.width,
                                 'height': dataBandHeight,
                             });
-
                             inVisible(div_id, dataBand);
-
                         } else { // 동적 테이블이 없을 때
                             setWidthHeightInBand(div_id, dataBand);
                         }
@@ -444,15 +438,66 @@ function drawBand(bands, dataBand, layerName, reportHeight, parentBand) {
                     }
                 } else {
                     judgementControlList(band, div_id, numofData); // 라벨을 그려줌
-                    afterjudgementControlListAction(band, div_id, layerName, reportHeight, dataBand, dt);
+                    afterjudgementControlListAction(band, div_id, layerName, reportHeight, parentBand, dt);
                 }
             }
 
             if (band.childFooterBands !== null) { // 자식 풋터 밴드에서 재호출
                 drawChildFooterBand(band.childFooterBands, dataBand, layerName, reportHeight); // 자식 밴드를 그려주는 함수 호출
             }
+
+            if(band.attributes["xsi:type"] == "BandData"){
+                var arrDataBand = getArrDataBand(bands);
+                if(curDatarowInDataBand >= dt.length){
+                    completeDataBand.push(dataBand.id);
+                    curDatarowInDataBand = 0;
+                    tableLabelList = [];
+
+                    if(arrDataBand.length > 1){
+                        completeDataBand.forEach(function(complete){
+                            if(band.id == complete){
+                                return true;
+                            }
+                        });
+                    }
+                }
+            }
+
+            // if (band.attributes["xsi:type"] == "BandData") {
+            //     var arrDataBand = getArrDataBand(bands);
+            //     if (arrDataBand.length > 1) {
+            //         if (curDatarowInDataBand >= dt.length) {
+            //             completeDataBand.push(dataBand.id);
+            //             curDatarowInDataBand = 0;
+            //             var nextDataBand = arrDataBand.findIndex(function (dataBand) {
+            //                 if(dataBand.id !== completeDataBand[completeDataBand.length - 1].id){
+            //                     completeDataBand.forEach(function (complete) {
+            //                         if(dataBand.id == complete){
+            //
+            //                        }else{
+            //                            return true;
+            //                        }
+            //                     });
+            //                 }
+            //                 // return dataBand.id !== completeDataBand[completeDataBand.length - 1].id
+            //             });
+            //             console.log(arrDataBand[nextDataBand+1]);
+            //             drawBand(bands, arrDataBand[nextDataBand+1], layerName, reportHeight);
+            //         }
+            //     }
+            // }
         }
     });
+}
+
+function getArrDataBand(bands) {
+    var arrDataBand = [];
+    bands.forEach(function (band) {
+        if (band.attributes["xsi:type"] == "BandData") {
+            arrDataBand.push(band);
+        }
+    });
+    return arrDataBand;
 }
 
 /***********************************************************
@@ -487,9 +532,10 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
                 }
             } else { //그룹 필드가 아닐 경우
                 if (isDynamicTable == true && dt != undefined) {
-                    if(isRegion){
+                    if (isRegion) {
                         curDatarowInRegion += numofData;
-                    } else{
+                    } else {
+                        console.log('curDataRowindb : ' + curDatarowInDataBand)
                         curDatarowInDataBand += numofData;
                     }
                     curDatarow += numofData;
@@ -542,7 +588,7 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
                         if (!Array.isArray(dataBand)) {
                             var tempDataBand = [];
                             tempDataBand.push(dataBand);
-                            drawBand(tempDataBand, dataBand, layerName, reportHeight);
+                            drawBand(tempDataBand, layerName, reportHeight);
                         }
                     }
                 }
@@ -639,49 +685,49 @@ function drawChildFooterBand(childBands, dataBand, layerName, reportHeight) {
     var childFooterBandArray = new Array();
     var dt = dataTable.DataSetName[dataBand.dataTableName];
 
-        childBands.forEach(function (childBand) {
-            switch (childBand.attributes["xsi:type"]) {
-                case 'BandGroupFooter' :
-                    if (!remainData) {
+    childBands.forEach(function (childBand) {
+        switch (childBand.attributes["xsi:type"]) {
+            case 'BandGroupFooter' :
+                if (!remainData) {
+                    childFooterBandArray.push(childBand);
+                } else {
+                    if (dataBand.fixPriorGroupFooter == 'true') { //그룻 풋터 고정
                         childFooterBandArray.push(childBand);
-                    } else {
-                        if (dataBand.fixPriorGroupFooter == 'true') { //그룻 풋터 고정
-                            childFooterBandArray.push(childBand);
-                        }
                     }
-                    break;
-                case 'BandDataFooter' : // 모든 데이터 출력이 끝난 후에 출력
-                    if(dt == undefined){
+                }
+                break;
+            case 'BandDataFooter' : // 모든 데이터 출력이 끝난 후에 출력
+                if (dt == undefined) {
+                    childFooterBandArray.push(childBand); // 매 페이지마다 나와야 함
+                } else {
+                    if (dataBand.fixTitle == 'true') { // 데이터 헤더 밴드 고정 값이 '예'일 때
                         childFooterBandArray.push(childBand); // 매 페이지마다 나와야 함
-                    }else{
-                        if (dataBand.fixTitle == 'true') { // 데이터 헤더 밴드 고정 값이 '예'일 때
-                            childFooterBandArray.push(childBand); // 매 페이지마다 나와야 함
-                        } else { // 데이터 헤더 밴드 고정 값이 '아니오'일 때
-                            if (curDatarow > dt.length || isDynamicTable == false) { // 데이터 출력이 끝났을 때 나옴
-                                childFooterBandArray.push(childBand);
-                            }
-                        }
-                    }
-                    break;
-                case 'BandDummyFooter' :
-                    var isGroupFooter = false;
-                    childBands.forEach(function (childBand) {
-                        if (childBand.attributes["xsi:type"] == 'BandGroupFooter') {
-                            isGroupFooter = true;
-                        }
-                    });
-                    if (isGroupFooter) { // 그룹 헤더가 있을 때는 그룹의 맨 마지막에 출력
-                        if (!remainData) { // 출력할 그룹의 데이터가 남아있지 않을 때 O
-                            childFooterBandArray.push(childBand);
-                        }
-                    } else { // 그룹 헤더가 없을 때는 인쇄물의 마지막 페이지에만 출력
-                        if (curDatarow > dt.length) { // 데이터 출력이 끝났을 때 나옴
+                    } else { // 데이터 헤더 밴드 고정 값이 '아니오'일 때
+                        if (curDatarow > dt.length || isDynamicTable == false) { // 데이터 출력이 끝났을 때 나옴
                             childFooterBandArray.push(childBand);
                         }
                     }
-                    break;
-            }
-        });
+                }
+                break;
+            case 'BandDummyFooter' :
+                var isGroupFooter = false;
+                childBands.forEach(function (childBand) {
+                    if (childBand.attributes["xsi:type"] == 'BandGroupFooter') {
+                        isGroupFooter = true;
+                    }
+                });
+                if (isGroupFooter) { // 그룹 헤더가 있을 때는 그룹의 맨 마지막에 출력
+                    if (!remainData) { // 출력할 그룹의 데이터가 남아있지 않을 때 O
+                        childFooterBandArray.push(childBand);
+                    }
+                } else { // 그룹 헤더가 없을 때는 인쇄물의 마지막 페이지에만 출력
+                    if (curDatarow > dt.length) { // 데이터 출력이 끝났을 때 나옴
+                        childFooterBandArray.push(childBand);
+                    }
+                }
+                break;
+        }
+    });
 
     drawBand(childFooterBandArray, dataBand, layerName, reportHeight);
 }

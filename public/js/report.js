@@ -45,6 +45,8 @@ function makeReportTemplate(data, subReport) {
         var report = reportTemplate.reportList[i];
         var bands = report.layers.designLayer.bands;
         var dataBands = [];
+        var arrRegion = [];
+
         bands.forEach(function (band) {
             if (band.attributes['xsi:type'] == 'BandData') {
                 dataBands.push(band);
@@ -59,27 +61,33 @@ function makeReportTemplate(data, subReport) {
         //     }
         // });
         //ToDo 하나의 페이지에 여러개의 데이터 밴드 가능 수정 필요
-        dataBands.forEach(function(dataBand){
+        dataBands.forEach(function(dataBand) {
             var controlLists = dataBand.controlList.anyType;
-            var arrRegion = [];
 
             if (controlLists.length !== undefined) {
-                controlLists.forEach(function(controlList) {
-                    if(controlList._attributes["xsi:type"] == "ControlRegion"){
+                controlLists.forEach(function (controlList) {
+                    if (controlList._attributes["xsi:type"] == "ControlRegion") {
                         arrRegion.push(controlList.anyType);
                     }
                 });
-            }else{
+            } else {
                 console.log(controlLists);
-                if(controlLists._attributes["xsi:type"] == "ControlRegion"){
+                if (controlLists._attributes["xsi:type"] == "ControlRegion") {
                     arrRegion.push(controlLists.anyType);
                 }
-
             }
-            makeReport(report, dataBand, arrRegion);
-            completeDataBand.push(dataBand.id);
-            initializeVariable();
         });
+
+            makeReport(report, arrRegion);
+
+            var isDataBand = completeDataBand.find(function(completeData){
+                return dataBand.id = completeData;
+            });
+            if(isDataBand == undefined){
+                completeDataBand.push(dataBand.id);
+            }
+            initializeVariable();
+        // });
     });
     // 서브리포트 밴드가 있을 경우 사이즈를 확인해서 너무 큰 경우 마지막 페이지에 추가됨.
     // if(subReport_yes){
@@ -110,13 +118,13 @@ function makeReportTemplate(data, subReport) {
  기능 : make report in function makeReportTemplate
  author : powerku
  ******************************************************************/
-function makeReport(report, dataBand, arrRegion) {
+function makeReport(report, arrRegion) {
     reportPageCnt++;
     if (pageNum === '1') {
 
     }
     setPage(report);
-    setReport(report, dataBand);
+    setReport(report);
 
     pageNum++;
 
@@ -125,6 +133,7 @@ function makeReport(report, dataBand, arrRegion) {
     if (dataTable.DataSetName[dataBand.dataTableName] != undefined) {
         if (curDatarowInDataBand < dataTable.DataSetName[dataBand.dataTableName].length && isDynamicTable == true) {
             reportPageCnt++;
+            //ToDo arrRegion 수정 필요 리전 n개가 가능하고, 리전 반복이 가능해야함.
             if(arrRegion[0] != undefined){
                 if(curDatarowInRegion < dataTable.DataSetName[arrRegion[0].Layers.anyType.Bands.anyType.DataTableName._text].length && isDynamicTable == true){
                     makeReport(report, dataBand, arrRegion);
@@ -391,10 +400,10 @@ function setDesignLayer(report, dataBand) {
 
         returnBands.splice(dataBandIndex, 1);
 
-        drawBand(returnBands, dataBand, layerName, reportHeight);
+        drawBand(returnBands, layerName, reportHeight);
         remainFooterBand = [];
     } else {
-        drawBand(report.layers.designLayer.bands, dataBand, layerName, reportHeight); // 추가 - 전형준
+        drawBand(report.layers.designLayer.bands, layerName, reportHeight); // 추가 - 전형준
     }
 }
 
@@ -525,7 +534,7 @@ function setForeGroundLayerDirection(report) {
  내용 : #page 하위에 forcopyratio라는 인쇄배율 조정을 위한 div를 생성하고
         forcopyratio라는 클래스 부여 & 스타일 생성
  ******************************************************************/
-function setReport(report, dataBand) {
+function setReport(report) {
     $(('#page' + pageNum)).append('<div id="forcopyratio' + pageNum + '"class = forcopyratio' + '></div>');//추가 - 하지연
     $(('#forcopyratio' + pageNum)).append('<div id="report' + pageNum + '"class = report' + '></div>');//추가 - 하지연
     // $("#report"+pageNum).css('pointer-events', 'none');//학준추가
@@ -554,7 +563,7 @@ function setReport(report, dataBand) {
     $('#forcopyratio' + pageNum).css('zIndex', -11);//학준추가
 
     // setBackGroundLayer(report);
-    setDesignLayer(report, dataBand);
+    setDesignLayer(report);
     // setForeGroundLayer(report);
 
     // makeTableByData();
