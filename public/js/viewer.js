@@ -485,31 +485,36 @@ function band_dbclick_event(data) {
         if (Editable == "true") {
             $(".NormalLabel_scope").on({
                 "dblclick": function () {
-                    var this_id = this.children[0].id;
-                    var current = this.id;
-                    var current_width = this.style.width;
-                    var current_height = this.style.height;
-                    var this_text = $("#" + this_id)[0].innerText;
+                    var this_text;
+                    var this_id = this.children;
+                    for(var i=0; i<this_id.length; i++){
+                        if(this_id[i].id){
+                            this_text = $("#" + this_id[i].id)[0].innerText;
+                            var current = this.id;
+                            var current_width = this.style.width;
+                            var current_height = this.style.height;
 
-                    if ($("#text_area")[0] === undefined) {
-                        var text_div = document.createElement("div");
-                        text_div.id = "text_div";
+                            if ($("#text_area")[0] === undefined) {
+                                var text_div = document.createElement("div");
+                                text_div.id = "text_div";
 
-                        var text_area = document.createElement('textarea');
-                        text_area.id = "text_area";
-                        text_area.value = this_text;
-                        text_area.style.width = current_width;
-                        text_area.style.height = current_height;
-                        text_area.zIndex = 999;
+                                var text_area = document.createElement('textarea');
+                                text_area.id = "text_area";
+                                text_area.value = this_text;
+                                text_area.style.width = current_width;
+                                text_area.style.height = current_height;
+                                text_area.zIndex = 999;
 
-                        this.style.borderWidth = "3px";
-                        this.style.borderColor = "blue";
-                        this.style.borderStyle = "dotted solid";
+                                this.style.borderWidth = "3px";
+                                this.style.borderColor = "blue";
+                                this.style.borderStyle = "dotted solid";
 
-                        document.getElementById(current).appendChild(text_div);
-                        document.getElementById(text_div.id).appendChild(text_area);
+                                document.getElementById(current).appendChild(text_div);
+                                document.getElementById(text_div.id).appendChild(text_area);
 
-                        document.getElementById(text_area.id).focus();
+                                document.getElementById(text_area.id).focus();
+                            }
+                        }
                     }
                 },
                 "keydown": function (key) {
@@ -517,12 +522,17 @@ function band_dbclick_event(data) {
                         if (!key.shiftKey) {  //shift + enter 처리
                             var insert_text = $("#text_area").val();
                             var text_convert = insert_text.replace(/(?:\r\n|\r|\n)/g, '<br />'); // html 문법으로 변환.
-                            var this_id = this.children[0].id;
-                            $("#" + this_id)[0].innerHTML = text_convert;
-                            $("#text_div").remove();
-                            this.style.borderWidth = "1px";
-                            this.style.borderColor = "black";
-                            this.style.borderStyle = "solid";
+                            var this_id = this.children;
+                            for(var i=0; i<this_id.length; i++){
+                                if(this_id[i].id){
+                                    $("#" + this_id[i].id)[0].innerHTML = text_convert;
+                                    $("#text_div").remove();
+                                    this.style.borderWidth = "1px";
+                                    this.style.borderColor = "black";
+                                    this.style.borderStyle = "solid";
+                                }
+                            }
+
                         }
                     } else if (key.keyCode === 27) { //esc 처리
                         $("#text_div").remove();
@@ -581,7 +591,7 @@ function band_dbclick_event(data) {
             });
 
             $('.NormalLabel').on("click", function () {
-                autoSize(this.id);
+                // autoSize(this.id);
             });
         }
     }
