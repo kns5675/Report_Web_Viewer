@@ -1194,19 +1194,15 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                                  '</td>');
                                              settingAttribute(fromData, tdId, rC2, thisLabelWidth, thisLabelHeight);
                                              var tdId_javascript = $("#"+tdIDMaking);
-                                             console.log("groupFieldArray[groupFieldNum][0] : ",groupFieldArray[groupFieldNum][0]);
                                          }
                                          break;
                                      case  "NormalLabel" :
                                          ThisfixedTableRow.append('<td class="NormalLabel" id = "' + tdId + rC2 + '_' + fixedTableNum + '"><p id="' + tdId + rC2 + '_p_' + fixedTableNum + '">' + fromData.text + '</p></td>');
                                          settingAttribute(fromData, tdId, rC2, thisLabelWidth, thisLabelHeight);
                                          var tdId_javascript = $("#"+tdIDMaking);
-                                         console.log("fromData.text  : ",fromData.text);
                                          break;
                                  }
                                  // drd_javascript(label, tdId_javascript, label.startBindScript, rC2, data[temp]);
-                                 console.log("tdIDMaking : ",tdIDMaking);
-                                 console.log("tdId_javascript : ",tdId_javascript);
                              }
                          }
                          fixTableRowCount++;
@@ -2701,11 +2697,6 @@ function z_index_setting(band_name) {
  * DRD 자바스크립트 구현
  *************************/
 function drd_javascript(label, labelId, script, key, data) {
-    console.log("label : ",label);
-    console.log("labelId : ",labelId);
-    console.log("script : ",script);
-    console.log("key : ",key);
-    console.log("data : ",data);
     if (labelId !== undefined && script !== undefined) {
         var making_script;
         making_script = str_replace(script, '<br/>', '\n');
