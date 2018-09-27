@@ -55,12 +55,21 @@ function makeReportTemplate(data, subReport) {
         });
 
         // subReport_click = report.layers.designLayer.bands;
-        // subReport_click.forEach(function (value, j) {
-        //     if (subReport_click[j].attributes["xsi:type"] === "BandSubReport") {
-        //         subReport_yes = subReport_click[j];
-        //         console.log("subReport_click[j] : ",subReport_click[j]);
-        //     }
-        // });
+        //         subReport_click.forEach(function (value, j) {
+        //             if(subReport_click[j].attributes["xsi:type"] === "BandSubReport"){
+        //                 console.log("subReport_click[j] : ",subReport_click[j]);
+        //                 subReport_yes = subReport_click[j];
+        //                 console.log("subReport_yes : ",subReport_yes);
+        //             }
+        //         });
+        //         if(subReport_yes){
+        //             dataBands.forEach(function(dataBand, index){
+        //                 makeReport(report, dataBand);
+        //                 completeDataBand.push(dataBand.id);
+        //                 initializeVariable();
+        //             });
+        //         }
+
         //ToDo 하나의 페이지에 여러개의 데이터 밴드 가능 수정 필요
         dataBands.forEach(function(dataBand) {
             var controlLists = dataBand.controlList.anyType;

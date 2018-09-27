@@ -141,6 +141,7 @@ function BandGroupHeader(band){
     this.dataTableName = band.DataTableName._text; // 데이터 테이블 이름
     this.groupFiledName = band.GroupFiledName._text; // 그룹 기준 필드
     this.isApprovalBase = band.IsApprovalBase._text; // 결재란 기준 밴드
+    this.startBindScript = band.StartBindScript  === undefined ? undefined : band.StartBindScript._text;
     /******************************************************************
      추가
      기능 : 그룹 기준 필드에 대한 데이터를 배열에 담는다.
