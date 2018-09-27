@@ -975,6 +975,7 @@ function drawChildFooterBand(childBands, dataBand, layerName, reportHeight) {
                     if (isRegion) { // 리전일 때
                         if (curDatarowInRegion > dt.length) { // 데이터 출력이 끝났을 때 나옴
                             childFooterBandArray.push(childBand);
+                            }
                         }
                     } else { // 리전이 아닐 때
                         if (!remainData && !remainDataInRegion) { // 출력할 그룹의 데이터가 남아있지 않을 때 O

@@ -1175,7 +1175,24 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                  switch (fromData.dataType) {
                                      case  "DataLabel" :
                                          if (groupFieldArray !== undefined) {
-                                             ThisfixedTableRow.append('<td class="DataLabel" id = "' + tdId + rC2 + '_' + fixedTableNum + '"><p id="' + tdId + rC2 + '_p_' + fixedTableNum + '">' + groupFieldArray[groupFieldNum][0] + '</p></td>');
+                                             if(fromData.fieldName !==undefined){
+                                                 var fieldName = fromData.fieldName;
+                                                 if(fieldName==groupFieldName){
+                                                     if(groupFieldArray[groupFieldNum]){
+                                                         var showDataLabel = groupFieldArray[groupFieldNum][0];
+                                                     }
+                                                 }else{
+                                                     if(groupFieldArray[groupFieldNum]){
+                                                         if(groupFieldArray[groupFieldNum][1][fieldName]){
+                                                             var showDataLabel = groupFieldArray[groupFieldNum][1][fieldName]._text;
+                                                         }
+                                                     }
+                                                 }
+                                             }
+                                             ThisfixedTableRow.append
+                                             ('<td class="DataLabel" id = "' + tdId + rC2 + '_' + fixedTableNum + '">' +
+                                                 '<p id="' + tdId + rC2 + '_p_' + fixedTableNum + '">' + showDataLabel + '</p>' +
+                                                 '</td>');
                                              settingAttribute(fromData, tdId, rC2, thisLabelWidth, thisLabelHeight);
                                          }
                                          break;
@@ -1247,12 +1264,11 @@ function settingAttribute(fromData, tdId, rC2, thisLabelWidth, thisLabelHeight){
                 }break;
                 case "Top":{
                     ThisFixedTableDataP.css({
-                        '-webkit-margin-before':0,
-                        'top':0,
+                        '-webkit-margin-before':tagPmarginTop/2,
+                        'top':tagPmarginTop/2,
                     });
                 }break;
                 case "Bottom":{
-                    console.log("bottom");
                     ThisFixedTableDataP.css({
                         '-webkit-margin-before':tagPmarginTop*2,
                         'top':tagPmarginTop*2,
@@ -1324,201 +1340,6 @@ function settingAttribute(fromData, tdId, rC2, thisLabelWidth, thisLabelHeight){
         ThisFixedTableData.css('white-space', 'normal');
     }
 }
-
-/**************************************************************************************
- 기능 : GroupFieldArray가 없을 경우
- FixedTableValueLabel(고정 테이블 밸류 라벨)을 화면에 그려주는 함수를 만든다.
- 만든이 : 하지연
- **************************************************************************************/
-/*function drawingFixedTableValueLabelWithoutGroupFieldArray(label, dt, tableId, numOfData, table){
-    var rowLength = curDatarow + numOfData; //한 페이지에 마지막으로 출력해야할 row
-    for (var j = curDatarow; j < rowLength; j++) {
-        var data = dt[j];
-        var valueTrId = $("#fixedTableLabel" + j);
-        if(valueTrId.length < 1)
-            tableId.append('<tr id = "fixedTableLabel' + j + '"></tr>');
-        for (var key in data) {
-            if (label.fieldName == key) {
-                var valueTrId = $('#fixedTableLabel' + j);
-                var key_data = data[key]._text;
-                var table_reform = table_format_check(data, valueTrId, key_data, table);
-                if(label.labelTextType == 'Number' && label.format != undefined){
-                    valueTrId.append('<td class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '">' + table_reform + '</td>');
-                }else{
-                    valueTrId.append('<td class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '">' + table_reform + '</td>');
-                }
-
-                valueTrId.css({
-                    'width': label.rectangle.width,
-                    'height': label.rectangle.height
-                });
-                var td = $('.' + key);
-                //// 추가 부분 18.08.28 YeSol
-                if (label.noBorder == 'true') {
-                    td.css('border', 'none');
-                } else {
-                    if (label.borderThickness !== undefined) {
-                        var leftBorder = borderDottedLine(label.borderDottedLines.leftDashStyle);
-                        var rightBorder = borderDottedLine(label.borderDottedLines.rightDashStyle);
-                        var bottomBorder = borderDottedLine(label.borderDottedLines.bottomDashStyle);
-                        var topBorder = borderDottedLine(label.borderDottedLines.topDashStyle);
-                        td.css({
-                            'border-left': label.borderThickness.left + 'px ' + leftBorder + ' ' + label.leftBorderColor,
-                            'border-right': label.borderThickness.right + 'px ' + rightBorder + ' ' + label.rightBorderColor,
-                            'border-bottom': label.borderThickness.bottom + 'px ' + bottomBorder + ' ' + label.bottomBorderColor,
-                            'border-top': label.borderThickness.top + 'px ' + topBorder + ' ' + label.topBorderColor
-                        });
-                    } else {
-                        td.css('border', '1px solid black');
-                    }
-                }
-                td.css({
-                    // 'border' : '1px solid black',
-                    'font-size': label.fontSize,
-                    'font-family': label.fontFamily,
-                    'font-weight': label.fontStyle,
-                    'background-color': label.backGroundColor,
-                    'white-space': 'nowrap'
-                });
-            }
-        }
-    }
-}*/
-
-/**************************************************************************************
- 기능 : GroupFieldArray가 있을 경우
- FixedTableValueLabel(고정 테이블 밸류 라벨)을 화면에 그려주는 함수를 만든다.
- 만든이 : 하지연
- **************************************************************************************/
-/*function drawingFixedTableValueLabelWithGroupFieldArray(label, dt, tableId, numOfData){
-    for (var j = groupDataRow; j < numOfData; j++) {
-        var data = groupFieldArray[groupFieldNum];
-        var rowNum = curDatarow + j;
-        // var $trId = '#fixedValueLabel' + rowNum;
-        var $trId = '#fixedTableLabel' + rowNum;
-        var valueTrId = $($trId);
-        if (valueTrId.length < 1)
-        for (var key in data[j]) {
-
-            valueTrId = $($trId);
-
-            if (label.fieldName == undefined) {
-
-                var key_data = data[j][key]._text;
-                var table_reform = table_format_check(data, valueTrId, key_data, label);
-
-                if(label.labelTextType == 'Number' && label.format != undefined){//데이터형식이 숫자이고, 라벨의 형식이 정해져있다면. 머니소수클래스더함.
-                    valueTrId.append(
-                        '<td class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '">' + table_reform + '</td>'
-                    );
-                }else{
-                    valueTrId.append(
-                        '<td class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '">' + table_reform + '</td>'
-                    );
-                }
-                var td = $('.' + key);
-                if (label.noBorder == 'true') {
-                    td.css('border', 'none');
-                } else {
-                    if (label.borderThickness !== undefined) {
-                        var leftBorder = borderDottedLine(label.borderDottedLines.leftDashStyle);
-                        var rightBorder = borderDottedLine(label.borderDottedLines.rightDashStyle);
-                        var bottomBorder = borderDottedLine(label.borderDottedLines.bottomDashStyle);
-                        var topBorder = borderDottedLine(label.borderDottedLines.topDashStyle);
-
-                        td.css({
-                            'border-left': label.borderThickness.left + 'px ' + leftBorder + ' ' + label.leftBorderColor,
-                            'border-right': label.borderThickness.right + 'px ' + rightBorder + ' ' + label.rightBorderColor,
-                            'border-bottom': label.borderThickness.bottom + 'px ' + bottomBorder + ' ' + label.bottomBorderColor,
-                            'border-top': label.borderThickness.top + 'px ' + topBorder + ' ' + label.topBorderColor,
-                            'border-collapse':'collapse'
-                        });
-                    } else {
-                        td.css('border', '1px solid black');
-                    }
-                }
-                td.css({
-                    // 'border': '1px solid black',
-                    'font-size': label.fontSize,
-                    'font-family': label.fontFamily,
-                    'font-weight': label.fontStyle,
-                    'background-color': label.backGroundColor,
-                    'white-space': 'nowrap'
-                });
-            }
-        }
-    }
-}*/
-
-/******************************************************************
- 기능 : FixedTableValueLabel(고정 테이블 밸류 라벨)을 화면에 그려주는 함수를 만든다.
- 만든이 : 하지연
- *******************************************************************/
-/*function drawingFixedTableValueLabel(label, dt, tableId, numOfData, table) {
-    if (groupFieldArray == undefined || groupFieldArray.length == 0) {
-        drawingFixedTableValueLabelWithoutGroupFieldArray(label, dt, tableId, numOfData, table);
-    } else {
-        drawingFixedTableValueLabelWithGroupFieldArray(label, dt, tableId, numOfData);
-    }
-}*/
-
-/******************************************************************
- 기능 : FixedTableLabel(고정 테이블 라벨)을 화면에 그려주는 함수를 만든다.
- 만든이 : 하지연
- *******************************************************************/
-/*function drawingFixedTableLabel(label, dt, tableId, numOfData, table) {
-    var temp = Object.keys(dt[0]);
-    var titleTrId = $('#fixedTableLabel' + fixedTableLabelNum);
-    var header_Name_Number = 1;
-    temp.forEach(function (titleName) {
-    });
-    drawingFixedTableValueLabel(label, dt, tableId, numOfData, table);
-        /!*if (label.text == titleName) {
-            console.log("1 + if들옴.");
-            titleArray.push(titleName);
-            titleTrId.append('<th id = "FixedTableLabel' + header_Name_Number + '_View_Page_Number' + thNum + '"></th>');
-            titleTrId.css({
-                'width': label.rectangle.width,
-                'height': label.rectangle.height
-            });
-            var thId = $('#FixedTableLabel' + header_Name_Number + "_View_Page_Number" + thNum);
-
-            //// 추가 부분 18.08.28 YeSol
-            if (label.noBorder == 'true') {
-                thId.css('border', 'none');
-            } else {
-                if (label.borderThickness !== undefined) {
-                    var leftBorder = borderDottedLine(label.borderDottedLines.leftDashStyle);
-                    var rightBorder = borderDottedLine(label.borderDottedLines.rightDashStyle);
-                    var bottomBorder = borderDottedLine(label.borderDottedLines.bottomDashStyle);
-                    var topBorder = borderDottedLine(label.borderDottedLines.topDashStyle);
-                    thId.css({
-                        'border-left': label.borderThickness.left + 'px ' + leftBorder + ' ' + label.leftBorderColor,
-                        'border-right': label.borderThickness.right + 'px ' + rightBorder + ' ' + label.rightBorderColor,
-                        'border-bottom': label.borderThickness.bottom + 'px ' + bottomBorder + ' ' + label.bottomBorderColor,
-                        'border-top': label.borderThickness.top + 'px ' + topBorder + ' ' + label.topBorderColor
-                    });
-                } else {
-                    thId.css('border', '1px solid red');
-                }
-            }
-
-            thId.css({
-                'background-color': label.backGroundColor,
-                'font-size': label.fontSize,
-                'font-family': label.fontFamily,
-                'font-weight': label.fontStyle,
-                'font-color': label.textColor
-            });
-            thId.append(titleName);
-            thId.addClass('Label FixedTableHeader');
-            thId.addClass(label._attributes);
-            table_column_controller(thId, titleTrId);
-        }
-        header_Name_Number++;*!/
-        //console.log("할일 끝?");
-
-}*/
 
 /******************************************************************
  기능 : SystemLabel(시스템 라벨)을 화면에 그려주는 함수를 만든다.
