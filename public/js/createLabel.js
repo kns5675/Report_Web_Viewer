@@ -324,7 +324,6 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData, band) {
 
     var dt = dataTable.DataSetName[band.dataTableName];
     var header_Name_Number = 1;
-
     if (Array.isArray(tableLabel)) {
         tableLabel.forEach(function (label) {
             switch (label._attributes) {
@@ -2027,6 +2026,8 @@ function table_format_check(data, Label_id, key, table) {
                 var decimal_cutting = parts[1].substring(0, 2);
                 console.log("decimal_cutting : ", decimal_cutting);
                 return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "." + decimal_cutting;
+            }else{
+                return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             }
             // data_text = key.replace(/\B(?=(\d{3})+(?!\d))/g, ","); //천단위로 콤마를 찍어줌.
             // return data_text;
@@ -2036,6 +2037,8 @@ function table_format_check(data, Label_id, key, table) {
                 var decimal_cutting = parts[1].substring(0, 2);
                 console.log("decimal_cutting : ", decimal_cutting);
                 return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + (parts[1] ? "." + parts[1] : "");
+            }else{
+                return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             }
         } else if (test === "ExchangeDangaSosu" || test === "BiyulSosu" || test === "ExchangeAmountSosu") { //외화단가, 비율 소수점 자리수 ###,###.000
             var parts = key.toString().split(".");
@@ -2043,6 +2046,8 @@ function table_format_check(data, Label_id, key, table) {
                 var decimal_cutting = parts[1].substring(0, 3);
                 console.log("decimal_cutting : ", decimal_cutting);
                 return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + (parts[1] ? "." + parts[1] : "");
+            }else{
+                return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             }
         } else {
             return key;
@@ -2709,10 +2714,11 @@ function drd_javascript(label, labelId, script, key, data) {
         var var_Y = making_script.indexOf("var");
         if(var_Y !== -1){
             var variable = making_script.split("var")[1];
-             eval(variable);
+            console.log("variable : ",variable);
+            eval(variable);
+            DataSource(data);
+            eval(making_script);
         }
-        DataSource(data);
-        eval(making_script);
     }
 }
 
