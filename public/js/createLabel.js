@@ -223,7 +223,7 @@ function drawingRegion(data, divId) {
                     sort = childHeaderBand.groupingFieldSort;
                 }
             });
-        } else {
+        } else if (!Array.isArray(childHeaderBands) && childHeaderBands != null) {
             if (childHeaderBands.attributes["xsi:type"] == 'BandGroupHeader') {
                 dt = dataTable.DataSetName[dataBand.dataTableName];
                 groupFieldNameInRegion = childHeaderBands.groupFiledName;
@@ -333,7 +333,7 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData, band) {
                     break;
                 case "DynamicTableValueLabel" :
                     drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table);
-                 break;
+                    break;
             }
         });
         tableId.css({
@@ -1107,7 +1107,6 @@ function drawingDynamicTableTitleLabel(label, header_Name_Number) {
  만든이 : 하지연
  ******************************************************************/
 function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList) {
-
     var div = $('#' + divId);//divId = 밴드
     div.css('position', 'relative');
     div.css('border', '1px solid blue');
@@ -1162,9 +1161,10 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                  'margin': 0,
                                  'padding': 0,
                                  'top': 0,
-                                 'width': fixTableWidth,
+                                 'width': thisLabelWidth,
                                  'height': thisLabelHeight,
-                                 'overflow':'visible'
+                                 'overflow':'visible',
+                                 'background-color':'red'
                              });
                              var tdId = 'FixedTableLabel_';
                              for (var rC2 = 1; rC2 <= labelCount; rC2++) {
@@ -1173,7 +1173,7 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                  switch (fromData.dataType) {
                                      case  "DataLabel" :
                                          if (groupFieldArray !== undefined) {
-                                             if(fromData.fieldName !==undefined){
+                                             if(fromData.fieldName !== undefined){
                                                  var fieldName = fromData.fieldName;
                                                  if(fieldName==groupFieldName){
                                                      if(groupFieldArray[groupFieldNum]){
@@ -1191,13 +1191,16 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                              ('<td class="DataLabel" id = "' + tdId + rC2 + '_' + fixedTableNum + '">' +
                                                  '<p id="' + tdId + rC2 + '_p_' + fixedTableNum + '">' + showDataLabel + '</p>' +
                                                  '</td>');
-                                             settingAttribute(fromData, tdId, rC2, thisLabelWidth, thisLabelHeight);
+                                             settingAttribute(fromData, tdId, rC2, fixTableId,fixTableWidth,fixTableHeight);
+                                             setTable();
                                              var tdId_javascript = $("#"+tdIDMaking);
                                          }
                                          break;
                                      case  "NormalLabel" :
-                                         ThisfixedTableRow.append('<td class="NormalLabel" id = "' + tdId + rC2 + '_' + fixedTableNum + '"><p id="' + tdId + rC2 + '_p_' + fixedTableNum + '">' + fromData.text + '</p></td>');
-                                         settingAttribute(fromData, tdId, rC2, thisLabelWidth, thisLabelHeight);
+                                         ThisfixedTableRow.append('<td class="NormalLabel" id = "' + tdId + rC2 + '_' + fixedTableNum + '">' +
+                                             '<p id="' + tdId + rC2 + '_p_' + fixedTableNum + '">' + fromData.text + '</p></td>');
+                                         settingAttribute(fromData, tdId, rC2, fixTableId,fixTableWidth,fixTableHeight);
+                                         setTable();
                                          var tdId_javascript = $("#"+tdIDMaking);
                                          break;
                                  }
@@ -1211,23 +1214,24 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
          }
 
          setRowCount();
+         function setTable(){
+             if (Array.isArray(fixTableLabelList)) {
+                 fixTableId.css({
+                     'position': 'absolute',
+                     'z-index': 999,
+                     'width': Math.round(fixTableWidth),//어쩔수없었음 round안하면 테이블 width 소수점 자동으로 없애버림..
+                     'height': fixTableHeight,
+                     'left': controlFixedTable.rectangle.x + 'px',
+                     'top': controlFixedTable.rectangle.y + 'px',
+                     'border-collapse': 'collapse',
+                     'border':'0.5px solid black'//임시로 이렇게 줘봤음 일단
+                 });
 
-
-         if (Array.isArray(fixTableLabelList)) {
-             fixTableId.css({
-                 'position': 'absolute',
-                 'z-index': 999,
-                 'width': Math.round(fixTableWidth),//어쩔수없었음 round안하면 테이블 width 소수점 자동으로 없애버림..
-                 'height': fixTableHeight,
-                 'left': controlFixedTable.rectangle.x + 'px',
-                 'top': controlFixedTable.rectangle.y + 'px',
-                 'border': 'collapse',
-             });
-
-             tableNum++;
-             fixedTableNum++;
-             thNum++;
-             fixedTableLabelNum++;
+                 tableNum++;
+                 fixedTableNum++;
+                 thNum++;
+                 fixedTableLabelNum++;
+             }
          }
 }
 
@@ -1235,18 +1239,103 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
  기능 : 고정테이블 안의 FixedTableLabel의 속성을 구현하고, 적용시킨다.
  만든이 : 하지연
  ******************************************************************/
-function settingAttribute(fromData, tdId, rC2, thisLabelWidth, thisLabelHeight){
+function settingAttribute(fromData, tdId, rC2, fixTableId,fixTableWidth,fixTableHeight){
     var ThisFixedTableData = $("#" + tdId + rC2 + '_' + fixedTableNum);
     var ThisFixedTableDataP = $("#"+ tdId + rC2 + '_p_' + fixedTableNum);
-    ThisFixedTableData.css({
-        'width': fromData.rectangle.width,
-        'height': fromData.rectangle.height,
-        'overflow':'visible'
-    });
     ThisFixedTableDataP.css({
         'top': 0,
         'left': 0,
     });
+    if (fromData.noBorder == 'true'){//border 없을때
+        ThisFixedTableData.css('border', 'none');
+
+        ThisFixedTableData.css({
+            'width': fromData.rectangle.width,
+            'height': fromData.rectangle.height,
+            'float': 'left',
+            'background-color': fromData.backGroundColor,
+            'font-size': fromData.fontSize,
+            'font-family': fromData.fontFamily,
+            'font-weight': fromData.fontStyle,
+            'padding': 0,
+            'white-space': 'nowrap',
+            'color':fromData.textColor
+        });
+    }else{//border 있을때
+        if (fromData.borderThickness !== undefined){
+            var leftBorderStyle = borderDottedLine(fromData.borderDottedLines.leftDashStyle);
+            var rightBorderStyle = borderDottedLine(fromData.borderDottedLines.rightDashStyle);
+            var bottomBorderStyle = borderDottedLine(fromData.borderDottedLines.bottomDashStyle);
+            var topBorderStyle = borderDottedLine(fromData.borderDottedLines.topDashStyle);
+            var leftThickness = fromData.borderThickness.left;
+            var rightThickness = fromData.borderThickness.right;
+            var bottomThickness = fromData.borderThickness.bottom;
+            var topThickness = fromData.borderThickness.top;
+
+            if(leftBorderStyle==rightBorderStyle && rightBorderStyle==bottomBorderStyle && bottomBorderStyle==topBorderStyle){
+                if(leftThickness == rightThickness  && rightThickness==bottomThickness && bottomThickness==topThickness){
+                    ThisFixedTableData.css({
+                        'width': fromData.rectangle.width - (leftThickness)*2,
+                        'height': fromData.rectangle.height - (topThickness)*2,
+                        'float': 'left',
+                        'background-color': fromData.backGroundColor,
+                        'font-size': fromData.fontSize,
+                        'font-family': fromData.fontFamily,
+                        'font-weight': fromData.fontStyle,
+                        'padding':0,
+                        'margin':0,
+                        'border': (topThickness/2) + 'px ' + leftBorderStyle +' ' + fromData.leftBorderColor,
+                        'border-collapse': 'collapse',
+                        'white-space': 'nowrap',
+                        'color':fromData.textColor,
+                        'overflow':'visible',
+                    });
+                    /*fixTableId.css({
+                        'border': (topThickness/2) + 'px ' + leftBorder +' ' + fromData.leftBorderColor,
+                        'border-collapse':'collapse',
+                        'width': fixTableWidth,
+                        'height': fixTableHeight,
+                    });*/
+                }
+            }else{
+                console.log("안들어왔어야함.");
+                ThisFixedTableData.css({
+                    'border-left': fromData.borderThickness.left + 'px ' + leftBorderStyle + ' ' + fromData.leftBorderColor,
+                    'border-right': fromData.borderThickness.right + 'px ' + rightBorderStyle + ' ' + fromData.rightBorderColor,
+                    'border-bottom': fromData.borderThickness.bottom + 'px ' + bottomBorderStyle + ' ' + fromData.bottomBorderColor,
+                    'border-top': fromData.borderThickness.top + 'px ' + topBorderStyle + ' ' + fromData.topBorderColor
+                });
+                var borderLWidth = ThisFixedTableData.css('border-left-width').split('px')[0];
+                var borderRWidth = ThisFixedTableData.css('border-right-width').split('px')[0];
+                var borderTWidth = ThisFixedTableData.css('border-top-width').split('px')[0];
+                var borderBWidth = ThisFixedTableData.css('border-bottom-width').split('px')[0];
+
+                ThisFixedTableData.css({
+                    'width': fromData.rectangle.width - fromData.borderThickness.left - fromData.borderThickness.right,
+                    'height': fromData.rectangle.height - fromData.borderThickness.top - fromData.borderThickness.bottom,
+                    'float': 'left',
+                    'background-color': fromData.backGroundColor,
+                    'font-size': fromData.fontSize,
+                    'font-family': fromData.fontFamily,
+                    'font-weight': fromData.fontStyle,
+                    'padding':0,
+                    'border-collapse': 'collapse',
+                    'white-space': 'nowrap',
+                    'color':fromData.textColor,
+                    'overflow':'visible'
+                });
+            }
+        }
+    }
+    if (fromData.wordWrap == 'true') {
+        ThisFixedTableData.css('white-space', 'normal');
+    }
+    /*ThisFixedTableData.css({
+        'width': fromData.rectangle.width,
+        'height': fromData.rectangle.height,
+        'overflow':'visible'
+    });*/
+
 
     if(fromData.visible =='false'){//visible 속성
         ThisFixedTableData.css('display', 'none');
@@ -1284,62 +1373,10 @@ function settingAttribute(fromData, tdId, rC2, thisLabelWidth, thisLabelHeight){
         if(HTextAlignment!== undefined){
             ThisFixedTableData.css("text-align",HTextAlignment);
         }
-
     }
     settingHorizontalTextAlignment(HTextAlignment);
 
-    if (fromData.noBorder == 'true') {//border 없을때
-        ThisFixedTableData.css('border', 'none');
 
-        ThisFixedTableData.css({
-            'width': fromData.rectangle.width,
-            'height': fromData.rectangle.height,
-            'float': 'left',
-            'background-color': fromData.backGroundColor,
-            'font-size': fromData.fontSize,
-            'font-family': fromData.fontFamily,
-            'font-weight': fromData.fontStyle,
-            'padding': 0,
-            'white-space': 'nowrap',
-            'color':fromData.textColor
-        });
-    } else {//border 있을때
-        if (fromData.borderThickness !== undefined) {
-            var leftBorder = borderDottedLine(fromData.borderDottedLines.leftDashStyle);
-            var rightBorder = borderDottedLine(fromData.borderDottedLines.rightDashStyle);
-            var bottomBorder = borderDottedLine(fromData.borderDottedLines.bottomDashStyle);
-            var topBorder = borderDottedLine(fromData.borderDottedLines.topDashStyle);
-
-            ThisFixedTableData.css({
-                'border-left': fromData.borderThickness.left + 'px ' + leftBorder + ' ' + fromData.leftBorderColor,
-                'border-right': fromData.borderThickness.right + 'px ' + rightBorder + ' ' + fromData.rightBorderColor,
-                'border-bottom': fromData.borderThickness.bottom + 'px ' + bottomBorder + ' ' + fromData.bottomBorderColor,
-                'border-top': fromData.borderThickness.top + 'px ' + topBorder + ' ' + fromData.topBorderColor
-            });
-            var borderLWidth = Number((ThisFixedTableData.css('border-left-width')).replace(/[^0-9]/g, ""));
-            var borderRWidth = Number((ThisFixedTableData.css('border-right-width')).replace(/[^0-9]/g, ""));
-            var borderTWidth = Number((ThisFixedTableData.css('border-top-width')).replace(/[^0-9]/g, ""));
-            var borderBWidth = Number((ThisFixedTableData.css('border-bottom-width')).replace(/[^0-9]/g, ""));
-
-            ThisFixedTableData.css({
-                'width': fromData.rectangle.width - fromData.borderThickness.left - fromData.borderThickness.right,
-                'height': fromData.rectangle.height - fromData.borderThickness.top - fromData.borderThickness.bottom,
-                'float': 'left',
-                'background-color': fromData.backGroundColor,
-                'font-size': fromData.fontSize,
-                'font-family': fromData.fontFamily,
-                'font-weight': fromData.fontStyle,
-                'padding':0,
-                'border-collapse': 'collapse',
-                'white-space': 'nowrap',
-                'color':fromData.textColor,
-                'overflow':'visible'
-            });
-        }
-    }
-    if (fromData.wordWrap == 'true') {
-        ThisFixedTableData.css('white-space', 'normal');
-    }
 }
 
 /******************************************************************
@@ -1396,7 +1433,8 @@ function drawingSummaryLabel(data, divId, band_name) {
         labelNum: summaryLabelNum,
         label_type: data.dataType,
         dataTableName: data.dataTableName
-    }
+    };
+    console.log(data);
     labelPropertyApply(labelNbandInfo);
 }
 
@@ -2026,7 +2064,7 @@ function table_format_check(data, Label_id, key, table) {
                 var decimal_cutting = parts[1].substring(0, 2);
                 console.log("decimal_cutting : ", decimal_cutting);
                 return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "." + decimal_cutting;
-            }else{
+            } else {
                 return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             }
             // data_text = key.replace(/\B(?=(\d{3})+(?!\d))/g, ","); //천단위로 콤마를 찍어줌.
@@ -2037,7 +2075,7 @@ function table_format_check(data, Label_id, key, table) {
                 var decimal_cutting = parts[1].substring(0, 2);
                 console.log("decimal_cutting : ", decimal_cutting);
                 return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + (parts[1] ? "." + parts[1] : "");
-            }else{
+            } else {
                 return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             }
         } else if (test === "ExchangeDangaSosu" || test === "BiyulSosu" || test === "ExchangeAmountSosu") { //외화단가, 비율 소수점 자리수 ###,###.000
@@ -2046,7 +2084,7 @@ function table_format_check(data, Label_id, key, table) {
                 var decimal_cutting = parts[1].substring(0, 3);
                 console.log("decimal_cutting : ", decimal_cutting);
                 return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + (parts[1] ? "." + parts[1] : "");
-            }else{
+            } else {
                 return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             }
         } else {
@@ -2085,8 +2123,8 @@ function table_column_controller(resize_area, Unalterable_area) {
 
 /******************************************************************
  기능 : 이미지 라벨 추가.(이미지 크기는 라벨과 이미지 비율 두가지가 있는데,
-        layout속성은 xml에서 따로 가져오지 않는 것으로 보아 통합하는 방법으로 구성하되
-        그리는 사이즈는 xml에서 받아오는 이미지 사이즈로 통합하고 크기 조정은 가능하도록 구성)
+ layout속성은 xml에서 따로 가져오지 않는 것으로 보아 통합하는 방법으로 구성하되
+ 그리는 사이즈는 xml에서 받아오는 이미지 사이즈로 통합하고 크기 조정은 가능하도록 구성)
  Date : 2018-09-12
  만든이 : hagdung-i
  ******************************************************************/
@@ -2712,9 +2750,9 @@ function drd_javascript(label, labelId, script, key, data) {
         making_script = str_replace(making_script, 'DataSource.GetDataRow()', "GetDataRow");
 
         var var_Y = making_script.indexOf("var");
-        if(var_Y !== -1){
+        if (var_Y !== -1) {
             var variable = making_script.split("var")[1];
-            console.log("variable : ",variable);
+            console.log("variable : ", variable);
             eval(variable);
             DataSource(data);
             eval(making_script);
@@ -2728,7 +2766,8 @@ function drd_javascript(label, labelId, script, key, data) {
 function str_replace(str, searchStr, replaceStr) {
     return str.split(searchStr).join(replaceStr);
 }
-function DataSource(data, variable_name, variable_value){
+
+function DataSource(data, variable_name, variable_value) {
     this.GetDataRow = data;
     // this.variable_name = variable_value;
 };

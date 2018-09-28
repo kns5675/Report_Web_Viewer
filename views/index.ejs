@@ -38,7 +38,7 @@
     <script>
         var data = <%-data%>;  //xml json 데이터
         var dataTable = <%- dataTable %>; //임시 데이터 dataTable
-        var paramTable = <%- paramTable %>; // 임시 파라미터 데이터 paramTable
+        var paramTable = <%- paramTable%>;
 
         $(document).ready(function () {
             $("#header").load("/include/header.ejs");
@@ -50,7 +50,6 @@
             band_dbclick_event(data);
             image_setting();
             $('.BandPageFooter').css('position', 'absolute');
-            // temp_to_reportTemplate();
 
             drawPageNumberInSystemLabel();
         });

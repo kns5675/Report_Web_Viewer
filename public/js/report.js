@@ -30,7 +30,7 @@ function initializeVariable() {
  author : powerku
 
  기능 : 서브 리포트 1번째 루트 많은 양의 데이터 리포트를 삽입할 경우
-        페이지를 새로 만들어서 기존 리포트를 모두 출력 후 출력한다.
+ 페이지를 새로 만들어서 기존 리포트를 모두 출력 후 출력한다.
  날짜 : 2018-09-10
  만든이 : 김학준
  ******************************************************************/
@@ -75,13 +75,14 @@ function makeReportTemplate(data, subReport) {
             var controlLists = dataBand.controlList.anyType;
 
             if (controlLists.length !== undefined) {
-                controlLists.forEach(function (controlList) {
-                    if (controlList._attributes["xsi:type"] == "ControlRegion") {
+                controlLists.forEach(function(controlList) {
+                    if(controlList._attributes["xsi:type"] == "ControlRegion"){
                         arrRegion.push(controlList.anyType);
                     }
                 });
-            } else {
-                if (controlLists._attributes["xsi:type"] == "ControlRegion") {
+            }else{
+                console.log(controlLists);
+                if(controlLists._attributes["xsi:type"] == "ControlRegion"){
                     arrRegion.push(controlLists.anyType);
                 }
             }
@@ -141,7 +142,6 @@ function makeReport(report, arrRegion) {
     if (dataTable.DataSetName["dt"] != undefined) {
         if (curDatarowInDataBand < dataTable.DataSetName["dt"].length && isDynamicTable == true) {
             reportPageCnt++;
-            //ToDo arrRegion 수정 필요 리전 n개가 가능하고, 리전 반복이 가능해야함.
             if(arrRegion[0] != undefined){
                 if(curDatarowInRegion < dataTable.DataSetName[arrRegion[0].Layers.anyType.Bands.anyType.DataTableName._text].length && isDynamicTable == true){
                     makeReport(report, arrRegion);
@@ -204,31 +204,37 @@ function getNumOfPage(report) {
  만든이 : 구영준
  ********************************************************************************************/
 function getBandHeightOfDataBand(band, numOfData) {
-
     var controlLists = band.controlList.anyType;
-    var bandHeight = Number(band.rectangle.height);
+    // var bandHeight = Number(band.rectangle.height);
+    var tableSpacing = 0;
     var labels = [];
+    var labelHeight = 0;
     var valueHeight = 0;
     var titleBorderTopThickness = 0;
     var titleBorderBottomThickness = 0;
     var valueBorderBottomThickness = 0;
     var allLabelBorderThickness;
 
-    if(controlLists.length > 1){
-        controlLists.forEach(function(controlList){
-           if(controlList._attributes["xsi:type"] == "ControlDynamicTable"){
-               labels.push(controlList);
-           }
+    if (controlLists.length > 1) {
+        controlLists.forEach(function (controlList) {
+            if (controlList._attributes["xsi:type"] == "ControlDynamicTable") {
+                labels.push(controlList);
+                tableSpacing = Number(controlList.Rectangle.Y._text);
+            }
         });
-    }else{
-        if(controlLists._attributes["xsi:type"] == "ControlDynamicTable") {
+    } else {
+        if (controlLists._attributes["xsi:type"] == "ControlDynamicTable") {
             labels.push(controlLists);
+            if (controlLists.Rectangle.Y !== undefined) {
+                tableSpacing = Number(controlLists.Rectangle.Y._text);
+            }
         }
     }
-    labels.forEach(function(label){
+    labels.forEach(function (label) {
         var tableLabels = label.Labels.TableLabel;
+        labelHeight += Number(tableLabels[0].Rectangle.Height._text);
         valueHeight += Number(tableLabels[tableLabels.length - 1].Rectangle.Height._text);
-        tableLabels.forEach(function (tableLabel){
+        tableLabels.forEach(function (tableLabel) {
             if (label._attributes["xsi:type"] == "DynamicTableTitleLabel") {
                 var labelBottom = Number(tableLabel.BorderThickness.Bottom._text);
                 var labelTop = Number(tableLabel.BorderThickness.Top._text);
@@ -246,10 +252,8 @@ function getBandHeightOfDataBand(band, numOfData) {
         });
     });
 
-    allLabelBorderThickness = titleBorderBottomThickness * (numOfData-1) + titleBorderBottomThickness + titleBorderTopThickness;
-
-    return bandHeight + (valueHeight * (numOfData-1)) + allLabelBorderThickness;
-
+    allLabelBorderThickness = titleBorderBottomThickness * numOfData + titleBorderBottomThickness + titleBorderTopThickness;
+    return tableSpacing + labelHeight + (valueHeight * numOfData) + allLabelBorderThickness;
 }
 
 /***********************************************************
@@ -339,11 +343,11 @@ function getNumOfDataInOnePageNonObject(band, divId) {
     var firstLine = Number(tableLabel[0].Rectangle.Height._text);
     var dataLine = Number(tableLabel[tableLabel.length - 1].Rectangle.Height._text);
 
-    var numofData =  Math.floor((bandDataHeight - firstLine - tableSpacing) / dataLine);
+    var numofData = Math.floor((bandDataHeight - firstLine - tableSpacing) / dataLine);
 
-    if(numofData > dt.length){
+    if (numofData > dt.length) {
         return dt.length;
-    }else{
+    } else {
         return numofData;
     }
 }
@@ -540,7 +544,7 @@ function setForeGroundLayerDirection(report) {
  수정 : 하지연
  날짜 : 2018 - 09 - 03
  내용 : #page 하위에 forcopyratio라는 인쇄배율 조정을 위한 div를 생성하고
-        forcopyratio라는 클래스 부여 & 스타일 생성
+ forcopyratio라는 클래스 부여 & 스타일 생성
  ******************************************************************/
 function setReport(report) {
     $(('#page' + pageNum)).append('<div id="forcopyratio' + pageNum + '"class = forcopyratio' + '></div>');//추가 - 하지연
@@ -647,7 +651,7 @@ function setPage(report, width, height) {
     // $("#pageForCopyRatio"+pageNum).css('pointer-events', 'none');//학준추가
     // $("#page"+pageNum).css('pointer-events', 'none');//학준추가
     $('#pageForCopyRatio' + pageNum).addClass('report' + reportNum); // 형준추가
-    
+
     setPageDirection(report);
     setPageForCopyRatioDirection(report);//추가 - 하지연
 
@@ -693,7 +697,7 @@ function setPageForCopyRatioDirection(report) {
  수정 : 하지연
  날짜 : 2018 - 08 - 23
  내용 : page의 width, height값을 page의 부모인 pageForCopyRatio의 width,
-        height값의 100%로 지정하고, 방향 설정
+ height값의 100%로 지정하고, 방향 설정
  ******************************************************************/
 function setPageDirection(report) {
     var page = $('#page' + pageNum);
@@ -705,30 +709,30 @@ function setPageDirection(report) {
 
 /***********************************************************************
  기능 : temp_reportTemplate div에 담은 엘리먼트들을 reportTemplate div에 넣어줌
-        ( 리포트 넘기기, 리포트 선택 기능 구현을 위함 )
+ ( 리포트 넘기기, 리포트 선택 기능 구현을 위함 )
  만든이 : 전형준
  ***********************************************************************/
-function temp_to_reportTemplate(){
+function temp_to_reportTemplate() {
     var reportTemplate_div = $('#reportTemplate');
     var wrap_arr_clone = report_backup(); // report_wrap_arr_html 변수 세팅
     var str = "";
 
-    for(var i=0; i<wrap_arr_clone.length; i++){
-        if(wrap_arr_clone[i].length > 0 && check_forceNextReport(reportTemplate.reportList[i])){ // 리포트 넘기기일 때
+    for (var i = 0; i < wrap_arr_clone.length; i++) {
+        if (wrap_arr_clone[i].length > 0 && check_forceNextReport(reportTemplate.reportList[i])) { // 리포트 넘기기일 때
             str += wrap_arr_clone[i][0];
             wrap_arr_clone[i].shift();
-        } else{
-            for(var j=0; j<wrap_arr_clone[i].length; j++){
+        } else {
+            for (var j = 0; j < wrap_arr_clone[i].length; j++) {
                 str += wrap_arr_clone[i][j];
             }
             wrap_arr_clone[i] = [];
         }
 
         var remain_wrap_count = 0;
-        for(var j=0; j<wrap_arr_clone.length; j++){
+        for (var j = 0; j < wrap_arr_clone.length; j++) {
             remain_wrap_count += wrap_arr_clone[j].length;
         }
-        if((i === wrap_arr_clone.length-1) && (remain_wrap_count > 0)){
+        if ((i === wrap_arr_clone.length - 1) && (remain_wrap_count > 0)) {
             i = -1;
         }
     }
@@ -739,18 +743,18 @@ function temp_to_reportTemplate(){
 
 /***********************************************************************
  기능 : 리포트 넘기기와 리포트 선택 기능 구현 중,
-        리포트 백업 기능 구현(html 따로 저장)
+ 리포트 백업 기능 구현(html 따로 저장)
  만든이 : 전형준
  ***********************************************************************/
-function report_backup(){
-    var temp_arr= [];
+function report_backup() {
+    var temp_arr = [];
     var report_wrap_arr = $('.report_wrap');
     var pageInReport;
 
-    for(var i=0; i<report_wrap_arr.length; i++){
+    for (var i = 0; i < report_wrap_arr.length; i++) {
         temp_arr[i] = [];
         pageInReport = report_wrap_arr.eq(i).find('.pageforcopyratio');
-        for(var j=0; j<pageInReport.length; j++){
+        for (var j = 0; j < pageInReport.length; j++) {
             temp_arr[i].push(
                 $('<div>').append(pageInReport.eq(j).clone()).html()
             );
@@ -763,37 +767,37 @@ function report_backup(){
 
 /***********************************************************************
  기능 : '리포트 넘기기' 속성이 true 인지 확인
-        >> 속성이 리포트에만 있는 것이 아니라,
-           '그룹풋터밴드'에도 존재하며 그 속성이 true라면
-           리포트 넘기기의 기능이 정상작동 하므로 둘 모두 체크해줌
+ >> 속성이 리포트에만 있는 것이 아니라,
+ '그룹풋터밴드'에도 존재하며 그 속성이 true라면
+ 리포트 넘기기의 기능이 정상작동 하므로 둘 모두 체크해줌
  만든이 : 전형준
  ***********************************************************************/
-function check_forceNextReport(report){
+function check_forceNextReport(report) {
     var bandGroupFooterIsTrue = false;
-    report.layers.designLayer.bands.forEach(function(band){
-       if(band instanceof BandData && band.childFooterBands !== null){
-            band.childFooterBands.forEach(function(childBand){
-                if(childBand instanceof BandGroupFooter && childBand.forceNextReport === true)
+    report.layers.designLayer.bands.forEach(function (band) {
+        if (band instanceof BandData && band.childFooterBands !== null) {
+            band.childFooterBands.forEach(function (childBand) {
+                if (childBand instanceof BandGroupFooter && childBand.forceNextReport === true)
                     bandGroupFooterIsTrue = true;
                 else
                     bandGroupFooterIsTrue = false;
             });
-       }
+        }
     });
     return report.forceNextReport + bandGroupFooterIsTrue > 0 ? true : false;
 }
 
 /***********************************************************************
  기능 : 리포트 넘기기가 됐을시 temp_reportTemplate에서 생성되어 뒤섞인
-        pageforcopyratio와 page를 다시 새로 넘버링해줌
+ pageforcopyratio와 page를 다시 새로 넘버링해줌
  만든이 : 전형준
  ***********************************************************************/
-function reNumbering(){
+function reNumbering() {
     var pageforcopyratio_div_arr = $('.pageforcopyratio');
     var page_div_arr = $('.page');
 
-    for(var i=0; i<pageforcopyratio_div_arr.length; i++){
-        pageforcopyratio_div_arr.eq(i).attr('id', 'pageforcopyratio'+(i+1));
-        page_div_arr.eq(i).attr('id', 'page'+(i+1));
+    for (var i = 0; i < pageforcopyratio_div_arr.length; i++) {
+        pageforcopyratio_div_arr.eq(i).attr('id', 'pageforcopyratio' + (i + 1));
+        page_div_arr.eq(i).attr('id', 'page' + (i + 1));
     }
 }
