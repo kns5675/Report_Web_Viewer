@@ -235,7 +235,7 @@ function getBandHeightOfDataBand(band, numOfData) {
         labelHeight += Number(tableLabels[0].Rectangle.Height._text);
         valueHeight += Number(tableLabels[tableLabels.length - 1].Rectangle.Height._text);
         tableLabels.forEach(function (tableLabel) {
-            if (label._attributes["xsi:type"] == "DynamicTableTitleLabel") {
+            if (tableLabel._attributes["xsi:type"] == "DynamicTableTitleLabel") {
                 var labelBottom = Number(tableLabel.BorderThickness.Bottom._text);
                 var labelTop = Number(tableLabel.BorderThickness.Top._text);
 
