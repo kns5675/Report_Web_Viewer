@@ -9,10 +9,13 @@ var groupFieldArray = [];
 var remainFooterBand = [];
 var remainFooterBandInRegion = [];
 var isDynamicTable = false;
+var isFixedTable = false;
+
 var isRegion = false;
 var tableLabelList = [];
 var report_wrap_arr_html = null;
 var completeDataBand = []; // 0918 예솔 추가 : 출력이 끝난 데이터 밴드의 id를 담는 배열
+var ingDataTableName = undefined;
 
 /******************************************************************
  기능 : 하나의 리포트를 다 출력 시킨 후에 사용한 전역 변수들 초기화
@@ -81,7 +84,6 @@ function makeReportTemplate(data, subReport) {
                     }
                 });
             }else{
-                console.log(controlLists);
                 if(controlLists._attributes["xsi:type"] == "ControlRegion"){
                     arrRegion.push(controlLists.anyType);
                 }
@@ -139,8 +141,10 @@ function makeReport(report, arrRegion) {
     pageNum++;
     // 현재 찍힌 데이터 로우 행이 전체 데이터 보다 작을 경우 재귀함수
     // 클 경우 함수 종료 후 다음 리포트 생성
-    if (dataTable.DataSetName["dt"] != undefined) {
-        if (curDatarowInDataBand < dataTable.DataSetName["dt"].length && isDynamicTable == true) {
+
+
+    if (dataTable.DataSetName[ingDataTableName] != undefined) {
+        if (curDatarowInDataBand < dataTable.DataSetName[ingDataTableName].length && isDynamicTable == true) {
             reportPageCnt++;
             if(arrRegion[0] != undefined){
                 if(curDatarowInRegion < dataTable.DataSetName[arrRegion[0].Layers.anyType.Bands.anyType.DataTableName._text].length && isDynamicTable == true){
@@ -152,6 +156,8 @@ function makeReport(report, arrRegion) {
             } else {
                 makeReport(report, arrRegion);
             }
+        // } else if (isFixedTable == true && curDatarowInDataBand < dataTable.DataSetName[ingDataTableName].length) {
+        //     makeReport(report, arrRegion);
         } else {
             reportPageCnt = 1;
         }
@@ -253,6 +259,7 @@ function getBandHeightOfDataBand(band, numOfData) {
     });
 
     allLabelBorderThickness = titleBorderBottomThickness * numOfData + titleBorderBottomThickness + titleBorderTopThickness;
+
     return tableSpacing + labelHeight + (valueHeight * numOfData) + allLabelBorderThickness;
 }
 
@@ -322,6 +329,7 @@ function getNumOfDataInOnePageNonObject(band, divId) {
     } else if (typeof divId == 'number') {
         bandDataHeight = divId;
     }
+
 
     var tableSpacing = 0;
     var tableLabel;
