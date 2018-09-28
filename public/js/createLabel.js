@@ -223,7 +223,7 @@ function drawingRegion(data, divId) {
                     sort = childHeaderBand.groupingFieldSort;
                 }
             });
-        } else {
+        } else if (!Array.isArray(childHeaderBands) && childHeaderBands != null) {
             if (childHeaderBands.attributes["xsi:type"] == 'BandGroupHeader') {
                 dt = dataTable.DataSetName[dataBand.dataTableName];
                 groupFieldNameInRegion = childHeaderBands.groupFiledName;
@@ -324,7 +324,6 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData, band) {
 
     var dt = dataTable.DataSetName[band.dataTableName];
     var header_Name_Number = 1;
-
     if (Array.isArray(tableLabel)) {
         tableLabel.forEach(function (label) {
             switch (label._attributes) {
@@ -334,7 +333,7 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData, band) {
                     break;
                 case "DynamicTableValueLabel" :
                     drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table);
-                 break;
+                    break;
             }
         });
         tableId.css({
@@ -395,9 +394,9 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
             });
             var td = $('.' + key);
             //// 추가 부분 18.08.28 YeSol
-            if (label.noBorder == 'true'){
+            if (label.noBorder == 'true') {
                 td.css('border', 'none');
-            }else{
+            } else {
                 if (label.borderThickness !== undefined) {
                     var leftBorder = borderDottedLine(label.borderDottedLines.leftDashStyle);
                     var rightBorder = borderDottedLine(label.borderDottedLines.rightDashStyle);
@@ -432,11 +431,9 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
                     var tdId = 'tableValueLabelNum' + tableValueLabelNum++;
                     if (!minimumRow) {
                         if (label.labelTextType == 'Number' && label.format != undefined) {
-                            valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' '
-                                + label.dataType + ' ' + "MoneySosu" + '">' + table_reform + '</td>');
+                            valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '">' + table_reform + '</td>');
                         } else {
-                            valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' '
-                                + label.dataType + '">' + table_reform + '</td>');
+                            valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '">' + table_reform + '</td>');
                         }
                     } else { // 최소행 개수
                         valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '"></td>');
@@ -1110,10 +1107,9 @@ function drawingDynamicTableTitleLabel(label, header_Name_Number) {
  만든이 : 하지연
  ******************************************************************/
 function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList) {
-
     var div = $('#' + divId);//divId = 밴드
     div.css('position', 'relative');
-    //div.css('border', '1px solid blue');
+    div.css('border', '1px solid blue');
 
     div.append('<div id = "Table' + tableNum + '"></div>');//무의미한 테이블 div
     var divIdTable = $('#Table' + tableNum);
@@ -1437,7 +1433,8 @@ function drawingSummaryLabel(data, divId, band_name) {
         labelNum: summaryLabelNum,
         label_type: data.dataType,
         dataTableName: data.dataTableName
-    }
+    };
+    console.log(data);
     labelPropertyApply(labelNbandInfo);
 }
 
@@ -2061,13 +2058,14 @@ function table_format_check(data, Label_id, key, table) {
     var test = table.formatType;
     var data_text;
     if (key != NaN) { //해당 데이터가 숫자일 경우
-
         if (test === "AmountSosu" || test === "MoneySosu" || test === "MoneySosu") {   //수량, 금액 소숫점 자리수 ###,###
             var parts = key.toString().split(".");
             if (parts[1]) {
                 var decimal_cutting = parts[1].substring(0, 2);
                 console.log("decimal_cutting : ", decimal_cutting);
                 return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "." + decimal_cutting;
+            } else {
+                return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             }
             // data_text = key.replace(/\B(?=(\d{3})+(?!\d))/g, ","); //천단위로 콤마를 찍어줌.
             // return data_text;
@@ -2077,6 +2075,8 @@ function table_format_check(data, Label_id, key, table) {
                 var decimal_cutting = parts[1].substring(0, 2);
                 console.log("decimal_cutting : ", decimal_cutting);
                 return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + (parts[1] ? "." + parts[1] : "");
+            } else {
+                return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             }
         } else if (test === "ExchangeDangaSosu" || test === "BiyulSosu" || test === "ExchangeAmountSosu") { //외화단가, 비율 소수점 자리수 ###,###.000
             var parts = key.toString().split(".");
@@ -2084,6 +2084,8 @@ function table_format_check(data, Label_id, key, table) {
                 var decimal_cutting = parts[1].substring(0, 3);
                 console.log("decimal_cutting : ", decimal_cutting);
                 return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + (parts[1] ? "." + parts[1] : "");
+            } else {
+                return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             }
         } else {
             return key;
@@ -2121,8 +2123,8 @@ function table_column_controller(resize_area, Unalterable_area) {
 
 /******************************************************************
  기능 : 이미지 라벨 추가.(이미지 크기는 라벨과 이미지 비율 두가지가 있는데,
-        layout속성은 xml에서 따로 가져오지 않는 것으로 보아 통합하는 방법으로 구성하되
-        그리는 사이즈는 xml에서 받아오는 이미지 사이즈로 통합하고 크기 조정은 가능하도록 구성)
+ layout속성은 xml에서 따로 가져오지 않는 것으로 보아 통합하는 방법으로 구성하되
+ 그리는 사이즈는 xml에서 받아오는 이미지 사이즈로 통합하고 크기 조정은 가능하도록 구성)
  Date : 2018-09-12
  만든이 : hagdung-i
  ******************************************************************/
@@ -2748,12 +2750,13 @@ function drd_javascript(label, labelId, script, key, data) {
         making_script = str_replace(making_script, 'DataSource.GetDataRow()', "GetDataRow");
 
         var var_Y = making_script.indexOf("var");
-        if(var_Y !== -1){
+        if (var_Y !== -1) {
             var variable = making_script.split("var")[1];
-             eval(variable);
+            console.log("variable : ", variable);
+            eval(variable);
+            DataSource(data);
+            eval(making_script);
         }
-        DataSource(data);
-        eval(making_script);
     }
 }
 
@@ -2763,7 +2766,8 @@ function drd_javascript(label, labelId, script, key, data) {
 function str_replace(str, searchStr, replaceStr) {
     return str.split(searchStr).join(replaceStr);
 }
-function DataSource(data, variable_name, variable_value){
+
+function DataSource(data, variable_name, variable_value) {
     this.GetDataRow = data;
     // this.variable_name = variable_value;
 };

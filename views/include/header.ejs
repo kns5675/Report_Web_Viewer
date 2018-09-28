@@ -77,8 +77,8 @@
   <body>
 <div class="topMenu">
 <ul style="margin: 0px">
-  <li><input type="button" value="저장"></li>
-  <li><input type="button" value="파일열기"></li>
+  <li><input type="button" id="saving"><a download="saving_name" id="saving">저장</a></li>
+  <li><input type="button" value="파일열기" id="file_opener"></li>
   <li>
     <select id="copyOptions">
       <option id="defaultoption"selected disabled hidden>--인쇄--</option>
@@ -86,7 +86,6 @@
       <option id="enhancedcopy" value="ecopy">고급인쇄설정</option>
     </select>
   </li>
-  <li><input type="button" value="DRD" id="DRD_Start"></li>
   <li><input type="button" value="첫 페이지" id="FirstPage"></li>
   <li><input type="button" value="이전 페이지" id="PreviousPage"></li>
   <li><input type="text" value=1 id="NowPage"> /</li>
@@ -136,9 +135,6 @@
   <li><input type="button" id="btnZoomIn" value="+"></li>
   <li><input type="button" id="btnZoomOut" value="-"></li>
   <li><input type="button" value="PDF"class="saveAsPdf"></li>
-  <li><input type="button" value="엑셀"></li>
-  <li><input type="button" value="셀"></li>
-  <li><input type="button" value="HWP"></li>
   <li>
     <select id="saveAsImage">
       <option id="saveAsDefault"selected disabled hidden>--이미지--</option>
