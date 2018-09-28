@@ -311,8 +311,6 @@ function drawBand(bands, dataBand, layerName, reportHeight, parentBand) {
                                     dataBandHeight = getBandHeightOfDataBand(dataBand, numofData - 1);
                                 }
                             }
-                            console.log(numofData);
-                            console.log(dataBandHeight);
                             $('#' + div_id).css({
                                 'width': dataBand.rectangle.width,
                                 'height': dataBandHeight,
