@@ -81,7 +81,6 @@ function makeReportTemplate(data, subReport) {
                     }
                 });
             } else {
-                console.log(controlLists);
                 if (controlLists._attributes["xsi:type"] == "ControlRegion") {
                     arrRegion.push(controlLists.anyType);
                 }
@@ -90,12 +89,12 @@ function makeReportTemplate(data, subReport) {
 
             makeReport(report, arrRegion);
 
-            var isDataBand = completeDataBand.find(function(completeData){
-                return dataBand.id = completeData;
-            });
-            if(isDataBand == undefined){
-                completeDataBand.push(dataBand.id);
-            }
+            // var isDataBand = completeDataBand.find(function(completeData){
+            //     return dataBand.id = completeData;
+            // });
+            // if(isDataBand == undefined){
+            //     completeDataBand.push(dataBand.id);
+            // }
             initializeVariable();
         // });
     });
@@ -137,22 +136,21 @@ function makeReport(report, arrRegion) {
     setReport(report);
 
     pageNum++;
-
     // 현재 찍힌 데이터 로우 행이 전체 데이터 보다 작을 경우 재귀함수
     // 클 경우 함수 종료 후 다음 리포트 생성
-    if (dataTable.DataSetName[dataBand.dataTableName] != undefined) {
-        if (curDatarowInDataBand < dataTable.DataSetName[dataBand.dataTableName].length && isDynamicTable == true) {
+    if (dataTable.DataSetName["dt"] != undefined) {
+        if (curDatarowInDataBand < dataTable.DataSetName["dt"].length && isDynamicTable == true) {
             reportPageCnt++;
             //ToDo arrRegion 수정 필요 리전 n개가 가능하고, 리전 반복이 가능해야함.
             if(arrRegion[0] != undefined){
                 if(curDatarowInRegion < dataTable.DataSetName[arrRegion[0].Layers.anyType.Bands.anyType.DataTableName._text].length && isDynamicTable == true){
-                    makeReport(report, dataBand, arrRegion);
+                    makeReport(report, arrRegion);
                 } else {
                     reportPageCnt = 1;
                     completeDataBand.push(arrRegion[0].Id._text);
                 }
             } else {
-                makeReport(report, dataBand, arrRegion);
+                makeReport(report, arrRegion);
             }
         } else {
             reportPageCnt = 1;
