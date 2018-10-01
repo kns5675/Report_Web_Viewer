@@ -1164,7 +1164,7 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
     }
     countingRows();
          function setRowCount(xZeroCount) {
-             console.log("@@@xZeroCount : ",xZeroCount);
+             //console.log("@@@xZeroCount : ",xZeroCount);
              var totalLabelWidth = 0;//라벨너비
              var labelCount = 0;//라벨개수
              var rowCount = 0;//row개수
@@ -1180,8 +1180,8 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                      labelCount++;
                      totalLabelWidth += thisLabelWidth;
 
-                     console.log("fixTableLabelListLength : ", fixTableLabelListLength, fixTableLabelList[i].rectangle.x);
-                     console.log(labelCount + "   ,   " +  totalLabelWidth + "  ,   "+ thisLabelWidth + ",   fixTableWidth : "+ fixTableWidth);
+                     //console.log("fixTableLabelListLength : ", fixTableLabelListLength, fixTableLabelList[i].rectangle.x);
+                     //console.log(labelCount + "   ,   " +  totalLabelWidth + "  ,   "+ thisLabelWidth + ",   fixTableWidth : "+ fixTableWidth);
 
                      if (labelCount == fixTableLabelListLength) {
 
@@ -1207,14 +1207,13 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                          }
                              function tdDataBinding(ThisfixedTableRow,drawingTds){
                                  var tdId = 'FixedTableLabel_';
-                                 console.log("2@@@@@@@@@@@@@@@@@@@@@@@@");
-                                 console.log(rC2, drawingTds);
+                                 //console.log(rC2, drawingTds);
                                  if(rC2>drawingTds){
                                      drawingTds  = labelCount;
                                  }
                                  for (rC2; rC2 <= drawingTds; rC2++) {
-                                     console.log("@@@ rC2 : ",rC2);
-                                     console.log("@@@ drawingTds : ",drawingTds);
+                                     //console.log("@@@ rC2 : ",rC2);
+                                     //console.log("@@@ drawingTds : ",drawingTds);
                                      var fromData = fixTableLabelList[rC2 - 1];
                                      //var fromData = fixTableLabelList[fixedTableNum - 1];
                                      // var tdIDMaking = tdId + rC2 + '_' + fixedTableNum;
@@ -1287,7 +1286,7 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                      // // drd_javascript(label, tdId_javascript, label.startBindScript, rC2, data[temp]);
 
                                  }
-                                 console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + rC2);
+                                 //console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + rC2);
                              }
                      }
                  }
@@ -1335,7 +1334,7 @@ function settingAttribute(fromData, tdId, rC2, fixTableId,fixTableWidth,fixTable
         'top': 0,
         'left': 0,
     });
-    console.log( " ############ : ",ThisFixedTableDataP);
+    //console.log( " ############ : ",ThisFixedTableDataP);
     if (fromData.noBorder == 'true'){//border 없을때
         ThisFixedTableData.css('border', 'none');
 
@@ -1437,7 +1436,6 @@ function settingAttribute(fromData, tdId, rC2, fixTableId,fixTableWidth,fixTable
     function settingVerticalTextAlignment(VTextAlignment){
         if(VTextAlignment!== undefined){
             var tagPHeight = (ThisFixedTableDataP.css('height')).split('px')[0];
-            console.log("!!!!!!!!!!!!! : ",tagPHeight);
             var tagPmarginTop=(fromData.rectangle.height - tagPHeight)/2;
             switch (VTextAlignment) {
                 case "Center":{
@@ -2265,7 +2263,6 @@ function shift_table_column_controller(resize_area, Unalterable_area) {
                         e.style.width = width + "px";
                     }
                 });
-                console.log("width : ",width);
                 // $(".table").each(function (i, e) {
                 //     var total_col = $("#" + e.id)[0].className.split(" ")[1];
                 //     if (total_col === select_label) {

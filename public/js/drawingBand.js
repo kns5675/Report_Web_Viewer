@@ -825,7 +825,9 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
                             })(parentBand);
                             // var tempDataBand = [];
                             // tempDataBand.push(dataBand);
-                            drawBand(parentBand, layerName, reportHeight);
+                            if(parentBand[0]){
+                                drawBand(parentBand, layerName, reportHeight);
+                            }
                         // }
                         }
                     }
