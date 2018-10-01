@@ -107,11 +107,13 @@ function makeHTML(){
  기능 : DR Viewer 인쇄 메뉴 선택하기 (select option value받아와서 메뉴 인식 후 모달창 띄우기)
  작성자 : 하지연
  ******************************************************************/
-function copyoptions(){
+function copyoptions(clicked_copy){
+    console.log(clicked_copy);
+    clicked_copy = clicked_copy.toLowerCase();
     try{
-        if ($("#copyOptions").val() == 'ecopy'){
+        if (clicked_copy == 'enhancedcopy'){
             $('#myModal').show();
-        }else if($("#copyOptions").val() == 'copy'){
+        }else if(clicked_copy == 'print' || clicked_copy == 'copyoptions'){
             $('#myModal').css('display','none');
             pagePrint();
         }else{
@@ -196,6 +198,7 @@ function zoomIn(){
     catch(e) {
         alert("test ==> " + e.message);
     }
+    console.log(size);
 }
 /******************************************************************
  기능 : select option의 선택값을 기본으로 - 버튼 클릭 시 5%가 추가 축소되는
@@ -333,35 +336,36 @@ function close_pop3(){
     $('#modalcase').hide();
 }
 /******************************************************************
- 기능 : - DR Viewer 이미지 내보내기 메뉴를 이용하여 SELECT의 OPTION
-        값을 설정.
+ 기능 : - DR Viewer 이미지 내보내기
         - 이미지 버튼클릭 시 로딩화면 띄우기
  작성자 : 하지연
+ 수정 : 전형준 - SELECT BOX → 드롭다운
  ******************************************************************/
-function imageOptions(){
+function imageOptions(export_img){
+    export_img = export_img.toLowerCase();
     try{
-        if ($("#saveAsImage").val() == 'png'){
-            var typeofimages = $("#saveAsImage").val();
+        if (export_img == 'png'){
+            var typeofimages = export_img;
             beginLoading(typeofimages);
             setImageType(typeofimages);
             endingLoading();
-        }else if($("#saveAsImage").val() == 'jpeg'){
-            var typeofimages = $("#saveAsImage").val();
+        }else if(export_img == 'jpg'){
+            var typeofimages = 'jpeg';
             beginLoading(typeofimages);
             setImageType(typeofimages);
             endingLoading();
-        }else if($("#saveAsImage").val() == 'bmp'){
-            var typeofimages = $("#saveAsImage").val();
+        }else if(export_img == 'bmp'){
+            var typeofimages = 'bmp'
             beginLoading(typeofimages);
             setImageType(typeofimages);
             endingLoading();
-        }else if($("#saveAsImage").val() == 'tiff'){
-            var typeofimages = $("#saveAsImage").val();
+        }else if(export_img == 'tiff'){
+            var typeofimages = 'tiff'
             beginLoading(typeofimages);
             setImageType(typeofimages);
             endingLoading();
-        }else if($("#saveAsImage").val() == 'gif'){
-            var typeofimages = $("#saveAsImage").val();
+        }else if(export_img == 'gif'){
+            var typeofimages = 'gif'
             beginLoading(typeofimages);
             setImageType(typeofimages);
             endingLoading();
@@ -679,3 +683,4 @@ function autoSize(pTagId) {
         'margin-bottom': '3px'
     });
 }
+

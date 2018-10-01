@@ -738,22 +738,48 @@ function temp_to_reportTemplate() {
     var wrap_arr_clone = report_backup(); // report_wrap_arr_html 변수 세팅
     var str = "";
 
-    for (var i = 0; i < wrap_arr_clone.length; i++) {
-        if (wrap_arr_clone[i].length > 0 && check_forceNextReport(reportTemplate.reportList[i])) { // 리포트 넘기기일 때
+    for(var i=0; i<wrap_arr_clone.length; i++){
+        // console.log(i+1 + "번째 리포트");
+        // '리포트'의 리포트 넘기기가 true일 때
+        if(wrap_arr_clone[i].length > 0
+            && (reportTemplate.reportList[i].forceNextReport // 리포트의 리포트 넘기기가 true
+            // || check_groupFieldName_in_GroupFooter(reportTemplate.reportList[i].layers.designLayer.bands))){
+            )){
+            // console.log("리포트의 리포트 넘기기가 true");
             str += wrap_arr_clone[i][0];
             wrap_arr_clone[i].shift();
-        } else {
-            for (var j = 0; j < wrap_arr_clone[i].length; j++) {
+        }
+        // '그룹풋터밴드'의 리포트 넘기기가 true일 때
+        else if(wrap_arr_clone[i].length > 0
+            // && check_groupFieldName_in_GroupFooter(reportTemplate.reportList[i].layers.designLayer.bands)
+            && check_forceNextReport_in_GroupFooter(reportTemplate.reportList[i].layers.designLayer.bands)){
+
+            while(wrap_arr_clone[i].length > 0){
+                var bandDataCnt = (wrap_arr_clone[i].match(/BandData/g) || []).length;
+                var bandDataHeaderCnt = (wrap_arr_clone[i].match(/BandDataHeader/g) || []).length;
+                var bandDataFooterCnt = (wrap_arr_clone[i].match(/BandDataFooter/g) || []).length;
+                var bandGroupFooterCnt = (wrap_arr_clone[i].match(/BandGroupFooter/g) || []).length;
+                bandDataCnt = bandDataCnt - bandDataFooterCnt - bandDataHeaderCnt;
+                console.log("데이터밴드 텍스트 개수 : " + bandDataCnt);
+                console.log("그룹풋터밴드 텍스트 개수 : " + bandGroupFooterCnt);
+                if(bandDataCnt === bandGroupFooterCnt){
+                    str += wrap_arr_clone[i][0];
+                }
+
+            }
+        }
+        else{
+            for(var j=0; j<wrap_arr_clone[i].length; j++){
                 str += wrap_arr_clone[i][j];
             }
             wrap_arr_clone[i] = [];
         }
 
         var remain_wrap_count = 0;
-        for (var j = 0; j < wrap_arr_clone.length; j++) {
+        for(var j=0; j<wrap_arr_clone.length; j++){
             remain_wrap_count += wrap_arr_clone[j].length;
         }
-        if ((i === wrap_arr_clone.length - 1) && (remain_wrap_count > 0)) {
+        if((i === wrap_arr_clone.length-1) && (remain_wrap_count > 0)){
             i = -1;
         }
     }
@@ -787,38 +813,103 @@ function report_backup() {
 }
 
 /***********************************************************************
- 기능 : '리포트 넘기기' 속성이 true 인지 확인
- >> 속성이 리포트에만 있는 것이 아니라,
- '그룹풋터밴드'에도 존재하며 그 속성이 true라면
- 리포트 넘기기의 기능이 정상작동 하므로 둘 모두 체크해줌
- 만든이 : 전형준
+?? 삭제 예정
  ***********************************************************************/
-function check_forceNextReport(report) {
+function check_forceNextReport_in_Report(report){
     var bandGroupFooterIsTrue = false;
-    report.layers.designLayer.bands.forEach(function (band) {
-        if (band instanceof BandData && band.childFooterBands !== null) {
-            band.childFooterBands.forEach(function (childBand) {
-                if (childBand instanceof BandGroupFooter && childBand.forceNextReport === true)
+    report.layers.designLayer.bands.forEach(function(band){
+       if(band instanceof BandData && band.childFooterBands !== null){
+            band.childFooterBands.forEach(function(childBand){
+                if(childBand instanceof BandGroupFooter && childBand.forceNextReport === true)
                     bandGroupFooterIsTrue = true;
                 else
                     bandGroupFooterIsTrue = false;
             });
-        }
+       }
     });
     return report.forceNextReport + bandGroupFooterIsTrue > 0 ? true : false;
 }
 
 /***********************************************************************
- 기능 : 리포트 넘기기가 됐을시 temp_reportTemplate에서 생성되어 뒤섞인
- pageforcopyratio와 page를 다시 새로 넘버링해줌
+ 기능 : 그룹 풋터 밴드가 존재하는지, 그룹 풋터 밴드의 속성중
+        GroupFiledName이 존재하는지 체크
  만든이 : 전형준
  ***********************************************************************/
-function reNumbering() {
+function check_groupFieldName_in_GroupFooter(bands){
+    var bool = false;
+    bands.forEach(function(band){
+        if(band instanceof BandData && band.childFooterBands !== null){
+            band.childFooterBands.forEach(function(childBand) {
+                if (childBand instanceof BandGroupFooter && childBand.groupFiledName !== null){
+                    bool = true;
+                }
+            });
+        }
+    });
+    return bool;
+}
+/***********************************************************************
+ 기능 : 그룹 풋터 밴드가 존재하는지, 그룹 풋터 밴드의 속성중
+        '리포트 넘기기'가 true인지 확인
+ 만든이 : 전형준
+ ***********************************************************************/
+function check_forceNextReport_in_GroupFooter(bands){
+    var bool = false;
+    bands.forEach(function(band){
+        console.log("여긴 오나요");
+        if(band instanceof BandData && band.childFooterBands !== null){
+            console.log("데이터밴드가 있고 자식밴드가 있어요");
+            band.childFooterBands.forEach(function(childBand) {
+                if (childBand instanceof BandGroupFooter && childBand.forceNextReport === true){
+                    console.log("자식밴드중 그룹풋터밴드가 있고 리포트넘기기가 true예요");
+                    bool = true;
+                }
+            });
+        }
+    });
+    return bool;
+}
+
+
+/***********************************************************************
+ 기능 : 리포트 넘기기가 됐을시 temp_reportTemplate에서 생성되어 뒤섞인
+        pageforcopyratio와 page를 다시 넘버링해줌
+        (기능에 영향을 미치는 엘리먼트만 우선.
+        다시 넘버링해줘야 하는 애들이 더 있을지 모름)
+ 만든이 : 전형준
+ ***********************************************************************/
+function reNumbering(){
     var pageforcopyratio_div_arr = $('.pageforcopyratio');
     var page_div_arr = $('.page');
+    var cnt = 1;
 
-    for (var i = 0; i < pageforcopyratio_div_arr.length; i++) {
-        pageforcopyratio_div_arr.eq(i).attr('id', 'pageforcopyratio' + (i + 1));
-        page_div_arr.eq(i).attr('id', 'page' + (i + 1));
+    for(var i=0; i<pageforcopyratio_div_arr.length; i++){
+        // console.log(i);
+        if(pageforcopyratio_div_arr.eq(i).css('display') !== 'none'){
+            pageforcopyratio_div_arr.eq(i).attr('id', 'pageforcopyratio'+(cnt));
+            page_div_arr.eq(i).attr('id', 'page'+(cnt));
+            cnt++;
+        } else{
+            pageforcopyratio_div_arr.eq(i).removeAttr('id');
+            page_div_arr.eq(i).removeAttr('id');
+            // pageforcopyratio_div_arr.eq(i).removeUniqueId();
+            // page_div_arr.eq(i).removeUniqueId();
+        }
     }
+    // console.log(remove_page_arr);
+    // console.log("============");
+    //
+    // for(var i=0; i<remove_page_arr.length; i++){
+    //     pageforcopyratio_div_arr.splice(remove_page_arr[0], 1);
+    //     page_div_arr.splice(remove_page_arr[0], 1);
+    //     console.log("삭제!");
+    // }
+    //
+    // console.log("pagecory length : " + pageforcopyratio_div_arr.length);
+    // console.log("page length : " + page_div_arr.length);
+    //
+    // for(var i=0; i<pageforcopyratio_div_arr.length; i++){
+    //     pageforcopyratio_div_arr.eq(i).attr('id', 'pageforcopyratio'+(i+1));
+    //     page_div_arr.eq(i).attr('id', 'page'+(i+1));
+    // }
 }

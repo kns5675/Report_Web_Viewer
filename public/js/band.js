@@ -139,7 +139,7 @@ function BandGroupHeader(band){
     this.autoSize = band.AutoSize._text; // 자동 높이 조정
     this.dziName = band.DziName._text; // 데이터 셋 이름
     this.dataTableName = band.DataTableName._text; // 데이터 테이블 이름
-    this.groupFiledName = band.GroupFiledName._text; // 그룹 기준 필드
+    this.groupFieldName = band.GroupFiledName._text === undefined ? null : band.GroupFiledName._text;// 그룹 기준 필드
     this.isApprovalBase = band.IsApprovalBase._text; // 결재란 기준 밴드
     this.startBindScript = band.StartBindScript  === undefined ? undefined : band.StartBindScript._text;
     /******************************************************************

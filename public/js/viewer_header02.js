@@ -103,7 +103,7 @@ function tableChoice() {
 
             selected_table_index = $('#leftpart_modalTableChoice_header > li').index(this);
             var labelList = $('#labelListUl');
-            labelList.html("");
+            labelList.empty();
 
             for(var i=0; i< table_choice_th_list[selected_table_index].length; i++){
                labelList.append(
@@ -295,13 +295,88 @@ function tableChoice() {
         /****************************** 컬럼 display 여부 완료 ******************************/
 
         $('#labelListUl > li').removeClass('selected_th'); // 사용한 클래스 제거
+        resize_event_reSetting();
         modalLayer.fadeOut("slow"); // 창 닫기
     });
 }
 
+/************************************
+ * 기능 : '리포트 선택' 기능 구현
+ * 만든이 : 전형준
+ ************************************/
 function report_choice(){
+    var modalLayer = $('#modalReportChoice');
+    var reportListUl = $('#reportListUl');
+    $('#reportChoice').on('click', function(){
+        modalLayer.show(); // 모달창 띄우기
 
-    var modalLayer = $('#reportChoice');
+        // 서브리포트? 인지 등 처리해줄 것
+        if(reportNum === reportTemplate.reportList.length){
+            reportListUl.empty();
+            drawChkBox_N_ReportList(reportListUl);
+            getDisplayReportList();
+        }
+    });
 
+    /************************************
+     * 기능 : 'X'버튼 클릭시 화면 닫기
+     * 만든이 : 전형준
+     ************************************/
+    $('#closebtn_modalReportChoice').on('click', function(){
+       modalLayer.hide();
+    });
 
+    /****************************************************
+     * 기능 : '확인'버튼 클릭시 체크한 리포트만 보여줌
+     * 만든이 : 전형준
+     ****************************************************/
+    $('#reportChoice_done').on('click', function(){
+        var chkbox_arr = $('.report_display_chk');
+        var report_specific;
+
+        for(var i=0; i<chkbox_arr.length; i++){
+            report_specific = $('.report' + (i+1));
+            if(chkbox_arr.eq(i).prop('checked') === true) {
+                report_specific.css('display', 'block');
+            }
+            else{
+                report_specific.css('display', 'none');
+            }
+        }
+        reNumbering();
+        // resize_event_reSetting();
+        modalLayer.hide();
+    });
+}
+
+/****************************************************
+ * 기능 : '리포트 선택' 기능에서,
+ *         모달창에 리포트 리스트와 그에 대한 체크박스를 그림
+ * 만든이 : 전형준
+ ****************************************************/
+function drawChkBox_N_ReportList(reportListUl){
+    for(var i=0; i<reportTemplate.reportList.length; i++){
+        reportListUl.append(
+            "<li>" +
+                "<input type='checkbox' id='report_display_chk" + i + "' class='report_display_chk'/>" +
+                "<label for='report_display_chk" + i + "'>" +
+                    "Report" + (i+1) + "[" + reportTemplate.reportList[i].name + "]" +
+                "</label>" +
+            "</li>"
+        );
+    }
+}
+
+/****************************************************
+ * 기능 : '리포트 선택' 기능에서 현재 보여지고 있는
+ *        리포트를 체크표시로 둠
+ * 만든이 : 전형준
+ ****************************************************/
+function getDisplayReportList(){
+    var chkbox_arr = $('.report_display_chk');
+    for(var i=0; i<reportTemplate.reportList.length; i++){
+        if($('.report' + (i+1)).eq(0).css('display') !== 'none'){
+            chkbox_arr.eq(i).prop('checked', 'checked');
+        }
+    }
 }

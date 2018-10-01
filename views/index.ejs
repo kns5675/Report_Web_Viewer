@@ -6,7 +6,7 @@
     <meta name="keywords" content="angeleyes, testhtml, testjavascript">
     <meta name="description" content="test document">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Document</title>
+    <title>Report Web Viewer</title>
     <link rel="stylesheet" href="css/main.css"/>
     <link rel="stylesheet" href="css/index.css"/>
     <link rel="stylesheet" href="css/print.css"/>
@@ -45,6 +45,7 @@
             $("#myModal").load("/include/modal.ejs");
             $("#loadingModal").load("/include/loading.ejs");
             $('#modalTableChoice').load("/include/modalTableChoice.ejs");
+            $('#modalReportChoice').load("/include/modalReportChoice.ejs");
             makeReportTemplate(data);
             drawPageNumberInSystemLabel();
             band_dbclick_event(data);
@@ -61,12 +62,12 @@
     </style>
 </head>
 <body>
-<div id="header" style="padding-top:30px;/*pointer-events: auto;*/"></div>
+<div id="header"></div>
 <div id="myModal" class="modal" style="/*pointer-events: auto;*/"></div><!-- 고급인쇄 모달창 -->
 <div id="loadingModal" class="modal" style="/*pointer-events: auto;*/"></div><!-- pdf,html등 내보내기에 필요한 로딩창 -->
 
 <div id="modalTableChoice" class="modal" style="/*pointer-events: auto;*/"></div>
-<div id="report_choice" class="modal"></div>
+<div id="modalReportChoice" class="modal"></div>
 
 <div id="reportTemplate"></div>
 <div id="temp_reportTemplate"></div>

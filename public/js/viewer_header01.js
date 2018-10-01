@@ -186,7 +186,7 @@ function image_upload() {
      기능 : 이미지 추가 버튼
      만든이 : hagdung-i
      ******************************************************************/
-    $(".image_upload_button").on("click" ,function () {
+    $("#image_upload_button").on("click" ,function () {
         modalLayer.fadeIn("slow");
         modalCont.css({"margin-top" : -marginTop, "margin-left" : -marginLeft});
         $(this).blur();
