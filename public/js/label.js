@@ -14,7 +14,7 @@ function Label(data){
     };
 
     this.name = data.Name._text;
-    this.Lock = data.Lock;
+    this.Lock = data.Lock === undefined ? undefined : data.Lock._text;
     this.dataType = data.DataType === undefined ? "NormalLabel" : data.DataType._text; // 데이터 형태
     this.imageTransparent = data.ImageTransparent === undefined ? 0 : data.ImageTransparent; // 이미지 투명도
     this.zOrder = data.ZOrder === undefined ? 0 : data.ZOrder._text;
@@ -124,7 +124,7 @@ function Label(data){
     this.visible = data.Visible === undefined ? true : data.Visible._text; // VISIBLE Default : true
     this.numberToTextType = data.NumberToTextType === undefined ? false : data.NumberToTextType._text; // 금액 표시 방법
     this.isSameWidth = data.IsSameWidth === undefined ? false : data.IsSameWidth._text; // 글자 크기 동일 여부
-    this.editable = data.Editable === undefined ? undefined : data.Editable._text; // 편집 가능
+    this.editable = data.Editable === undefined ? 'true' : data.Editable._text; // 편집 가능
 
     this.backGroundColor = data.BackgGoundColor === undefined ? 'white' : data.BackgGoundColor._text; // 바탕색
     this.clipping = data.Clipping === undefined ? false : data.Clipping._text; // 클립핑 default : false

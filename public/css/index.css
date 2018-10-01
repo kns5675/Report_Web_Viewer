@@ -7,9 +7,62 @@ body{
 }
 
 #header {
-    background-color: darkslategrey;
+    background-color: #cbd9ef;
+    /*darkslategrey*/
+    /*#cbd9ef*/
     z-index: 999;
-    height:77px;
+    height:64px;
+    padding-top : 18px;
+    border-bottom : 1px solid grey;
+}
+
+ul#header_ul{
+    margin : 0 auto;
+    padding : 0;
+    width : fit-content;
+}
+
+ul#header_ul > li{
+    display : inline-block;
+    box-sizing: border-box;
+}
+
+ul#header_ul > li:hover{
+    cursor : pointer;
+    background-color : lightblue;
+    border : 1px solid steelblue;
+}
+ul#copyOptions_list{
+    position : absolute;
+    display : none;
+    padding : 0px;
+    background-color : #e5e7ea;
+    margin-top : 1px;
+}
+ul#copyOptions_list > li{
+    display : block;
+}
+li#copyOptions:hover ul#copyOptions_list{
+    display : block;
+    position : absolute;
+}
+ul#saveImgList{
+    display : none;
+    position : absolute;
+    padding : 0px;
+    background-color : #e5e7ea;
+    margin-top : 1px;
+}
+ul#saveImgList > li{
+    display : block;
+}
+
+ul#saveImgList > li:hover{
+    background-color : #c5cedb;
+}
+
+li#saveAsImage:hover ul#saveImgList{
+    display : block;
 }
 
 .jbFixed {
@@ -18,7 +71,7 @@ body{
     margin:0px;
     padding:0px;
     z-index: 999;
-    height:77px;
+    height:58px;
 }
 
 .show-on-scroll { visibility: hidden; }
@@ -26,12 +79,20 @@ body{
 
 #reportTemplate{
     z-index: -3;
-    background-color: transparent;
+    background-color: gray;
+}
+
+#temp_reportTemplate{
+    background-color : gray;
 }
 
 #modalLayer{display:none; position:relative;}
 #modalLayer .modalContent{width:440px; height:200px; padding:20px; border:1px solid #ccc; position:fixed; left:50%; top:50%; z-index:551; background:#fff;}
 #modalLayer .modalContent button{right:0; top:0; cursor:pointer;}
+
+#filemodalLayer{display:none; position:relative;}
+#filemodalLayer .modalContent{width:250px; height:225px; border:1px solid #313e52; position:fixed; left:40%; top:35%; z-index:551; background:#fff; margin: 0px;}
+#filemodalLayer .modalContent button{right:0; top:0; cursor:pointer;}
 
 #image_dialog{display:none; position:relative;}
 #image_dialog #dialog{width:440px; height:200px; padding:20px; border:1px solid #ccc; position:fixed; left:50%; top:50%; z-index:551; background:#fff;}

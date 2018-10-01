@@ -6,7 +6,7 @@
     <meta name="keywords" content="angeleyes, testhtml, testjavascript">
     <meta name="description" content="test document">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Document</title>
+    <title>Report Web Viewer</title>
     <link rel="stylesheet" href="css/main.css"/>
     <link rel="stylesheet" href="css/index.css"/>
     <link rel="stylesheet" href="css/print.css"/>
@@ -45,6 +45,7 @@
             $("#myModal").load("/include/modal.ejs");
             $("#loadingModal").load("/include/loading.ejs");
             $('#modalTableChoice').load("/include/modalTableChoice.ejs");
+            $('#modalReportChoice').load("/include/modalReportChoice.ejs");
             makeReportTemplate(data);
             drawPageNumberInSystemLabel();
             band_dbclick_event(data);
@@ -61,12 +62,12 @@
     </style>
 </head>
 <body>
-<div id="header" style="padding-top:30px;/*pointer-events: auto;*/"></div>
+<div id="header"></div>
 <div id="myModal" class="modal" style="/*pointer-events: auto;*/"></div><!-- 고급인쇄 모달창 -->
 <div id="loadingModal" class="modal" style="/*pointer-events: auto;*/"></div><!-- pdf,html등 내보내기에 필요한 로딩창 -->
 
 <div id="modalTableChoice" class="modal" style="/*pointer-events: auto;*/"></div>
-<div id="report_choice" class="modal"></div>
+<div id="modalReportChoice" class="modal"></div>
 
 <div id="reportTemplate"></div>
 <div id="temp_reportTemplate"></div>
@@ -114,7 +115,46 @@
             </div>
         </div>
     </div>
-
+</div>
+<div id="file_Modal" style="pointer-events: auto;"><!--파일열기 모달창-->
+    <div id="filemodalLayer" class="modalLayer">
+        <div class="modalContent modal-content">
+            <div id="file_add_area" class="image_add_area">
+                <span>파일 추가</span>
+                <span class="upload_cancel" style="cursor:pointer;float:right;margin-right:10px;">X</span>
+            </div>
+            <div>
+                <span style="font-weight: bold; font-size: 12px; margin-top: 4px; margin-left: 3px;">XML 선택</span>
+            </div>
+            <form action="/" enctype="multipart/form-data" method="post">
+                <div style="margin: 10px; margin-top: 0px; background-color: #f5f5f5; border: 1px solid gray; height: auto;">
+                    <div class="file_insert_area">
+                        <input id="file_insert" name="send_file" type="file" accept="*/xml"><br/>
+                    </div>
+                </div>
+                <div>
+                    <span style="font-weight: bold; font-size: 12px; margin-top: 4px; margin-left: 3px;">DB 선택</span>
+                </div>
+                <div style="margin: 10px; margin-top: 0px; background-color: #f5f5f5; border: 1px solid gray; height: auto;">
+                    <div class="file_insert_area">
+                        <input id="db_insert" name="send_file" type="file" accept="*/xml"><br/>
+                    </div>
+                </div>
+                <div>
+                    <span style="font-weight: bold; font-size: 12px; margin-top: 4px; margin-left: 3px;">PARAM 선택</span>
+                </div>
+                <div style="margin: 10px; margin-top: 0px; background-color: #f5f5f5; border: 1px solid gray; height: auto;">
+                    <div class="file_insert_area">
+                        <input id="param_insert" name="send_file" type="file" accept="*/xml"><br/>
+                    </div>
+                </div>
+                <div class="file_insert_button_area" style="float: right; margin-right: 10px;">
+                    <button id="file_upload_button" type="submit" value="" onclick="file_open_submit($('#file_insert'), $('#db_insert'), $('#param_insert'))">확인</button>
+                    <button id="file_upload_cancel" class="upload_cancel" type="button">취소</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 </body>
 </html>

@@ -306,7 +306,7 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData, band) {
     dynamicTable_resizing_div_packing.append('<div id="dynamicTable_resizing_div' + dynamicTableNum + '"></div>');
     var dynamicTable_resizing_div = $("#dynamicTable_resizing_div" + dynamicTableNum);
     var temp_table_class = table.id.substring(0, 4); // 임시로 table을 인식하기 위한 번호 - 전형준
-    dynamicTable_resizing_div.append('<table id="dynamicTable' + dynamicTableNum + '" class="table table-' + temp_table_class + '"></table>');
+    dynamicTable_resizing_div.append('<table id="dynamicTable' + dynamicTableNum + '" class="table dynamicTable table-' + temp_table_class + '"></table>');
     // dynamicTable_resizing_div.addClass("NormalLabel_scope");
     div.css('position', 'relative');
 
@@ -342,7 +342,7 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData, band) {
         tableId.css({
             'border': '1px solid red',
             'border-collapse': 'collapse',
-            'text-align': 'center'
+            'text-align': 'center',
             // 'table-layout': 'fixed'
         });
 
@@ -383,11 +383,13 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
                     label.text = paramData.Value._text;
                 }
             });
+
+            thId.append('<p id="value_P_tag'+thNum+'">'+label.text+'</p>');
             var valueTrId = $('#dynamicValueLabel' + tempCurDataRow);
             var tdId = 'tableValueLabelNum' + tableValueLabelNum++;
             var key = label.parameterName;
-            if (!minimumRow) {
-                valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '">' + label.text + '</td>');
+            if (!minimumRow) {  //td의 label 값을 p태그에 묶음.
+                valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '"><p id="value_P_tag'+thNum+'" style="margin: 0px;">' + label.text + '</p></td>');
             } else { // 최소행 개수
                 valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '"></td>');
             }
@@ -435,8 +437,8 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
                     var table_reform = table_format_check(data, valueTrId, key_data, table);
                     var tdId = 'tableValueLabelNum' + tableValueLabelNum++;
                     if (!minimumRow) {
-                        if (label.labelTextType == 'Number' && label.format != undefined) {
-                            valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '">' + table_reform + '</td>');
+                        if (label.labelTextType == 'Number' && label.format != undefined) { //td의 label 값을 p태그에 묶음.
+                            valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '"><p id="value_P_tag'+thNum+'" style="margin: 0px;">' + table_reform + '</p></td>');
                         } else {
                             valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '">' + table_reform + '</td>');
                         }
@@ -550,7 +552,7 @@ function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, nu
             var tdId = 'tableValueLabelNum' + tableValueLabelNum++;
             var key = label.parameterName;
             if (!minimumRow) {
-                valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '">' + label.text + '</td>');
+                valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '"><p id="value_P_tag'+thNum+'" style="margin: 0px;">' + label.text + '</p></td>');
             } else { // 최소행 개수
                 valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '"></td>');
             }
@@ -606,7 +608,7 @@ function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, nu
                     } else {
                         if (label.labelTextType == 'Number' && label.format != undefined) {
                             valueTrId.append(
-                                '<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '">' + table_reform + '</td>'
+                                '<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '"><p id="value_P_tag'+thNum+'" style="margin: 0px;">' + table_reform + '</p></td>'
                             );
                         } else {
                             valueTrId.append(
@@ -1104,8 +1106,8 @@ function drawingDynamicTableTitleLabel(label, header_Name_Number) {
     var thId = $('#DynamicTableTitleLabel' + header_Name_Number + "_View_Page_Number" + thNum);
 
     setCssInTable(label, thId);
-
-    thId.append(label.text);
+    // thId.append(label.text);
+    thId.append('<p id="title_P_tag'+thNum+'" style="margin: 0px;">'+label.text+'</p>');
     thId.addClass('Label DynamicTableHeader');
     thId.addClass(label._attributes);
     table_column_controller(thId, titleTrId);
@@ -1524,7 +1526,6 @@ function drawingSummaryLabel(data, divId, band_name) {
         label_type: data.dataType,
         dataTableName: data.dataTableName
     };
-    console.log(data);
     labelPropertyApply(labelNbandInfo);
 }
 
@@ -2060,22 +2061,36 @@ function lineSpacing(text, spacing, pTagId) {
  Date : 2018-08-24
  만든이 : hagdung-i
  ******************************************************************/
-function Lock_check(data, Label_id, div) { //라벨 데이터, 드래그 리사이즈 영역, 벗어나면 안되는 영역
-    var Lock_check;
+function Lock_check(data, Label_id, div) { //라벨 데이터, 드래그 리사이즈 영역(p의 div), 벗어나면 안되는 영역(밴드)
     var editable_test = data.editable;
-    editable_test = 'true';
-    if (editable_test == 'true') {
-        if (data.Lock === undefined) {
-            Lock_check = data.Lock;
-        } else {
-            Lock_check = data.Lock._text;
-        }
-        if (!Lock_check) {
-            if (div) {
+
+    if (editable_test == 'true') { // 편집이 가능할 때
+        if (!data.lock) {
+            if(div){
                 Label_id.draggable({containment: "#" + div[0].id, zIndex: 999});
                 Label_id.resizable({containment: "#" + div[0].id, autoHide: true});
             }
+        } else{
+            Label_id.addClass('Lock');
         }
+    } else{
+        Label_id.addClass('nEdit');
+    }
+}
+
+/******************************************************************
+ 기능 : 위의 Lock_check 이벤트를 새로 그려준 element에게도 먹여주기 위한 함수
+ Date : 2018-09-27
+ 만든이 : hyeongdyun-i
+ ******************************************************************/
+function after_Lock_check() {
+    var label_all = $('p.Label:not(.nEdit, .Lock)').parent();
+
+    for(var i=0; i<label_all.length; i++){
+        (function(index){
+            label_all.eq(index).draggable({containment: "#" + label_all.eq(index).parents('.Band').attr('id'), zIndex: 999});
+            label_all.eq(index).resizable({containment: "#" + label_all.eq(index).parents('.Band').attr('id'), autoHide: true});
+        })(i);
     }
 }
 
@@ -2089,30 +2104,56 @@ function Lock_check(data, Label_id, div) { //라벨 데이터, 드래그 리사�
  만든이 : hagdung-i
  ******************************************************************/
 function Lock_Check_Table(data, drag, resize, div) { //테이블 데이터, 드래거블 지정할 영역, 리사이즈 영역, 위치 이동시 벗어나면 안되는 영역
-    var Lock_check;
-    if (data.Lock === undefined) {
-        Lock_check = data.Lock;
-    } else {
-        Lock_check = data.Lock._text;
-    }
-    if (!Lock_check) {
+    if (!data.Lock) {
         drag.draggable({containment: "#" + div[0].id, zIndex: 999});
         var width;
         resize.resizable({
-            containment: "#" + div[0].id,
-            autoHide: true,
+            containment: "#" + div[0].id, autoHide: true,
             resize: function (event, ui) {   //테이블사이즈는 가로만 조정 가능하도록.
                 ui.size.height = ui.originalSize.height;
                 width = ui.size.width;
-                var select_label = $("#" + this.id)[0].className.split(" ")[1];
+                var select_label = $("#"+this.id)[0].className.split(" ")[1];
                 $(".table").each(function (i, e) {
-                    var total_col = $("#" + e.id)[0].className.split(" ")[1];
-                    if (total_col === select_label) {
-                        e.style.width = width + "px";
+                    var total_col = $("#"+e.id)[0].className.split(" ")[1];
+                    if(total_col === select_label){
+                        e.style.width = width+"px";
                     }
                 });
             }
         });
+    } else{
+        resize.addClass('Lock');
+    }
+}
+
+/******************************************************************
+ 기능 : 위의 Lock_Check_Table 이벤트를 새로 그려준 element에게도 먹여주기 위한 함수
+ Date : 2018-09-27
+ 만든이 : hyeongdyun-i
+ ******************************************************************/
+function after_Lock_Check_Table() { //테이블 데이터, 드래거블 지정할 영역, 리사이즈 영역, 위치 이동시 벗어나면 안되는 영역
+    var table_all = $('table.table:not(.Lock)'); // resize
+
+    for(var i=0; i<table_all.length; i++){
+        (function(index){
+            table_all.eq(index).parent().draggable({containment: "#" + table_all.eq(index).parents('.Band').attr('id'), zIndex: 999});
+            var width;
+            table_all.eq(index).resizable({
+                containment: "#" + table_all.eq(index).parents('.Band').attr('id'), autoHide: true,
+                resize: function (event, ui) {   //테이블사이즈는 가로만 조정 가능하도록.
+                    ui.size.height = ui.originalSize.height;
+                    width = ui.size.width;
+                    var select_label = $("#"+this.id)[0].className.split(" ")[1];
+                    $(".table").each(function (index, e) {
+                        var total_col = $("#"+e.id)[0].className.split(" ")[1];
+                        if(total_col === select_label){
+                            e.style.width = width+"px";
+                        }
+                    });
+                }
+            });
+        })(i);
+
     }
 }
 
@@ -2149,9 +2190,8 @@ function table_format_check(data, Label_id, key, table) {
     if (key != NaN) { //해당 데이터가 숫자일 경우
         if (test === "AmountSosu" || test === "MoneySosu" || test === "MoneySosu") {   //수량, 금액 소숫점 자리수 ###,###
             var parts = key.toString().split(".");
-            if (parts[1]) {
+            if (parts[1]) { //소수점이 있을 때.
                 var decimal_cutting = parts[1].substring(0, 2);
-                console.log("decimal_cutting : ", decimal_cutting);
                 return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "." + decimal_cutting;
             } else {
                 return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -2162,7 +2202,6 @@ function table_format_check(data, Label_id, key, table) {
             var parts = key.toString().split(".");
             if (parts[1]) {
                 var decimal_cutting = parts[1].substring(0, 2);
-                console.log("decimal_cutting : ", decimal_cutting);
                 return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + (parts[1] ? "." + parts[1] : "");
             } else {
                 return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -2171,7 +2210,6 @@ function table_format_check(data, Label_id, key, table) {
             var parts = key.toString().split(".");
             if (parts[1]) {
                 var decimal_cutting = parts[1].substring(0, 3);
-                console.log("decimal_cutting : ", decimal_cutting);
                 return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + (parts[1] ? "." + parts[1] : "");
             } else {
                 return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -2208,6 +2246,85 @@ function table_column_controller(resize_area, Unalterable_area) {
             }
         });
     }
+}
+
+function shift_table_column_controller(resize_area, Unalterable_area) {
+    var width;
+    if (Unalterable_area[0]) {
+        resize_area.resizable({
+            containment: "#" + Unalterable_area[0].id,
+            autoHide: true,
+            resize: function (event, ui) {   //테이블사이즈는 가로만 조정 가능하도록.
+                ui.size.height = ui.originalSize.height;
+                width = ui.size.width;
+                var resizing_label = this;
+                var select_label = $("#" + resizing_label.id).text();
+                $(".DynamicTableHeader").each(function (i, e) {
+                    var total_col = $("#" + e.id).text();
+                    if (total_col === select_label) {
+                        e.style.width = width + "px";
+                    }
+                });
+                console.log("width : ",width);
+                // $(".table").each(function (i, e) {
+                //     var total_col = $("#" + e.id)[0].className.split(" ")[1];
+                //     if (total_col === select_label) {
+                //         e.style.width = width + "px";
+                //     }
+                // });
+            }
+        });
+    }
+}
+
+/******************************************************************
+ 기능 : 위의 Lock_Check_Table 이벤트를 새로 그려준 element에게도 먹여주기 위한 함수
+ Date : 2018-09-27
+ 만든이 : hyeongdyun-i
+ ******************************************************************/
+function after_table_column_controller() {
+    var table_all = $('table.dynamicTable');
+    var width;
+    for(var i=0; i<table_all.length; i++){
+        (function(index_i){
+            var first_tr = table_all.eq(index_i).find('tr').eq(0);
+            // console.log(first_tr);
+            for(var j=0; j<first_tr.children().length; j++) {
+                (function(index_j){
+                    var resize_area = first_tr.children().eq(index_j);
+                    resize_area.resizable({
+                        containment: "#" + first_tr.attr('id'),
+                        autoHide: true,
+                        resize: function (event, ui) {   //테이블사이즈는 가로만 조정 가능하도록.
+                            ui.size.height = ui.originalSize.height;
+                            width = ui.size.width;
+                            var resizing_label = this;
+                            var select_label = $("#" + resizing_label.id).text();
+                            console.log("select_label"+select_label);
+                            $(".DynamicTableHeader").each(function (i, e) {
+                                var total_col = $("#" + e.id).text();
+                                console.log("total_col:" + total_col);
+                                if (total_col === select_label) {
+                                    e.style.width = width + "px";
+                                }
+                            });
+                        }
+                    });
+                })(j);
+            }
+        })(i);
+    }
+}
+
+/******************************************************************
+ 기능 : 라벨들이 다시 그려질 때 다시 이벤트를 부여하는 함수
+ Date : 2018-09-27
+ 만든이 : hyeongdyun-i
+ ******************************************************************/
+function resize_event_reSetting(){
+    after_Lock_check();
+    after_Lock_Check_Table();
+    after_table_column_controller();
 }
 
 /******************************************************************
@@ -2825,9 +2942,15 @@ function z_index_setting(band_name) {
     return z_index;
 }
 
-/*************************
- * DRD 자바스크립트 구현
- *************************/
+/******************************************************************
+ 기능 : DRD 자바스크립트 구현
+ Date : 2018-09-24
+ 만든이 : big_dolphin
+
+ 추가 : DRD 자바스크립트 세부적 추가 기능 구현
+ Date : 2018-09-27
+ 만든이 : hagdung-i
+ ******************************************************************/
 function drd_javascript(label, labelId, script, key, data) {
     if (labelId !== undefined && script !== undefined) {
         var making_script;
@@ -2855,8 +2978,12 @@ function drd_javascript(label, labelId, script, key, data) {
 function str_replace(str, searchStr, replaceStr) {
     return str.split(searchStr).join(replaceStr);
 }
-
-function DataSource(data, variable_name, variable_value) {
+/******************************************************************
+ 기능 :
+ Date : 2018-09-24
+ 만든이 : hagdung-i
+ ******************************************************************/
+function DataSource(data, variable_name, variable_value){
     this.GetDataRow = data;
     // this.variable_name = variable_value;
 };

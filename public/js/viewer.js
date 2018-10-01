@@ -105,11 +105,13 @@ function makeHTML(){
  기능 : DR Viewer 인쇄 메뉴 선택하기 (select option value받아와서 메뉴 인식 후 모달창 띄우기)
  작성자 : 하지연
  ******************************************************************/
-function copyoptions(){
+function copyoptions(clicked_copy){
+    console.log(clicked_copy);
+    clicked_copy = clicked_copy.toLowerCase();
     try{
-        if ($("#copyOptions").val() == 'ecopy'){
+        if (clicked_copy == 'enhancedcopy'){
             $('#myModal').show();
-        }else if($("#copyOptions").val() == 'copy'){
+        }else if(clicked_copy == 'print' || clicked_copy == 'copyoptions'){
             $('#myModal').css('display','none');
             pagePrint();
         }else{
@@ -194,6 +196,7 @@ function zoomIn(){
     catch(e) {
         alert("test ==> " + e.message);
     }
+    console.log(size);
 }
 /******************************************************************
  기능 : select option의 선택값을 기본으로 - 버튼 클릭 시 5%가 추가 축소되는
@@ -331,35 +334,36 @@ function close_pop3(){
     $('#modalcase').hide();
 }
 /******************************************************************
- 기능 : - DR Viewer 이미지 내보내기 메뉴를 이용하여 SELECT의 OPTION
-        값을 설정.
+ 기능 : - DR Viewer 이미지 내보내기
         - 이미지 버튼클릭 시 로딩화면 띄우기
  작성자 : 하지연
+ 수정 : 전형준 - SELECT BOX → 드롭다운
  ******************************************************************/
-function imageOptions(){
+function imageOptions(export_img){
+    export_img = export_img.toLowerCase();
     try{
-        if ($("#saveAsImage").val() == 'png'){
-            var typeofimages = $("#saveAsImage").val();
+        if (export_img == 'png'){
+            var typeofimages = export_img;
             beginLoading(typeofimages);
             setImageType(typeofimages);
             endingLoading();
-        }else if($("#saveAsImage").val() == 'jpeg'){
-            var typeofimages = $("#saveAsImage").val();
+        }else if(export_img == 'jpg'){
+            var typeofimages = 'jpeg';
             beginLoading(typeofimages);
             setImageType(typeofimages);
             endingLoading();
-        }else if($("#saveAsImage").val() == 'bmp'){
-            var typeofimages = $("#saveAsImage").val();
+        }else if(export_img == 'bmp'){
+            var typeofimages = 'bmp'
             beginLoading(typeofimages);
             setImageType(typeofimages);
             endingLoading();
-        }else if($("#saveAsImage").val() == 'tiff'){
-            var typeofimages = $("#saveAsImage").val();
+        }else if(export_img == 'tiff'){
+            var typeofimages = 'tiff'
             beginLoading(typeofimages);
             setImageType(typeofimages);
             endingLoading();
-        }else if($("#saveAsImage").val() == 'gif'){
-            var typeofimages = $("#saveAsImage").val();
+        }else if(export_img == 'gif'){
+            var typeofimages = 'gif'
             beginLoading(typeofimages);
             setImageType(typeofimages);
             endingLoading();
@@ -545,8 +549,10 @@ function band_dbclick_event(data) {
                     var current = this.id;
                     var current_width = this.style.width;
                     var current_height = this.style.height;
-                    var this_text = $("#" + current)[0].innerText;
-
+                    var current_id = $("#"+current)[0];
+                    console.log("current : ",current_id);
+                    var this_text = $("#" + current)[0].textContent;
+                    console.log("this_text : ",$("#" + current));
                     if ($("#text_area")[0] === undefined) {
                         var text_div = document.createElement("div");
                         text_div.id = "text_div";
@@ -573,7 +579,17 @@ function band_dbclick_event(data) {
                         if (!key.shiftKey) {
                             var insert_text = $("#text_area").val();
                             var text_convert = insert_text.replace(/(?:\r\n|\r|\n)/g, '<br />'); // html 문법으로 변환.
-                            $("#" + this.id)[0].innerHTML = text_convert;
+                            var id = $("#" + this.id)[0];
+
+                            console.log("id : ",id.children);
+                            for(var i=0; i< id.children.length; i++){
+                                if(id.children[i].tagName === "P"){
+                                    id.children[i].innerText = insert_text;
+                                }
+                            }
+                            // console.log("innerText : ",id.innerText.replace(/[^0-9a-zA-Z가-힣]/g, ""));
+                            console.log("insert_text : ", insert_text);
+                            console.log("text_convert : ", text_convert);
                             $("#text_div").remove();
                             this.style.borderWidth = "1px";
                             this.style.borderColor = "black";
@@ -584,6 +600,20 @@ function band_dbclick_event(data) {
                         this.style.borderWidth = "1px";
                         this.style.borderColor = "black";
                         this.style.borderStyle = "solid";
+                    } else if(key.keyCode === 16){ //shift키 누르고 있을 때 column의 width값이 바뀌면 해당 column만 사이즈 조정 되는 것처럼 보이도록.
+                        console.log("test");
+                    }
+                },
+                "mouseover": function (event) {
+                    if(event.shiftKey){ //shift키 누르고 있을 때 column의 width값이 바뀌면 해당 column만 사이즈 조정 되는 것처럼 보이도록.
+                        console.log("test");
+                        var thid = $("#"+this.id);
+                        var titleTrId = $("#"+thid[0].parentElement.id);
+                        console.log("this : ",thid[0].parentElement.id);
+
+                        shift_table_column_controller(thid, titleTrId);
+                    }else{
+                        console.log("shift 클릭 안함.");
                     }
                 }
             });
@@ -651,3 +681,4 @@ function autoSize(pTagId) {
         'margin-bottom': '3px'
     });
 }
+
