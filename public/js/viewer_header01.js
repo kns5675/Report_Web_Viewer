@@ -85,7 +85,6 @@ function FirstPage(){
  만든이 : hagdung-i
  ******************************************************************/
 function NowPage(){
-    $("#NowPage")[0].style.width ="50px";
     $("#NowPage").on("keyup",function () {
         $(this).val($(this).val().replace(/[^0-9]/g,""));
         var inputpage = "page"+$(this).val();
