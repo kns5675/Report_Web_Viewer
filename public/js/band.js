@@ -28,13 +28,13 @@ function Band(data){
 
     this.childBands // 자식 밴드들
         = (typeof data.ChildBands.anyType === "undefined" ?
-        null : CreateBandArray(data.ChildBands));
+        null : CreateBandArray(data.ChildBands, this));
     this.childHeaderBands // 헤더의 자식 밴드들
         = (typeof data.ChildHeaderBands.anyType === "undefined" ?
-        null : CreateBandArray(data.ChildHeaderBands));
+        null : CreateBandArray(data.ChildHeaderBands, this));
     this.childFooterBands // 풋터의 자식 밴드들
         = (typeof data.ChildFooterBands.anyType === "undefined" ?
-        null : CreateBandArray(data.ChildFooterBands));
+        null : CreateBandArray(data.ChildFooterBands, this));
     this.controlList // 임시로 해둔것 - 안예솔 팀원에게 물어보고 인자를 넘겨줄 것
         = (typeof data.ControlList === undefined ? null : data.ControlList);
 }
@@ -82,22 +82,24 @@ function BandSummary(band){
 }
 
 // 데이터 헤더 밴드
-function BandDataHeader(band){
+function BandDataHeader(band, parentBand){
     Band.apply(this, arguments);
     this.showGroupLink = band.ShowGroupLink._text; // 그룹 연결 보기
     this.forceNewPage = band.ForceNewPage._text; // 페이지 넘기기
     this.autoSize = band.AutoSize._text; // 자동 높이 조정
+    this.parentBand = parentBand !== undefined ? parentBand : undefined;
     this.isApprovalBase = band.IsApprovalBase._text; // 결재란 기준 밴드
     // 인쇄 미리보기 화면에서,
     // 인쇄 고급 설정을 통하여 결재란을 그릴때 기준이 된 밴드에 결재란을 그린다
 }
 
 // 데이터 풋터 밴드
-function BandDataFooter(band){
+function BandDataFooter(band, parentBand){
     Band.apply(this, arguments);
     this.showGroupLink = band.ShowGroupLink._text; // 그룹 연결 보기
     this.forceNewPage = band.ForceNewPage._text; // 페이지 넘기기
     this.autoSize = band.AutoSize._text; // 자동 높이 조정
+    this.parentBand = parentBand !== undefined ? parentBand : undefined;
 }
 
 // 데이터 밴드
@@ -127,7 +129,7 @@ function BandData(band){
 }
 
 // 그룹 헤더 밴드
-function BandGroupHeader(band){
+function BandGroupHeader(band, parentBand){
     Band.apply(this, arguments);
     this.showGroupLink = band.ShowGroupLink._text; // 그룹 연결 보기
     this.subBand = band.SubBand._text; //
@@ -142,6 +144,7 @@ function BandGroupHeader(band){
     this.groupFieldName = band.GroupFiledName._text === undefined ? null : band.GroupFiledName._text;// 그룹 기준 필드
     this.isApprovalBase = band.IsApprovalBase._text; // 결재란 기준 밴드
     this.startBindScript = band.StartBindScript  === undefined ? undefined : band.StartBindScript._text;
+    this.parentBand = parentBand !== undefined ? parentBand : undefined;
     /******************************************************************
      추가
      기능 : 그룹 기준 필드에 대한 데이터를 배열에 담는다.
@@ -200,7 +203,7 @@ function BandGroupHeader(band){
 }
 
 // 그룹 풋터 밴드
-function BandGroupFooter(band){
+function BandGroupFooter(band, parentBand){
     Band.apply(this, arguments);
     this.subBand = band.SubBand._text; // 서브 밴드
     this.forceNextReport = band.ForceNextReport._text === 'true' ? true : false; // 리포트 넘기기
@@ -211,6 +214,7 @@ function BandGroupFooter(band){
     this.dziName = band.DziName._text; // 데이터 셋 이름
     this.dataTableName = band.DataTableName._text; // 데이터 테이블 이름
     this.groupFiledName = band.GroupFiledName._text; // 그룹 기준 필드
+    this.parentBand = parentBand !== undefined ? parentBand : undefined;
 }
 
 // 타이틀 밴드
@@ -247,16 +251,18 @@ function BandSubReport(band){
 }
 
 // 더미 헤더 밴드
-function BandDummyHeader(band){
+function BandDummyHeader(band, parentBand){
     Band.apply(this, arguments);
     this.forceNewPage = band.ForceNewPage._text; // 페이지 넘기기
+    this.parentBand = parentBand !== undefined ? parentBand : undefined;
 }
 
 // 더미 풋터 밴드
-function BandDummyFooter(band){
+function BandDummyFooter(band, parentBand){
     Band.apply(this, arguments);
     this.forceNewPage = band.ForceNewPage._text; // 페이지 넘기기
     this.useSpaceEffect = band.UseSpaceEffect._text; // 여백 효과 사용
+    this.parentBand = parentBand !== undefined ? parentBand : undefined;
 }
 /********************************************************************
  ********************************************************************/

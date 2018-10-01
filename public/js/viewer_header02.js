@@ -336,15 +336,17 @@ function report_choice(){
 
         for(var i=0; i<chkbox_arr.length; i++){
             report_specific = $('.report' + (i+1));
+            report_specific.removeClass('visiblePage');
             if(chkbox_arr.eq(i).prop('checked') === true) {
                 report_specific.css('display', 'block');
+                report_specific.addClass('visiblePage');
             }
             else{
                 report_specific.css('display', 'none');
             }
         }
         reNumbering();
-        // resize_event_reSetting();
+
         modalLayer.hide();
     });
 }

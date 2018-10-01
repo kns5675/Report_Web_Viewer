@@ -7,16 +7,16 @@
 /********************** 밴드 배열 생성 메소드 ************************
 * 작성자 : 전형준
 ***********************************************************************/
-function CreateBandArray(data){
+function CreateBandArray(data, parentBand){
     var band_list = [];
     var band = null;
     if(Array.isArray(data.anyType)){ // Layer의 Band 또는 ChildBands 배열일 때
         data.anyType.forEach(function(band){
-            band = CreateBand(band);
+            band = CreateBand(band, parentBand);
             band_list.push(band);
         });
     } else{ // Layer의 Band 또는 ChildBands 배열이 아닐 때
-        band = CreateBand(data.anyType);
+        band = CreateBand(data.anyType, parentBand);
         band_list.push(band);
     }
     return band_list;
@@ -30,7 +30,7 @@ function CreateBandArray(data){
 /************  밴드 타입에 맞는 밴드 객체 생성을 위한 함수 *************
  * 작성자 : 전형준
 ************************************************************************/
-function CreateBand(band){
+function CreateBand(band, parentBand){
     var return_band = null;
     switch(band._attributes["xsi:type"]){
         case "BandBackGround" : // 백그라운드레이어 - 백그라운드밴드
@@ -49,16 +49,16 @@ function CreateBand(band){
             return_band = new BandData(band);
             break;
         case "BandDataHeader" : // 데이터 헤더 밴드
-            return_band = new BandDataHeader(band);
+            return_band = new BandDataHeader(band, parentBand);
             break;
         case "BandDataFooter" : // 데이터 풋터 밴드
-            return_band = new BandDataFooter(band);
+            return_band = new BandDataFooter(band, parentBand);
             break;
         case "BandGroupHeader" : // 그룹 헤더 밴드
-            return_band = new BandGroupHeader(band);
+            return_band = new BandGroupHeader(band, parentBand);
             break;
         case "BandGroupFooter" : // 그룹 풋터 밴드
-            return_band = new BandGroupFooter(band);
+            return_band = new BandGroupFooter(band, parentBand);
             break;
         case "BandTail" : // 테일 밴드
             return_band = new BandTail(band);
@@ -76,10 +76,10 @@ function CreateBand(band){
             return_band = new BandSubReport(band);
             break;
         case "BandDummyHeader" : // 더미 헤더 밴드
-            return_band = new BandDummyHeader(band);
+            return_band = new BandDummyHeader(band, parentBand);
             break;
         case "BandDummyFooter" : // 더미 풋터 밴드
-            return_band = new BandDummyFooter(band);
+            return_band = new BandDummyFooter(band, parentBand);
             break;
     }
 

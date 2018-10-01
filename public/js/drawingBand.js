@@ -1254,7 +1254,7 @@ function drawChildFooterBand(band, layerName, reportHeight) {
                 break;
         }
     });
-    drawBand(childFooterBandArray, layerName, reportHeight);
+    drawBand(childFooterBandArray, layerName, reportHeight, band);
 }
 
 /***********************************************************
