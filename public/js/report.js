@@ -208,6 +208,11 @@ function getNumOfPage(report) {
  1. 데이터밴드가 데이터에 따라 동적으로 늘어나는 길이를 계산
  2. 데이터 밴드 길이 + 라벨 두께 + TableValueLabel 길이 + 한 페이지에 들어가는 데이터 갯수
  만든이 : 구영준
+
+ 수정 : 동적 테이블 일 경우  -> 동적 테이블.y + 라벨 두께 +  + TableTitleLabel 길이 + TableValueLabel 길이 + 한 페이지에 들어가는 데이터 갯수
+        고정 테이블 일 경우  -> DataBand.rectangle.height 길이
+ 만든이 : 구영준
+ 날짜 : 2018-10-01
  ********************************************************************************************/
 function getBandHeightOfDataBand(band, numOfData) {
     var controlLists = band.controlList.anyType;
@@ -220,16 +225,19 @@ function getBandHeightOfDataBand(band, numOfData) {
     var titleBorderBottomThickness = 0;
     var valueBorderBottomThickness = 0;
     var allLabelBorderThickness;
+    var isDynaicTable =  false;
 
     if (controlLists.length > 1) {
         controlLists.forEach(function (controlList) {
             if (controlList._attributes["xsi:type"] == "ControlDynamicTable") {
+                isDynaicTable =  true;
                 labels.push(controlList);
                 tableSpacing = Number(controlList.Rectangle.Y._text);
             }
         });
     } else {
         if (controlLists._attributes["xsi:type"] == "ControlDynamicTable") {
+            isDynaicTable =  true;
             labels.push(controlLists);
             if (controlLists.Rectangle.Y !== undefined) {
                 tableSpacing = Number(controlLists.Rectangle.Y._text);
@@ -260,7 +268,12 @@ function getBandHeightOfDataBand(band, numOfData) {
 
     allLabelBorderThickness = titleBorderBottomThickness * numOfData + titleBorderBottomThickness + titleBorderTopThickness;
 
-    return tableSpacing + labelHeight + (valueHeight * numOfData) + allLabelBorderThickness;
+    if(isDynaicTable){
+        return tableSpacing + labelHeight + (valueHeight * numOfData) + allLabelBorderThickness;
+    }else{
+        return band.rectangle.height;
+    }
+
 }
 
 /***********************************************************
