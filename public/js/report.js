@@ -144,6 +144,13 @@ function makeReport(report, arrRegion) {
 
 
     if (dataTable.DataSetName[ingDataTableName] != undefined) {
+        // if(curDatarowInDataBand < dataTable.DataSetName[ingDataTableName].length) {
+        //     if (isDynamicTable) {
+        //
+        //     } else if (isFixedTable) {
+        //
+        //     }
+        // }
         if (curDatarowInDataBand < dataTable.DataSetName[ingDataTableName].length && isDynamicTable == true) {
             reportPageCnt++;
             if(arrRegion[0] != undefined){
@@ -156,8 +163,8 @@ function makeReport(report, arrRegion) {
             } else {
                 makeReport(report, arrRegion);
             }
-        // } else if (isFixedTable == true && curDatarowInDataBand < dataTable.DataSetName[ingDataTableName].length) {
-        //     makeReport(report, arrRegion);
+        } else if (isFixedTable == true && curDatarowInDataBand < dataTable.DataSetName[ingDataTableName].length) {
+            makeReport(report, arrRegion);
         } else {
             reportPageCnt = 1;
         }
@@ -225,19 +232,23 @@ function getBandHeightOfDataBand(band, numOfData) {
     var titleBorderBottomThickness = 0;
     var valueBorderBottomThickness = 0;
     var allLabelBorderThickness;
-    var isDynaicTable =  false;
+    var isDynamicInBandData =  false;
 
     if (controlLists.length > 1) {
         controlLists.forEach(function (controlList) {
             if (controlList._attributes["xsi:type"] == "ControlDynamicTable") {
-                isDynaicTable =  true;
+                isDynamicInBandData =  true;
                 labels.push(controlList);
-                tableSpacing = Number(controlList.Rectangle.Y._text);
+                if (controlList.Rectangle.Y !== undefined) {
+                    tableSpacing = Number(controlList.Rectangle.Y._text);
+                } else {
+                    tableSpacing = 0;
+                }
             }
         });
     } else {
         if (controlLists._attributes["xsi:type"] == "ControlDynamicTable") {
-            isDynaicTable =  true;
+            isDynamicInBandData =  true;
             labels.push(controlLists);
             if (controlLists.Rectangle.Y !== undefined) {
                 tableSpacing = Number(controlLists.Rectangle.Y._text);
@@ -268,7 +279,7 @@ function getBandHeightOfDataBand(band, numOfData) {
 
     allLabelBorderThickness = titleBorderBottomThickness * numOfData + titleBorderBottomThickness + titleBorderTopThickness;
 
-    if(isDynaicTable){
+    if(isDynamicInBandData){
         return tableSpacing + labelHeight + (valueHeight * numOfData) + allLabelBorderThickness;
     }else{
         return band.rectangle.height;
@@ -343,7 +354,6 @@ function getNumOfDataInOnePageNonObject(band, divId) {
         bandDataHeight = divId;
     }
 
-
     var tableSpacing = 0;
     var tableLabel;
     if (Array.isArray(band.controlList.anyType)) {
@@ -365,6 +375,46 @@ function getNumOfDataInOnePageNonObject(band, divId) {
     var dataLine = Number(tableLabel[tableLabel.length - 1].Rectangle.Height._text);
 
     var numofData = Math.floor((bandDataHeight - firstLine - tableSpacing) / dataLine);
+
+    if (numofData > dt.length) {
+        return dt.length;
+    } else {
+        return numofData;
+    }
+}
+
+// TODO 미구현2!!!!!!!!!!!!!!!!!
+/***********************************************************
+ 기능 : 객체 생성 없이 한 페이지에 들어갈 데이터 개수 구하기 (고정 테이블)
+ 만든이 : 안예솔
+ * *********************************************************/
+function getNumOfDataInOnePageNonObjectInFixedTable(band, divId) {
+    var dt = dataTable.DataSetName[band.dataTableName];
+    var bandDataHeight = 0;
+    if (typeof divId == 'string') {
+        bandDataHeight = $('#' + divId).height();
+    } else if (typeof divId == 'number') {
+        bandDataHeight = divId;
+    }
+
+    var fixedTableHeight = 0;
+
+    if (Array.isArray(band.controlList.anyType)) {
+        band.controlList.anyType.forEach(function (anyType) {
+            if (anyType._attributes['xsi:type'] == 'ControlFixedTable' && anyType.Labels !== undefined) {
+                console.log(anyType.Rectangle);
+                if(anyType.Rectangle.Height !== undefined) {
+                    fixedTableHeight = Number(anyType.Rectangle.Height._text);
+                }
+            }
+        });
+    } else {
+        if(band.Rectangle.Height !== undefined) {
+            fixedTableHeight = Number(band.Rectangle.Height._text);
+        }
+    }
+
+    var numofData = Math.floor(bandDataHeight / fixedTableHeight);
 
     if (numofData > dt.length) {
         return dt.length;

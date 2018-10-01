@@ -155,24 +155,32 @@ function BandGroupHeader(band){
     var dt = dataTable.DataSetName[this.dataTableName];
 
     if(dt != undefined && groupFieldName != undefined){
-        dt.forEach(function (data) {
-            var comparison = groupFieldArray.some(function (arr) {
-                if (arr[0] == data[groupFieldName]._text) {
-                    arr.push(data);
-                    return true; // 배열 중 같은 이름이 있으면 break;
-                } else {
-                    return false; // continue;
+        if(dt.length > 1) {
+            dt.forEach(function (data) {
+                var comparison = groupFieldArray.some(function (arr) {
+                    if (arr[0] == data[groupFieldName]._text) {
+                        arr.push(data);
+                        return true; // 배열 중 같은 이름이 있으면 break;
+                    } else {
+                        return false; // continue;
+                    }
+                });
+                if (!comparison) {
+                    if (data[groupFieldName]) { //학준 추가 groupFieldName이 없을 경우 제외.
+                        groupFieldArray[i] = [];
+                        groupFieldArray[i].push(data[groupFieldName]._text);
+                        groupFieldArray[i].push(data);
+                        i++;
+                    }
                 }
             });
-            if (!comparison) {
-                if(data[groupFieldName]){ //학준 추가 groupFieldName이 없을 경우 제외.
-                    groupFieldArray[i] = [];
-                    groupFieldArray[i].push(data[groupFieldName]._text);
-                    groupFieldArray[i].push(data);
-                    i++;
-                }
+        } else {
+            if (dt[groupFieldName]) { //학준 추가 groupFieldName이 없을 경우 제외.
+                groupFieldArray[0] = [];
+                groupFieldArray[0].push(dt[groupFieldName]._text);
+                groupFieldArray[0].push(dt);
             }
-        });
+        }
 
         if(data.GroupingFieldSort !== undefined && data.GroupingFieldSort._text == 'ASC') {
             // 기준 필드 정렬 순서가 오름차순일 때!
