@@ -38,6 +38,9 @@ var titleSet;
 var valueSet = 0;
 var regionNum = 1;
 var fixTableRowCount = 0;
+var labelC = 0;
+
+var rC2 =1;
 
 var row = 0;
 var verticalPNum = 0;
@@ -394,9 +397,9 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
             });
             var td = $('.' + key);
             //// 추가 부분 18.08.28 YeSol
-            if (label.noBorder == 'true') {
+            if (label.noBorder == "true") {
                 td.css('border', 'none');
-            } else {
+            } else if(label.noBorder =="false") {
                 if (label.borderThickness !== undefined) {
                     var leftBorder = borderDottedLine(label.borderDottedLines.leftDashStyle);
                     var rightBorder = borderDottedLine(label.borderDottedLines.rightDashStyle);
@@ -406,7 +409,9 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
                         'border-left': label.borderThickness.left + 'px ' + leftBorder + ' ' + label.leftBorderColor,
                         'border-right': label.borderThickness.right + 'px ' + rightBorder + ' ' + label.rightBorderColor,
                         'border-bottom': label.borderThickness.bottom + 'px ' + bottomBorder + ' ' + label.bottomBorderColor,
-                        'border-top': label.borderThickness.top + 'px ' + topBorder + ' ' + label.topBorderColor
+                        'border-top': label.borderThickness.top + 'px ' + topBorder + ' ' + label.topBorderColor,
+                        //'border-collapse':'collapse',
+                        'border-spacing':'0px'
                     });
                 } else {
                     td.css('border', '1px solid black');
@@ -420,7 +425,7 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
                 'background-color': label.backGroundColor,
                 'white-space': 'nowrap'
             });
-            drd_javascript(label, tdId, label.startBindScript);
+            // drd_javascript(label, tdId, label.startBindScript);
             tempCurDataRow++;
         } else {
             for (var key in data) {
@@ -493,7 +498,7 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
                         'background-color': label.backGroundColor,
                         'white-space': 'nowrap'
                     });
-                    drd_javascript(label, tdId, label.startBindScript);
+                    // drd_javascript(label, tdId, label.startBindScript);
                 }
             }
             tempCurDataRow++;
@@ -516,6 +521,7 @@ function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, nu
             minimumRow = true;
         }
     }
+
     var groupLabelNum = 1;
     for (var j = groupDataRow; j < numOfData; j++) {
         var temp = j;
@@ -580,12 +586,16 @@ function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, nu
                 'background-color': label.backGroundColor,
                 'white-space': 'nowrap'
             });
-            drd_javascript(label, tdId, label.startBindScript);
+            // drd_javascript(label, tdId, label.startBindScript);
         } else {
             for (var key in data[temp]) {
                 valueTrId = $($trId);
                 if (label.fieldName == key) {
                     var key_data = data[temp][key]._text;
+                    // console.log("valueTrId : ",valueTrId);
+                    // console.log("key_data : ",key_data);
+                    // console.log("label : ",label);
+                    // console.log("data : ",data);
                     var table_reform = table_format_check(data, valueTrId, key_data, label);
 
                     var tdId = 'tableValueLabelNum' + tableValueLabelNum++;
@@ -662,7 +672,7 @@ function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, nu
                         'background-color': label.backGroundColor,
                         'white-space': 'nowrap'
                     });
-                    drd_javascript(label, tdId, label.startBindScript, key, data[temp]);
+                    // drd_javascript(label, tdId, label.startBindScript, key, data[temp]);
                 }
             }
         }
@@ -771,7 +781,7 @@ function drawingDynamicTableValueLabelWithGroupFieldArrayWithRegion(label, dt, t
                 'background-color': label.backGroundColor,
                 'white-space': 'nowrap'
             });
-            drd_javascript(label, tdId, label.startBindScript);
+            // drd_javascript(label, tdId, label.startBindScript);
         } else {
             for (var key in data[temp]) {
                 valueTrId = $($trId);
@@ -853,7 +863,7 @@ function drawingDynamicTableValueLabelWithGroupFieldArrayWithRegion(label, dt, t
                         'background-color': label.backGroundColor,
                         'white-space': 'nowrap'
                     });
-                    drd_javascript(label, tdId, label.startBindScript);
+                    // drd_javascript(label, tdId, label.startBindScript);
                 }
             }
         }
@@ -924,7 +934,7 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArrayWithRegion(label, dt
                 'background-color': label.backGroundColor,
                 'white-space': 'nowrap'
             });
-            drd_javascript(label, tdId, label.startBindScript);
+            // drd_javascript(label, tdId, label.startBindScript);
             tempCurDataRow++;
         } else {
             for (var key in data) {
@@ -997,7 +1007,7 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArrayWithRegion(label, dt
                         'background-color': label.backGroundColor,
                         'white-space': 'nowrap'
                     });
-                    drd_javascript(label, tdId, label.startBindScript);
+                    // drd_javascript(label, tdId, label.startBindScript);
                 }
             }
             tempCurDataRow++;
@@ -1026,7 +1036,7 @@ function drawingDynamicTableValueLabelWithOutDataTable(label, tableId) {
     tdId.append(label.text);
     tdId.addClass('Label DynamicTableHeader');
     tdId.addClass(label._attributes);
-    drd_javascript(label, tdId, label.startBindScript);
+    // drd_javascript(label, tdId, label.startBindScript);
 
 }
 
@@ -1099,7 +1109,7 @@ function drawingDynamicTableTitleLabel(label, header_Name_Number) {
     thId.addClass('Label DynamicTableHeader');
     thId.addClass(label._attributes);
     table_column_controller(thId, titleTrId);
-    drd_javascript(label, thId, label.startBindScript);
+    // drd_javascript(label, thId, label.startBindScript);
 }
 
 /******************************************************************
@@ -1107,9 +1117,14 @@ function drawingDynamicTableTitleLabel(label, header_Name_Number) {
  만든이 : 하지연
  ******************************************************************/
 function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList) {
+    if(data.IsApprovalBox._text=="true"){
+        console.log("결재란");
+        //결재란일 경우 결재란에 대한 처리를 여기에 해줘야함. 코드 정리는 필요..
+    }
     var div = $('#' + divId);//divId = 밴드
     div.css('position', 'relative');
     div.css('border', '1px solid blue');
+    div.css('background-color', 'lightyellow');
 
     div.append('<div id = "Table' + tableNum + '"></div>');//무의미한 테이블 div
     var divIdTable = $('#Table' + tableNum);
@@ -1117,11 +1132,11 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
         'position': 'absolute',
         'top': 0
     });
-
     var temp_table_class = controlFixedTable.id.substring(0, 4); // 임시로 table을 인식하기 위한 번호 - 전형준
 
     divIdTable.append('<table id="fixedTable' + fixedTableNum + '" class="table table-' + temp_table_class + '"></table>');
     var fixTableId = $('#fixedTable' + fixedTableNum);//고정테이블
+    rC2=1;
     fixTableId.css({
         'width': controlFixedTable.rectangle.width,
         'height': controlFixedTable.rectangle.height,
@@ -1136,22 +1151,39 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
          var fixTableHeight = controlFixedTable.rectangle.height;
          var fixTableLabelListLength = Number(fixTableLabelList.length);//고정테이블 라벨리스트 라벨 갯수
 
-         function setRowCount() {
+    function countingRows(){
+        var xZeroCount=0;
+        for(var zz = 0; zz < fixTableLabelListLength; zz++){
+            if(fixTableLabelList[zz].rectangle.x=='0'){
+                xZeroCount++;
+            }
+        }
+        setRowCount(xZeroCount);
+    }
+    countingRows();
+         function setRowCount(xZeroCount) {
+             console.log("@@@xZeroCount : ",xZeroCount);
              var totalLabelWidth = 0;//라벨너비
              var labelCount = 0;//라벨개수
              var rowCount = 0;//row개수
 
+
              if (data.Labels) {//라벨 리스트 라벨 width, height값 가져오기
+
                  for (var i = 0; i < fixTableLabelListLength; i++) {
                      var thisLabelWidth = Number(fixTableLabelList[i].rectangle.width);
                      var thisLabelHeight = Number(fixTableLabelList[i].rectangle.height);
-                     labelCount++;
+                     var thisLabelX = fixTableLabelList[i].rectangle.x;
 
+                     labelCount++;
                      totalLabelWidth += thisLabelWidth;
+
+                     console.log("fixTableLabelListLength : ", fixTableLabelListLength, fixTableLabelList[i].rectangle.x);
+                     console.log(labelCount + "   ,   " +  totalLabelWidth + "  ,   "+ thisLabelWidth + ",   fixTableWidth : "+ fixTableWidth);
+
                      if (labelCount == fixTableLabelListLength) {
 
-                         rowCount++;
-
+                         rowCount=xZeroCount;
                          for (var rC = 1; rC <= rowCount; rC++) {
                              fixTableId.append('<tr id = "fixedTableRow' + fixTableRowCount + '"></tr>');
                              var ThisfixedTableRow = $("#fixedTableRow" + fixTableRowCount);
@@ -1163,76 +1195,131 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                  'top': 0,
                                  'width': thisLabelWidth,
                                  'height': thisLabelHeight,
-                                 'overflow':'visible',
-                                 'background-color':'red'
+                                 'overflow': 'visible'
                              });
-                             var tdId = 'FixedTableLabel_';
-                             for (var rC2 = 1; rC2 <= labelCount; rC2++) {
-                                 var fromData = fixTableLabelList[rC2 - 1];
-                                 var tdIDMaking = tdId+rC2+ '_' + fixedTableNum;
-                                 switch (fromData.dataType) {
-                                     case  "DataLabel" :
-                                         if (groupFieldArray !== undefined) {
-                                             if(fromData.fieldName !== undefined){
-                                                 var fieldName = fromData.fieldName;
-                                                 if(fieldName==groupFieldName){
-                                                     if(groupFieldArray[groupFieldNum]){
-                                                         var showDataLabel = groupFieldArray[groupFieldNum][0];
-                                                     }
-                                                 }else{
-                                                     if(groupFieldArray[groupFieldNum]){
-                                                         if(groupFieldArray[groupFieldNum][1][fieldName]){
-                                                             var showDataLabel = groupFieldArray[groupFieldNum][1][fieldName]._text;
+
+                             var drawingTds = labelCount/rowCount;
+
+                             tdDataBinding(ThisfixedTableRow,drawingTds);
+                             fixTableRowCount++;
+                         }
+                             function tdDataBinding(ThisfixedTableRow,drawingTds){
+                                 var tdId = 'FixedTableLabel_';
+                                 console.log("2@@@@@@@@@@@@@@@@@@@@@@@@");
+                                 console.log(rC2, drawingTds);
+                                 if(rC2>drawingTds){
+                                     drawingTds  = labelCount;
+                                 }
+                                 for (rC2; rC2 <= drawingTds; rC2++) {
+                                     console.log("@@@ rC2 : ",rC2);
+                                     console.log("@@@ drawingTds : ",drawingTds);
+                                     var fromData = fixTableLabelList[rC2 - 1];
+                                     //var fromData = fixTableLabelList[fixedTableNum - 1];
+                                     // var tdIDMaking = tdId + rC2 + '_' + fixedTableNum;
+
+                                     var tdIDMaking = tdId + rC2 + '_' + labelC;
+                                     var tdIDwithS = $("#" + tdIDMaking);
+
+                                     switch (fromData.dataType) {
+                                         case  "DataLabel" :
+                                             if (groupFieldArray !== undefined) {
+                                                 if (fromData.fieldName !== undefined) {
+                                                     var fieldName = fromData.fieldName;
+
+                                                     if (fieldName == groupFieldName) {
+                                                         if (groupFieldArray[groupFieldNum]) {
+                                                             var showDataLabel = groupFieldArray[groupFieldNum][0];
+                                                             if (showDataLabel !== undefined) {
+                                                                 showDataLabel = showDataLabel
+                                                             }
+                                                             if (showDataLabel === 'undefined') {
+                                                                 showDataLabel = ' ';
+                                                             }
+                                                             if (typeof showDataLabel == undefined) {
+                                                                 showDataLabel = ' ';
+                                                             }
+                                                         }
+                                                     } else {
+                                                         if (groupFieldArray[groupFieldNum]) {
+                                                             if (groupFieldArray[groupFieldNum][1][fieldName]) {
+                                                                 var showDataLabel = groupFieldArray[groupFieldNum][1][fieldName]._text;
+                                                                 if (showDataLabel !== undefined) {
+                                                                     showDataLabel = showDataLabel
+                                                                 }
+                                                                 if (typeof showDataLabel === 'undefined') {
+                                                                     showDataLabel = ' ';
+                                                                 }
+                                                             }
+                                                         } else {
+                                                             console.log("그룹풋터밴드에 해당하는 총계나 그런애들에 대한 자바스크립트..? 처리가 필요함");
                                                          }
                                                      }
                                                  }
+                                                 if (typeof showDataLabel === 'undefined') {
+                                                     showDataLabel = ' ';
+                                                 }
+                                                 var table_reform = table_format_check(data.Labels, tdIDwithS, showDataLabel, fromData);
+                                                 ThisfixedTableRow.append
+                                                 ('<td class="DataLabel" id = "' + tdId + rC2 + '_' + labelC + '">' +
+                                                     '<p id="' + tdId + rC2 + '_p_' + labelC + '">' + table_reform + '</p>' +
+                                                     '</td>');
+                                                 settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTableHeight);
+                                                 setTable();
+                                                 var tdId_javascript = $("#" + tdIDMaking);
                                              }
-                                             ThisfixedTableRow.append
-                                             ('<td class="DataLabel" id = "' + tdId + rC2 + '_' + fixedTableNum + '">' +
-                                                 '<p id="' + tdId + rC2 + '_p_' + fixedTableNum + '">' + showDataLabel + '</p>' +
-                                                 '</td>');
-                                             settingAttribute(fromData, tdId, rC2, fixTableId,fixTableWidth,fixTableHeight);
+                                             break;
+                                         case  "NormalLabel" :
+                                             ThisfixedTableRow.append('<td class="NormalLabel" id = "' + tdId + rC2 + '_' + labelC + '">' +
+                                                 '<p id="' + tdId + rC2 + '_p_' + labelC + '">' + table_format_check(data.Labels, tdIDwithS, fromData.text, fromData) + '</p></td>');
+                                             settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTableHeight);
                                              setTable();
-                                             var tdId_javascript = $("#"+tdIDMaking);
-                                         }
-                                         break;
-                                     case  "NormalLabel" :
-                                         ThisfixedTableRow.append('<td class="NormalLabel" id = "' + tdId + rC2 + '_' + fixedTableNum + '">' +
-                                             '<p id="' + tdId + rC2 + '_p_' + fixedTableNum + '">' + fromData.text + '</p></td>');
-                                         settingAttribute(fromData, tdId, rC2, fixTableId,fixTableWidth,fixTableHeight);
-                                         setTable();
-                                         var tdId_javascript = $("#"+tdIDMaking);
-                                         break;
+                                             var tdId_javascript = $("#" + tdIDMaking);
+                                             break;
+                                         case "SummaryLabel" :
+                                             var label = new DataLabel(data);
+                                             drawingSummaryLabel(label);
+                                             ThisfixedTableRow.append('<td class="SummaryLabel" id = "' + tdId + rC2 + '_' + fixedTableNum + '">' +
+                                                 '<p id="' + tdId + rC2 + '_p_' + fixedTableNum + '">' + table_format_check(data.Labels, tdIDwithS, fromData.text, fromData) + '</p></td>');
+                                             break;
+                                     }
+                                     // // drd_javascript(label, tdId_javascript, label.startBindScript, rC2, data[temp]);
+
                                  }
-                                 // drd_javascript(label, tdId_javascript, label.startBindScript, rC2, data[temp]);
+                                 console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" + rC2);
                              }
-                         }
-                         fixTableRowCount++;
                      }
                  }
+                 //}
              }
          }
 
          setRowCount();
          function setTable(){
              if (Array.isArray(fixTableLabelList)) {
+                 var MathfixTableWidth = Math.round(fixTableWidth);
                  fixTableId.css({
                      'position': 'absolute',
                      'z-index': 999,
-                     'width': Math.round(fixTableWidth),//어쩔수없었음 round안하면 테이블 width 소수점 자동으로 없애버림..
+                     //'width': Math.round(fixTableWidth),//어쩔수없었음 round안하면 테이블 width 소수점 자동으로 없애버림..,
+                     'width': MathfixTableWidth,//하지연
+                     'over-flow':'visible',
                      'height': fixTableHeight,
-                     'left': controlFixedTable.rectangle.x + 'px',
-                     'top': controlFixedTable.rectangle.y + 'px',
-                     'border-collapse': 'collapse',
-                     'border':'0.5px solid black'//임시로 이렇게 줘봤음 일단
+                     'margin-left': controlFixedTable.rectangle.x + 'px',
+                     'margin-top': controlFixedTable.rectangle.y + 'px',
+                     //'border-collapse': 'collapse',
+                     //'border':'0.5px solid black',//임시로 이렇게 줘봤음 일단
+                     'border':'0px',
+                     'border-spacing':'0px'
+
                  });
 
                  tableNum++;
-                 fixedTableNum++;
+                 labelC++;
                  thNum++;
                  fixedTableLabelNum++;
              }
          }
+    fixedTableNum++;
 }
 
 /******************************************************************
@@ -1240,12 +1327,13 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
  만든이 : 하지연
  ******************************************************************/
 function settingAttribute(fromData, tdId, rC2, fixTableId,fixTableWidth,fixTableHeight){
-    var ThisFixedTableData = $("#" + tdId + rC2 + '_' + fixedTableNum);
-    var ThisFixedTableDataP = $("#"+ tdId + rC2 + '_p_' + fixedTableNum);
+    var ThisFixedTableData = $("#" + tdId + rC2 + '_' + labelC);
+    var ThisFixedTableDataP = $("#"+ tdId + rC2 + '_p_' + labelC);
     ThisFixedTableDataP.css({
         'top': 0,
         'left': 0,
     });
+    console.log( " ############ : ",ThisFixedTableDataP);
     if (fromData.noBorder == 'true'){//border 없을때
         ThisFixedTableData.css('border', 'none');
 
@@ -1258,7 +1346,9 @@ function settingAttribute(fromData, tdId, rC2, fixTableId,fixTableWidth,fixTable
             'font-family': fromData.fontFamily,
             'font-weight': fromData.fontStyle,
             'padding': 0,
-            'white-space': 'nowrap',
+            'border-spacing':'0px',
+            'border-collapse':'collapse',
+            //'white-space': 'nowrap',
             'color':fromData.textColor
         });
     }else{//border 있을때
@@ -1284,8 +1374,9 @@ function settingAttribute(fromData, tdId, rC2, fixTableId,fixTableWidth,fixTable
                         'font-weight': fromData.fontStyle,
                         'padding':0,
                         'margin':0,
-                        'border': (topThickness/2) + 'px ' + leftBorderStyle +' ' + fromData.leftBorderColor,
+                        'border': topThickness + 'px ' + leftBorderStyle +' ' + fromData.leftBorderColor,
                         'border-collapse': 'collapse',
+                        'border-spacing':'0px',
                         'white-space': 'nowrap',
                         'color':fromData.textColor,
                         'overflow':'visible',
@@ -1344,6 +1435,7 @@ function settingAttribute(fromData, tdId, rC2, fixTableId,fixTableWidth,fixTable
     function settingVerticalTextAlignment(VTextAlignment){
         if(VTextAlignment!== undefined){
             var tagPHeight = (ThisFixedTableDataP.css('height')).split('px')[0];
+            console.log("!!!!!!!!!!!!! : ",tagPHeight);
             var tagPmarginTop=(fromData.rectangle.height - tagPHeight)/2;
             switch (VTextAlignment) {
                 case "Center":{
@@ -1404,8 +1496,6 @@ function drawingSystemLabel(data, divId, band_name) {
     }
     labelPropertyApply(labelNbandInfo);
 }
-
-
 /******************************************************************
  기능 : SummaryLabel(요약 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 안예솔
@@ -2056,7 +2146,6 @@ function format_check(data) {
  ******************************************************************/
 function table_format_check(data, Label_id, key, table) {
     var test = table.formatType;
-    var data_text;
     if (key != NaN) { //해당 데이터가 숫자일 경우
         if (test === "AmountSosu" || test === "MoneySosu" || test === "MoneySosu") {   //수량, 금액 소숫점 자리수 ###,###
             var parts = key.toString().split(".");
@@ -2499,7 +2588,7 @@ function label_text_Setting(labelNbandInfo) {
         var fontSize = (pId.css('font-size')).split('p');
         pId.css('word-spacing', (fontSize[0] - 1.181) + 'px');
     }
-    drd_javascript(labelNbandInfo.data, labelNbandInfo.labelId, labelNbandInfo.data.startBindScript);
+    // drd_javascript(labelNbandInfo.data, labelNbandInfo.labelId, labelNbandInfo.data.startBindScript);
     pId.addClass('Label');
     pId.addClass(labelNbandInfo.label_type);
 }

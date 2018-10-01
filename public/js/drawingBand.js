@@ -959,7 +959,7 @@ function drawChildFooterBand(childBands, dataBand, layerName, reportHeight) {
                                 childFooterBandArray.push(childBand);
                             }
                         } else { // 리전이 아닐 때
-                            if (curDatarowInDataBand > dt.length || isDynamicTable == false) { // 데이터 출력이 끝났을 때 나옴
+                            if (curDatarowInDataBand >= dt.length || isDynamicTable == false) { // 데이터 출력이 끝났을 때 나옴
                                 childFooterBandArray.push(childBand);
                             }
                         }

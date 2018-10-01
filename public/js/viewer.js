@@ -7,7 +7,6 @@ var doc;// = new jsPDF('p','mm',[297,210]);
  ******************************************************************/
 function beginLoading(imageName) {
     $("#imageType").text(imageName);
-    console.log("불키기 들어왔따.");
     $("#loadingModal").show();
 }
 /******************************************************************
@@ -15,7 +14,6 @@ function beginLoading(imageName) {
  작성자 : 하지연
  ******************************************************************/
 function endingLoading(){
-   // console.log("불끄기 들어왔다.");
     $("#loadingModal").css("display","none");
 }
 /******************************************************************
