@@ -81,11 +81,11 @@
 <ul id="header_ul">
   <li class="header_btn" id="saving" title="저장"><img src="image/drd_image/top_btn_save1.png"/></li>
   <li class="header_btn" id="file_opener" title="파일열기"><img src="image/drd_image/top_btn_open1.png"/></li>
-  <li title="인쇄" id="copyOptions">
+  <li class="header_btn" title="인쇄" id="copyOptions">
       <img src="image/drd_image/top_btn_print1.png"/>
       <ul id="copyOptions_list">
           <li id="print">인쇄</li>
-          <li id="enhancedcopy">고급인쇄설정</li>
+          <li id="enhancedcopy" title="고급인쇄설정">고급인쇄설정</li>
       </ul>
 
     <!--<select id="copyOptions">-->
@@ -98,8 +98,12 @@
   <li class="header_btn" id="FirstPage" title="첫 페이지"><img src="image/drd_image/top_btn_front011.png"/></li>
   <li class="header_btn" id="PreviousPage" title="이전 페이지"><img src="image/drd_image/top_btn_front021.png"/></li>
 
-  <li><input type="text" value=1 id="NowPage"> /</li>
-  <li><a id="TotalPage">10</a></li>
+  <li id="page_nav">
+    <input type="text" value=1 id="NowPage">
+    <label> / </label>
+    <label id="TotalPage">10</label>
+  </li>
+  <!--<li><a id="TotalPage">10</a></li>-->
   <li class="header_btn" id="NextPage" title="다음 페이지"><img src="image/drd_image/top_btn_back011.png"/></li>
   <li class="header_btn" id="LastPage" title="마지막 페이지"><img src="image/drd_image/top_btn_back021.png"/></li>
   <li class="header_btn" title="한 페이지만 보기"><img src="image/drd_image/top_btn_page1.png"/></li>
@@ -153,8 +157,8 @@
   <li class="header_btn" id="saveAsImage" title="이미지 내보내기">
       <img src="image/drd_image/top_btn_img1.png"/>
       <ul id="saveImgList">
-          <li id="saveAsPng"><img src="image/drd_image/export_png24.png"/>PNG</li>
-          <li id="saveAsJpg"><img src="image/drd_image/export_jpg24.png"/>JPG</li>
+          <li id="saveAsPng" title="PNG로 내보내기"><img src="image/drd_image/export_png24.png"/>PNG</li>
+          <li id="saveAsJpg" title="JPG로 내보내기"><img src="image/drd_image/export_jpg24.png"/>JPG</li>
           <!--<li><img src="image/drd_image/export_bmp24.png"/>BMP</li>-->
           <!--<li><img src="image/drd_image/export_tiff24.png"/>TIFF</li>-->
           <!--<li><img src="image/drd_image/export_gif24.png"/>GIF</li>-->
@@ -172,11 +176,11 @@
     <!--</select>-->
   <!--</li>-->
 
-  <li class="header_btn" id="saveAsHWP" title="한글로 내보내기"><img src="image/drd_image/top_btn_hwp1.png"/></li>
+  <!--<li class="header_btn" id="saveAsHWP" title="한글로 내보내기"><img src="image/drd_image/top_btn_hwp1.png"/></li>-->
 
-  <li><button><a id="saveAsHTML" type="button" style="text-decoration: none;">HTML</a></button></li>
+  <li class="header_btn" title="HTML로 내보내기"><a id="saveAsHTML" type="button" style="text-decoration: none;"><img src="image/drd_image/top_btn_html1.png"></a></li>
   <li class="header_btn" id="image_upload_button" title="이미지 추가"><img src="image/drd_image/top_btn_img_plus1.png"/></li>
-  <li class="header_btn" id="tableChoice" title="항목선택"><img src="image/drd_image/SelectColumn.png"/></li>
+  <li class="header_btn" id="tableChoice" title="항목선택"><img src="image/drd_image/SelectColumn1.png"/></li>
   <li><input type="button" value="리포트 선택" id="reportChoice"></li>
 </ul>
 </div>
