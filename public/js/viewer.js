@@ -547,8 +547,10 @@ function band_dbclick_event(data) {
                     var current = this.id;
                     var current_width = this.style.width;
                     var current_height = this.style.height;
-                    var this_text = $("#" + current)[0].innerText;
-
+                    var current_id = $("#"+current)[0];
+                    console.log("current : ",current_id);
+                    var this_text = $("#" + current)[0].textContent;
+                    console.log("this_text : ",$("#" + current));
                     if ($("#text_area")[0] === undefined) {
                         var text_div = document.createElement("div");
                         text_div.id = "text_div";
@@ -575,7 +577,17 @@ function band_dbclick_event(data) {
                         if (!key.shiftKey) {
                             var insert_text = $("#text_area").val();
                             var text_convert = insert_text.replace(/(?:\r\n|\r|\n)/g, '<br />'); // html 문법으로 변환.
-                            $("#" + this.id)[0].innerHTML = text_convert;
+                            var id = $("#" + this.id)[0];
+
+                            console.log("id : ",id.children);
+                            for(var i=0; i< id.children.length; i++){
+                                if(id.children[i].tagName === "P"){
+                                    id.children[i].innerText = insert_text;
+                                }
+                            }
+                            // console.log("innerText : ",id.innerText.replace(/[^0-9a-zA-Z가-힣]/g, ""));
+                            console.log("insert_text : ", insert_text);
+                            console.log("text_convert : ", text_convert);
                             $("#text_div").remove();
                             this.style.borderWidth = "1px";
                             this.style.borderColor = "black";
@@ -586,6 +598,20 @@ function band_dbclick_event(data) {
                         this.style.borderWidth = "1px";
                         this.style.borderColor = "black";
                         this.style.borderStyle = "solid";
+                    } else if(key.keyCode === 16){ //shift키 누르고 있을 때 column의 width값이 바뀌면 해당 column만 사이즈 조정 되는 것처럼 보이도록.
+                        console.log("test");
+                    }
+                },
+                "mouseover": function (event) {
+                    if(event.shiftKey){ //shift키 누르고 있을 때 column의 width값이 바뀌면 해당 column만 사이즈 조정 되는 것처럼 보이도록.
+                        console.log("test");
+                        var thid = $("#"+this.id);
+                        var titleTrId = $("#"+thid[0].parentElement.id);
+                        console.log("this : ",thid[0].parentElement.id);
+
+                        shift_table_column_controller(thid, titleTrId);
+                    }else{
+                        console.log("shift 클릭 안함.");
                     }
                 }
             });

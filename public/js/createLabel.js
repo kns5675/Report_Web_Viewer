@@ -380,11 +380,13 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
                     label.text = paramData.Value._text;
                 }
             });
+
+            thId.append('<p id="value_P_tag'+thNum+'">'+label.text+'</p>');
             var valueTrId = $('#dynamicValueLabel' + tempCurDataRow);
             var tdId = 'tableValueLabelNum' + tableValueLabelNum++;
             var key = label.parameterName;
-            if (!minimumRow) {
-                valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '">' + label.text + '</td>');
+            if (!minimumRow) {  //td의 label 값을 p태그에 묶음.
+                valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '"><p id="value_P_tag'+thNum+'" style="margin: 0px;">' + label.text + '</p></td>');
             } else { // 최소행 개수
                 valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '"></td>');
             }
@@ -420,7 +422,7 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
                 'background-color': label.backGroundColor,
                 'white-space': 'nowrap'
             });
-            drd_javascript(label, tdId, label.startBindScript);
+            // drd_javascript(label, tdId, label.startBindScript);
             tempCurDataRow++;
         } else {
             for (var key in data) {
@@ -430,8 +432,8 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
                     var table_reform = table_format_check(data, valueTrId, key_data, table);
                     var tdId = 'tableValueLabelNum' + tableValueLabelNum++;
                     if (!minimumRow) {
-                        if (label.labelTextType == 'Number' && label.format != undefined) {
-                            valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '">' + table_reform + '</td>');
+                        if (label.labelTextType == 'Number' && label.format != undefined) { //td의 label 값을 p태그에 묶음.
+                            valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '"><p id="value_P_tag'+thNum+'" style="margin: 0px;">' + table_reform + '</p></td>');
                         } else {
                             valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '">' + table_reform + '</td>');
                         }
@@ -493,7 +495,7 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
                         'background-color': label.backGroundColor,
                         'white-space': 'nowrap'
                     });
-                    drd_javascript(label, tdId, label.startBindScript);
+                    // drd_javascript(label, tdId, label.startBindScript);
                 }
             }
             tempCurDataRow++;
@@ -544,7 +546,7 @@ function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, nu
             var tdId = 'tableValueLabelNum' + tableValueLabelNum++;
             var key = label.parameterName;
             if (!minimumRow) {
-                valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '">' + label.text + '</td>');
+                valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '"><p id="value_P_tag'+thNum+'" style="margin: 0px;">' + label.text + '</p></td>');
             } else { // 최소행 개수
                 valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '"></td>');
             }
@@ -580,7 +582,7 @@ function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, nu
                 'background-color': label.backGroundColor,
                 'white-space': 'nowrap'
             });
-            drd_javascript(label, tdId, label.startBindScript);
+            // drd_javascript(label, tdId, label.startBindScript);
         } else {
             for (var key in data[temp]) {
                 valueTrId = $($trId);
@@ -596,7 +598,7 @@ function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, nu
                     } else {
                         if (label.labelTextType == 'Number' && label.format != undefined) {
                             valueTrId.append(
-                                '<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '">' + table_reform + '</td>'
+                                '<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '"><p id="value_P_tag'+thNum+'" style="margin: 0px;">' + table_reform + '</p></td>'
                             );
                         } else {
                             valueTrId.append(
@@ -662,7 +664,7 @@ function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, nu
                         'background-color': label.backGroundColor,
                         'white-space': 'nowrap'
                     });
-                    drd_javascript(label, tdId, label.startBindScript, key, data[temp]);
+                    // drd_javascript(label, tdId, label.startBindScript, key, data[temp]);
                 }
             }
         }
@@ -771,7 +773,7 @@ function drawingDynamicTableValueLabelWithGroupFieldArrayWithRegion(label, dt, t
                 'background-color': label.backGroundColor,
                 'white-space': 'nowrap'
             });
-            drd_javascript(label, tdId, label.startBindScript);
+            // drd_javascript(label, tdId, label.startBindScript);
         } else {
             for (var key in data[temp]) {
                 valueTrId = $($trId);
@@ -853,7 +855,7 @@ function drawingDynamicTableValueLabelWithGroupFieldArrayWithRegion(label, dt, t
                         'background-color': label.backGroundColor,
                         'white-space': 'nowrap'
                     });
-                    drd_javascript(label, tdId, label.startBindScript);
+                    // drd_javascript(label, tdId, label.startBindScript);
                 }
             }
         }
@@ -924,7 +926,7 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArrayWithRegion(label, dt
                 'background-color': label.backGroundColor,
                 'white-space': 'nowrap'
             });
-            drd_javascript(label, tdId, label.startBindScript);
+            // drd_javascript(label, tdId, label.startBindScript);
             tempCurDataRow++;
         } else {
             for (var key in data) {
@@ -997,7 +999,7 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArrayWithRegion(label, dt
                         'background-color': label.backGroundColor,
                         'white-space': 'nowrap'
                     });
-                    drd_javascript(label, tdId, label.startBindScript);
+                    // drd_javascript(label, tdId, label.startBindScript);
                 }
             }
             tempCurDataRow++;
@@ -1026,7 +1028,7 @@ function drawingDynamicTableValueLabelWithOutDataTable(label, tableId) {
     tdId.append(label.text);
     tdId.addClass('Label DynamicTableHeader');
     tdId.addClass(label._attributes);
-    drd_javascript(label, tdId, label.startBindScript);
+    // drd_javascript(label, tdId, label.startBindScript);
 
 }
 
@@ -1094,12 +1096,12 @@ function drawingDynamicTableTitleLabel(label, header_Name_Number) {
     var thId = $('#DynamicTableTitleLabel' + header_Name_Number + "_View_Page_Number" + thNum);
 
     setCssInTable(label, thId);
-
-    thId.append(label.text);
+    // thId.append(label.text);
+    thId.append('<p id="title_P_tag'+thNum+'" style="margin: 0px;">'+label.text+'</p>');
     thId.addClass('Label DynamicTableHeader');
     thId.addClass(label._attributes);
     table_column_controller(thId, titleTrId);
-    drd_javascript(label, thId, label.startBindScript);
+    // drd_javascript(label, thId, label.startBindScript);
 }
 
 /******************************************************************
@@ -1434,7 +1436,6 @@ function drawingSummaryLabel(data, divId, band_name) {
         label_type: data.dataType,
         dataTableName: data.dataTableName
     };
-    console.log(data);
     labelPropertyApply(labelNbandInfo);
 }
 
@@ -2060,9 +2061,8 @@ function table_format_check(data, Label_id, key, table) {
     if (key != NaN) { //해당 데이터가 숫자일 경우
         if (test === "AmountSosu" || test === "MoneySosu" || test === "MoneySosu") {   //수량, 금액 소숫점 자리수 ###,###
             var parts = key.toString().split(".");
-            if (parts[1]) {
+            if (parts[1]) { //소수점이 있을 때.
                 var decimal_cutting = parts[1].substring(0, 2);
-                console.log("decimal_cutting : ", decimal_cutting);
                 return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "." + decimal_cutting;
             } else {
                 return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -2073,7 +2073,6 @@ function table_format_check(data, Label_id, key, table) {
             var parts = key.toString().split(".");
             if (parts[1]) {
                 var decimal_cutting = parts[1].substring(0, 2);
-                console.log("decimal_cutting : ", decimal_cutting);
                 return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + (parts[1] ? "." + parts[1] : "");
             } else {
                 return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -2082,7 +2081,6 @@ function table_format_check(data, Label_id, key, table) {
             var parts = key.toString().split(".");
             if (parts[1]) {
                 var decimal_cutting = parts[1].substring(0, 3);
-                console.log("decimal_cutting : ", decimal_cutting);
                 return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + (parts[1] ? "." + parts[1] : "");
             } else {
                 return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -2116,6 +2114,35 @@ function table_column_controller(resize_area, Unalterable_area) {
                         e.style.width = width + "px";
                     }
                 });
+            }
+        });
+    }
+}
+
+function shift_table_column_controller(resize_area, Unalterable_area) {
+    var width;
+    if (Unalterable_area[0]) {
+        resize_area.resizable({
+            containment: "#" + Unalterable_area[0].id,
+            autoHide: true,
+            resize: function (event, ui) {   //테이블사이즈는 가로만 조정 가능하도록.
+                ui.size.height = ui.originalSize.height;
+                width = ui.size.width;
+                var resizing_label = this;
+                var select_label = $("#" + resizing_label.id).text();
+                $(".DynamicTableHeader").each(function (i, e) {
+                    var total_col = $("#" + e.id).text();
+                    if (total_col === select_label) {
+                        e.style.width = width + "px";
+                    }
+                });
+                console.log("width : ",width);
+                // $(".table").each(function (i, e) {
+                //     var total_col = $("#" + e.id)[0].className.split(" ")[1];
+                //     if (total_col === select_label) {
+                //         e.style.width = width + "px";
+                //     }
+                // });
             }
         });
     }
@@ -2499,7 +2526,7 @@ function label_text_Setting(labelNbandInfo) {
         var fontSize = (pId.css('font-size')).split('p');
         pId.css('word-spacing', (fontSize[0] - 1.181) + 'px');
     }
-    drd_javascript(labelNbandInfo.data, labelNbandInfo.labelId, labelNbandInfo.data.startBindScript);
+    // drd_javascript(labelNbandInfo.data, labelNbandInfo.labelId, labelNbandInfo.data.startBindScript);
     pId.addClass('Label');
     pId.addClass(labelNbandInfo.label_type);
 }
@@ -2736,9 +2763,15 @@ function z_index_setting(band_name) {
     return z_index;
 }
 
-/*************************
- * DRD 자바스크립트 구현
- *************************/
+/******************************************************************
+ 기능 : DRD 자바스크립트 구현
+ Date : 2018-09-24
+ 만든이 : big_dolphin
+
+ 추가 : DRD 자바스크립트 세부적 추가 기능 구현
+ Date : 2018-09-27
+ 만든이 : hagdung-i
+ ******************************************************************/
 function drd_javascript(label, labelId, script, key, data) {
     if (labelId !== undefined && script !== undefined) {
         var making_script;
@@ -2766,8 +2799,12 @@ function drd_javascript(label, labelId, script, key, data) {
 function str_replace(str, searchStr, replaceStr) {
     return str.split(searchStr).join(replaceStr);
 }
-
-function DataSource(data, variable_name, variable_value) {
+/******************************************************************
+ 기능 :
+ Date : 2018-09-24
+ 만든이 : hagdung-i
+ ******************************************************************/
+function DataSource(data, variable_name, variable_value){
     this.GetDataRow = data;
     // this.variable_name = variable_value;
 };

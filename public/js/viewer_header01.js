@@ -13,7 +13,10 @@ var imagezIndex = 401;
  만든이 : hagdung-i
  ******************************************************************/
 function file_save() {
+    $("#saving").on("click", function () {
+        console.log("window : ",this);
 
+    });
 }
 /******************************************************************
  기능 : 파일 열기 버튼 기능.
@@ -21,6 +24,50 @@ function file_save() {
  ******************************************************************/
 function file_open() {
 
+    var modalLayer = $("#filemodalLayer");
+    $("#file_opener").on("click", function () {
+        console.log("window : ",window.reportTemplate);
+        $("#filemodalLayer").fadeIn("slow");
+    });
+
+    $("#file_upload_button").on("click", function () {
+        modalLayer.fadeOut("slow");
+    });
+
+    $("#file_upload_cancel").on("click", function () {
+        modalLayer.fadeOut("slow");
+    });
+
+    $(".upload_cancel").click(function(){
+        modalLayer.fadeOut("slow");
+    });
+}
+
+function file_open_submit(file, db, param) {
+    var file_ckeck_xml = file[0].value.match(/(.xml)$/);
+    var db_ckeck_xml = db[0].value.match(/(.xml)$/);
+    var param_ckeck_xml = param[0].value.match(/(.xml)$/);
+    if(file_ckeck_xml && db_ckeck_xml && param_ckeck_xml){ //입력 파일이 .xml 파일일 때
+        alert("입력한 파일을 기준으로 새로 그립니다.");
+        console.log("file_name : ",file[0].value);
+        console.log("db : ",db[0].value);
+        console.log("param : ",param[0].value);
+    }else{
+        alert("xml 파일만 입력이 가능합니다.");
+        return null;
+    }
+    // alert(file_name);
+}
+
+function file_realURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+            // $('#image'+ImageNum).attr('src', e.target.result);
+            // ImageNum++;
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
 }
 
 /******************************************************************
@@ -411,7 +458,49 @@ async function image_setting(){
  ******************************************************************/
 $(function() {
     $('#image_insert').on("change", function () {
-        readURL(this);
+        if(this.value){
+            var test = this.value;
+            if(test){
+                console.log("test : ",test);
+                readURL(this);
+            }
+        }
+    });
+
+    $("#file_insert").on("change", function () {
+        if(this.value){
+            var test = this.value;
+            if(test){
+                var ckeck_xml = test.match(/(.xml)$/);
+                if(ckeck_xml){ //입력 파일이 .xml 파일일 때
+                    var file = document.querySelector('#file_insert');
+
+                    file.onchange = function () {
+                        var fileList = file.files ;
+
+                        // 읽기
+                        var reader = new FileReader();
+                        var dwadaw = reader.readAsText(fileList [0]);
+
+                        console.log("reader : ",fileList [0]);
+                        if (fileList && fileList[0]) {
+                            var reader = new FileReader();
+                            reader.onload = function(e) {
+                                console.log("e.target.result : ",e.target.result);
+                            };
+                            reader.readAsDataURL(fileList[0]);
+                        }
+                        // //로드 한 후
+                        // reader.onload = function  () {
+                        //     document.querySelector('#preview').textContent = reader.result ;
+                        // };
+                    };
+                    file_realURL(this);
+                }else{
+                    alert("xml 파일을 입력해주세요.");
+                }
+            }
+        }
     });
 });
 function DRD_button() {
