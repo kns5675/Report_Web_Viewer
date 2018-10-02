@@ -361,11 +361,11 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData, band) {
                     break;
             }
         });
+
         tableId.css({
             'border': '1px solid red',
             'border-collapse': 'collapse',
             'text-align': 'center',
-            // 'table-layout': 'fixed'
         });
 
         tableNum++;
@@ -426,8 +426,10 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
             // drd_javascript(label, tdId, label.startBindScript);
             tempCurDataRow++;
         } else {
+            var isData = false;
             for (var key in data) {
                 if (label.fieldName == key) {
+                    isData = true;
                     var valueTrId = $('#dynamicValueLabel' + tempCurDataRow);
                     var key_data = data[key]._text;
                     var table_reform = table_format_check(data, valueTrId, key_data, table);
@@ -474,6 +476,17 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
                     // drd_javascript(label, tdId, label.startBindScript);
                 }
             }
+
+            if(!isData){  // Label은 있지만 데이터가 없을 때
+                var tdId = 'tableValueLabelNum' + tableValueLabelNum++;
+                valueTrId.append(
+                    '<td id = "' + tdId + '" class="' + label.fieldName + ' Label ' + label._attributes + ' ' + label.dataType + '"></td>'
+                );
+                var tdId = $('.' + label.fieldName);
+                setCssInTable(label, tdId);
+            }
+
+
             tempCurDataRow++;
         }
     }
@@ -584,19 +597,13 @@ function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, nu
                 }
             }
             if(!isData){  // Label은 있지만 데이터가 없을 때
-
                 var tdId = 'tableValueLabelNum' + tableValueLabelNum++;
-
                 valueTrId.append(
                             '<td id = "' + tdId + '" class="' + label.fieldName + ' Label ' + label._attributes + ' ' + label.dataType + '"></td>'
                 );
                 var tdId = $('.' + label.fieldName);
-
                 setCssInTable(label, tdId);
-
             }
-
-
         }
     }
 }
@@ -675,39 +682,16 @@ function drawingDynamicTableValueLabelWithGroupFieldArrayWithRegion(label, dt, t
                 'width': label.rectangle.width,
                 'height': label.rectangle.height
             });
-            var td = $('.' + key);
-            //// 추가 부분 18.08.28 YeSol
-            if (label.noBorder == 'true') {
-                td.css('border', 'none');
-            } else {
-                if (label.borderThickness !== undefined) {
-                    var leftBorder = borderDottedLine(label.borderDottedLines.leftDashStyle);
-                    var rightBorder = borderDottedLine(label.borderDottedLines.rightDashStyle);
-                    var bottomBorder = borderDottedLine(label.borderDottedLines.bottomDashStyle);
-                    var topBorder = borderDottedLine(label.borderDottedLines.topDashStyle);
-                    td.css({
-                        'border-left': label.borderThickness.left + 'px ' + leftBorder + ' ' + label.leftBorderColor,
-                        'border-right': label.borderThickness.right + 'px ' + rightBorder + ' ' + label.rightBorderColor,
-                        'border-bottom': label.borderThickness.bottom + 'px ' + bottomBorder + ' ' + label.bottomBorderColor,
-                        'border-top': label.borderThickness.top + 'px ' + topBorder + ' ' + label.topBorderColor
-                    });
-                } else {
-                    td.css('border', '1px solid black');
-                }
-            }
-            td.css({
-                'font-size': label.fontSize,
-                'font-family': label.fontFamily,
-                'font-weight': label.fontStyle,
-                'font-color': label.textColor,
-                'background-color': label.backGroundColor,
-                'white-space': 'nowrap'
-            });
-            // drd_javascript(label, tdId, label.startBindScript);
+
+            var tdId = $('.' + key);
+            setCssInTable(label, tdId);
+
         } else {
+            var isData = false;
             for (var key in data[temp]) {
                 valueTrId = $($trId);
                 if (label.fieldName == key) {
+                    isData = true;
                     var key_data = data[temp][key]._text;
                     var table_reform = table_format_check(data, valueTrId, key_data, label);
 
@@ -755,38 +739,17 @@ function drawingDynamicTableValueLabelWithGroupFieldArrayWithRegion(label, dt, t
                         }
                     }
 
-                    var td = $('.' + key);
-                    //// 추가 부분 18.08.28 YeSol
-                    if (label.noBorder == 'true') {
-                        td.css('border', 'none');
-                    } else {
-                        if (label.borderThickness !== undefined) {
-                            var leftBorder = borderDottedLine(label.borderDottedLines.leftDashStyle);
-                            var rightBorder = borderDottedLine(label.borderDottedLines.rightDashStyle);
-                            var bottomBorder = borderDottedLine(label.borderDottedLines.bottomDashStyle);
-                            var topBorder = borderDottedLine(label.borderDottedLines.topDashStyle);
-
-                            td.css({
-                                'border-left': label.borderThickness.left + 'px ' + leftBorder + ' ' + label.leftBorderColor,
-                                'border-right': label.borderThickness.right + 'px ' + rightBorder + ' ' + label.rightBorderColor,
-                                'border-bottom': label.borderThickness.bottom + 'px ' + bottomBorder + ' ' + label.bottomBorderColor,
-                                'border-top': label.borderThickness.top + 'px ' + topBorder + ' ' + label.topBorderColor
-                            });
-                        } else {
-                            td.css('border', '1px solid black');
-                        }
-                    }
-
-                    td.css({
-                        // 'border': '1px solid black',
-                        'font-size': label.fontSize,
-                        'font-family': label.fontFamily,
-                        'font-weight': label.fontStyle,
-                        'background-color': label.backGroundColor,
-                        'white-space': 'nowrap'
-                    });
-                    // drd_javascript(label, tdId, label.startBindScript);
+                    var tdId = $('.' + key);
+                    setCssInTable(label, tdId);
                 }
+            }
+            if(!isData){  // Label은 있지만 데이터가 없을 때
+                var tdId = 'tableValueLabelNum' + tableValueLabelNum++;
+                valueTrId.append(
+                    '<td id = "' + tdId + '" class="' + label.fieldName + ' Label ' + label._attributes + ' ' + label.dataType + '"></td>'
+                );
+                var tdId = $('.' + label.fieldName);
+                setCssInTable(label, tdId);
             }
         }
     }
@@ -829,38 +792,13 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArrayWithRegion(label, dt
                 'height': label.rectangle.height
             });
             var td = $('.' + key);
-            //// 추가 부분 18.08.28 YeSol
-            if (label.noBorder == 'true') {
-                td.css('border', 'none');
-            } else {
-                if (label.borderThickness !== undefined) {
-                    var leftBorder = borderDottedLine(label.borderDottedLines.leftDashStyle);
-                    var rightBorder = borderDottedLine(label.borderDottedLines.rightDashStyle);
-                    var bottomBorder = borderDottedLine(label.borderDottedLines.bottomDashStyle);
-                    var topBorder = borderDottedLine(label.borderDottedLines.topDashStyle);
-                    td.css({
-                        'border-left': label.borderThickness.left + 'px ' + leftBorder + ' ' + label.leftBorderColor,
-                        'border-right': label.borderThickness.right + 'px ' + rightBorder + ' ' + label.rightBorderColor,
-                        'border-bottom': label.borderThickness.bottom + 'px ' + bottomBorder + ' ' + label.bottomBorderColor,
-                        'border-top': label.borderThickness.top + 'px ' + topBorder + ' ' + label.topBorderColor
-                    });
-                } else {
-                    td.css('border', '1px solid black');
-                }
-            }
-            td.css({
-                'font-size': label.fontSize,
-                'font-family': label.fontFamily,
-                'font-weight': label.fontStyle,
-                'font-color': label.textColor,
-                'background-color': label.backGroundColor,
-                'white-space': 'nowrap'
-            });
-            // drd_javascript(label, tdId, label.startBindScript);
+            setCssInTable(label, td);
             tempCurDataRow++;
         } else {
+            var isData = false;
             for (var key in data) {
                 if (label.fieldName == key) {
+                    isData = true;
                     var valueTrId = $('#dynamicValueLabel' + tempCurDataRow);
                     var key_data = data[key]._text;
                     var table_reform = table_format_check(data, valueTrId, key_data, table);
@@ -902,35 +840,17 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArrayWithRegion(label, dt
                         }
                     }
                     var td = $('.' + key);
-                    //// 추가 부분 18.08.28 YeSol
-                    if (label.noBorder == 'true') {
-                        td.css('border', 'none');
-                    } else {
-                        if (label.borderThickness !== undefined) {
-                            var leftBorder = borderDottedLine(label.borderDottedLines.leftDashStyle);
-                            var rightBorder = borderDottedLine(label.borderDottedLines.rightDashStyle);
-                            var bottomBorder = borderDottedLine(label.borderDottedLines.bottomDashStyle);
-                            var topBorder = borderDottedLine(label.borderDottedLines.topDashStyle);
-                            td.css({
-                                'border-left': label.borderThickness.left + 'px ' + leftBorder + ' ' + label.leftBorderColor,
-                                'border-right': label.borderThickness.right + 'px ' + rightBorder + ' ' + label.rightBorderColor,
-                                'border-bottom': label.borderThickness.bottom + 'px ' + bottomBorder + ' ' + label.bottomBorderColor,
-                                'border-top': label.borderThickness.top + 'px ' + topBorder + ' ' + label.topBorderColor
-                            });
-                        } else {
-                            td.css('border', '1px solid black');
-                        }
-                    }
-                    td.css({
-                        'font-size': label.fontSize,
-                        'font-family': label.fontFamily,
-                        'font-weight': label.fontStyle,
-                        'font-color': label.textColor,
-                        'background-color': label.backGroundColor,
-                        'white-space': 'nowrap'
-                    });
+                    setCssInTable(label, td);
                     // drd_javascript(label, tdId, label.startBindScript);
                 }
+            }
+            if(!isData){  // Label은 있지만 데이터가 없을 때
+                var tdId = 'tableValueLabelNum' + tableValueLabelNum++;
+                valueTrId.append(
+                    '<td id = "' + tdId + '" class="' + label.fieldName + ' Label ' + label._attributes + ' ' + label.dataType + '"></td>'
+                );
+                var tdId = $('.' + label.fieldName);
+                setCssInTable(label, tdId);
             }
             tempCurDataRow++;
         }
@@ -989,7 +909,9 @@ function setCssInTable(label, tdId) {
         }
     }
 
-    if((Number(label.rectangle.x) + Number(label.rectangle.width)) > $("#designLayer" + pageNum).width()){
+    var labelXsumWidth =  Number(label.rectangle.x) + Number(label.rectangle.width);
+
+    if(Math.round(labelXsumWidth) > $("#designLayer" + pageNum).width()){
         tdId.css({
             'display' : 'none'
         });
@@ -1002,7 +924,8 @@ function setCssInTable(label, tdId) {
             'font-color': label.textColor,
             'width': label.rectangle.width + 'px',
             'height': label.rectangle.height + 'px',
-            'white-space': 'nowrap'
+            'white-space': 'nowrap',
+            'padding ': '5px',
         });
     }
 }
@@ -1025,17 +948,10 @@ function setCssInTable(label, tdId) {
 function drawingDynamicTableTitleLabel(label, header_Name_Number) {
     var titleTrId = $('#dynamicTitleLabel' + dynamicTitleLabelNum);
 
-
-
     titleTrId.append('<th id = "DynamicTableTitleLabel' + header_Name_Number + '_View_Page_Number' + thNum + '"></th>');
-    titleTrId.css({
-        'width': label.rectangle.width,
-        'height': label.rectangle.height
-    });
     var thId = $('#DynamicTableTitleLabel' + header_Name_Number + "_View_Page_Number" + thNum);
 
     setCssInTable(label, thId);
-    // thId.append(label.text);
     thId.append('<p id="title_P_tag' + thNum + '" style="margin: 0px;">' + label.text + '</p>');
     thId.addClass('Label DynamicTableHeader');
     thId.addClass(label._attributes);
@@ -1768,9 +1684,6 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
             if (tagPHeight !== undefined) {
                 if (fromData.rectangle.height - tagPHeight >= 0) {
                     var tagPmarginTop = (fromData.rectangle.height - tagPHeight) / 2;
-                    console.log("tagPmarginTop : ", tagPmarginTop);
-                    console.log("fromData.rectangle.height : ",fromData.rectangle.height);
-                    console.log("tagPHeight : ",tagPHeight);
 
                     switch (VTextAlignment) {
                         case "Center": {

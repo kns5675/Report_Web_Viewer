@@ -270,6 +270,7 @@ function getNumOfDataWithGroupFieldInFixedTable(band, avaHeight) {
 function drawBand(bands, layerName, reportHeight, parentBand) {
     var avaHeight = 0;
     var dt;
+
     bands.some(function (band) {
         var doneDataBand = false;
         completeDataBand.forEach(function (compareDataBand) {
@@ -535,14 +536,14 @@ function drawBandData(groupFieldArray, band, layerName, reportHeight, parentBand
                     if (remainData) {
                         dataBandHeight = getBandHeightOfDataBand(band, numofData - groupDataRow);
                     } else {
-                        dataBandHeight = getBandHeightOfDataBand(band, numofData);
+                        dataBandHeight = getBandHeightOfDataBand(band, numofData - 1);
                     }
                 }
             } else {
                 if (remainData) {
                     dataBandHeight = getBandHeightOfDataBand(band, numofData - groupDataRow);
                 } else {
-                    dataBandHeight = getBandHeightOfDataBand(band, numofData);
+                    dataBandHeight = getBandHeightOfDataBand(band, numofData - 1);
                 }
             }
 
@@ -563,7 +564,7 @@ function drawBandData(groupFieldArray, band, layerName, reportHeight, parentBand
             var dataBandFooterHeight = 0;
             avaHeight = getAvaHeight(div_id, reportHeight);
             numofData = getNumOfDataInOnePageNonObject(band, avaHeight);
-            dataBandHeight = getBandHeightOfDataBand(band, numofData);
+            dataBandHeight = getBandHeightOfDataBand(band, numofData - 1);
 
             if (band.childFooterBands !== null) { // 자식 풋터 밴드에서 재호출
                 dataBandFooterHeight = getChildBandHeight(band);
@@ -885,10 +886,18 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
                         var dataCount = groupFieldArray[groupFieldNum].length;
                         var groupRemainData = (dataCount - groupDataRow);
                         if (numofData > groupRemainData /*|| groupDataRow == 1*/) { // 마지막 페이지
-                            curDatarow += groupFieldArray[groupFieldNum].length - 1;
-                            curDatarowInDataBand += groupFieldArray[groupFieldNum].length - 1;
-                            remainData = false;
-                            completeDataBand.push(band.id);
+                            if(curDatarowInDataBand >= dt.length){
+                                curDatarow += groupFieldArray[groupFieldNum].length - 1;
+                                curDatarowInDataBand = 0;
+                                remainData = false;
+                                completeDataBand.push(band.id);
+                                ingDataTableName = undefined;
+                            }else{
+                                curDatarow += groupFieldArray[groupFieldNum].length - 1;
+                                curDatarowInDataBand += groupFieldArray[groupFieldNum].length - 1;
+                                remainData = false;
+                                ingDataTableName = band.dataTableName;
+                            }
                         } else { //마지막 페이지가 아닌 경우
                             remainData = true;
                             if (numofData > groupDataRow) {
@@ -896,15 +905,24 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
                             } else {
                                 groupDataRow += numofData - 1;
                             }
+                            ingDataTableName = band.dataTableName;
                         }
                     } else if (isFixedTable == true && dt != undefined) { // TODO 뭔가 이상해..
                         var dataCount = groupFieldArray[groupFieldNum].length;
                         var groupRemainData = (dataCount - groupDataRow);
                         if (numofData > groupRemainData) { // 마지막 페이지
-                            curDatarow += groupFieldArray[groupFieldNum].length - 1;
-                            curDatarowInDataBand += groupFieldArray[groupFieldNum].length - 1;
-                            remainData = false;
-                            completeDataBand.push(band.id);
+                            if(curDatarowInDataBand >= dt.length) {
+                                curDatarow += groupFieldArray[groupFieldNum].length - 1;
+                                curDatarowInDataBand = 0;
+                                remainData = false;
+                                completeDataBand.push(band.id);
+                                ingDataTableName = undefined;
+                            }else{
+                                curDatarow += groupFieldArray[groupFieldNum].length - 1;
+                                curDatarowInDataBand += groupFieldArray[groupFieldNum].length - 1;
+                                remainData = false;
+                                ingDataTableName = band.dataTableName;
+                            }
                         } else { //마지막 페이지가 아닌 경우
                             remainData = true;
                             if (numofData > groupDataRow) {
@@ -912,6 +930,7 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
                             } else {
                                 groupDataRow += numofData - 1;
                             }
+                            ingDataTableName = band.dataTableName;
                         }
                     }
                 } else { //그룹 필드가 아닐 경우
