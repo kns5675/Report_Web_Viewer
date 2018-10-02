@@ -1137,7 +1137,7 @@ function drawingDynamicTableTitleLabel(label, header_Name_Number) {
  만든이 : 하지연
  ******************************************************************/
 function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList) {
-    if(data.IsApprovalBox._text=="true"){
+    if (data.IsApprovalBox._text == "true") {
         console.log("결재란");//결재란일 경우 처리 여기에. 코드 정리 필요..
     }
     var div = $('#' + divId);//divId = 밴드
@@ -1154,7 +1154,7 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
 
     divIdTable.append('<table id="fixedTable' + fixedTableNum + '" class="table table-' + temp_table_class + '"></table>');
     var fixTableId = $('#fixedTable' + fixedTableNum);//고정테이블
-    rC2=1;
+    rC2 = 1;
     fixTableId.css({
         'width': controlFixedTable.rectangle.width,
         'height': controlFixedTable.rectangle.height,
@@ -1163,171 +1163,175 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
         // 'left': controlFixedTable.rectangle.x + 'px',
         // 'top': controlFixedTable.rectangle.y + 'px'
     });
-         var dt = Object.values(dataTable.DataSetName)[0];
+    var dt = Object.values(dataTable.DataSetName)[0];
 
-         var fixTableWidth = controlFixedTable.rectangle.width;//고정테이블 width 값
-         var fixTableHeight = controlFixedTable.rectangle.height;
-         var fixTableLabelListLength = Number(fixTableLabelList.length);//고정테이블 라벨리스트 라벨 갯수
-    function countingRows(){
-        var xZeroCount=0;
-        for(var zz = 0; zz < fixTableLabelListLength; zz++){
-            if(fixTableLabelList[zz].rectangle.x=='0'){
+    var fixTableWidth = controlFixedTable.rectangle.width;//고정테이블 width 값
+    var fixTableHeight = controlFixedTable.rectangle.height;
+    var fixTableLabelListLength = Number(fixTableLabelList.length);//고정테이블 라벨리스트 라벨 갯수
+    function countingRows() {
+        var xZeroCount = 0;
+        for (var zz = 0; zz < fixTableLabelListLength; zz++) {
+            if (fixTableLabelList[zz].rectangle.x == '0') {
                 xZeroCount++;
             }
         }
         setRowCount(xZeroCount);
     }
     countingRows();
-         function setRowCount(xZeroCount) {
-             var totalLabelWidth = 0;//라벨너비
-             var labelCount = 0;//라벨개수
-             var rowCount;//row개수
 
-             if (data.Labels) {//라벨 리스트 라벨 width, height값 가져오기
+    function setRowCount(xZeroCount) {
+        var totalLabelWidth = 0;//라벨너비
+        var labelCount = 0;//라벨개수
+        var rowCount;//row개수
 
-                 for (var i = 0; i < fixTableLabelListLength; i++) {
-                     var thisLabelWidth = Number(fixTableLabelList[i].rectangle.width);
-                     var thisLabelHeight = Number(fixTableLabelList[i].rectangle.height);
-                     var thisLabelX = fixTableLabelList[i].rectangle.x;
+        if (data.Labels) {//라벨 리스트 라벨 width, height값 가져오기
 
-                     labelCount++;
-                     totalLabelWidth += thisLabelWidth;
+            for (var i = 0; i < fixTableLabelListLength; i++) {
+                var thisLabelWidth = Number(fixTableLabelList[i].rectangle.width);
+                var thisLabelHeight = Number(fixTableLabelList[i].rectangle.height);
+                var thisLabelX = fixTableLabelList[i].rectangle.x;
 
-                     //console.log("fixTableLabelListLength : ", fixTableLabelListLength, fixTableLabelList[i].rectangle.x);
-                     //console.log(labelCount + "   ,   " +  totalLabelWidth + "  ,   "+ thisLabelWidth + ",   fixTableWidth : "+ fixTableWidth);
-                     if (labelCount == fixTableLabelListLength) {
-                         // console.log("labelCount",labelCount);
-                         // console.log("fixTableLabelListLength",fixTableLabelListLength);
+                labelCount++;
+                totalLabelWidth += thisLabelWidth;
 
-                         rowCount=xZeroCount;
-                         // console.log("rowCount : ",rowCount,fixTableId);
-                         for (var rC = 1; rC <= rowCount; rC++) {
-                             fixTableId.append('<tr id = "fixedTableRow' + fixTableRowCount + '"></tr>');
-                             var ThisfixedTableRow = $("#fixedTableRow" + fixTableRowCount);
+                //console.log("fixTableLabelListLength : ", fixTableLabelListLength, fixTableLabelList[i].rectangle.x);
+                //console.log(labelCount + "   ,   " +  totalLabelWidth + "  ,   "+ thisLabelWidth + ",   fixTableWidth : "+ fixTableWidth);
+                if (labelCount == fixTableLabelListLength) {
+                    // console.log("labelCount",labelCount);
+                    // console.log("fixTableLabelListLength",fixTableLabelListLength);
 
-                             ThisfixedTableRow.css({
-                                 'border-spacing': 0,
-                                 'margin': 0,
-                                 'padding': 0,
-                                 'top': 0,
-                                 'width': thisLabelWidth,
-                                 'height': thisLabelHeight,
-                                 'overflow': 'visible'
-                             });
+                    rowCount = xZeroCount;
+                    // console.log("rowCount : ",rowCount,fixTableId);
+                    for (var rC = 1; rC <= rowCount; rC++) {
+                        fixTableId.append('<tr id = "fixedTableRow' + fixTableRowCount + '"></tr>');
+                        var ThisfixedTableRow = $("#fixedTableRow" + fixTableRowCount);
 
-                             var drawingTds = labelCount/rowCount;
+                        ThisfixedTableRow.css({
+                            'border-spacing': 0,
+                            'margin': 0,
+                            'padding': 0,
+                            'top': 0,
+                            'width': thisLabelWidth,
+                            'height': thisLabelHeight,
+                            'overflow': 'visible'
+                        });
 
-                             tdDataBinding(ThisfixedTableRow,drawingTds,rowCount);
-                             fixTableRowCount++;
-                         }
-                             function tdDataBinding(ThisfixedTableRow,drawingTds,rowCount){
-                                 var tdId = 'FixedTableLabel_';
-                                 //console.log(rC2, drawingTds);
-                                 if(rC2>drawingTds){
-                                     drawingTds  = labelCount;
-                                 }
-                                 for (rC2; rC2 <= drawingTds; rC2++) {
-                                     //console.log("@@@ rC2 : ",rC2);
-                                     //console.log("@@@ drawingTds : ",drawingTds);
-                                     var fromData = fixTableLabelList[rC2 - 1];
-                                     //var fromData = fixTableLabelList[fixedTableNum - 1];
-                                     // var tdIDMaking = tdId + rC2 + '_' + fixedTableNum;
+                        var drawingTds = labelCount / rowCount;
 
-                                     var tdIDMaking = tdId + rC2 + '_' + labelC;
-                                     var tdIDwithS = $("#" + tdIDMaking);
+                        tdDataBinding(ThisfixedTableRow, drawingTds, rowCount);
+                        fixTableRowCount++;
+                    }
 
-                                     switch (fromData.dataType) {
-                                         case  "DataLabel" :
-                                             if (groupFieldArray !== undefined) {
-                                                 if (fromData.fieldName !== undefined) {
-                                                     var fieldName = fromData.fieldName;
+                    function tdDataBinding(ThisfixedTableRow, drawingTds, rowCount) {
+                        var tdId = 'FixedTableLabel_';
+                        //console.log(rC2, drawingTds);
+                        if (rC2 > drawingTds) {
+                            drawingTds = labelCount;
+                        }
+                        for (rC2; rC2 <= drawingTds; rC2++) {
+                            //console.log("@@@ rC2 : ",rC2);
+                            //console.log("@@@ drawingTds : ",drawingTds);
+                            var fromData = fixTableLabelList[rC2 - 1];
+                            //var fromData = fixTableLabelList[fixedTableNum - 1];
+                            // var tdIDMaking = tdId + rC2 + '_' + fixedTableNum;
 
-                                                     if (fieldName == groupFieldName) {
-                                                         if (groupFieldArray[groupFieldNum]) {
-                                                             var showDataLabel = groupFieldArray[groupFieldNum][0];
-                                                             if (showDataLabel !== undefined) {
-                                                                 showDataLabel = showDataLabel
-                                                             }
-                                                             if (showDataLabel === 'undefined') {
-                                                                 showDataLabel = ' ';
-                                                             }
-                                                             if (typeof showDataLabel == undefined) {
-                                                                 showDataLabel = ' ';
-                                                             }
-                                                         }
-                                                     } else {
-                                                         if (groupFieldArray[groupFieldNum]) {
-                                                             if (groupFieldArray[groupFieldNum][1][fieldName]) {
-                                                                 var showDataLabel = groupFieldArray[groupFieldNum][1][fieldName]._text;
-                                                                 if (showDataLabel !== undefined) {
-                                                                     showDataLabel = showDataLabel
-                                                                 }
-                                                                 if (typeof showDataLabel === 'undefined') {
-                                                                     showDataLabel = ' ';
-                                                                 }
-                                                             }
-                                                         } else {
-                                                             console.log("그룹풋터밴드에 해당하는 총계나 그런애들에 대한 자바스크립트..? 처리가 필요함");
-                                                         }
-                                                     }
-                                                 }
-                                                 if (typeof showDataLabel === 'undefined') {
-                                                     showDataLabel = ' ';
-                                                 }
-                                                 var table_reform = table_format_check(data.Labels, tdIDwithS, showDataLabel, fromData);
-                                                 ThisfixedTableRow.append
-                                                 ('<td class="DataLabel" id = "' + tdId + rC2 + '_' + labelC + '">' +
-                                                     '<p id="' + tdId + rC2 + '_p_' + labelC + '">' + table_reform + '</p>' +
-                                                     '</td>');
-                                                 settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTableHeight);
-                                                 setTable();
-                                                 var tdId_javascript = $("#" + tdIDMaking);
-                                             }
-                                             break;
-                                         case  "NormalLabel" :
-                                             ThisfixedTableRow.append('<td class="NormalLabel" id = "' + tdId + rC2 + '_' + labelC + '">' +
-                                                 '<p id="' + tdId + rC2 + '_p_' + labelC + '">' + table_format_check(data.Labels, tdIDwithS, fromData.text, fromData) + '</p></td>');
-                                             settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTableHeight);
-                                             setTable();
-                                             var tdId_javascript = $("#" + tdIDMaking);
-                                             break;
-                                         case "SummaryLabel" :
-                                             var label = new DataLabel(data);
-                                             drawingSummaryLabel(label);
-                                             ThisfixedTableRow.append('<td class="SummaryLabel" id = "' + tdId + rC2 + '_' + fixedTableNum + '">' +
-                                                 '<p id="' + tdId + rC2 + '_p_' + fixedTableNum + '">' + table_format_check(data.Labels, tdIDwithS, fromData.text, fromData) + '</p></td>');
-                                             break;
-                                     }
-                                     // // drd_javascript(label, tdId_javascript, label.startBindScript, rC2, data[temp]);
-                                 }
-                             }
-                     }
-                 }
-             }
-         }
-         function setTable(){
-             if (Array.isArray(fixTableLabelList)) {
-                 var MathfixTableWidth = Math.round(fixTableWidth);
-                 fixTableId.css({
-                     'position': 'absolute',
-                     'z-index': 999,
-                     //'width': Math.round(fixTableWidth),//어쩔수없었음 round안하면 테이블 width 소수점 자동으로 없애버림..,
-                     'width': MathfixTableWidth,//하지연
-                     'over-flow':'visible',
-                     'height': fixTableHeight,
-                     'left': controlFixedTable.rectangle.x + 'px',
-                     'top': controlFixedTable.rectangle.y + 'px',
-                     //'border-collapse': 'collapse',
-                     //'border':'0.5px solid black',//임시로 이렇게 줘봤음 일단
-                     'border':'0px',
-                     'border-spacing':'0px'
+                            var tdIDMaking = tdId + rC2 + '_' + labelC;
+                            var tdIDwithS = $("#" + tdIDMaking);
 
-                 });
-                 labelC++;
-                 thNum++;
-                 fixedTableLabelNum++;
-             }
-         }
+                            switch (fromData.dataType) {
+                                case  "DataLabel" :
+                                    if (groupFieldArray !== undefined) {
+                                        if (fromData.fieldName !== undefined) {
+                                            var fieldName = fromData.fieldName;
+
+                                            if (fieldName == groupFieldName) {
+                                                if (groupFieldArray[groupFieldNum]) {
+                                                    var showDataLabel = groupFieldArray[groupFieldNum][0];
+                                                    if (showDataLabel !== undefined) {
+                                                        showDataLabel = showDataLabel
+                                                    }
+                                                    if (showDataLabel === 'undefined') {
+                                                        showDataLabel = ' ';
+                                                    }
+                                                    if (typeof showDataLabel == undefined) {
+                                                        showDataLabel = ' ';
+                                                    }
+                                                }
+                                            } else {
+                                                if (groupFieldArray[groupFieldNum]) {
+                                                    if (groupFieldArray[groupFieldNum][1][fieldName]) {
+                                                        var showDataLabel = groupFieldArray[groupFieldNum][1][fieldName]._text;
+                                                        if (showDataLabel !== undefined) {
+                                                            showDataLabel = showDataLabel
+                                                        }
+                                                        if (typeof showDataLabel === 'undefined') {
+                                                            showDataLabel = ' ';
+                                                        }
+                                                    }
+                                                } else {
+                                                    console.log("그룹풋터밴드에 해당하는 총계나 그런애들에 대한 자바스크립트..? 처리가 필요함");
+                                                }
+                                            }
+                                        }
+                                        if (typeof showDataLabel === 'undefined') {
+                                            showDataLabel = ' ';
+                                        }
+                                        var table_reform = table_format_check(data.Labels, tdIDwithS, showDataLabel, fromData);
+                                        ThisfixedTableRow.append
+                                        ('<td class="DataLabel" id = "' + tdId + rC2 + '_' + labelC + '">' +
+                                            '<p id="' + tdId + rC2 + '_p_' + labelC + '">' + table_reform + '</p>' +
+                                            '</td>');
+                                        settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTableHeight);
+                                        setTable();
+                                        var tdId_javascript = $("#" + tdIDMaking);
+                                    }
+                                    break;
+                                case  "NormalLabel" :
+                                    ThisfixedTableRow.append('<td class="NormalLabel" id = "' + tdId + rC2 + '_' + labelC + '">' +
+                                        '<p id="' + tdId + rC2 + '_p_' + labelC + '">' + table_format_check(data.Labels, tdIDwithS, fromData.text, fromData) + '</p></td>');
+                                    settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTableHeight);
+                                    setTable();
+                                    var tdId_javascript = $("#" + tdIDMaking);
+                                    break;
+                                case "SummaryLabel" :
+                                    var label = new DataLabel(data);
+                                    drawingSummaryLabel(label);
+                                    ThisfixedTableRow.append('<td class="SummaryLabel" id = "' + tdId + rC2 + '_' + fixedTableNum + '">' +
+                                        '<p id="' + tdId + rC2 + '_p_' + fixedTableNum + '">' + table_format_check(data.Labels, tdIDwithS, fromData.text, fromData) + '</p></td>');
+                                    break;
+                            }
+                            // // drd_javascript(label, tdId_javascript, label.startBindScript, rC2, data[temp]);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    function setTable() {
+        if (Array.isArray(fixTableLabelList)) {
+            var MathfixTableWidth = Math.round(fixTableWidth);
+            fixTableId.css({
+                'position': 'absolute',
+                'z-index': 999,
+                //'width': Math.round(fixTableWidth),//어쩔수없었음 round안하면 테이블 width 소수점 자동으로 없애버림..,
+                'width': MathfixTableWidth,//하지연
+                'over-flow': 'visible',
+                'height': fixTableHeight,
+                'left': controlFixedTable.rectangle.x + 'px',
+                'top': controlFixedTable.rectangle.y + 'px',
+                //'border-collapse': 'collapse',
+                //'border':'0.5px solid black',//임시로 이렇게 줘봤음 일단
+                'border': '0px',
+                'border-spacing': '0px'
+
+            });
+            labelC++;
+            thNum++;
+            fixedTableLabelNum++;
+        }
+    }
+
     tableNum++;
     fixedTableNum++;
 }
@@ -1476,7 +1480,7 @@ function drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, d
                                     }
                                     break;
                                 case  "NormalLabel" :
-                                    if(fromData.text === undefined) {
+                                    if (fromData.text === undefined) {
                                         fromData.text = ' ';
                                     }
                                     ThisfixedTableRow.append('<td class="NormalLabel" id = "' + tdId + rC2 + '_' + labelC + '">' +
@@ -1735,14 +1739,14 @@ function drawingFixedTableInDataBand(data, controlFixedTable, fixTableLabelList,
  기능 : 고정테이블 안의 FixedTableLabel의 속성을 구현하고, 적용시킨다.
  만든이 : 하지연
  ******************************************************************/
-function settingAttribute(fromData, tdId, rC2, fixTableId,fixTableWidth,fixTableHeight){
+function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTableHeight) {
     var ThisFixedTableData = $("#" + tdId + rC2 + '_' + labelC);
-    var ThisFixedTableDataP = $("#"+ tdId + rC2 + '_p_' + labelC);
+    var ThisFixedTableDataP = $("#" + tdId + rC2 + '_p_' + labelC);
     ThisFixedTableDataP.css({
         'top': 0,
         'left': 0,
     });
-    if (fromData.noBorder == 'true'){//border 없을때
+    if (fromData.noBorder == 'true') {//border 없을때
         ThisFixedTableData.css('border', 'none');
 
         ThisFixedTableData.css({
@@ -1754,13 +1758,13 @@ function settingAttribute(fromData, tdId, rC2, fixTableId,fixTableWidth,fixTable
             'font-family': fromData.fontFamily,
             'font-weight': fromData.fontStyle,
             'padding': 0,
-            'border-spacing':'0px',
-            'border-collapse':'collapse',
+            'border-spacing': '0px',
+            'border-collapse': 'collapse',
             //'white-space': 'nowrap',
-            'color':fromData.textColor
+            'color': fromData.textColor
         });
-    }else{//border 있을때
-        if (fromData.borderThickness !== undefined){
+    } else {//border 있을때
+        if (fromData.borderThickness !== undefined) {
             var leftBorderStyle = borderDottedLine(fromData.borderDottedLines.leftDashStyle);
             var rightBorderStyle = borderDottedLine(fromData.borderDottedLines.rightDashStyle);
             var bottomBorderStyle = borderDottedLine(fromData.borderDottedLines.bottomDashStyle);
@@ -1802,7 +1806,7 @@ function settingAttribute(fromData, tdId, rC2, fixTableId,fixTableWidth,fixTable
                         'height': fixTableHeight,
                     });*/
                 }
-            }else{
+            } else {
                 console.log("안들어왔어야함.");
                 ThisFixedTableData.css({
                     'border-left': leftThickness + 'px ' + leftBorderStyle + ' ' + fromData.leftBorderColor,
@@ -1836,50 +1840,61 @@ function settingAttribute(fromData, tdId, rC2, fixTableId,fixTableWidth,fixTable
             }
         }
     }
-
     if (fromData.wordWrap == 'true') {
         ThisFixedTableData.css('white-space', 'normal');
     }
-    /*ThisFixedTableData.css({
-        'width': fromData.rectangle.width,
-        'height': fromData.rectangle.height,
-        'overflow':'visible'
-    });*/
-    if(fromData.visible =='false'){//visible 속성
+    if (fromData.visible == 'false') {//visible 속성
         ThisFixedTableData.css('display', 'none');
     }
     var VTextAlignment = fromData.verticalTextAlignment;
-    function settingVerticalTextAlignment(VTextAlignment){
-        if(VTextAlignment!== undefined){
-            var tagPHeight = (ThisFixedTableDataP.css('height')).split('px')[0];
-            var tagPmarginTop=(fromData.rectangle.height - tagPHeight)/2;
-            switch (VTextAlignment) {
-                case "Center":{
-                    ThisFixedTableDataP.css({
-                        '-webkit-margin-before':tagPmarginTop,
-                        'top':tagPmarginTop,
-                    });
-                }break;
-                case "Top":{
-                    ThisFixedTableDataP.css({
-                        '-webkit-margin-before':tagPmarginTop/2,
-                        'top':tagPmarginTop/2,
-                    });
-                }break;
-                case "Bottom":{
-                    ThisFixedTableDataP.css({
-                        '-webkit-margin-before':tagPmarginTop*2,
-                        'top':tagPmarginTop*2,
-                    });
-                }break;
+
+    function settingVerticalTextAlignment(VTextAlignment) {
+        if (VTextAlignment !== undefined) {
+            if (ThisFixedTableDataP.css('height') !== undefined) {
+            var tagPHeight = (ThisFixedTableDataP.css('height').split('px')[0]);
+            var dataHeight = (ThisFixedTableData.css('height').split('px')[0]);
+
+            if (tagPHeight !== undefined) {
+                if (fromData.rectangle.height - tagPHeight >= 0) {
+                    var tagPmarginTop = (fromData.rectangle.height - tagPHeight) / 2;
+                    console.log("tagPmarginTop : ", tagPmarginTop);
+                    console.log("fromData.rectangle.height : ",fromData.rectangle.height);
+                    console.log("tagPHeight : ",tagPHeight);
+
+                    switch (VTextAlignment) {
+                        case "Center": {
+                            ThisFixedTableDataP.css({
+                                '-webkit-margin-before': tagPmarginTop,
+                                'top': tagPmarginTop
+                            });
+                        }
+                            break;
+                        case "Top": {
+                            ThisFixedTableDataP.css({
+                                '-webkit-margin-before': tagPmarginTop / 2,
+                                'top': tagPmarginTop / 2,
+                            });
+                        }
+                            break;
+                        case "Bottom": {
+                            ThisFixedTableDataP.css({
+                                '-webkit-margin-before': tagPmarginTop * 2,
+                                'top': tagPmarginTop * 2,
+                            });
+                        }
+                            break;
+                    }
+                }
             }
+        }
         }
     }
     settingVerticalTextAlignment(VTextAlignment);
     var HTextAlignment = fromData.horizontalTextAlignment;
-    function settingHorizontalTextAlignment(HTextAlignment){
-        if(HTextAlignment!== undefined){
-            ThisFixedTableData.css("text-align",HTextAlignment);
+
+    function settingHorizontalTextAlignment(HTextAlignment) {
+        if (HTextAlignment !== undefined) {
+            ThisFixedTableData.css("text-align", HTextAlignment);
         }
     }
     settingHorizontalTextAlignment(HTextAlignment);
