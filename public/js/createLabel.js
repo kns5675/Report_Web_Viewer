@@ -40,7 +40,7 @@ var regionNum = 1;
 var fixTableRowCount = 0;
 var labelC = 0;
 
-var rC2 = 1;
+var rC2 =1;
 
 var row = 0;
 var verticalPNum = 0;
@@ -307,20 +307,6 @@ function drawingRegion(data, divId) {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /******************************************************************
  기능 : FixedTable(고정 테이블)을 화면에 그려주는 함수를 만든다.
  만든이 : 하지연
@@ -348,9 +334,7 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
         'width': controlFixedTable.rectangle.width,
         'height': controlFixedTable.rectangle.height,
         'border-spacing': 0,
-        'padding': 0,
-        // 'left': controlFixedTable.rectangle.x + 'px',
-        // 'top': controlFixedTable.rectangle.y + 'px'
+        'padding': 0
     });
     var dt = Object.values(dataTable.DataSetName)[0];
 
@@ -359,22 +343,20 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
     var fixTableLabelListLength = Number(fixTableLabelList.length);//고정테이블 라벨리스트 라벨 갯수
     function countingRows() {
         var xZeroCount = 0;
-        for (var zz = 0; zz < fixTableLabelListLength; zz++) {
-            if (fixTableLabelList[zz].rectangle.x == '0') {
+        for (var q = 0; q < fixTableLabelListLength; q++) {
+            if (fixTableLabelList[q].rectangle.x == '0') {
                 xZeroCount++;
             }
         }
         setRowCount(xZeroCount);
     }
     countingRows();
-
     function setRowCount(xZeroCount) {
         var totalLabelWidth = 0;//라벨너비
         var labelCount = 0;//라벨개수
         var rowCount;//row개수
 
         if (data.Labels) {//라벨 리스트 라벨 width, height값 가져오기
-
             for (var i = 0; i < fixTableLabelListLength; i++) {
                 var thisLabelWidth = Number(fixTableLabelList[i].rectangle.width);
                 var thisLabelHeight = Number(fixTableLabelList[i].rectangle.height);
@@ -383,14 +365,9 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                 labelCount++;
                 totalLabelWidth += thisLabelWidth;
 
-                //console.log("fixTableLabelListLength : ", fixTableLabelListLength, fixTableLabelList[i].rectangle.x);
-                //console.log(labelCount + "   ,   " +  totalLabelWidth + "  ,   "+ thisLabelWidth + ",   fixTableWidth : "+ fixTableWidth);
                 if (labelCount == fixTableLabelListLength) {
-                    // console.log("labelCount",labelCount);
-                    // console.log("fixTableLabelListLength",fixTableLabelListLength);
-
                     rowCount = xZeroCount;
-                    // console.log("rowCount : ",rowCount,fixTableId);
+
                     for (var rC = 1; rC <= rowCount; rC++) {
                         fixTableId.append('<tr id = "fixedTableRow' + fixTableRowCount + '"></tr>');
                         var ThisfixedTableRow = $("#fixedTableRow" + fixTableRowCount);
@@ -400,29 +377,25 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                             'margin': 0,
                             'padding': 0,
                             'top': 0,
-                            'width': thisLabelWidth,
+                            'width': fixTableWidth,
                             'height': thisLabelHeight,
                             'overflow': 'visible'
                         });
 
                         var drawingTds = labelCount / rowCount;
 
-                        tdDataBinding(ThisfixedTableRow, drawingTds, rowCount);
+                        tdDataBinding(ThisfixedTableRow, drawingTds);
                         fixTableRowCount++;
                     }
 
-                    function tdDataBinding(ThisfixedTableRow, drawingTds, rowCount) {
+                    function tdDataBinding(ThisfixedTableRow, drawingTds) {
+                        console.log("drawingTds : ", drawingTds);
                         var tdId = 'FixedTableLabel_';
-                        //console.log(rC2, drawingTds);
                         if (rC2 > drawingTds) {
                             drawingTds = labelCount;
                         }
                         for (rC2; rC2 <= drawingTds; rC2++) {
-                            //console.log("@@@ rC2 : ",rC2);
-                            //console.log("@@@ drawingTds : ",drawingTds);
                             var fromData = fixTableLabelList[rC2 - 1];
-                            //var fromData = fixTableLabelList[fixedTableNum - 1];
-                            // var tdIDMaking = tdId + rC2 + '_' + fixedTableNum;
 
                             var tdIDMaking = tdId + rC2 + '_' + labelC;
                             var tdIDwithS = $("#" + tdIDMaking);
@@ -529,6 +502,10 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
 /******************************************************************
  기능 : FixedTable(고정 테이블)이 리전 안에 있을 경우에 화면에 그려주는 함수를 만든다.
  만든이 : 안예솔
+
+ 수정 : 하지연
+ 내용 : tr이 1개일 경우 td가 테이블 내에 제위치를 찾을 수 있도록 수정,
+
  ******************************************************************/
 function drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList) {
     // TODO 몇 번째 데이터를 찍고 있는지 알아야 함!
@@ -565,16 +542,14 @@ function drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, d
 
     function countingRows() {
         var xZeroCount = 0;
-        for (var zz = 0; zz < fixTableLabelListLength; zz++) {
-            if (fixTableLabelList[zz].rectangle.x == '0') {
+        for (var q = 0; q < fixTableLabelListLength; q++) {
+            if (fixTableLabelList[q].rectangle.x == '0') {
                 xZeroCount++;
             }
         }
         setRowCount(xZeroCount);
     }
-
     countingRows();
-
     function setRowCount(xZeroCount) {
         var totalLabelWidth = 0;//라벨너비
         var labelCount = 0;//라벨개수
@@ -594,7 +569,6 @@ function drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, d
                     for (var rC = 1; rC <= rowCount; rC++) {
                         fixTableId.append('<tr id = "fixedTableRow' + fixTableRowCount + '"></tr>');
                         var ThisfixedTableRow = $("#fixedTableRow" + fixTableRowCount);
-
                         ThisfixedTableRow.css({
                             'border-spacing': 0,
                             'margin': 0,
@@ -733,7 +707,7 @@ function drawingFixedTableInDataBand(data, controlFixedTable, fixTableLabelList,
     var fixedTableDiv = $('#' + fixedTableDivId);// 밴드
     fixedTableDiv.css('position', 'relative');
     fixedTableDiv.css('border', '1px solid blue');
-    fixedTableDiv.css('background-color', 'lightyellow');
+    fixedTableDiv.css('background-color', 'lightgreen');
 
     fixedTableDiv.append('<div id = "Table' + tableNum + '"></div>');//무의미한 테이블 div
     var divIdTable = $('#Table' + tableNum);
@@ -932,9 +906,20 @@ function drawingFixedTableInDataBand(data, controlFixedTable, fixTableLabelList,
 function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTableHeight) {
     var ThisFixedTableData = $("#" + tdId + rC2 + '_' + labelC);
     var ThisFixedTableDataP = $("#" + tdId + rC2 + '_p_' + labelC);
+
+    var thisText = fromData.text;
+    var thisTextLength = String(fromData.text).length;
+    var textWithoutSpace =  String(thisText).replace( /(\s*)/g, "");
+    var textSize = fromData.fontSize.split('pt')[0];
+    var textWithoutSpaceLength = textWithoutSpace.length;
+
+    //thisText = thisText.toString();
+    //console.log("갯수 : ",thisText.length+'<br/>');
+    // var space = thisText.split
+    //console.log("length : ",fromData.text.length);
     ThisFixedTableDataP.css({
         'top': 0,
-        'left': 0,
+        'left': 0
     });
     if (fromData.noBorder == 'true') {//border 없을때
         ThisFixedTableData.css('border', 'none');
@@ -969,8 +954,8 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
             if (leftBorderStyle == rightBorderStyle && rightBorderStyle == bottomBorderStyle && bottomBorderStyle == topBorderStyle) {
                 if (leftThickness == rightThickness && rightThickness == bottomThickness && bottomThickness == topThickness) {
                     ThisFixedTableData.css({
-                        'width': (width - leftThickness * 2) + 'px',
-                        'height': (height - topThickness * 2) + 'px',
+                        'width': (width - (leftThickness * 2)) + 'px',
+                        'height': (height - (topThickness * 2)) + 'px',
                         'float': 'left',
                         'background-color': fromData.backGroundColor,
                         'font-size': fromData.fontSize,
@@ -985,10 +970,7 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
                         'color': fromData.textColor,
                         'overflow': 'visible',
                     });
-                    ThisFixedTableDataP.css({ // 예솔 추가
-                        'width': (width - leftThickness * 2) + 'px',
-                        'height': (height - topThickness * 2) + 'px'
-                    });
+
                     /*fixTableId.css({
                         'border': (topThickness/2) + 'px ' + leftBorder +' ' + fromData.leftBorderColor,
                         'border-collapse':'collapse',
@@ -1022,13 +1004,14 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
                     'color': fromData.textColor,
                     'overflow': 'visible'
                 });
-                ThisFixedTableDataP.css({ // 예솔 추가
-                    'width': (width - leftThickness - rightThickness) + 'px',
+                /*ThisFixedTableDataP.css({
+                    'width': (width - (leftThickness*2) - rightThickness) + 'px',
                     'height': (height - topThickness - bottomThickness) + 'px'
-                });
+                });*/
             }
         }
     }
+
     if (fromData.wordWrap == 'true') {
         ThisFixedTableData.css('white-space', 'normal');
     }
@@ -1036,6 +1019,31 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
         ThisFixedTableData.css('display', 'none');
     }
     var VTextAlignment = fromData.verticalTextAlignment;
+    var TextDirection = fromData.textDirection;
+
+    if(topThickness !== undefined){
+        if(TextDirection == 'Vertical'){
+            ThisFixedTableDataP.text(textWithoutSpace);
+            var ptToPx = textSize/0.75;  //pt를 px로 변환
+            textWithoutSpaceLength
+
+            ThisFixedTableDataP.css({
+                'width': ptToPx + 'px',
+                'height': (textWithoutSpaceLength * ptToPx) + 'px',
+                'display':'inline-block'
+            });
+            ThisFixedTableData.css({
+                'white-space':'normal'
+            })
+        }else if(Text == 'Horizontal'){
+
+            /*ThisFixedTableDataP.css({
+                'width': (width - leftThickness * 2) + 'px',
+                'height': (height - topThickness * 2) + 'px'
+            });*/
+
+        }
+    }
 
     function settingVerticalTextAlignment(VTextAlignment) {
         if (VTextAlignment !== undefined) {
@@ -1051,7 +1059,8 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
                         case "Center": {
                             ThisFixedTableDataP.css({
                                 '-webkit-margin-before': tagPmarginTop,
-                                'top': tagPmarginTop
+                                'top': tagPmarginTop,
+                                'display':'inline-block'
                             });
                         }
                             break;
@@ -1059,6 +1068,7 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
                             ThisFixedTableDataP.css({
                                 '-webkit-margin-before': tagPmarginTop / 2,
                                 'top': tagPmarginTop / 2,
+                                'display':'inline-block'
                             });
                         }
                             break;
@@ -1066,6 +1076,7 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
                             ThisFixedTableDataP.css({
                                 '-webkit-margin-before': tagPmarginTop * 2,
                                 'top': tagPmarginTop * 2,
+                                'display':'inline-block'
                             });
                         }
                             break;
@@ -1075,6 +1086,7 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
         }
         }
     }
+
     settingVerticalTextAlignment(VTextAlignment);
     var HTextAlignment = fromData.horizontalTextAlignment;
 
@@ -1083,6 +1095,7 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
             ThisFixedTableData.css("text-align", HTextAlignment);
         }
     }
+
     settingHorizontalTextAlignment(HTextAlignment);
 
 
@@ -1681,7 +1694,7 @@ function Lock_check(data, Label_id, div) { //라벨 데이터, 드래그 리사�
 
     if (editable_test == 'true') { // 편집이 가능할 때
         if (!data.lock) {
-            if (div) {
+            if (div[0]) {
                 Label_id.draggable({containment: "#" + div[0].id, zIndex: 999});
                 Label_id.resizable({containment: "#" + div[0].id, autoHide: true});
             }
@@ -1811,7 +1824,7 @@ function format_check(data) {
  ******************************************************************/
 function table_format_check(data, Label_id, key, table) {
     var test = table.formatType;
-    if (key != NaN) { //해당 데이터가 숫자일 경우
+    if (key != NaN) { // 해당 데이터가 숫자일 경우
         if (test === "AmountSosu" || test === "MoneySosu" || test === "MoneySosu") {   //수량, 금액 소숫점 자리수 ###,###
             var parts = key.toString().split(".");
             if (parts[1]) { //소수점이 있을 때.
@@ -2756,6 +2769,7 @@ function labelPropertyApply(labelNbandInfo) {
             labelNbandInfo.data.gradientLB.gradientColor,
             labelNbandInfo.data.backGroundColor, labelNbandInfo.label_type + labelNbandInfo.labelNum);
     }
+
 
     // 자동 줄바꾸기
     if (labelNbandInfo.data.wordWrap == 'true') {

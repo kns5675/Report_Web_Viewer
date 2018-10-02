@@ -454,8 +454,14 @@ function setForCopyRatioDirection(report) {  //추가 - 하지연
 function setPage(report, width, height) {
     var paperType = report.paperType;
 
-    $('#report_wrap' + reportNum).append('<div id="pageForCopyRatio' + pageNum + '" class="pageforcopyratio paperType-' + paperType + '"></div>');//수정 - 하지연
-    $('#pageForCopyRatio' + pageNum).append('<div id="page' + pageNum + '" class="page paperType-' + paperType + '"></div>');//수정 - 하지연
+    $('#report_wrap' + reportNum).append(
+        '<div id="pageForCopyRatio' + pageNum + '" class="pageforcopyratio paperType-' + paperType + '"></div>'
+    );//수정 - 하지연
+
+    $('#pageForCopyRatio' + pageNum).append(
+        '<div id="page' + pageNum + '" class="visiblePage page paperType-' + paperType + '"></div>'
+    ); //수정 - 하지연
+
     // $(('#forcopyratio' + pageNum)).append('<div id="report' + pageNum + '"class = report' +'></div>');
     // $(document.html).css('pointer-events', 'none');//학준추가
     // $(document.body).css('pointer-events', 'none');//학준추가
@@ -684,30 +690,13 @@ function reNumbering() {
         } else {
             pageforcopyratio_div_arr.eq(i).removeAttr('id');
             page_div_arr.eq(i).removeAttr('id');
-            // pageforcopyratio_div_arr.eq(i).removeUniqueId();
-            // page_div_arr.eq(i).removeUniqueId();
         }
     }
 
     var total_page_count = $('.visiblePage').length;
-    $('#TotalPage').text(total_page_count);
-    HeaderFixAndPageScroll(total_page_count);
-    LastPage(total_page_count);
 
-    // console.log(remove_page_arr);
-    // console.log("============");
-    //
-    // for(var i=0; i<remove_page_arr.length; i++){
-    //     pageforcopyratio_div_arr.splice(remove_page_arr[0], 1);
-    //     page_div_arr.splice(remove_page_arr[0], 1);
-    //     console.log("삭제!");
-    // }
-    //
-    // console.log("pagecory length : " + pageforcopyratio_div_arr.length);
-    // console.log("page length : " + page_div_arr.length);
-    //
-    // for(var i=0; i<pageforcopyratio_div_arr.length; i++){
-    //     pageforcopyratio_div_arr.eq(i).attr('id', 'pageforcopyratio'+(i+1));
-    //     page_div_arr.eq(i).attr('id', 'page'+(i+1));
-    // }
+    $('#TotalPage').text(total_page_count);
+    LastPage(total_page_count);
+    // HeaderFixAndPageScroll(total_page_count);
+
 }

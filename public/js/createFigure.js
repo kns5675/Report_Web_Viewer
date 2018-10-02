@@ -114,21 +114,21 @@ function drawingLine(data, divId) {
 
     var figureId = $('#Figure' + figureNum);
 
+    var x = Number(data.rectangle.x);
+    var y = Number(data.rectangle.y);
+    var width = Number(data.rectangle.width);
+    var height = Number(data.rectangle.height);
+
     figureId.css({
         'border' : '0px',
-        'width' : data.rectangle.width,
-        'height' : data.rectangle.height,
+        'width' : width + 'px',
+        'height' : height + 'px',
         'position' : 'absolute',
-        'left' : data.rectangle.x + 'px',
-        'top' : data.rectangle.y + 'px'
+        'left' : x + 'px',
+        'top' : y + 'px'
     });
 
     Lock_check(data, figureId, div);
-
-    var x = parseInt(data.rectangle.x);
-    var y = parseInt(data.rectangle.y);
-    var width = parseInt(data.rectangle.width);
-    var height = parseInt(data.rectangle.height);
 
     figureId.append('<canvas id = "Line' + lineNum + '" width = "' + width + '" height = "' + height + '"></canvas>');
 
@@ -168,6 +168,7 @@ function drawingLine(data, divId) {
             context.setLineDash([3, 9]);
             break;
     }
+    canvas.style.position = "absolute";
     context.lineWidth = data.thickness;
     context.strokeStyle = data.lineColor;
     context.closePath();

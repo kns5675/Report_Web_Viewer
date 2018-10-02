@@ -115,7 +115,8 @@ function PreviousPage(){
 function NextPage(){
     $("#NextPage").on("click",function () {
         var nowpage = $("#NowPage").val()*1+1;
-        var totalpage = $(".page").length;
+        // var totalpage = $(".page").length;
+        var totalpage = $(".visiblePage").length;
         if(nowpage <= totalpage){
             var page;
             if(nowpage == 2){
@@ -136,7 +137,8 @@ function NextPage(){
  ******************************************************************/
 function LastPage(pagecount){
     $("#LastPage").on("click",function () {
-        var Last = $(".page").length;
+        // var Last = $(".page").length;
+        var Last = $(".visiblePage").length;
         var page = $("#page"+Last).offset().top-185;
         $(window).scrollTop(page);
         $("#NowPage").val(pagecount);
@@ -148,7 +150,7 @@ function LastPage(pagecount){
  ******************************************************************/
 function HeaderFixAndPageScroll(pagecount) {
     var jbOffset = $( '#header' ).offset();
-    $( '#header' )[0].style.width = "100%";
+    // $( '#header' )[0].style.width = "100%";
     $( window ).scroll( function() {
         if ( $( document ).scrollTop() > jbOffset.top ) {
             $( '#header' ).addClass( 'jbFixed' );
@@ -164,7 +166,8 @@ function HeaderFixAndPageScroll(pagecount) {
  만든이 : hagdung-i
  ******************************************************************/
 function PageValue() {
-    $(".page").each(function (i, e) {
+    // $(".page").each(function (i, e) {
+    $(".visiblePage").each(function (i, e) {
         var page = $("#"+e.id).offset().top-500;
         if($( document ).scrollTop() >= page){
             var pagenum = e.id.replace(/[^0-9]/g,'');

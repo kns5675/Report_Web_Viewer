@@ -4,8 +4,8 @@
  만든이 : 안예솔
  ******************************************************************/
 function Label(data){
-    this.parentId = data.ParentID === undefined ? undefined : (data.ParentID._text).trim();
-    this.id = (data.Id._text).trim();
+    this.parentId = data.ParentID === undefined ? undefined : data.ParentID._text;
+    this.id = data.Id._text;
     this.rectangle = {
         x : (data.Rectangle.X === undefined ? 0 : data.Rectangle.X._text),
         y : (data.Rectangle.Y === undefined ? 0 : data.Rectangle.Y._text),
@@ -29,9 +29,9 @@ function Label(data){
     this.leftBorderColor = data.LeftBorderColor === undefined ? 'black' : data.LeftBorderColor._text; // 왼쪽 테두리 색
     this.rightBorderColor = data.RightBorderColor === undefined ? 'black' : data.RightBorderColor._text; // 오른쪽 테두리 색
     this.topBorderColor = data.TopBorderColor === undefined ? 'black' : data.TopBorderColor._text; // 위쪽 테두리 색
-    this.bottomBorderColor = data.BottomBorderColor === undefined ? 'black' : (data.BottomBorderColor._text).trim(); // 아래쪽 테두리 색
+    this.bottomBorderColor = data.BottomBorderColor === undefined ? 'black' : data.BottomBorderColor._text; // 아래쪽 테두리 색
 
-    this.borderDottedLines = data.BorderDottedLines === undefined ? undefined : { // 아마도 모든 라벨에 항상 있는 것 같음
+    this.borderDottedLines = { // 아마도 모든 라벨에 항상 있는 것 같음
         leftDashStyle : (data.BorderDottedLines.LeftDashStyle === undefined ? 'Solid' : data.BorderDottedLines.LeftDashStyle._text),
         rightDashStyle : (data.BorderDottedLines.RightDashStyle === undefined ? 'Solid' : data.BorderDottedLines.RightDashStyle._text),
         topDashStyle : (data.BorderDottedLines.TopDashStyle === undefined ? 'Solid' : data.BorderDottedLines.TopDashStyle._text),
@@ -105,7 +105,7 @@ function Label(data){
     this.dataTableName = data.DataTableName === undefined ? undefined : data.DataTableName._text; // 데이터 테이블 이름
     this.base64ImageFromViewer = data.Base64ImageFromViewer === undefined ? undefined : data.Base64ImageFromViewer._text; // 이미지 저장값을 예로 하는 경우 해당 이미지를 Base64형태로 변환하여 저장한다
 
-    this.labelTextType = (data.LabelTextType === undefined ? 0 : data.LabelTextType._text); // 문자 형식
+    this.labelTextType = data.LabelTextType === undefined ? undefined : data.LabelTextType._text; // 문자 형식
     this.format = (data.Format === undefined ? 0 : data.Format._text); // 표시 형식
     this.startBindScript = data.StartBindScript === undefined ? undefined : data.StartBindScript._text; // 아마도 JavaScript 코드
     this.reVectorValue = data.ReVectorValue === undefined ? 0 : data.ReVectorValue._text; // 아마도 장평 관련
@@ -138,7 +138,7 @@ function Label(data){
     this.isUseBasicInnerMargin = data.IsUseBasicInnerMargin === undefined ? true : data.IsUseBasicInnerMargin._text; // 기본 여백 사용 기본 값이 true 인 듯
     this.labelShape = data.LabelShape === undefined ? 'rectangle' : data.LabelShape._text; // 라벨 형태
     this.circleLineColor = data.CircleLineColor === undefined ? 'black' : data.CircleLineColor._text; // 원 테두리 색
-    this.circleLineThickness = data.CirCleLineThickness === undefined ? 1 : (data.CirCleLineThickness._text).trim(); //원 테두리 두께
+    this.circleLineThickness = data.CirCleLineThickness === undefined ? 1 : data.CirCleLineThickness._text; //원 테두리 두께
 
     this.qrCodeEncodingType = data.QRCodeEncodingType === undefined ? undefined : data.QRCodeEncodingType._text; // QR 코드 인코딩 타입
     this.barcodeType = data.BarcodeType === undefined ? undefined : data.BarcodeType._text; // 바코드 타입
@@ -150,7 +150,7 @@ function Label(data){
 
     this._formatFieldAmountSosu = data._formatFieldAmountSosu === undefined ? undefined : data._formatFieldAmountSosu._text; // 소수점자리수 : 수량소숫점자리수 표시형식(Format)
 
-    this.horizontalTextAlignment = data.HorizontalTextAlignment === undefined ? 'Center' : (data.HorizontalTextAlignment._text).trim(); // 텍스트 수평 정렬
+    this.horizontalTextAlignment = data.HorizontalTextAlignment === undefined ? 'Center' : data.HorizontalTextAlignment._text; // 텍스트 수평 정렬
     this.verticalTextAlignment = data.VerticalTextAlignment === undefined ? 'Center' : data.VerticalTextAlignment._text; // 텍스트 수직 정렬
     this.textDirection = data.TextDirection === undefined ? 'Horizontal' : data.TextDirection._text; // 텍스트 방향 아마도 default horizontal
 
@@ -166,13 +166,13 @@ function Label(data){
  만든이 : 안예솔
  ******************************************************************/
 function Table(data){ // ControlList 밑에 anyType이 ControlFixedTable, ControlDynamicTable인 애들
-    this.parentId = (data.ParentID._text).trim();
-    this.id = (data.Id._text).trim();
+    this.parentId = data.ParentID._text;
+    this.id = data.Id._text;
     this.rectangle = {
         x : (data.Rectangle.X === undefined ? 0 : data.Rectangle.X._text),
         y : (data.Rectangle.Y === undefined ? 0 : data.Rectangle.Y._text),
-        width : (data.Rectangle.Width === undefined ? 0 : data.Rectangle.Width._text),//학준추가, 예솔 수정
-        height : (data.Rectangle.Height === undefined ? 0 : data.Rectangle.Height._text)//학준추가, 예솔 수정
+        width : (data.Rectangle.Width === undefined ? undefined : data.Rectangle.Width._text),//학준추가
+        height : (data.Rectangle.Height === undefined ? undefined : data.Rectangle.Height._text)//학준추가
     };
     this.name = data.Name._text;
 

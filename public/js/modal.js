@@ -410,12 +410,12 @@ function datePrinting() {
  ******************************************************************/
 function countPrinting() {
 
-    $(".page").each(function (i,e) {
+    $(".visiblePage").each(function (i,e) {
         console.log(e.id.replace(/[^0-9]/g, ""));
         const col_interval = e.style.width.replace(/[^-\.0-9]/g,"")*0.91;
         const row_interval = e.style.height.replace(/[^-\.0-9]/g,"")*0.97;
         const count_area = document.createElement("div");
-        const totalpage = $(".page").length;
+        const totalpage = $(".visiblePage").length;
         count_area.id = "countPage" + e.id.replace(/[^0-9]/g, "");
         count_area.className = "countPage";
         count_area.style.position = "absolute";

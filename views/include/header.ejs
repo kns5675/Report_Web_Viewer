@@ -22,7 +22,7 @@
                 event.stopPropagation();
             });
             $("#saveAsImage li").on("click",function(){
-                imageOptions($(this).text());  //지연 - 이미지 타입 결정하여 화면을 저장 function
+                imageOptions($(this).text().trim());  //지연 - 이미지 타입 결정하여 화면을 저장 function
             });
             $("#btnZoomIn").click(function(){
                zoomIn();  //지연 - 화면 zoomIn function
@@ -106,8 +106,8 @@
   <!--<li><a id="TotalPage">10</a></li>-->
   <li class="header_btn" id="NextPage" title="다음 페이지"><img src="image/drd_image/top_btn_back011.png"/></li>
   <li class="header_btn" id="LastPage" title="마지막 페이지"><img src="image/drd_image/top_btn_back021.png"/></li>
-  <li class="header_btn" title="한 페이지만 보기"><img src="image/drd_image/top_btn_page1.png"/></li>
-  <li class="header_btn" title="여러 페이지 보기"><img src="image/drd_image/top_btn_page_21.png"/></li>
+  <!--<li class="header_btn" title="한 페이지만 보기"><img src="image/drd_image/top_btn_page1.png"/></li>-->
+  <!--<li class="header_btn" title="여러 페이지 보기"><img src="image/drd_image/top_btn_page_21.png"/></li>-->
   <!--<div id="showPages">-->
 
     <!--<div id="rectangles">-->
@@ -157,8 +157,8 @@
   <li class="header_btn" id="saveAsImage" title="이미지 내보내기">
       <img src="image/drd_image/top_btn_img1.png"/>
       <ul id="saveImgList">
-          <li id="saveAsPng" title="PNG로 내보내기"><img src="image/drd_image/export_png24.png"/>PNG</li>
-          <li id="saveAsJpg" title="JPG로 내보내기"><img src="image/drd_image/export_jpg24.png"/>JPG</li>
+          <li id="saveAsPng" title="PNG로 내보내기"><img src="image/drd_image/export_png24.png"/> PNG</li>
+          <li id="saveAsJpg" title="JPG로 내보내기"><img src="image/drd_image/export_jpg24.png"/> JPG</li>
           <!--<li><img src="image/drd_image/export_bmp24.png"/>BMP</li>-->
           <!--<li><img src="image/drd_image/export_tiff24.png"/>TIFF</li>-->
           <!--<li><img src="image/drd_image/export_gif24.png"/>GIF</li>-->
