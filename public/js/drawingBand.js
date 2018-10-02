@@ -550,6 +550,7 @@ function drawBandData(groupFieldArray, band, layerName, reportHeight, parentBand
             $('#' + div_id).css({
                 'width': band.rectangle.width,
                 'height': dataBandHeight,
+                'overflow' : 'hidden'
             });
             inVisible(div_id, band);
 
@@ -633,7 +634,8 @@ function drawBandData(groupFieldArray, band, layerName, reportHeight, parentBand
             var divId = $('#' + div_id);
             divId.css({
                 'width': band.rectangle.width,
-                'height': dataBandHeight
+                'height': dataBandHeight,
+                'overflow' : 'hidden'
             });
 
             // numofData개수 만큼 BandData가 존재해야 함
@@ -1106,6 +1108,7 @@ function setWidthHeightInBand(div_id, band) {
     $('#' + div_id).css({
         'width': band.rectangle.width,
         'height': band.rectangle.height,
+        'overflow' : 'hidden'
     });
 }
 

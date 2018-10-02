@@ -338,13 +338,14 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData, band) {
         'top': table.rectangle.y + 'px',
     });
 
+
     var tableId = $('#dynamicTable' + dynamicTableNum);
     Lock_Check_Table(table, dynamicTable_resizing_div, tableId, div);
-    // table_format_check(table, dynamicTable_resizing_div, tableId, div);
-    // tableId.css({
-    //     'width': table.rectangle.width + 'px',
-    //     'height': table.rectangle.height + 'px'
-    // });
+     // table_format_check(table, dynamicTable_resizing_div, tableId, div);
+    tableId.css({
+        'width': table.rectangle.width + 'px',
+        'height': table.rectangle.height + 'px'
+    });
     tableId.append('<tr id = "dynamicTitleLabel' + dynamicTitleLabelNum + '"></tr>');
 
     var dt = dataTable.DataSetName[band.dataTableName];
@@ -420,7 +421,7 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
                 'height': label.rectangle.height
             });
 
-            var tdId = $('.' + key);
+            var tdId = $('#' + key);
             setCssInTable(label, tdId);
 
             // drd_javascript(label, tdId, label.startBindScript);
@@ -476,11 +477,11 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
                     // drd_javascript(label, tdId, label.startBindScript);
                 }
             }
-
+            console.log(isData);
             if(!isData){  // Label은 있지만 데이터가 없을 때
-                var tdId = 'tableValueLabelNum' + tableValueLabelNum++;
+                var tdId = 'tableValueLabelNum' + tableValueLabelNum++
                 valueTrId.append(
-                    '<td id = "' + tdId + '" class="' + label.fieldName + ' Label ' + label._attributes + ' ' + label.dataType + '"></td>'
+                    '<td id = "' + tdId + '" class="' + label.fieldName + ' Label ' + label._attributes + ' ' + label.dataType + '">' + 'fdsafdsfsdf' + '</td>'
                 );
                 var tdId = $('.' + label.fieldName);
                 setCssInTable(label, tdId);
@@ -532,7 +533,6 @@ function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, nu
                     label.text = paramData.Value._text;
                 }
             });
-            // var valueTrId = $('#dynamicValueLabel' + tempCurDataRow);
             var tdId = 'tableValueLabelNum' + tableValueLabelNum++;
             var key = label.parameterName;
             if (!minimumRow) {
@@ -541,7 +541,7 @@ function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, nu
                 valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '"></td>');
             }
 
-            var tdId = $('.' + key);
+            tdId = $('.' + key);
             setCssInTable(label, tdId);
 
         } else {
@@ -590,18 +590,16 @@ function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, nu
                             }
                         }
                     }
-
                     var tdId = $('.' + key);
-
                     setCssInTable(label, tdId);
                 }
             }
             if(!isData){  // Label은 있지만 데이터가 없을 때
                 var tdId = 'tableValueLabelNum' + tableValueLabelNum++;
                 valueTrId.append(
-                            '<td id = "' + tdId + '" class="' + label.fieldName + ' Label ' + label._attributes + ' ' + label.dataType + '"></td>'
+                    '<td id = "' + tdId + '" class="' + label.fieldName + ' Label ' + label._attributes + ' ' + label.dataType + '">' + ' ' + '</td>'
                 );
-                var tdId = $('.' + label.fieldName);
+                tdId = $('.' + tdId);
                 setCssInTable(label, tdId);
             }
         }
@@ -887,7 +885,6 @@ function drawingDynamicTableValueLabelWithOutDataTable(label, tableId) {
  만든이 : 구영준
  **************************************************************************************/
 function setCssInTable(label, tdId) {
-    //// 추가 부분 18.08.28 YeSol
     if (label.noBorder == 'true') {
         tdId.css('border', 'none');
     } else {
@@ -909,13 +906,8 @@ function setCssInTable(label, tdId) {
         }
     }
 
-    var labelXsumWidth =  Number(label.rectangle.x) + Number(label.rectangle.width);
-
-    if(Math.round(labelXsumWidth) > $("#designLayer" + pageNum).width()){
-        tdId.css({
-            'display' : 'none'
-        });
-    }else{
+    if(tdId[0]){
+        // $("#"+tdId[0].id)[0].style.padding ="0px";
         tdId.css({
             'background-color': label.backGroundColor,
             'font-size': label.fontSize,
@@ -925,7 +917,7 @@ function setCssInTable(label, tdId) {
             'width': label.rectangle.width + 'px',
             'height': label.rectangle.height + 'px',
             'white-space': 'nowrap',
-            'padding ': '5px',
+            'padding' :'0px'
         });
     }
 }
