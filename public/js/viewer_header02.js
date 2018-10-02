@@ -99,7 +99,6 @@ function tableChoice() {
         // 3. 위의 변수를 기반으로 체크박스 표시
         $('#leftpart_modalTableChoice_header > li').on('click', function(){
             $('#leftpart_modalTableChoice_header > li').removeClass('selected_table');
-            $(this).addClass('selected_table');
 
             selected_table_index = $('#leftpart_modalTableChoice_header > li').index(this);
             var labelList = $('#labelListUl');
@@ -336,17 +335,16 @@ function report_choice(){
 
         for(var i=0; i<chkbox_arr.length; i++){
             report_specific = $('.report' + (i+1));
-            report_specific.removeClass('visiblePage');
+            report_specific.find('.page').removeClass('visiblePage');
             if(chkbox_arr.eq(i).prop('checked') === true) {
                 report_specific.css('display', 'block');
-                report_specific.addClass('visiblePage');
+                report_specific.find('.page').addClass('visiblePage');
             }
             else{
                 report_specific.css('display', 'none');
             }
         }
         reNumbering();
-
         modalLayer.hide();
     });
 }

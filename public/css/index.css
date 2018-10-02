@@ -7,6 +7,8 @@ body{
 }
 
 #header {
+    position : fixed;
+    width : 100%;
     background-color: #cbd9ef;
     /*darkslategrey*/
     /*#cbd9ef*/
@@ -70,6 +72,8 @@ ul#saveImgList{
 ul#saveImgList > li{
     display : block;
     padding : 3px 10px 4px 1px;
+    letter-spacing : normal;
+
 }
 
 ul#saveImgList > li:hover{
@@ -98,10 +102,13 @@ li#saveAsImage:hover ul#saveImgList{
 #reportTemplate{
     z-index: -3;
     background-color: gray;
+    padding-top : 80px;
 }
 
 #temp_reportTemplate{
+    z-index : -3;
     background-color : gray;
+    padding-top : 80px;
 }
 
 #modalLayer{display:none; position:relative;}

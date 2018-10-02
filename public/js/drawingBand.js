@@ -1082,7 +1082,6 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
             }
             break;
     }
-    numofData = 0;
 }
 
 /***********************************************************

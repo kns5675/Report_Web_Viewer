@@ -40,7 +40,7 @@ var regionNum = 1;
 var fixTableRowCount = 0;
 var labelC = 0;
 
-var rC2 = 1;
+var rC2 =1;
 
 var row = 0;
 var verticalPNum = 0;
@@ -1705,6 +1705,7 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
             }
         }
     }
+
     if (fromData.wordWrap == 'true') {
         ThisFixedTableData.css('white-space', 'normal');
     }

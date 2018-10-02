@@ -137,7 +137,7 @@ function sizechanged(){
  ******************************************************************/
 function test(){
     try {
-        var flexiblecontent = document.getElementById("reportTemplate");
+        var flexiblecontent = document.getElementById("temp_reportTemplate");
         var size = $("#txtZoom").val();
         $("#txtZoom").val(size);
 
@@ -175,7 +175,7 @@ function zoomIn(){
         $("#txtZoom option:last").attr("selected","selected");
 
         try {
-            var flexiblecontent = document.getElementById("reportTemplate");
+            var flexiblecontent = document.getElementById("temp_reportTemplate");
             $("#txtZoom").val(size);
             if (jQuery.browser.msie) {
                 flexiblecontent.style.zoom = size;
@@ -219,7 +219,7 @@ function zoomOut(){
 
         /*test();*/
         try {
-            var flexiblecontent = document.getElementById("reportTemplate");
+            var flexiblecontent = document.getElementById("temp_reportTemplate");
             $("#txtZoom").val(size);
             if (jQuery.browser.msie) {
                 flexiblecontent.style.zoom = size;
