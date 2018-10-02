@@ -113,10 +113,18 @@ function judgementLabel(data, divId, numOfData, band) {
         if (numOfData > 1) {
             for (var i = 0; i < numOfData; i++) {
                 var fixedTableDivId = divId + 'fixedTable' + (curDatarow + i);
-                if (isRegion) {
-                    drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, fixedTableDivId, curDatarowInRegion, fixTableList);//numOfData추가.
+                if (band.attributes['xsi:type'] === 'BandData') {
+                    if (isRegion) {
+                        drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, fixedTableDivId, curDatarowInRegion, fixTableList);//numOfData추가.
+                    } else {
+                        drawingFixedTableInDataBand(data, controlFixedTable, fixTableLabelList, fixedTableDivId, curDatarowInDataBand, fixTableList);//numOfData추가.
+                    }
                 } else {
-                    drawingFixedTableInDataBand(data, controlFixedTable, fixTableLabelList, fixedTableDivId, curDatarowInDataBand, fixTableList);//numOfData추가.
+                    if (isRegion) {
+                        drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList);//numOfData추가.
+                    } else {
+                        drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList);//numOfData추가.
+                    }
                 }
             }
         } else {
@@ -405,7 +413,6 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
                     label.text = paramData.Value._text;
                 }
             });
-
             thId.append('<p id="value_P_tag' + thNum + '">' + label.text + '</p>');
             var valueTrId = $('#dynamicValueLabel' + tempCurDataRow);
             var tdId = 'tableValueLabelNum' + tableValueLabelNum++;
@@ -437,11 +444,14 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
                     if (!minimumRow) {
                         if (label.labelTextType == 'Number' && label.format != undefined) { //td의 label 값을 p태그에 묶음.
                             valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '"><p id="value_P_tag' + thNum + '" style="margin: 0px;">' + table_reform + '</p></td>');
+                            isData = true;
                         } else {
                             valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '">' + table_reform + '</td>');
+                            isData = true;
                         }
                     } else { // 최소행 개수
                         valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '"></td>');
+                        isData = true;
                     }
                     valueTrId.css({
                         'width': label.rectangle.width,
@@ -902,7 +912,6 @@ function setCssInTable(label, tdId) {
                 'border-bottom': label.borderThickness.bottom + 'px ' + bottomBorder + ' ' + label.bottomBorderColor,
                 'border-top': label.borderThickness.top + 'px ' + topBorder + ' ' + label.topBorderColor,
                 'border-spacing': '0px'
-
             });
         } else {
             tdId.css('border', '1px solid black');
@@ -952,6 +961,14 @@ function drawingDynamicTableTitleLabel(label, header_Name_Number) {
     var thId = $('#DynamicTableTitleLabel' + header_Name_Number + "_View_Page_Number" + thNum);
 
     setCssInTable(label, thId);
+    // thId.append(label.text);
+    if (label.dataType === 'ParameterLabel') {
+        paramTable.NewDataSet.Table1.forEach(function (paramData) {
+            if (label.parameterName == paramData.Key._text) {
+                label.text = paramData.Value._text;
+            }
+        });
+    }
     thId.append('<p id="title_P_tag' + thNum + '" style="margin: 0px;">' + label.text + '</p>');
     thId.addClass('Label DynamicTableHeader');
     thId.addClass(label._attributes);
@@ -1120,12 +1137,13 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                     setTable();
                                     var tdId_javascript = $("#" + tdIDMaking);
                                     break;
-                                case "SummaryLabel" :
-                                    var label = new DataLabel(data);
-                                    drawingSummaryLabel(label);
-                                    ThisfixedTableRow.append('<td class="SummaryLabel" id = "' + tdId + rC2 + '_' + fixedTableNum + '">' +
-                                        '<p id="' + tdId + rC2 + '_p_' + fixedTableNum + '">' + table_format_check(data.Labels, tdIDwithS, fromData.text, fromData) + '</p></td>');
-                                    break;
+                                // case "SummaryLabel" :
+                                    // console.log(data);
+                                    // var label = new SummaryLabel(data);
+                                    // drawingSummaryLabel(label, divId);
+                                    // ThisfixedTableRow.append('<td class="SummaryLabel" id = "' + tdId + rC2 + '_' + fixedTableNum + '">' +
+                                    //     '<p id="' + tdId + rC2 + '_p_' + fixedTableNum + '">' + table_format_check(data.Labels, tdIDwithS, fromData.text, fromData) + '</p></td>');
+                                    // break;
                             }
                             // // drd_javascript(label, tdId_javascript, label.startBindScript, rC2, data[temp]);
                         }
@@ -1634,7 +1652,6 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
                     });*/
                 }
             } else {
-                console.log("안들어왔어야함.");
                 ThisFixedTableData.css({
                     'border-left': leftThickness + 'px ' + leftBorderStyle + ' ' + fromData.leftBorderColor,
                     'border-right': rightThickness + 'px ' + rightBorderStyle + ' ' + fromData.rightBorderColor,
@@ -3388,7 +3405,7 @@ function labelPropertyApply(labelNbandInfo) {
     }
 
     // 그라데이션을 사용할 때
-    if (labelNbandInfo.data.gradientLB.isUseGradient == 'true') {
+    if (labelNbandInfo.data.gradientLB !== undefined && labelNbandInfo.data.gradientLB.isUseGradient == 'true') {
         gradientCase(labelNbandInfo.data.gradientLB.startGradientDirection,
             labelNbandInfo.data.gradientLB.gradientDirection,
             labelNbandInfo.data.gradientLB.gradientColor,
