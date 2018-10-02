@@ -20,10 +20,10 @@ function Label(data){
     this.zOrder = data.ZOrder === undefined ? 0 : data.ZOrder._text;
 
     this.borderThickness = (data.BorderThickness === undefined ? undefined : { // 테두리 두께 (있을 수도 있고 없을 수도 있는 속성)
-        left : (data.BorderThickness.Left === undefined ? 1 : data.BorderThickness.Left._text),
-        top : (data.BorderThickness.Top === undefined ? 1 : data.BorderThickness.Top._text),
-        right : (data.BorderThickness.Right === undefined ? 1 : data.BorderThickness.Right._text),
-        bottom : (data.BorderThickness.Bottom === undefined ? 1 : data.BorderThickness.Bottom._text)
+        left : (data.BorderThickness.Left === undefined ? 0 : data.BorderThickness.Left._text),
+        top : (data.BorderThickness.Top === undefined ? 0 : data.BorderThickness.Top._text),
+        right : (data.BorderThickness.Right === undefined ? 0 : data.BorderThickness.Right._text),
+        bottom : (data.BorderThickness.Bottom === undefined ? 0 : data.BorderThickness.Bottom._text)
     });
 
     this.leftBorderColor = data.LeftBorderColor === undefined ? 'black' : data.LeftBorderColor._text; // 왼쪽 테두리 색

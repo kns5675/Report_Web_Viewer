@@ -408,7 +408,7 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                             remainFooterBandInRegion = (function (bands) {
                                 var tempArr = [];
                                 bands.forEach(function (band) {
-                                    band.parentBand = dataBand;
+                                    band.parentBand = parentBand;
                                     tempArr.push(band);
                                 });
                                 return tempArr;
@@ -535,14 +535,14 @@ function drawBandData(groupFieldArray, band, layerName, reportHeight, parentBand
                     if (remainData) {
                         dataBandHeight = getBandHeightOfDataBand(band, numofData - groupDataRow);
                     } else {
-                        dataBandHeight = getBandHeightOfDataBand(band, numofData - 1);
+                        dataBandHeight = getBandHeightOfDataBand(band, numofData);
                     }
                 }
             } else {
                 if (remainData) {
                     dataBandHeight = getBandHeightOfDataBand(band, numofData - groupDataRow);
                 } else {
-                    dataBandHeight = getBandHeightOfDataBand(band, numofData - 1);
+                    dataBandHeight = getBandHeightOfDataBand(band, numofData);
                 }
             }
 
@@ -923,8 +923,10 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
                             curDatarowInDataBand = 0;
                             tableLabelList = [];
                             completeDataBand.push(band.id);
+                            ingDataTableName = undefined;
                         } else {
                             remainData = true;
+                            ingDataTableName = band.dataTableName;
                         }
                         if (band.controlList.anyType.MinimumRowCount !== undefined) {
                             var minimumRowCount = Number(band.controlList.anyType.MinimumRowCount._text);
@@ -952,7 +954,6 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
                     }
                 }
             }
-            ingDataTableName = band.dataTableName;
             break;
         case 'BandGroupFooter' :
             if (isRegion) { // 리전일 때
@@ -1042,24 +1043,19 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
                  *
                  **************************************************************************************/
                 parentBand = (parentBand === undefined ? band.parentBand : parentBand);
-
                 if (dt != undefined) {
                     if (curDatarowInDataBand < dt.length) {
                         if (band.forceNewPage === 'true') { //페이지 넘기기
 
                         } else {
-                            // if (!Array.isArray(dataBand)) {
-                            parentBand = (function (arg) {
-                                var band = [];
-                                band.push(arg);
-                                return band;
-                            })(parentBand);
-                            // var tempDataBand = [];
-                            // tempDataBand.push(dataBand);
-                            if(parentBand[0]){
-                                drawBand(parentBand, layerName, reportHeight);
+                            if(getAvaHeight(div_id, reportHeight) - footer_height > Number(parentBand.childHeaderBands[0].rectangle.height)){
+                                parentBand = (function (arg) {
+                                    var band = [];
+                                    band.push(arg);
+                                    return band;
+                                })(parentBand);
+                                drawBand(parentBand, layerName, reportHeight, band);
                             }
-                        // }
                         }
                     }
                 }

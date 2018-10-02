@@ -26,6 +26,7 @@ function initializeVariable() {
     groupFieldArray = [];
     groupFieldNum = 0;
     tableLabelList = [];
+    ingDataTableName = undefined;
 }
 
 /******************************************************************
@@ -91,6 +92,7 @@ function makeReportTemplate(data, subReport) {
         });
 
             makeReport(report, arrRegion);
+            initializeVariable();
 
             // var isDataBand = completeDataBand.find(function(completeData){
             //     return dataBand.id = completeData;
@@ -98,7 +100,6 @@ function makeReportTemplate(data, subReport) {
             // if(isDataBand == undefined){
             //     completeDataBand.push(dataBand.id);
             // }
-            initializeVariable();
         // });
     });
     // 서브리포트 밴드가 있을 경우 사이즈를 확인해서 너무 큰 경우 마지막 페이지에 추가됨.
@@ -141,7 +142,6 @@ function makeReport(report, arrRegion) {
     pageNum++;
     // 현재 찍힌 데이터 로우 행이 전체 데이터 보다 작을 경우 재귀함수
     // 클 경우 함수 종료 후 다음 리포트 생성
-
 
     if (dataTable.DataSetName[ingDataTableName] != undefined) {
         // if(curDatarowInDataBand < dataTable.DataSetName[ingDataTableName].length) {
@@ -260,25 +260,31 @@ function getBandHeightOfDataBand(band, numOfData) {
         labelHeight += Number(tableLabels[0].Rectangle.Height._text);
         valueHeight += Number(tableLabels[tableLabels.length - 1].Rectangle.Height._text);
         tableLabels.forEach(function (tableLabel) {
-            if (tableLabel._attributes["xsi:type"] == "DynamicTableTitleLabel") {
-                var labelBottom = Number(tableLabel.BorderThickness.Bottom._text);
-                var labelTop = Number(tableLabel.BorderThickness.Top._text);
+             tableLabel = new DynamicTableLabel(tableLabel, i);
+            if (tableLabel._attributes == "DynamicTableTitleLabel") {
+                var labelBottom = Number(tableLabel.borderThickness.bottom);
+                var labelTop = Number(tableLabel.borderThickness.top);
 
-                if (titleBorderBottomThickness < Number(tableLabel.BorderThickness.Bottom._text))
+                if (titleBorderBottomThickness < Number(tableLabel.borderThickness.bottom))
                     titleBorderBottomThickness = labelBottom;
 
-                if (titleBorderTopThickness < Number(tableLabel.BorderThickness.Top._text))
+                if (titleBorderTopThickness < Number(tableLabel.borderThickness.top))
                     titleBorderTopThickness = labelTop;
             } else {
-                var labelBottom = Number(tableLabel.BorderThickness.Bottom._text)
-                if (valueBorderBottomThickness < Number(tableLabel.BorderThickness.Bottom._text))
-                    valueBorderBottomThickness = labelBottom;
+                if(Number(tableLabel.borderThickness) === undefined){
+                    valueBorderBottomThickness = 0;
+                }else{
+                    var labelBottom = Number(tableLabel.borderThickness.bottom)
+                    if (valueBorderBottomThickness < Number(tableLabel.borderThickness.bottom))
+                        valueBorderBottomThickness = labelBottom;
+                }
             }
         });
     });
 
-    allLabelBorderThickness = titleBorderBottomThickness * numOfData + titleBorderBottomThickness + titleBorderTopThickness;
+    allLabelBorderThickness = valueBorderBottomThickness * numOfData + titleBorderBottomThickness + titleBorderTopThickness;
 
+    //ToDo 테이블 두께에 따라 1px 정도씩 오차가 생김
     if(isDynamicInBandData){
         return tableSpacing + labelHeight + (valueHeight * numOfData) + allLabelBorderThickness;
     }else{
