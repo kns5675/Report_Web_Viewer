@@ -105,7 +105,7 @@ function Label(data){
     this.dataTableName = data.DataTableName === undefined ? undefined : data.DataTableName._text; // 데이터 테이블 이름
     this.base64ImageFromViewer = data.Base64ImageFromViewer === undefined ? undefined : data.Base64ImageFromViewer._text; // 이미지 저장값을 예로 하는 경우 해당 이미지를 Base64형태로 변환하여 저장한다
 
-    this.labelTextType = (data.LabelTextType === undefined ? 0 : data.LabelTextType._text); // 문자 형식
+    this.labelTextType = data.LabelTextType === undefined ? undefined : data.LabelTextType._text; // 문자 형식
     this.format = (data.Format === undefined ? 0 : data.Format._text); // 표시 형식
     this.startBindScript = data.StartBindScript === undefined ? undefined : data.StartBindScript._text; // 아마도 JavaScript 코드
     this.reVectorValue = data.ReVectorValue === undefined ? 0 : data.ReVectorValue._text; // 아마도 장평 관련

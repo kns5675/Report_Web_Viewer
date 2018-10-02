@@ -299,7 +299,6 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                     // 180910 YeSol 추가
                     var controlLists = [];
                     // var bands = report.layers.designLayer.bands;
-
                     controlLists.push(band.controlList.anyType); // dataBand의 controlList배열
 
                     isDynamicTable = false;
@@ -313,7 +312,6 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                                 if (controlList[i]._attributes['xsi:type'] == 'ControlFixedTable') {
                                     isFixedTable = true;
                                 }
-
                             }
                         } else {
                             if (controlList._attributes['xsi:type'] == 'ControlDynamicTable') {
@@ -322,7 +320,6 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                             if (controlList._attributes['xsi:type'] == 'ControlFixedTable') {
                                 isFixedTable = true;
                             }
-
                         }
                     });
                     break;
@@ -399,6 +396,7 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                         drawBandDataInRegion(groupFieldArrayInRegion, band, layerName, reportHeight, parentBand, div_id, dt);
                     } else { // 리전이 아닐 때
                         drawBandData(groupFieldArray, band, layerName, reportHeight, parentBand, div_id, dt);
+                        console.log(numofData);
                     }
                     break;
                 case 'BandDummyFooter' :
@@ -564,7 +562,7 @@ function drawBandData(groupFieldArray, band, layerName, reportHeight, parentBand
             var dataBandFooterHeight = 0;
             avaHeight = getAvaHeight(div_id, reportHeight);
             numofData = getNumOfDataInOnePageNonObject(band, avaHeight);
-            dataBandHeight = getBandHeightOfDataBand(band, numofData - 1);
+            dataBandHeight = getBandHeightOfDataBand(band, numofData);
 
             if (band.childFooterBands !== null) { // 자식 풋터 밴드에서 재호출
                 dataBandFooterHeight = getChildBandHeight(band);
@@ -1194,7 +1192,6 @@ function drawChildHeaderBand(band, layerName, reportHeight) {
  만든이 : 안예솔
  * *********************************************************/
 function drawChildFooterBand(band, layerName, reportHeight) {
-
     var childFooterBandArray = new Array();
     var childBands = band.childFooterBands;
     var dt = dataTable.DataSetName[band.dataTableName];

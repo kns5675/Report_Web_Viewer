@@ -284,11 +284,11 @@ function getBandHeightOfDataBand(band, numOfData) {
         });
     });
 
-    allLabelBorderThickness = valueBorderBottomThickness * numOfData + titleBorderBottomThickness + titleBorderTopThickness;
+    allLabelBorderThickness = valueBorderBottomThickness * (numOfData) + titleBorderBottomThickness + titleBorderTopThickness;
 
     //ToDo 테이블 두께에 따라 1px 정도씩 오차가 생김
     if (isDynamicInBandData) {
-        return tableSpacing + labelHeight + (valueHeight * numOfData) + allLabelBorderThickness;
+        return tableSpacing + labelHeight + (valueHeight * (numOfData)) + allLabelBorderThickness;
     } else {
         return band.rectangle.height;
     }
@@ -352,7 +352,6 @@ function getNumOfDataInOnePage(tableLabel, divId) {
  만든이 : 구영준
  * *********************************************************/
 function getNumOfDataInOnePageNonObject(band, divId) {
-
     var dt = dataTable.DataSetName[band.dataTableName];
     var bandDataHeight = 0;
     if (typeof divId == 'string') {
@@ -360,7 +359,6 @@ function getNumOfDataInOnePageNonObject(band, divId) {
     } else if (typeof divId == 'number') {
         bandDataHeight = divId;
     }
-
     var tableSpacing = 0;
     var tableLabel;
     if (Array.isArray(band.controlList.anyType)) {

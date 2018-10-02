@@ -412,6 +412,9 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
             paramTable.NewDataSet.Table1.forEach(function (paramData) {
                 if (label.parameterName == paramData.Key._text) {
                     label.text = paramData.Value._text;
+                    if (label.labelTextType === 'Number') {
+                        label.text = Number(label.text);
+                    }
                 }
             });
             thId.append('<p id="value_P_tag' + thNum + '">' + label.text + '</p>');
@@ -440,6 +443,9 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
                     isData = true;
                     var valueTrId = $('#dynamicValueLabel' + tempCurDataRow);
                     var key_data = data[key]._text;
+                    if (label.labelTextType === 'Number') {
+                        key_data = Number(key_data);
+                    }
                     var table_reform = table_format_check(data, valueTrId, key_data, table);
                     var tdId = 'tableValueLabelNum' + tableValueLabelNum++;
                     if (!minimumRow) {
@@ -541,6 +547,9 @@ function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, nu
             paramTable.NewDataSet.Table1.forEach(function (paramData) {
                 if (label.parameterName == paramData.Key._text) {
                     label.text = paramData.Value._text;
+                    if (label.labelTextType === 'Number') {
+                        label.text = Number(label.text);
+                    }
                 }
             });
             var tdId = 'tableValueLabelNum' + tableValueLabelNum++;
@@ -561,6 +570,9 @@ function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, nu
                 if (label.fieldName == key) {
                     isData = true;
                     var key_data = data[temp][key]._text;
+                    if (label.labelTextType === 'Number') {
+                        key_data = Number(key_data);
+                    }
                     var table_reform = table_format_check(data, valueTrId, key_data, label);
                     var tdId = 'tableValueLabelNum' + tableValueLabelNum++;
                     if (minimumRow && (j > data.length)) {
@@ -676,6 +688,9 @@ function drawingDynamicTableValueLabelWithGroupFieldArrayWithRegion(label, dt, t
             paramTable.NewDataSet.Table1.forEach(function (paramData) {
                 if (label.parameterName == paramData.Key._text) {
                     label.text = paramData.Value._text;
+                    if (label.labelTextType === 'Number') {
+                        label.text = Number(label.text);
+                    }
                 }
             });
             // var valueTrId = $('#dynamicValueLabel' + tempCurDataRow);
@@ -701,6 +716,9 @@ function drawingDynamicTableValueLabelWithGroupFieldArrayWithRegion(label, dt, t
                 if (label.fieldName == key) {
                     isData = true;
                     var key_data = data[temp][key]._text;
+                    if (label.labelTextType === 'Number') {
+                        key_data = Number(key_data);
+                    }
                     var table_reform = table_format_check(data, valueTrId, key_data, label);
 
                     var tdId = 'tableValueLabelNum' + tableValueLabelNum++;
@@ -785,6 +803,9 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArrayWithRegion(label, dt
             paramTable.NewDataSet.Table1.forEach(function (paramData) {
                 if (label.parameterName == paramData.Key._text) {
                     label.text = paramData.Value._text;
+                    if (label.labelTextType === 'Number') {
+                        label.text = Number(label.text);
+                    }
                 }
             });
             var valueTrId = $('#dynamicValueLabel' + tempCurDataRow);
@@ -809,6 +830,9 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArrayWithRegion(label, dt
                     isData = true;
                     var valueTrId = $('#dynamicValueLabel' + tempCurDataRow);
                     var key_data = data[key]._text;
+                    if (label.labelTextType === 'Number') {
+                        key_data = Number(key_data);
+                    }
                     var table_reform = table_format_check(data, valueTrId, key_data, table);
                     var tdId = 'tableValueLabelNum' + tableValueLabelNum++;
                     if (!minimumRow) {
@@ -882,7 +906,9 @@ function drawingDynamicTableValueLabelWithOutDataTable(label, tableId) {
     var tdId = $('#tableValueLabelNum' + tableValueLabelNum++);
 
     setCssInTable(label, tdId);
-
+    if (label.labelTextType === 'Number') {
+        label.text = Number(label.text);
+    }
     tdId.append(label.text);
     tdId.addClass('Label DynamicTableHeader');
     tdId.addClass(label._attributes);
@@ -960,6 +986,9 @@ function drawingDynamicTableTitleLabel(label, header_Name_Number) {
                 label.text = paramData.Value._text;
             }
         });
+    }
+    if (label.labelTextType === 'Number') {
+        label.text = Number(label.text);
     }
     thId.append('<p id="title_P_tag' + thNum + '" style="margin: 0px;">' + label.text + '</p>');
     thId.addClass('Label DynamicTableHeader');
@@ -2458,7 +2487,7 @@ function format_check(data) {
  ******************************************************************/
 function table_format_check(data, Label_id, key, table) {
     var test = table.formatType;
-    if (key != NaN) { //해당 데이터가 숫자일 경우
+    if (key != NaN) { // 해당 데이터가 숫자일 경우
         if (test === "AmountSosu" || test === "MoneySosu" || test === "MoneySosu") {   //수량, 금액 소숫점 자리수 ###,###
             var parts = key.toString().split(".");
             if (parts[1]) { //소수점이 있을 때.
