@@ -4,6 +4,7 @@ div.page{
 
 body{
     margin : 0;
+    background-color : gray;
 }
 
 #header {
@@ -101,14 +102,12 @@ li#saveAsImage:hover ul#saveImgList{
 
 #reportTemplate{
     z-index: -3;
-    background-color: gray;
-    padding-top : 80px;
+    /*padding-top : 160px;*/
 }
 
 #temp_reportTemplate{
     z-index : -3;
-    background-color : gray;
-    padding-top : 80px;
+    padding-top : 160px;
 }
 
 #modalLayer{display:none; position:relative;}

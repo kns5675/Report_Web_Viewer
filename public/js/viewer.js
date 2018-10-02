@@ -106,14 +106,16 @@ function makeHTML(){
  작성자 : 하지연
  ******************************************************************/
 function copyoptions(clicked_copy){
-    console.log(clicked_copy);
     clicked_copy = clicked_copy.toLowerCase();
     try{
         if (clicked_copy == 'enhancedcopy'){
             $('#myModal').show();
         }else if(clicked_copy == 'print' || clicked_copy == 'copyoptions'){
             $('#myModal').css('display','none');
+            var temp_padding = $('#temp_reportTemplate').css('padding-top');
+            $('#temp_reportTemplate').css('padding-top', '0px');
             pagePrint();
+            $('#temp_reportTemplate').css('padding-top', temp_padding);
         }else{
             console.log("인식못했음");
         }
