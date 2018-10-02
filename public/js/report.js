@@ -75,31 +75,31 @@ function makeReportTemplate(data, subReport) {
         //         }
 
         //ToDo 하나의 페이지에 여러개의 데이터 밴드 가능 수정 필요
-        dataBands.forEach(function(dataBand) {
+        dataBands.forEach(function (dataBand) {
             var controlLists = dataBand.controlList.anyType;
 
             if (controlLists.length !== undefined) {
-                controlLists.forEach(function(controlList) {
-                    if(controlList._attributes["xsi:type"] == "ControlRegion"){
+                controlLists.forEach(function (controlList) {
+                    if (controlList._attributes["xsi:type"] == "ControlRegion") {
                         arrRegion.push(controlList.anyType);
                     }
                 });
-            }else{
-                if(controlLists._attributes["xsi:type"] == "ControlRegion"){
+            } else {
+                if (controlLists._attributes["xsi:type"] == "ControlRegion") {
                     arrRegion.push(controlLists.anyType);
                 }
             }
         });
 
-            makeReport(report, arrRegion);
-            initializeVariable();
+        makeReport(report, arrRegion);
+        initializeVariable();
 
-            // var isDataBand = completeDataBand.find(function(completeData){
-            //     return dataBand.id = completeData;
-            // });
-            // if(isDataBand == undefined){
-            //     completeDataBand.push(dataBand.id);
-            // }
+        // var isDataBand = completeDataBand.find(function(completeData){
+        //     return dataBand.id = completeData;
+        // });
+        // if(isDataBand == undefined){
+        //     completeDataBand.push(dataBand.id);
+        // }
         // });
     });
     // 서브리포트 밴드가 있을 경우 사이즈를 확인해서 너무 큰 경우 마지막 페이지에 추가됨.
@@ -142,7 +142,6 @@ function makeReport(report, arrRegion) {
     pageNum++;
     // 현재 찍힌 데이터 로우 행이 전체 데이터 보다 작을 경우 재귀함수
     // 클 경우 함수 종료 후 다음 리포트 생성
-
     if (dataTable.DataSetName[ingDataTableName] != undefined) {
         // if(curDatarowInDataBand < dataTable.DataSetName[ingDataTableName].length) {
         //     if (isDynamicTable) {
@@ -154,8 +153,8 @@ function makeReport(report, arrRegion) {
 
         if (curDatarowInDataBand < dataTable.DataSetName[ingDataTableName].length && isDynamicTable == true) {
             reportPageCnt++;
-            if(arrRegion[0] != undefined){
-                if(curDatarowInRegion < dataTable.DataSetName[arrRegion[0].Layers.anyType.Bands.anyType.DataTableName._text].length && isDynamicTable == true){
+            if (arrRegion[0] != undefined) {
+                if (curDatarowInRegion < dataTable.DataSetName[arrRegion[0].Layers.anyType.Bands.anyType.DataTableName._text].length && isDynamicTable == true) {
                     makeReport(report, arrRegion);
                 } else {
                     reportPageCnt = 1;
@@ -169,6 +168,8 @@ function makeReport(report, arrRegion) {
         } else {
             reportPageCnt = 1;
         }
+    } else {
+        reportPageCnt = 1;
     }
 }
 
@@ -218,7 +219,7 @@ function getNumOfPage(report) {
  만든이 : 구영준
 
  수정 : 동적 테이블 일 경우  -> 동적 테이블.y + 라벨 두께 +  + TableTitleLabel 길이 + TableValueLabel 길이 + 한 페이지에 들어가는 데이터 갯수
-        고정 테이블 일 경우  -> DataBand.rectangle.height 길이
+ 고정 테이블 일 경우  -> DataBand.rectangle.height 길이
  만든이 : 구영준
  날짜 : 2018-10-01
  ********************************************************************************************/
@@ -233,12 +234,12 @@ function getBandHeightOfDataBand(band, numOfData) {
     var titleBorderBottomThickness = 0;
     var valueBorderBottomThickness = 0;
     var allLabelBorderThickness;
-    var isDynamicInBandData =  false;
+    var isDynamicInBandData = false;
 
     if (controlLists.length > 1) {
         controlLists.forEach(function (controlList) {
             if (controlList._attributes["xsi:type"] == "ControlDynamicTable") {
-                isDynamicInBandData =  true;
+                isDynamicInBandData = true;
                 labels.push(controlList);
                 if (controlList.Rectangle.Y !== undefined) {
                     tableSpacing = Number(controlList.Rectangle.Y._text);
@@ -249,7 +250,7 @@ function getBandHeightOfDataBand(band, numOfData) {
         });
     } else {
         if (controlLists._attributes["xsi:type"] == "ControlDynamicTable") {
-            isDynamicInBandData =  true;
+            isDynamicInBandData = true;
             labels.push(controlLists);
             if (controlLists.Rectangle.Y !== undefined) {
                 tableSpacing = Number(controlLists.Rectangle.Y._text);
@@ -261,7 +262,7 @@ function getBandHeightOfDataBand(band, numOfData) {
         labelHeight += Number(tableLabels[0].Rectangle.Height._text);
         valueHeight += Number(tableLabels[tableLabels.length - 1].Rectangle.Height._text);
         tableLabels.forEach(function (tableLabel) {
-             tableLabel = new DynamicTableLabel(tableLabel, i);
+            tableLabel = new DynamicTableLabel(tableLabel, i);
             if (tableLabel._attributes == "DynamicTableTitleLabel") {
                 var labelBottom = Number(tableLabel.borderThickness.bottom);
                 var labelTop = Number(tableLabel.borderThickness.top);
@@ -272,10 +273,10 @@ function getBandHeightOfDataBand(band, numOfData) {
                 if (titleBorderTopThickness < Number(tableLabel.borderThickness.top))
                     titleBorderTopThickness = labelTop;
             } else {
-                if(Number(tableLabel.borderThickness) === undefined){
+                if (Number(tableLabel.borderThickness) === undefined) {
                     valueBorderBottomThickness = 0;
-                }else{
-                    var labelBottom = Number(tableLabel.borderThickness.bottom)
+                } else {
+                    var labelBottom = Number(tableLabel.borderThickness.bottom);
                     if (valueBorderBottomThickness < Number(tableLabel.borderThickness.bottom))
                         valueBorderBottomThickness = labelBottom;
                 }
@@ -286,12 +287,11 @@ function getBandHeightOfDataBand(band, numOfData) {
     allLabelBorderThickness = valueBorderBottomThickness * numOfData + titleBorderBottomThickness + titleBorderTopThickness;
 
     //ToDo 테이블 두께에 따라 1px 정도씩 오차가 생김
-    if(isDynamicInBandData){
+    if (isDynamicInBandData) {
         return tableSpacing + labelHeight + (valueHeight * numOfData) + allLabelBorderThickness;
-    }else{
+    } else {
         return band.rectangle.height;
     }
-
 }
 
 /***********************************************************
@@ -410,13 +410,13 @@ function getNumOfDataInOnePageNonObjectInFixedTable(band, divId) {
         band.controlList.anyType.forEach(function (anyType) {
             if (anyType._attributes['xsi:type'] == 'ControlFixedTable' && anyType.Labels !== undefined) {
                 console.log(anyType.Rectangle);
-                if(anyType.Rectangle.Height !== undefined) {
+                if (anyType.Rectangle.Height !== undefined) {
                     fixedTableHeight = Number(anyType.Rectangle.Height._text);
                 }
             }
         });
     } else {
-        if(band.Rectangle.Height !== undefined) {
+        if (band.Rectangle.Height !== undefined) {
             fixedTableHeight = Number(band.Rectangle.Height._text);
         }
     }
@@ -795,23 +795,23 @@ function temp_to_reportTemplate() {
     var wrap_arr_clone = report_backup(); // report_wrap_arr_html 변수 세팅
     var str = "";
 
-    for(var i=0; i<wrap_arr_clone.length; i++){
+    for (var i = 0; i < wrap_arr_clone.length; i++) {
         // console.log(i+1 + "번째 리포트");
         // '리포트'의 리포트 넘기기가 true일 때
-        if(wrap_arr_clone[i].length > 0
+        if (wrap_arr_clone[i].length > 0
             && (reportTemplate.reportList[i].forceNextReport // 리포트의 리포트 넘기기가 true
-            // || check_groupFieldName_in_GroupFooter(reportTemplate.reportList[i].layers.designLayer.bands))){
-            )){
+                // || check_groupFieldName_in_GroupFooter(reportTemplate.reportList[i].layers.designLayer.bands))){
+            )) {
             // console.log("리포트의 리포트 넘기기가 true");
             str += wrap_arr_clone[i][0];
             wrap_arr_clone[i].shift();
         }
         // '그룹풋터밴드'의 리포트 넘기기가 true일 때
-        else if(wrap_arr_clone[i].length > 0
+        else if (wrap_arr_clone[i].length > 0
             // && check_groupFieldName_in_GroupFooter(reportTemplate.reportList[i].layers.designLayer.bands)
-            && check_forceNextReport_in_GroupFooter(reportTemplate.reportList[i].layers.designLayer.bands)){
+            && check_forceNextReport_in_GroupFooter(reportTemplate.reportList[i].layers.designLayer.bands)) {
 
-            while(wrap_arr_clone[i].length > 0){
+            while (wrap_arr_clone[i].length > 0) {
                 var bandDataCnt = (wrap_arr_clone[i].match(/BandData/g) || []).length;
                 var bandDataHeaderCnt = (wrap_arr_clone[i].match(/BandDataHeader/g) || []).length;
                 var bandDataFooterCnt = (wrap_arr_clone[i].match(/BandDataFooter/g) || []).length;
@@ -819,24 +819,24 @@ function temp_to_reportTemplate() {
                 bandDataCnt = bandDataCnt - bandDataFooterCnt - bandDataHeaderCnt;
                 console.log("데이터밴드 텍스트 개수 : " + bandDataCnt);
                 console.log("그룹풋터밴드 텍스트 개수 : " + bandGroupFooterCnt);
-                if(bandDataCnt === bandGroupFooterCnt){
+                if (bandDataCnt === bandGroupFooterCnt) {
                     str += wrap_arr_clone[i][0];
                 }
 
             }
         }
-        else{
-            for(var j=0; j<wrap_arr_clone[i].length; j++){
+        else {
+            for (var j = 0; j < wrap_arr_clone[i].length; j++) {
                 str += wrap_arr_clone[i][j];
             }
             wrap_arr_clone[i] = [];
         }
 
         var remain_wrap_count = 0;
-        for(var j=0; j<wrap_arr_clone.length; j++){
+        for (var j = 0; j < wrap_arr_clone.length; j++) {
             remain_wrap_count += wrap_arr_clone[j].length;
         }
-        if((i === wrap_arr_clone.length-1) && (remain_wrap_count > 0)){
+        if ((i === wrap_arr_clone.length - 1) && (remain_wrap_count > 0)) {
             i = -1;
         }
     }
@@ -870,34 +870,34 @@ function report_backup() {
 }
 
 /***********************************************************************
-?? 삭제 예정
+ ?? 삭제 예정
  ***********************************************************************/
-function check_forceNextReport_in_Report(report){
+function check_forceNextReport_in_Report(report) {
     var bandGroupFooterIsTrue = false;
-    report.layers.designLayer.bands.forEach(function(band){
-       if(band instanceof BandData && band.childFooterBands !== null){
-            band.childFooterBands.forEach(function(childBand){
-                if(childBand instanceof BandGroupFooter && childBand.forceNextReport === true)
+    report.layers.designLayer.bands.forEach(function (band) {
+        if (band instanceof BandData && band.childFooterBands !== null) {
+            band.childFooterBands.forEach(function (childBand) {
+                if (childBand instanceof BandGroupFooter && childBand.forceNextReport === true)
                     bandGroupFooterIsTrue = true;
                 else
                     bandGroupFooterIsTrue = false;
             });
-       }
+        }
     });
     return report.forceNextReport + bandGroupFooterIsTrue > 0 ? true : false;
 }
 
 /***********************************************************************
  기능 : 그룹 풋터 밴드가 존재하는지, 그룹 풋터 밴드의 속성중
-        GroupFiledName이 존재하는지 체크
+ GroupFiledName이 존재하는지 체크
  만든이 : 전형준
  ***********************************************************************/
-function check_groupFieldName_in_GroupFooter(bands){
+function check_groupFieldName_in_GroupFooter(bands) {
     var bool = false;
-    bands.forEach(function(band){
-        if(band instanceof BandData && band.childFooterBands !== null){
-            band.childFooterBands.forEach(function(childBand) {
-                if (childBand instanceof BandGroupFooter && childBand.groupFiledName !== null){
+    bands.forEach(function (band) {
+        if (band instanceof BandData && band.childFooterBands !== null) {
+            band.childFooterBands.forEach(function (childBand) {
+                if (childBand instanceof BandGroupFooter && childBand.groupFiledName !== null) {
                     bool = true;
                 }
             });
@@ -905,19 +905,20 @@ function check_groupFieldName_in_GroupFooter(bands){
     });
     return bool;
 }
+
 /***********************************************************************
  기능 : 그룹 풋터 밴드가 존재하는지, 그룹 풋터 밴드의 속성중
-        '리포트 넘기기'가 true인지 확인
+ '리포트 넘기기'가 true인지 확인
  만든이 : 전형준
  ***********************************************************************/
-function check_forceNextReport_in_GroupFooter(bands){
+function check_forceNextReport_in_GroupFooter(bands) {
     var bool = false;
-    bands.forEach(function(band){
+    bands.forEach(function (band) {
         console.log("여긴 오나요");
-        if(band instanceof BandData && band.childFooterBands !== null){
+        if (band instanceof BandData && band.childFooterBands !== null) {
             console.log("데이터밴드가 있고 자식밴드가 있어요");
-            band.childFooterBands.forEach(function(childBand) {
-                if (childBand instanceof BandGroupFooter && childBand.forceNextReport === true){
+            band.childFooterBands.forEach(function (childBand) {
+                if (childBand instanceof BandGroupFooter && childBand.forceNextReport === true) {
                     console.log("자식밴드중 그룹풋터밴드가 있고 리포트넘기기가 true예요");
                     bool = true;
                 }
@@ -930,23 +931,23 @@ function check_forceNextReport_in_GroupFooter(bands){
 
 /***********************************************************************
  기능 : 리포트 넘기기가 됐을시 temp_reportTemplate에서 생성되어 뒤섞인
-        pageforcopyratio와 page를 다시 넘버링해줌
-        (기능에 영향을 미치는 엘리먼트만 우선.
-        다시 넘버링해줘야 하는 애들이 더 있을지 모름)
+ pageforcopyratio와 page를 다시 넘버링해줌
+ (기능에 영향을 미치는 엘리먼트만 우선.
+ 다시 넘버링해줘야 하는 애들이 더 있을지 모름)
  만든이 : 전형준
  ***********************************************************************/
-function reNumbering(){
+function reNumbering() {
     var pageforcopyratio_div_arr = $('.pageforcopyratio');
     var page_div_arr = $('.page');
     var cnt = 1;
 
-    for(var i=0; i<pageforcopyratio_div_arr.length; i++){
+    for (var i = 0; i < pageforcopyratio_div_arr.length; i++) {
         // console.log(i);
-        if(pageforcopyratio_div_arr.eq(i).css('display') !== 'none'){
-            pageforcopyratio_div_arr.eq(i).attr('id', 'pageforcopyratio'+(cnt));
-            page_div_arr.eq(i).attr('id', 'page'+(cnt));
+        if (pageforcopyratio_div_arr.eq(i).css('display') !== 'none') {
+            pageforcopyratio_div_arr.eq(i).attr('id', 'pageforcopyratio' + (cnt));
+            page_div_arr.eq(i).attr('id', 'page' + (cnt));
             cnt++;
-        } else{
+        } else {
             pageforcopyratio_div_arr.eq(i).removeAttr('id');
             page_div_arr.eq(i).removeAttr('id');
             // pageforcopyratio_div_arr.eq(i).removeUniqueId();

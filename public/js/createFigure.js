@@ -17,9 +17,9 @@ function drawingRectangle(data, divId) {
     var thickness = data.thickness;
     var recDashStyle = data.recDashStyle;
     var borderColor = data.borderColor;
-    var roundingValue = parseInt(data.roundingValue);
+    var roundingValue = Number(data.roundingValue);
     if(roundingValue < 2) {
-        roundingValue = roundingValue * 10;
+        roundingValue = roundingValue * 20;
     } else if(roundingValue >= 2) {
         roundingValue = 50;
     }

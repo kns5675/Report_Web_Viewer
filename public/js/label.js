@@ -256,6 +256,7 @@ function SummaryLabel(data){
  ******************************************************************/
 function DataLabel(data){
     Label.apply(this, arguments);
+
     this.fieldName = data.FieldName === undefined ? undefined : data.FieldName._text;
 }
 
