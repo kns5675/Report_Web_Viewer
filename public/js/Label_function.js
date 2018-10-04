@@ -63,7 +63,7 @@ function Lock_Check_Table(data, drag, resize, div) { //테이블 데이터, 드�
         var width;
         $(function(){
             // $(".JCLRFlex")[0].style.width = "98%";
-            $("#dynamicTable1").colResizable({
+            $(".table").colResizable({
                 resizeMode: 'overflow',
                 liveDrag: true,
                 fixed: true,

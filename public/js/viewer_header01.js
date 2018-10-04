@@ -7,6 +7,7 @@ var count = 0;
 var imagedivid;
 var set_buttonid;
 var imagezIndex = 401;
+var total_data;
 
 /******************************************************************
  기능 : 저장 버튼 기능
@@ -14,9 +15,39 @@ var imagezIndex = 401;
  ******************************************************************/
 function file_save() {
     $("#saving").on("click", function () {
-        console.log("window : ",this);
-
+        var Layers = total_data.ReportTemplate.ReportList.anyType.Layers.anyType;
+        var label;
+        console.log("total_data : ",total_data.ReportTemplate.ReportList.anyType.Layers.anyType);
+        Layers.forEach(function (e, i) {
+            var bands = e.Bands.anyType;
+            console.log("bands : ",bands);
+            if(bands[1]){
+                bands.forEach(function (e, i) {
+                    console.log("e : ",e.ControlList.anyType);
+                    label = e.ControlList.anyType.Id;
+                    console.log("label : ",label);
+                    // console.log("label.Rectangle.Height._text : ",label.Rectangle.Height._text);
+                });
+            }else{
+                if(bands.ControlList.anyType){
+                    label = bands.ControlList.anyType.id;
+                    console.log("label : ",label);
+                }
+            }
+        });
+        $(".NormalLabel_scope ").each(function (i, e) {
+            console.log("each test");
+            var label_name = e.id.replace(/[^0-9]/g, '');
+            if(label_name === "SystemLabel"){
+                console.log("e.id : ",e.id);
+                console.log("width",e.style.width);
+                console.log("height", e.style.height);
+            }
+        })
     });
+}
+function saving_data_binding(data){
+    total_data = data;
 }
 /******************************************************************
  기능 : 파일 열기 버튼 기능.

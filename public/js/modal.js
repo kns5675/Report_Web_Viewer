@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    hakjoons();
+    header_event_setting();
     jiyeons();
 });
 
@@ -8,7 +8,7 @@ $(document).ready(function(){
  만든이 : hagdung-i
  날짜 : 2018 - 08 - 27
  ******************************************************************/
-function hakjoons(){
+function header_event_setting(){
     /******************************************************************
      기능 : 용지 크기 선택(A4,B4 등) 이벤트, 셀렉트 박스 선택 값에 따라 페이지 리사이징 함수에 전달.
      만든이 : hagdung-i
