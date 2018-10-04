@@ -151,7 +151,6 @@ function makeReport(report, arrRegion) {
         //
         //     }
         // }
-
         if (curDatarowInDataBand < dataTable.DataSetName[ingDataTableName].length && isDynamicTable == true) {
             reportPageCnt++;
             if (arrRegion[0] != undefined) {

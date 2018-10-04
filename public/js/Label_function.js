@@ -154,7 +154,6 @@ function format_check(data) {
  ******************************************************************/
 function table_format_check(data, Label_id, key, table) {
     var test = table.formatType;
-    console.log("table : ",table);
     var format = table.format;
     // var data_text;
     if (key != NaN) { //해당 데이터가 숫자일 경우
@@ -200,7 +199,6 @@ function table_format_check(data, Label_id, key, table) {
  ******************************************************************/
 function table_column_controller(resize_area, Unalterable_area) {
     var width;
-    console.log("test");
     // $(".table th").colResizable();
 
 

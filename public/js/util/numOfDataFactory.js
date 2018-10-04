@@ -58,11 +58,22 @@ function getNumOfDataWithGroupField(band, avaHeight) {
         //ToDo 확인 필요
         var numofData = Math.floor((avaHeight - titleHeight - tableSpacing) / valueHeight) + 1;
         var groupRemainData = (dataCount - groupDataRow);
-
-        if (numofData - groupDataRow > groupRemainData || groupDataRow >= numofData) { // 마지막 페이지
-            return dataCount;
-        } else { //마지막 페이지가 아닌 경우
-            return numofData;
+        if(groupDataRow >= numofData){
+            if (numofData >= groupRemainData /*|| groupDataRow >= numofData*/) { // 마지막 페이지
+                return dataCount;
+            }else if(groupDataRow == 1){
+                return numofData
+            } else { //마지막 페이지가 아닌 경우
+                return numofData + groupDataRow;
+            }
+        }else{
+            if (numofData - groupDataRow >= groupRemainData /*|| groupDataRow >= numofData*/) { // 마지막 페이지
+                return dataCount;
+            }else if(groupDataRow == 1){
+                return numofData
+            } else { //마지막 페이지가 아닌 경우
+                return numofData + groupDataRow;
+            }
         }
     }
 
