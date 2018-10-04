@@ -164,7 +164,7 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                         drawBandDataInRegion(groupFieldArrayInRegion, band, layerName, reportHeight, parentBand, div_id, dt);
                     } else { // 리전이 아닐 때
                         drawBandData(groupFieldArray, band, layerName, reportHeight, parentBand, div_id, dt);
-                        console.log(numofData);
+                        //console.log(numofData);
                     }
                     break;
                 case 'BandDummyFooter' :
@@ -787,6 +787,7 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
                             if (!Array.isArray(dataBand)) {
                                 var tempDataBand = [];
                                 tempDataBand.push(dataBand);
+                                console.log("tempDataBand : ",tempDataBand);
                                 drawBand(tempDataBand, layerName, reportHeight);
                             }
                         }

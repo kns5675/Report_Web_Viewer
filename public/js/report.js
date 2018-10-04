@@ -696,9 +696,11 @@ function reNumbering() {
     }
 
     var total_page_count = $('.visiblePage').length;
+
     $('#TotalPage').text(total_page_count);
     HeaderFixAndPageScroll(total_page_count);
     LastPage(total_page_count);
+    // HeaderFixAndPageScroll(total_page_count);
 
     // console.log(remove_page_arr);
     // console.log("============");

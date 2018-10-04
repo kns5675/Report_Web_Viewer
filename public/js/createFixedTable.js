@@ -45,7 +45,7 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
     function setRowCount(xZeroCount) {
         var totalLabelWidth = 0;//라벨너비
         var labelCount = 0;//라벨개수
-        var rowCount;//row개수
+        var rowCount = xZeroCount;//row개수
 
         if (data.Labels) {//라벨 리스트 라벨 width, height값 가져오기
             for (var i = 0; i < fixTableLabelListLength; i++) {
@@ -57,19 +57,19 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                 totalLabelWidth += thisLabelWidth;
 
                 if (labelCount == fixTableLabelListLength) {
-                    rowCount = xZeroCount;
+                    // rowCount = xZeroCount;
 
-                    for (var rC = 1; rC <= rowCount; rC++) {
+                    for (var i = 1; i <= rowCount; i++) {
                         fixTableId.append('<tr id = "fixedTableRow' + fixTableRowCount + '"></tr>');
                         var ThisfixedTableRow = $("#fixedTableRow" + fixTableRowCount);
 
                         ThisfixedTableRow.css({
+                            'position':'absolute',
                             'border-spacing': 0,
                             'margin': 0,
                             'padding': 0,
                             'top': 0,
                             'width': fixTableWidth,
-                            'height': thisLabelHeight,
                             'overflow': 'visible'
                         });
 
@@ -80,14 +80,14 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                     }
 
                     function tdDataBinding(ThisfixedTableRow, drawingTds) {
-                        console.log("drawingTds : ", drawingTds);
                         var tdId = 'FixedTableLabel_';
                         if (rC2 > drawingTds) {
                             drawingTds = labelCount;
                         }
                         for (rC2; rC2 <= drawingTds; rC2++) {
                             var fromData = fixTableLabelList[rC2 - 1];
-
+                            var tdLeft = fromData.rectangle.x;
+                            var tdTop = fromData.rectangle.y;
                             var tdIDMaking = tdId + rC2 + '_' + labelC;
                             var tdIDwithS = $("#" + tdIDMaking);
 
@@ -134,16 +134,16 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                         ('<td class="DataLabel" id = "' + tdId + rC2 + '_' + labelC + '">' +
                                             '<p id="' + tdId + rC2 + '_p_' + labelC + '">' + table_reform + '</p>' +
                                             '</td>');
-                                        settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTableHeight);
-                                        setTable();
+                                        // settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTableHeight);
+                                        // setTable();
                                         var tdId_javascript = $("#" + tdIDMaking);
                                     }
                                     break;
                                 case  "NormalLabel" :
                                     ThisfixedTableRow.append('<td class="NormalLabel" id = "' + tdId + rC2 + '_' + labelC + '">' +
                                         '<p id="' + tdId + rC2 + '_p_' + labelC + '">' + table_format_check(data.Labels, tdIDwithS, fromData.text, fromData) + '</p></td>');
-                                    settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTableHeight);
-                                    setTable();
+                                    // settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTableHeight);
+                                    // setTable();
                                     var tdId_javascript = $("#" + tdIDMaking);
                                     break;
                                 // case "SummaryLabel" :
@@ -154,6 +154,8 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                 //     '<p id="' + tdId + rC2 + '_p_' + fixedTableNum + '">' + table_format_check(data.Labels, tdIDwithS, fromData.text, fromData) + '</p></td>');
                                 // break;
                             }
+                            settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTableHeight, tdLeft, tdTop);
+                            setTable();
                             // // drd_javascript(label, tdId_javascript, label.startBindScript, rC2, data[temp]);
                         }
                     }
@@ -194,7 +196,7 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
  기능 : 고정테이블 안의 FixedTableLabel의 속성을 구현하고, 적용시킨다.
  만든이 : 하지연
  ******************************************************************/
-function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTableHeight) {
+function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTableHeight, tdLeft, tdTop) {
     var ThisFixedTableData = $("#" + tdId + rC2 + '_' + labelC);
     var ThisFixedTableDataP = $("#" + tdId + rC2 + '_p_' + labelC);
 
@@ -212,6 +214,12 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
         'top': 0,
         'left': 0
     });
+    ThisFixedTableData.css({
+        'position':'absolute',
+        'left': tdLeft+'px',
+        'top': tdTop+'px'
+    })
+
     if (fromData.noBorder == 'true') {//border 없을때
         ThisFixedTableData.css('border', 'none');
 
@@ -226,7 +234,6 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
             'padding': 0,
             'border-spacing': '0px',
             'border-collapse': 'collapse',
-            //'white-space': 'nowrap',
             'color': fromData.textColor
         });
     } else {//border 있을때
@@ -412,7 +419,7 @@ function drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, d
     div.append('<div id = "Table' + tableNum + '"></div>');//무의미한 테이블 div
     var divIdTable = $('#Table' + tableNum);
     divIdTable.css({
-        'position': 'absolute',
+        //'position': 'absolute', 지연수정
         'top': 0
     });
 
@@ -445,11 +452,11 @@ function drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, d
     function setRowCount(xZeroCount) {
         var totalLabelWidth = 0;//라벨너비
         var labelCount = 0;//라벨개수
-        var rowCount = 0;//row개수
+        var rowCount = xZeroCount;//row개수
 
         if (data.Labels) {//라벨 리스트 라벨 width, height값 가져오기
             for (var i = 0; i < fixTableLabelListLength; i++) {
-                var thisLabelWidth = Number(fixTableLabelList[i].rectangle.width);
+                var thisLabelWidth = Number(fixTableLabelList[i].rectangle.width);//
                 var thisLabelHeight = Number(fixTableLabelList[i].rectangle.height);
                 var thisLabelX = fixTableLabelList[i].rectangle.x;
 
@@ -457,17 +464,17 @@ function drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, d
                 totalLabelWidth += thisLabelWidth;
 
                 if (labelCount == fixTableLabelListLength) {
-                    rowCount = xZeroCount;
-                    for (var rC = 1; rC <= rowCount; rC++) {
+                    // rowCount = xZeroCount;
+                    for (var i = 1; i <= rowCount; i++) {
                         fixTableId.append('<tr id = "fixedTableRow' + fixTableRowCount + '"></tr>');
                         var ThisfixedTableRow = $("#fixedTableRow" + fixTableRowCount);
                         ThisfixedTableRow.css({
+                            'position':'absolute',
                             'border-spacing': 0,
                             'margin': 0,
                             'padding': 0,
                             'top': 0,
-                            'width': thisLabelWidth,
-                            'height': thisLabelHeight,
+                            'width': fixTableWidth,
                             'overflow': 'visible'
                         });
 
@@ -478,14 +485,15 @@ function drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, d
                     }
 
                     function tdDataBinding(ThisfixedTableRow, drawingTds) {
-                        console.log("drawingTds : ", drawingTds);
                         var tdId = 'FixedTableLabel_';
-                        if (rC2 > drawingTds) {
+                        if (rowCount =='1') {
                             drawingTds = labelCount;
                         }
                         for (rC2; rC2 <= drawingTds; rC2++) {
                             var fromData = fixTableLabelList[rC2 - 1];
 
+                            var tdLeft = fromData.rectangle.x;
+                            var tdTop = fromData.rectangle.y;
                             var tdIDMaking = tdId + rC2 + '_' + labelC;
                             var tdIDwithS = $("#" + tdIDMaking);
 
@@ -531,8 +539,8 @@ function drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, d
                                         ('<td class="DataLabel" id = "' + tdId + rC2 + '_' + labelC + '">' +
                                             '<p id="' + tdId + rC2 + '_p_' + labelC + '">' + table_reform + '</p>' +
                                             '</td>');
-                                        settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTableHeight);
-                                        setTable();
+                                        // settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTableHeight);
+                                        // setTable();
                                         var tdId_javascript = $("#" + tdIDMaking);
                                     }
                                     break;
@@ -542,8 +550,8 @@ function drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, d
                                     }
                                     ThisfixedTableRow.append('<td class="NormalLabel" id = "' + tdId + rC2 + '_' + labelC + '">' +
                                         '<p id="' + tdId + rC2 + '_p_' + labelC + '">' + table_format_check(data.Labels, tdIDwithS, fromData.text, fromData) + '</p></td>');
-                                    settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTableHeight);
-                                    setTable();
+                                    // settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTableHeight);
+                                    // setTable();
                                     var tdId_javascript = $("#" + tdIDMaking);
                                     break;
                                 // case "SummaryLabel" :
@@ -553,6 +561,8 @@ function drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, d
                                 //         '<p id="' + tdId + rC2 + '_p_' + fixedTableNum + '">' + table_format_check(data.Labels, tdIDwithS, fromData.text, fromData) + '</p></td>');
                                 //     break;
                             }
+                            settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTableHeight, tdLeft, tdTop);
+                            setTable();
                         }
                     }
                 }
@@ -657,12 +667,13 @@ function drawingFixedTableInDataBand(data, controlFixedTable, fixTableLabelList,
                         var ThisfixedTableRow = $("#fixedTableRow" + fixTableRowCount);
 
                         ThisfixedTableRow.css({
+                            'position':'absolute',
                             'border-spacing': 0,
                             'margin': 0,
                             'padding': 0,
                             'top': 0,
-                            'width': thisLabelWidth,
-                            'height': thisLabelHeight,
+                            //'width': thisLabelWidth,
+                            //'height': thisLabelHeight,
                             'overflow': 'visible'
                         });
 

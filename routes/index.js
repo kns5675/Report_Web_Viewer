@@ -15,7 +15,7 @@ var storage = multer.diskStorage({
 });
 var upload = multer({ storage: storage });
 
-var xml = fs.readFileSync('xml/Sample01.xml', 'utf-8');
+var xml = fs.readFileSync('xml/거래명세서.xml', 'utf-8');
 var json_origin = convert.xml2json(xml, {compact: true});
 var json = json_origin.replace(/\\r/gi, '<br/>'); // 엔터키(\r)를 <br/>로 치환
 // var test = convert.json2xml(json, {compact: true});
@@ -26,11 +26,11 @@ var json = json_origin.replace(/\\r/gi, '<br/>'); // 엔터키(\r)를 <br/>로 �
 //     console.log('The file has been saved!');
 // });
 
-var tempData = fs.readFileSync('xml/TempData.xml', 'utf-8');
+var tempData = fs.readFileSync('xml/거래명세서_Data.xml', 'utf-8');
 // var tempData = fs.readFileSync('xml/GroupParameterData.xml', 'utf-8');
 var dataTable = convert.xml2json(tempData, {compact: true});
 
-var paramData = fs.readFileSync('xml/계정별원장_Param.xml', 'utf-8');
+var paramData = fs.readFileSync('xml/거래명세서_Param.xml', 'utf-8');
 var paramTable = convert.xml2json(paramData, {compact: true});
 
 

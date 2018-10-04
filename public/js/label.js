@@ -37,7 +37,6 @@ function Label(data){
         topDashStyle : (data.BorderDottedLines.TopDashStyle === undefined ? 'Solid' : data.BorderDottedLines.TopDashStyle._text),
         bottomDashStyle : (data.BorderDottedLines.BottomDashStyle === undefined ? 'Solid' : data.BorderDottedLines.BottomDashStyle._text),
     }; // 테두리 점선
-
     this.noBorder = data.NoBorder === undefined ? false : data.NoBorder._text; // 테두리 없음
 
     this.enableBorder = (data.EnableBorder === undefined ? undefined : { // 고정 값이라서 구현할 필요 없을 듯!
