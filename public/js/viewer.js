@@ -611,9 +611,11 @@ function band_dbclick_event(data) {
                         console.log("test");
                         var thid = $("#"+this.id);
                         var titleTrId = $("#"+thid[0].parentElement.id);
-                        console.log("this : ",thid[0].parentElement.id);
-
-                        shift_table_column_controller(thid, titleTrId);
+                        var tableId = $("#"+titleTrId[0].parentElement.id);
+                        var bandId = $("#"+tableId[0].parentElement.id);
+                        console.log("this : ",thid);
+                        console.log("bandId : ",bandId);
+                        // shift_table_column_controller(thid, titleTrId, tableId, bandId);
                     }else{
                         console.log("shift 클릭 안함.");
                     }

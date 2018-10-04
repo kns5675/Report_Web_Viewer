@@ -283,8 +283,6 @@ function drawBandData(groupFieldArray, band, layerName, reportHeight, parentBand
         if (isDynamicTable == true && dt != undefined) {
             avaHeight = getAvaHeight(div_id, reportHeight);
             numofData = getNumOfDataWithGroupField(band, avaHeight);
-
-
             if (band.controlList.anyType.FixRowCount !== undefined) { // 최대 행 개수
                 var maximumRowCount = Number(band.controlList.anyType.FixRowCount._text);
                 if (maximumRowCount != 0) {

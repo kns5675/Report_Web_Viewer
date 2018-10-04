@@ -691,13 +691,32 @@ function reNumbering() {
         } else {
             pageforcopyratio_div_arr.eq(i).removeAttr('id');
             page_div_arr.eq(i).removeAttr('id');
+            // pageforcopyratio_div_arr.eq(i).removeUniqueId();
+            // page_div_arr.eq(i).removeUniqueId();
         }
     }
 
     var total_page_count = $('.visiblePage').length;
 
     $('#TotalPage').text(total_page_count);
+    HeaderFixAndPageScroll(total_page_count);
     LastPage(total_page_count);
     // HeaderFixAndPageScroll(total_page_count);
 
+    // console.log(remove_page_arr);
+    // console.log("============");
+    //
+    // for(var i=0; i<remove_page_arr.length; i++){
+    //     pageforcopyratio_div_arr.splice(remove_page_arr[0], 1);
+    //     page_div_arr.splice(remove_page_arr[0], 1);
+    //     console.log("삭제!");
+    // }
+    //
+    // console.log("pagecory length : " + pageforcopyratio_div_arr.length);
+    // console.log("page length : " + page_div_arr.length);
+    //
+    // for(var i=0; i<pageforcopyratio_div_arr.length; i++){
+    //     pageforcopyratio_div_arr.eq(i).attr('id', 'pageforcopyratio'+(i+1));
+    //     page_div_arr.eq(i).attr('id', 'page'+(i+1));
+    // }
 }
