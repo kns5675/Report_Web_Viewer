@@ -324,7 +324,7 @@ function drawBandData(groupFieldArray, band, layerName, reportHeight, parentBand
 
         } else if (isFixedTable == true && dt != undefined) {
             avaHeight = getAvaHeight(div_id, reportHeight);
-            numofData = getNumOfDataWithGroupFieldInFixedTable(band, avaHeight);
+            // numofData = getNumOfDataWithGroupFieldInFixedTable(band, avaHeight);
         } else { // 테이블이 없을 때
             setWidthHeightInBand(div_id, band);
         }

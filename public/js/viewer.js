@@ -198,7 +198,6 @@ function zoomIn(){
     catch(e) {
         alert("test ==> " + e.message);
     }
-    console.log(size);
 }
 /******************************************************************
  기능 : select option의 선택값을 기본으로 - 버튼 클릭 시 5%가 추가 축소되는
@@ -378,33 +377,40 @@ function imageOptions(export_img){
 }
 /******************************************************************
  기능 : 웹뷰어의 화면을 html2canvas모듈을 이용하여 캡쳐한 후
-        SELECT의 OPTION값에서 받은 이미지의 확장자로 이미지 변환 후,
+        드롭다운에서 받은 이미지의 확장자로 이미지 변환 후,
         로컬로 파일 저장.
  작성자 : 하지연
+ 수정자 : 전형준
+ > 수정내용
+ - SELECT TAG >> DROP DOWN
+ - enumber의 기준 클래스 pageforcopyratio >> visiblePage
+ - 조건문 if(enumber == 1) 부분 주석처리
+ (본래 하지연 팀원이 처음 페이지가 2번 저장되던 문제를 해결하려던 조건문. 문제 없이 작동되어 주석처리 함)
  ******************************************************************/
 function setImageType(typeofimages){
 
-    var enumber = $(".pageforcopyratio").length;
+    var enumber = $(".visiblePage").length;
 
     for(var i=1; i<=enumber; i++){
         drawingCanvas(i);
     }
     function drawingCanvas(enumber){
         html2canvas(document.querySelector("#pageForCopyRatio" + enumber)).then(canvas => {
-            console.log("drawingcanvas안에서 enumber : " + enumber);
-            console.log("html2canvas 안에서 image type : " + typeofimages);
+            // console.log("drawingcanvas안에서 enumber : " + enumber);
+            // console.log("html2canvas 안에서 image type : " + typeofimages);
             document.body.appendChild(canvas);
             //var img = canvas.toDataURL("image/"+ typeofimages).replace("image/"+typeofimages,"image/octet-stream");
             var img = canvas.toDataURL("image/"+ typeofimages);
-            if(enumber==1){
-                window.open().document.write('<img src="' + img + '" />');
-            }
+            // if(enumber==1){
+            //     window.open().document.write('<img src="' + img + '" />');
+            // }
             var a = document.createElement('a');
             //a.href=canvas.toDataURL('image/'+typeofimages).replace("image/"+typeofimages,"image/octet-stream");
             //a.href=canvas.toDataURL('image/'+typeofimages).replace("image/"+typeofimages);
             a.href=img;
             a.download = 'saveAs' + typeofimages+ '.' + typeofimages;
             a.click();
+            canvas.remove();
         });
     }
     $("#saveAsImage").val("--이미지--").attr("selected","selected");
