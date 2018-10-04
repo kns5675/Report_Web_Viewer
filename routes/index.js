@@ -48,28 +48,32 @@ router.get('/', function (req, res) {
 
 router.post('/', upload.array('send_file', 3), function (req, res, next) {
     // res.send('Uploaded! : '+req.file); // object를 리턴함
-    // console.log(req.files[0].filename);
-    var file_name = 'uploads/'+req.files[0].filename;
-    var db_name = 'uploads/'+req.files[1].filename;
-    var param_name = 'uploads/'+req.files[2].filename;
+    if(req.body.file_open_click){
+        console.log(req.body.file_open_click);
+        var file_name = 'uploads/'+req.files[0].filename;
+        var db_name = 'uploads/'+req.files[1].filename;
+        var param_name = 'uploads/'+req.files[2].filename;
 
-    var xml = fs.readFileSync(file_name, 'utf-8');
-    var json_origin = convert.xml2json(xml, {compact: true});
-    var json = json_origin.replace(/\\r/gi, '<br/>');
+        var xml = fs.readFileSync(file_name, 'utf-8');
+        var json_origin = convert.xml2json(xml, {compact: true});
+        var json = json_origin.replace(/\\r/gi, '<br/>');
 
-    var tempData = fs.readFileSync(db_name, 'utf-8');
-    var dataTable = convert.xml2json(tempData, {compact: true});
+        var tempData = fs.readFileSync(db_name, 'utf-8');
+        var dataTable = convert.xml2json(tempData, {compact: true});
 
-    var paramData = fs.readFileSync(param_name, 'utf-8');
-    var paramTable = convert.xml2json(paramData, {compact: true});
+        var paramData = fs.readFileSync(param_name, 'utf-8');
+        var paramTable = convert.xml2json(paramData, {compact: true});
 
-    if(req.files[0]){
-        res.render('index', {
-            layout: false,
-            data: json,
-            dataTable: dataTable,
-            paramTable: paramTable
-        });
+        if(req.files[0]){
+            res.render('index', {
+                layout: false,
+                data: json,
+                dataTable: dataTable,
+                paramTable: paramTable
+            });
+        }
+    }else{  //file 저장 버튼 클릭시
+
     }
 });
 

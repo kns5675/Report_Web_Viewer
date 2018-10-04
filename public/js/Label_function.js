@@ -63,7 +63,7 @@ function Lock_Check_Table(data, drag, resize, div) { //테이블 데이터, 드�
         var width;
         $(function(){
             // $(".JCLRFlex")[0].style.width = "98%";
-            $("#dynamicTable1").colResizable({
+            $(".table").colResizable({
                 resizeMode: 'overflow',
                 liveDrag: true,
                 fixed: true,
@@ -154,7 +154,6 @@ function format_check(data) {
  ******************************************************************/
 function table_format_check(data, Label_id, key, table) {
     var test = table.formatType;
-    console.log("table : ",table);
     var format = table.format;
     // var data_text;
     if (key != NaN) { //해당 데이터가 숫자일 경우
