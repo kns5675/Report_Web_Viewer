@@ -14,14 +14,18 @@ function getFooterHeight(bands, dataBand) {
                 bandDataIndex = i;
             }
             if (i > bandDataIndex) {
-                if (bands[i].attributes['xsi:type'] == 'BandSummary') { // 써머리 밴드는 isBottom이 true일 때만 매 페이지 반복
-                    if (bands.isBottom == 'true') {
+                switch (bands[i].attributes['xsi:type']) {
+                    case 'BandSummary' :
+                        if (bands[i].isBottom == 'true') {
+                            footer_height += Number(bands[i].rectangle.height);
+                        } else if ((bands[i].isBottom == 'false' && curDatarowInDataBand > dt.length) || isDynamicTable == false) {
+                            footer_height += Number(bands[i].rectangle.height);
+                        }
+                        break;
+                    case 'BandSubReport' :
+                        break;
+                    default :
                         footer_height += Number(bands[i].rectangle.height);
-                    } else if ((bands[i].isBottom == 'false' && curDatarowInDataBand > dt.length) || isDynamicTable == false) {
-                        footer_height += Number(bands[i].rectangle.height);
-                    }
-                } else {
-                    footer_height += Number(bands[i].rectangle.height);
                 }
             }
         }

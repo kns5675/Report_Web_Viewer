@@ -102,6 +102,9 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                         }
                     }
                     break;
+                case 'BandSubReport' :
+                    return false;
+                    break;
             }
 
             if (band.childHeaderBands !== null) { // 자식헤더밴드에서 재호출
@@ -164,7 +167,6 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                         drawBandDataInRegion(groupFieldArrayInRegion, band, layerName, reportHeight, parentBand, div_id, dt);
                     } else { // 리전이 아닐 때
                         drawBandData(groupFieldArray, band, layerName, reportHeight, parentBand, div_id, dt);
-                        console.log(numofData);
                     }
                     break;
                 case 'BandDummyFooter' :
@@ -281,6 +283,8 @@ function drawBandData(groupFieldArray, band, layerName, reportHeight, parentBand
         if (isDynamicTable == true && dt != undefined) {
             avaHeight = getAvaHeight(div_id, reportHeight);
             numofData = getNumOfDataWithGroupField(band, avaHeight);
+
+
             if (band.controlList.anyType.FixRowCount !== undefined) { // 최대 행 개수
                 var maximumRowCount = Number(band.controlList.anyType.FixRowCount._text);
                 if (maximumRowCount != 0) {
