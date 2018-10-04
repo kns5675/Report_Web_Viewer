@@ -91,10 +91,10 @@ function Report(data){
     }
 
     this.margin = { // 여백
-        x : data.Margin.X === undefined ? undefined : data.Margin.X._text,//예외처리 지연
-        y : data.Margin.Y === undefined ? undefined : data.Margin.Y._text,//예외처리 지연
-        width : data.Margin.Width === undefined ? undefined : data.Margin.Width._text,//예외처리 지연
-        height : data.Margin.Height === undefined ? undefined : data.Margin.Height._text//예외처리 지연
+        x : data.Margin.X === undefined ? 0 : data.Margin.X._text,
+        y : data.Margin.Y === undefined ? 0 : data.Margin.Y._text,
+        width : data.Margin.Width === undefined ? 0 : data.Margin.Width._text,
+        height : data.Margin.Height === undefined ? 0 : data.Margin.Height._text
     };
     this.paperDirection = data.PaperDirection._text; // 용지 방향
     this.gutter = data.Gutter._text; // 제본용 여백

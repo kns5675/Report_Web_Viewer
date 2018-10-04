@@ -9,6 +9,7 @@
     "async": "^2.6.1",
     "body-parser": "^1.18.3",
     "canvas2image": "^1.0.5",
+    "colresizable": "^1.6.0",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
     "ejs": "^2.6.1",
