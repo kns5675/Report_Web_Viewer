@@ -267,7 +267,7 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
                             }
                         }
                     }
-                    var tdId = $('.' + key);
+                    var tdId = $('#' + key);
                     setCssInTable(label, tdId);
 
                     // drd_javascript(label, tdId, label.startBindScript);
@@ -279,7 +279,7 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
                 valueTrId.append(
                     '<td id = "' + tdId + '" class="' + label.fieldName + ' Label ' + label._attributes + ' ' + label.dataType + '"></td>'
                 );
-                var tdId = $('.' + label.fieldName);
+                var tdId = $('#' + label.fieldName);
                 setCssInTable(label, tdId);
             }
 
@@ -337,7 +337,7 @@ function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, nu
                 valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '"></td>');
             }
 
-            tdId = $('.' + key);
+            tdId = $('#' + tdId);
             setCssInTable(label, tdId);
 
         } else {
@@ -386,7 +386,7 @@ function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, nu
                             }
                         }
                     }
-                    var tdId = $('.' + key);
+                    var tdId = $('#' + tdId);
                     setCssInTable(label, tdId);
                 }
             }
@@ -395,7 +395,7 @@ function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, nu
                 valueTrId.append(
                     '<td id = "' + tdId + '" class="' + label.fieldName + ' Label ' + label._attributes + ' ' + label.dataType + '"></td>'
                 );
-                tdId = $('.' + tdId);
+                tdId = $('#' + tdId);
                 setCssInTable(label, tdId);
             }
         }
@@ -449,7 +449,7 @@ function drawingDynamicTableValueLabelWithGroupFieldArrayWithRegion(label, dt, t
                 'height': label.rectangle.height
             });
 
-            var tdId = $('.' + key);
+            var tdId = $('#' + key);
             setCssInTable(label, tdId);
 
         } else {
@@ -505,7 +505,7 @@ function drawingDynamicTableValueLabelWithGroupFieldArrayWithRegion(label, dt, t
                         }
                     }
 
-                    var tdId = $('.' + key);
+                    var tdId = $('#' + key);
                     setCssInTable(label, tdId);
                 }
             }
@@ -514,7 +514,7 @@ function drawingDynamicTableValueLabelWithGroupFieldArrayWithRegion(label, dt, t
                 valueTrId.append(
                     '<td id = "' + tdId + '" class="' + label.fieldName + ' Label ' + label._attributes + ' ' + label.dataType + '"></td>'
                 );
-                var tdId = $('.' + label.fieldName);
+                var tdId = $('#' + label.fieldName);
                 setCssInTable(label, tdId);
             }
         }
@@ -615,7 +615,7 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArrayWithRegion(label, dt
                 valueTrId.append(
                     '<td id = "' + tdId + '" class="' + label.fieldName + ' Label ' + label._attributes + ' ' + label.dataType + '"></td>'
                 );
-                var tdId = $('.' + label.fieldName);
+                var tdId = $('#' + tdId);
                 setCssInTable(label, tdId);
             }
             tempCurDataRow++;
@@ -648,7 +648,7 @@ function setCssInTable(label, tdId) {
         }
     }
 
-    if(tdId[0]){
+    // if(tdId[0]){
         // $("#"+tdId[0].id)[0].style.padding ="0px";
         tdId.css({
             'background-color': label.backGroundColor,
@@ -661,5 +661,5 @@ function setCssInTable(label, tdId) {
             'white-space': 'nowrap',
             'padding' :'0px'
         });
-    }
+    // }
 }
