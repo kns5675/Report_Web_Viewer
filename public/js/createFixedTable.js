@@ -130,14 +130,21 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                     }
                                     break;
                                 case  "NormalLabel" :
+                                    if(fromData.text === undefined){
+                                        fromData.text = ' ';
+                                        var showDataLabel;
+                                        showDataLabel = fromData.text;
+                                    }else if(fromData.text !== undefined){
+                                        var showDataLabel;
+                                        showDataLabel = fromData.text;
+                                    }
                                     ThisfixedTableRow.append('<td class="NormalLabel" id = "' + tdId + rC2 + '_' + labelC + '">' +
-                                        '<p id="' + tdId + rC2 + '_p_' + labelC + '">' + table_format_check(data.Labels, tdIDwithS, fromData.text, fromData) + '</p></td>');
+                                        '<p id="' + tdId + rC2 + '_p_' + labelC + '">' + table_format_check(data.Labels, tdIDwithS, showDataLabel, fromData) + '</p></td>');
                                     settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTableHeight, tdLeft, tdTop);
                                     var tdId_javascript = $("#" + tdIDMaking);
                                     break;
                                 case "SummaryLabel" :
                                     //console.log("SummaryLabel 들어왔음", " 1 : ", data.Labels, " 2 : ", fromData.text, " 3 : ", fromData);
-                                    //console.log("tdLeft, tdTop : ", tdLeft, tdTop);
                                     fromData.summaryType = fromData.SummaryType === undefined ? 'Sum' : fromData.SummaryType._text;//요약타입
                                     fromData.detailWhere = fromData.DetailWhere === undefined ? undefined : fromData.DetailWhere._text; //요약라벨 조건절
                                     fromData.fieldName = fromData.fieldName === undefined ? undefined : fromData.fieldName;//필드이름.
@@ -160,17 +167,17 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                             var summary_label_sum = 0;
                                             if (groupFieldArray.length !== 0) {//기준필드 있을때
                                                 for (var i = 0; i < groupFieldArray[groupFieldNum].length - 1; i++) {
-                                                    //console.log("기준필드 있을때 i : ", i);
+                                                    // console.log("기준필드 있을때 i : ", i);
                                                     summary_label_sum += Number(groupFieldArray[groupFieldNum][i + 1][key]._text);
                                                 }
                                             } else {//기준필드없을때
                                                 for (var i = 0; i < dt.length; i++) {
-                                                    //console.log("기준필드 없을때 i : ", i);
-                                                    //console.log("dt : ", dt[i]);
-                                                    // console.log("이게 찍히나몰라..",Number(dt[i][key])); //안나옴..
-                                                    //summary_label_sum += Number(dt[i][key]._text);
-                                                    //console.log("!!key : ", key);
-                                                    //console.log("summary_label_sum : ", Number(dt[i][key]));
+                                                    // console.log("기준필드 없을때 i : ", i);
+                                                    // console.log("dt : ", dt[i]);
+                                                     //console.log("이게 찍히나몰라..",Number(dt[i][key])); //안나옴..
+                                                    //summary_label_sum += Number(dt[i][key]._text);//얘도 안됌
+                                                    // console.log("!!key : ", key);
+                                                    // console.log("summary_label_sum : ", Number(dt[i][key]));
                                                 }
                                             }
 
@@ -178,7 +185,7 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                             if (isNaN(Number(fromData.text))) {
                                                 fromData.text = "오류";
                                             }
-                                            //console.log("합계임여");
+                                            // console.log("합계임여");
                                             break;
                                         case 'Avg' : //평균
                                             var summary_label_sum = 0;
@@ -199,7 +206,7 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                             if (isNaN(Number(fromData.text))) {
                                                 fromData.text = "오류!";
                                             }
-                                            // console.log("평균임여");
+                                             // console.log("평균임여");
                                             break;
                                         case 'Max' :
                                             // console.log("최대값 임여");
