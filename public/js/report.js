@@ -684,7 +684,7 @@ function reNumbering() {
     for (var i = 0; i < pageforcopyratio_div_arr.length; i++) {
         // console.log(i);
         if (pageforcopyratio_div_arr.eq(i).css('display') !== 'none') {
-            pageforcopyratio_div_arr.eq(i).attr('id', 'pageforcopyratio' + (cnt));
+            pageforcopyratio_div_arr.eq(i).attr('id', 'pageForCopyRatio' + (cnt));
             page_div_arr.eq(i).attr('id', 'page' + (cnt));
             cnt++;
         } else {

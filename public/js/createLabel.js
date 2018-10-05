@@ -509,8 +509,8 @@ function drawingParameterLabel(data, divId, band_name) {
  ******************************************************************/
 function resize_event_reSetting() {
     after_Lock_check();
-    after_Lock_Check_Table();
-    after_table_column_controller();
+    // after_Lock_Check_Table();
+    // after_table_column_controller();
 }
 
 /******************************************************************
@@ -1114,6 +1114,7 @@ function labelPropertyApply(labelNbandInfo) {
     labelNbandInfo.labelId.css({
         'width': labelNbandInfo.data.rectangle.width,
         'height': labelNbandInfo.data.rectangle.height,
+        'box-sizing' : 'border-box',
         'position': 'absolute',
         'left': labelNbandInfo.data.rectangle.x + 'px',
         'top': labelNbandInfo.data.rectangle.y + 'px',
