@@ -126,8 +126,6 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                         ('<td class="DataLabel" id = "' + tdId + rC2 + '_' + labelC + '">' +
                                             '<p id="' + tdId + rC2 + '_p_' + labelC + '">' + table_reform + '</p>' +
                                             '</td>');
-                                        // settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTableHeight);
-                                        // setTable();
                                         var tdId_javascript = $("#" + tdIDMaking);
                                     }
                                     break;
@@ -135,15 +133,11 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                     ThisfixedTableRow.append('<td class="NormalLabel" id = "' + tdId + rC2 + '_' + labelC + '">' +
                                         '<p id="' + tdId + rC2 + '_p_' + labelC + '">' + table_format_check(data.Labels, tdIDwithS, fromData.text, fromData) + '</p></td>');
                                     settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTableHeight, tdLeft, tdTop);
-                                    //setTable();
-                                    // settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTableHeight);
-                                    // setTable();
                                     var tdId_javascript = $("#" + tdIDMaking);
                                     break;
                                 case "SummaryLabel" :
-                                    console.log("SummaryLabel 들어왔음", " 1 : ", data.Labels, " 2 : ", fromData.text, " 3 : ", fromData);
-                                    console.log("tdLeft, tdTop : ", tdLeft, tdTop);
-                                    // console.log("써머리 타입이 없나봐..",fromData.SummaryType);
+                                    //console.log("SummaryLabel 들어왔음", " 1 : ", data.Labels, " 2 : ", fromData.text, " 3 : ", fromData);
+                                    //console.log("tdLeft, tdTop : ", tdLeft, tdTop);
                                     fromData.summaryType = fromData.SummaryType === undefined ? 'Sum' : fromData.SummaryType._text;//요약타입
                                     fromData.detailWhere = fromData.DetailWhere === undefined ? undefined : fromData.DetailWhere._text; //요약라벨 조건절
                                     fromData.fieldName = fromData.fieldName === undefined ? undefined : fromData.fieldName;//필드이름.
@@ -155,28 +149,28 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                     key_arr.forEach(function (obj) {//key값 설정
                                         if (fromData.fieldName == obj) {
                                             key = obj;
-                                            console.log("key : ", key);
+                                            //console.log("key : ", key);
                                             return;
                                         }
                                     });
-                                    console.log("서머리타입이..", fromData.summaryType);
+                                    //console.log("서머리타입이..", fromData.summaryType);
 
                                     switch (fromData.summaryType) {
                                         case 'Sum' : //합계
                                             var summary_label_sum = 0;
                                             if (groupFieldArray.length !== 0) {//기준필드 있을때
                                                 for (var i = 0; i < groupFieldArray[groupFieldNum].length - 1; i++) {
-                                                    console.log("기준필드 있을때 i : ", i);
+                                                    //console.log("기준필드 있을때 i : ", i);
                                                     summary_label_sum += Number(groupFieldArray[groupFieldNum][i + 1][key]._text);
                                                 }
                                             } else {//기준필드없을때
                                                 for (var i = 0; i < dt.length; i++) {
-                                                    console.log("기준필드 없을때 i : ", i);
-                                                    console.log("dt : ", dt[i]);
+                                                    //console.log("기준필드 없을때 i : ", i);
+                                                    //console.log("dt : ", dt[i]);
                                                     // console.log("이게 찍히나몰라..",Number(dt[i][key])); //안나옴..
                                                     //summary_label_sum += Number(dt[i][key]._text);
-                                                    console.log("!!key : ", key);
-                                                    console.log("summary_label_sum : ", Number(dt[i][key]));
+                                                    //console.log("!!key : ", key);
+                                                    //console.log("summary_label_sum : ", Number(dt[i][key]));
                                                 }
                                             }
 
@@ -184,8 +178,7 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                             if (isNaN(Number(fromData.text))) {
                                                 fromData.text = "오류";
                                             }
-
-                                            console.log("합계임여");
+                                            //console.log("합계임여");
                                             break;
                                         case 'Avg' : //평균
                                             var summary_label_sum = 0;
@@ -206,19 +199,19 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                             if (isNaN(Number(fromData.text))) {
                                                 fromData.text = "오류!";
                                             }
-                                            console.log("평균임여");
+                                            // console.log("평균임여");
                                             break;
                                         case 'Max' :
-                                            console.log("최대값 임여");
+                                            // console.log("최대값 임여");
                                             break;
                                         case 'Min' :
-                                            console.log("최소값 임여");
+                                            // console.log("최소값 임여");
                                             break;
                                         case 'Cnt' :
-                                            console.log("개수 임여");
+                                            // console.log("개수 임여");
                                             break;
                                         default : //none
-                                            console.log("default 임여");
+                                            // console.log("default 임여");
                                             break;
 
                                     }
@@ -226,7 +219,7 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                     if (groupFieldArray !== undefined) {
                                         if (fromData.fieldName !== undefined) {
                                             var fieldName = fromData.fieldName;
-                                            console.log("fieldName : ", fieldName);
+                                            // console.log("fieldName : ", fieldName);
 
                                             if (groupFieldArray[groupFieldNum]) {
                                                 if (groupFieldArray[groupFieldNum][1][fieldName]) {
@@ -243,7 +236,7 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                             }
                                         }
                                         if (typeof showDataLabel === 'undefined') {
-                                            console.log("여기");
+                                            // console.log("여기");
                                             showDataLabel = ' ';
                                         }
                                         var table_reform = table_format_check(data.Labels, tdIDwithS, showDataLabel, fromData);
@@ -366,53 +359,12 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
                 'border-bottom': bottomThickness + 'px ' + bottomBorderStyle +' '+ bottomBorderColor,
                 'border-right': rightThickness + 'px ' + rightBorderStyle +' '+ rightBorderColor,
                 'border-left': leftThickness + 'px ' + leftBorderStyle +' '+ leftBorderColor,
-                //'border': topThickness + 'px ' + leftBorderStyle + ' ' + fromData.leftBorderColor,
                 'border-collapse': 'collapse',
                 'border-spacing': '0px',
                 'white-space': 'nowrap',
                 'color': fromData.textColor,
                 'overflow': 'visible',
             });
-
-            /*fixTableId.css({
-                'border': (topThickness/2) + 'px ' + leftBorder +' ' + fromData.leftBorderColor,
-                'border-collapse':'collapse',
-                'width': fixTableWidth,
-                'height': fixTableHeight,
-            });*/
-
-            /*else {
-               console.log("@@2 ");
-               ThisFixedTableData.css({
-                   'border-left': leftThickness + 'px ' + leftBorderStyle + ' ' + fromData.leftBorderColor,
-                   'border-right': rightThickness + 'px ' + rightBorderStyle + ' ' + fromData.rightBorderColor,
-                   'border-bottom': bottomThickness + 'px ' + bottomBorderStyle + ' ' + fromData.bottomBorderColor,
-                   'border-top': topThickness + 'px ' + topBorderStyle + ' ' + fromData.topBorderColor
-               });
-               var borderLWidth = ThisFixedTableData.css('border-left-width').split('px')[0];
-               var borderRWidth = ThisFixedTableData.css('border-right-width').split('px')[0];
-               var borderTWidth = ThisFixedTableData.css('border-top-width').split('px')[0];
-               var borderBWidth = ThisFixedTableData.css('border-bottom-width').split('px')[0];
-
-               ThisFixedTableData.css({
-                   'width': (width - leftThickness - rightThickness) + 'px',
-                   'height': (height - topThickness - bottomThickness) + 'px',
-                   'float': 'left',
-                   'background-color': fromData.backGroundColor,
-                   'font-size': fromData.fontSize,
-                   'font-family': fromData.fontFamily,
-                   'font-weight': fromData.fontStyle,
-                   'padding': 0,
-                   'border-collapse': 'collapse',
-                   'white-space': 'nowrap',
-                   'color': fromData.textColor,
-                   'overflow': 'visible'
-               });
-               /!*ThisFixedTableDataP.css({
-                   'width': (width - (leftThickness*2) - rightThickness) + 'px',
-                   'height': (height - topThickness - bottomThickness) + 'px'
-               });*!/
-           }*/
         }
     }
 
@@ -440,12 +392,6 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
                 'white-space': 'normal'
             })
         } else if (Text == 'Horizontal') {
-
-            /*ThisFixedTableDataP.css({
-                'width': (width - leftThickness * 2) + 'px',
-                'height': (height - topThickness * 2) + 'px'
-            });*/
-
         }
     }
 
