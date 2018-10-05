@@ -991,7 +991,7 @@ function drawChildFooterBand(band, layerName, reportHeight) {
                     childFooterBandArray.push(childBand); // 매 페이지마다 나와야 함
                 } else {
                     if (band.fixTitle == 'true') { // 데이터 헤더 밴드 고정 값이 '예'일 때
-                        childFooterBandArray.push(childBand); // 매 페이지마다 나와야 함
+                        // childFooterBandArray.push(childBand); // 매 페이지마다 나와야 함
                     } else { // 데이터 헤더 밴드 고정 값이 '아니오'일 때
                         if (isRegion) { // 리전일 때
                             if (curDatarowInRegion >= dt.length || isDynamicTable == false) { // 데이터 출력이 끝났을 때 나옴
