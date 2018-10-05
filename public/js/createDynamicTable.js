@@ -267,7 +267,7 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
                             }
                         }
                     }
-                    var tdId = $('#' + key);
+                    var tdId = $('#' + tdId);
                     setCssInTable(label, tdId);
 
                     // drd_javascript(label, tdId, label.startBindScript);
@@ -279,7 +279,7 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
                 valueTrId.append(
                     '<td id = "' + tdId + '" class="' + label.fieldName + ' Label ' + label._attributes + ' ' + label.dataType + '"></td>'
                 );
-                var tdId = $('#' + label.fieldName);
+                var tdId = $('#' + tdId);
                 setCssInTable(label, tdId);
             }
 
