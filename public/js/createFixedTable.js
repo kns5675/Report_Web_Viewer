@@ -4,7 +4,7 @@
  ******************************************************************/
 function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList) {
     if (data.IsApprovalBox._text == "true") {
-        console.log("결재란");//결재란일 경우 처리 여기에. 코드 정리 필요..
+        // console.log("결재란");//결재란일 경우 처리 여기에. 코드 정리 필요..
     }
     var div = $('#' + divId);//divId = 밴드
     div.css('position', 'relative');
@@ -96,39 +96,27 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                     if (groupFieldArray !== undefined) {
                                         if (fromData.fieldName !== undefined) {
                                             var fieldName = fromData.fieldName;
-
                                             if (fieldName == groupFieldName) {
                                                 if (groupFieldArray[groupFieldNum]) {
                                                     var showDataLabel = groupFieldArray[groupFieldNum][0];
-                                                    if (showDataLabel !== undefined) {
-                                                        showDataLabel = showDataLabel
-                                                    }
-                                                    if (showDataLabel === 'undefined') {
-                                                        showDataLabel = ' ';
-                                                    }
-                                                    if (typeof showDataLabel == undefined) {
+                                                    if (showDataLabel === undefined) {
                                                         showDataLabel = ' ';
                                                     }
                                                 }
                                             } else {
                                                 if (groupFieldArray[groupFieldNum]) {
-                                                    if (groupFieldArray[groupFieldNum][1][fieldName]) {
-                                                        var showDataLabel = groupFieldArray[groupFieldNum][1][fieldName]._text;
-                                                        if (showDataLabel !== undefined) {
-                                                            showDataLabel = showDataLabel
-                                                        }
-                                                        if (typeof showDataLabel === 'undefined') {
-                                                            showDataLabel = ' ';
-                                                        }
+                                                    if (groupFieldArray[groupFieldNum][1][fieldName] !== undefined) {
+                                                        var showDataLabel;
+                                                        showDataLabel = groupFieldArray[groupFieldNum][1][fieldName]._text;
+                                                    } else {
+                                                        showDataLabel = ' ';
                                                     }
                                                 } else {
-                                                    console.log("그룹풋터밴드에 해당하는 총계나 그런애들에 대한 자바스크립트..? 처리가 필요함");
+                                                    // console.log("그룹풋터밴드에 해당하는 총계나 그런애들에 대한 자바스크립트..? 처리가 필요함");
                                                 }
                                             }
                                         }
-                                        if (typeof showDataLabel === 'undefined') {
-                                            showDataLabel = ' ';
-                                        }
+
                                         var table_reform = table_format_check(data.Labels, tdIDwithS, showDataLabel, fromData);
                                         ThisfixedTableRow.append
                                         ('<td class="DataLabel" id = "' + tdId + rC2 + '_' + labelC + '">' +

@@ -38,7 +38,6 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData, band) {
         'top': table.rectangle.y + 'px',
     });
 
-
     var tableId = $('#dynamicTable' + dynamicTableNum);
     Lock_Check_Table(table, dynamicTable_resizing_div, tableId, div);
     // table_format_check(table, dynamicTable_resizing_div, tableId, div);
@@ -273,17 +272,14 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
                     // drd_javascript(label, tdId, label.startBindScript);
                 }
             }
-            console.log(isData);
             if(!isData){  // Label은 있지만 데이터가 없을 때
-                var tdId = 'tableValueLabelNum' + tableValueLabelNum++
+                var tdId = 'tableValueLabelNum' + tableValueLabelNum++;
                 valueTrId.append(
                     '<td id = "' + tdId + '" class="' + label.fieldName + ' Label ' + label._attributes + ' ' + label.dataType + '"></td>'
                 );
                 var tdId = $('#' + tdId);
                 setCssInTable(label, tdId);
             }
-
-
             tempCurDataRow++;
         }
     }
@@ -417,7 +413,6 @@ function drawingDynamicTableValueLabelWithGroupFieldArrayWithRegion(label, dt, t
         var temp = j;
 
         var rowNum = curDatarow + j;
-
         if (minimumRow && data[j] === undefined) {
             temp = data.length - 1;
             rowNum += 'min';
@@ -462,7 +457,7 @@ function drawingDynamicTableValueLabelWithGroupFieldArrayWithRegion(label, dt, t
                     var table_reform = table_format_check(data, valueTrId, key_data, label);
 
                     var tdId = 'tableValueLabelNum' + tableValueLabelNum++;
-                    if (minimumRow && (j > data.length)) {
+                    if (minimumRow && (j >= data.length)) {
                         valueTrId.append(
                             '<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '"></td>'
                         );

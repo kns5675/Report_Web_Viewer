@@ -3,12 +3,12 @@
         display: none;
     }
 
-    body {
+    * {
         -webkit-print-color-adjust: exact;
     }
 
     @page {
-        size: auto;
+        size: auto A4 landscape;
         margin: 0mm;
     }
 
@@ -20,5 +20,8 @@
     div.page.paperType-B4 {
         page-break-after: always;
         page: B4;
+    }
+    #BrowserPrintDefaults {
+        display: none;
     }
 }
