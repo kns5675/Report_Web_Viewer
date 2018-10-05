@@ -238,7 +238,6 @@ function getNumOfDataInOnePageNonObjectInFixedTable(band, divId) {
     if (Array.isArray(band.controlList.anyType)) {
         band.controlList.anyType.forEach(function (anyType) {
             if (anyType._attributes['xsi:type'] == 'ControlFixedTable' && anyType.Labels !== undefined) {
-                console.log(anyType.Rectangle);
                 if (anyType.Rectangle.Height !== undefined) {
                     fixedTableHeight = Number(anyType.Rectangle.Height._text);
                 }
@@ -251,7 +250,6 @@ function getNumOfDataInOnePageNonObjectInFixedTable(band, divId) {
     }
 
     var numofData = Math.floor(bandDataHeight / fixedTableHeight);
-
     if (numofData > dt.length) {
         return dt.length;
     } else {

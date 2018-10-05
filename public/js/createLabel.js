@@ -75,7 +75,7 @@ function judgementControlList(band, divId, numOfData) {
 
  수정 : 하지연
  날짜 : 2018-09-18
- 수정 내용 : 고정테이블 else if 부분 수정
+ 수정 내용 : 고정테이블 부분 수정
  ******************************************************************/
 function judgementLabel(data, divId, numOfData, band) {
     var attr = data._attributes["xsi:type"];

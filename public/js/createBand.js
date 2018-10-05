@@ -87,3 +87,27 @@ function CreateBand(band, parentBand){
 }
 /*********************************************************************
 *********************************************************************/
+
+function setMasterBandNSubBand(input_bands){
+    input_bands.forEach(function(input_band) {
+
+        // 데이터 밴드가 아니라면 조기리턴
+        if (input_band.attributes["xsi:type"] !== "BandData"){
+            return;
+        }
+
+        // masterBand를 갖는 데이터밴드의 masterBand에 subBand를 만들어줌
+        // hasSubBand 변수를 true로 세팅, subBandArr 변수에 서브밴드 객체들을 넣어줌
+        if(input_band.masterBandName !== undefined){
+            input_bands.forEach(function(band, index){
+                if(input_band.masterBandName === band.name){
+                    input_bands[index].hasSubBand = true;
+                    input_bands[index].subBandArr =
+                        (input_bands[index].subBandArr === undefined ? [] : input_bands[index].subBandArr);
+                    input_bands[index].subBandArr.push(input_band);
+                }
+            });
+        }
+    });
+    return input_bands;
+}

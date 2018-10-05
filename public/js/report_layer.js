@@ -127,6 +127,7 @@ function Layer(data){
     this.isActive = data.IsActive._text;
     this.isVisible = data.IsVisible === undefined ? undefined : data.IsVisible._text;
     this.bands = CreateBandArray(data.Bands); // 각 Layer가 갖고 있는 Bands
+    this.bands = setMasterBandNSubBand(this.bands);
 }
 /***************************************************************************
  ***************************************************************************/

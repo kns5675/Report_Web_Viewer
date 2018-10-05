@@ -21,7 +21,6 @@ function Band(data){
         width : data.Rectangle.Width._text,
         height : (data.Rectangle.Height === undefined ? "0" : data.Rectangle.Height._text)
     };
-
     this.bandYOrder = data.BandYOrder._text;
     // 아마 밴드 위치 설정하기 위한 옵션인 듯
     // 디자이너에서만 사용되고 뷰어에는 불필요한 옵션인 듯
@@ -117,6 +116,9 @@ function BandData(band){
     this.invisible = band.Invisible._text; // 감추기
     this.fixPriorGroupHeader = band.FixPriorGroupHeader._text; // 상위 그룹 헤더 고정
     this.fixPriorGroupFooter = band.FixPriorGroupFooter._text; // 상위 그룹 풋터 고정
+    this.masterBandName = band.MasterBandName === undefined ? undefined : band.MasterBandName._text;
+    this.hasSubBand = false;
+    this.subBandArr = undefined;
     this.autoSize = band.AutoSize._text; // 자동 높이 조정
     this.repeatNumber = band.RepeatNumber._text; // 반복 횟수
     this.dziName = band.DziName === undefined ? undefined : band.DziName._text; // 데이터 셋 이름
