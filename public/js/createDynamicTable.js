@@ -273,7 +273,6 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
                     // drd_javascript(label, tdId, label.startBindScript);
                 }
             }
-            console.log(isData);
             if(!isData){  // Label은 있지만 데이터가 없을 때
                 var tdId = 'tableValueLabelNum' + tableValueLabelNum++
                 valueTrId.append(

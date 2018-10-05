@@ -42,9 +42,6 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
     bands.some(function (band) {
         var doneDataBand = false;
         completeDataBand.forEach(function (compareDataBand) {
-            // if (getAvaHeight(div_id, reportHeight) < Number(band.rectangle.height)) {
-            //     doneDataBand = true;
-            // }
             if (compareDataBand == band.id) {
                 doneDataBand = true;
             }
@@ -268,8 +265,25 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
             if (band.childFooterBands !== null) { // 자식 풋터 밴드에서 재호출
                 drawChildFooterBand(band, layerName, reportHeight); // 자식 밴드를 그려주는 함수 호출
             }
-        }
+
+            if (band.attributes["xsi:type"] === "BandData") {
+                dt = dataTable.DataSetName[ingDataTableName];
+                dataBanIinitialize(band, dt);
+            }
+
+
+            }
     });
+}
+
+function dataBanIinitialize(band, dt){
+
+    if (dt != undefined && curDatarowInDataBand >= dt.length) {
+        curDatarowInDataBand = 0;
+        tableLabelList = [];
+        completeDataBand.push(band.id);
+        ingDataTableName = undefined;
+    }
 }
 
 /***********************************************************
@@ -654,30 +668,31 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
                 }
             } else { // 리전이 아닐 때
                 if (groupFieldArray.length > 0 && band.childHeaderBands !== null) {
-                    if (isDynamicTable == true && dt != undefined && numofData > 0) {
+                    if (isDynamicTable == true && dt != undefined && numofData > 0) { //그룹일 경우
                         var dataCount = groupFieldArray[groupFieldNum].length;
                         var groupRemainData = (dataCount - groupDataRow);
-                        if (numofData - groupDataRow >= groupRemainData /*|| groupDataRow == 1*/) { // 마지막 페이지
-                            if(curDatarowInDataBand >= dt.length){
-                                curDatarow += groupFieldArray[groupFieldNum].length - 1;
-                                curDatarowInDataBand = 0;
-                                remainData = false;
-                                completeDataBand.push(band.id);
-                                ingDataTableName = undefined;
-                            }else{
+                        if(groupDataRow >= numofData){
+                            if (numofData >= groupRemainData) { // 마지막 페이지
                                 curDatarow += groupFieldArray[groupFieldNum].length - 1;
                                 curDatarowInDataBand += groupFieldArray[groupFieldNum].length - 1;
                                 remainData = false;
                                 ingDataTableName = band.dataTableName;
-                            }
-                        } else { //마지막 페이지가 아닌 경우
-                            remainData = true;
-                            // if (numofData > groupDataRow) {
+                            }else{ //첫 페이지 or 중간 페이지
+                                remainData = true;
                                 groupDataRow += (numofData - groupDataRow);
-                            // } else {
-                            //     groupDataRow += numofData - 1;
-                            // }
-                            ingDataTableName = band.dataTableName;
+                                ingDataTableName = band.dataTableName;
+                            }
+                        }else{
+                            if (numofData + groupDataRow > dataCount) { // 마지막 페이지
+                                curDatarow += groupFieldArray[groupFieldNum].length - 1;
+                                curDatarowInDataBand += groupFieldArray[groupFieldNum].length - 1;
+                                remainData = false;
+                                ingDataTableName = band.dataTableName;
+                            } else { //마지막 페이지가 아닌 경우
+                                remainData = true;
+                                groupDataRow += (numofData - groupDataRow);
+                                ingDataTableName = band.dataTableName;
+                            }
                         }
                     } else if (isFixedTable == true && dt != undefined && numofData > 0) { // TODO 뭔가 이상해..
                         var dataCount = groupFieldArray[groupFieldNum].length;
@@ -709,16 +724,8 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
                     if (isDynamicTable == true && dt != undefined && numofData > 0) {
                         curDatarowInDataBand += numofData;
                         curDatarow += numofData;
-                        if (curDatarowInDataBand >= dt.length) {
-                            remainData = false;
-                            curDatarowInDataBand = 0;
-                            tableLabelList = [];
-                            completeDataBand.push(band.id);
-                            ingDataTableName = undefined;
-                        } else {
-                            remainData = true;
-                            ingDataTableName = band.dataTableName;
-                        }
+                        ingDataTableName = band.dataTableName;
+
                         if (band.controlList.anyType.MinimumRowCount !== undefined) {
                             var minimumRowCount = Number(band.controlList.anyType.MinimumRowCount._text);
                             if (minimumRowCount != 1 && (dt.length - curDatarowInDataBand) < minimumRowCount) {
@@ -845,7 +852,9 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
                                     band.push(arg);
                                     return band;
                                 })(parentBand);
-                                drawBand(parentBand, layerName, reportHeight, band);
+                                if(curDatarowInDataBand < dt.length){
+                                    drawBand(parentBand, layerName, reportHeight, band);
+                                }
                             }
                         }
                     }

@@ -212,6 +212,8 @@ function getNumOfDataInOnePageNonObject(band, divId) {
 
     if (numofData > dt.length) {
         return dt.length;
+    }else if(curDatarowInDataBand + numofData > dt.length){
+        return dt.length - curDatarowInDataBand;
     } else {
         return numofData;
     }
