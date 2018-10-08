@@ -141,6 +141,8 @@ function makeReport(report, arrRegion) {
 
     pageNum++;
 
+    console.log(curDatarowInDataBand);
+    console.log(ingDataTableName);
     // 현재 찍힌 데이터 로우 행이 전체 데이터 보다 작을 경우 재귀함수
     // 클 경우 함수 종료 후 다음 리포트 생성
     if (dataTable.DataSetName[ingDataTableName] != undefined) {

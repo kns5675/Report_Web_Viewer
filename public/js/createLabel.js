@@ -114,24 +114,23 @@ function judgementLabel(data, divId, numOfData, band, dt) {
 
             if(band.attributes['xsi:type'] !== 'BandDataFooter'){// 하지연 추가
                 for (var i = 0; i < numOfData; i++) {
-                console.log("numOfData : ",numOfData);
-                var fixedTableDivId = divId + 'fixedTable' + (curDatarow + i);
+                    var fixedTableDivId = divId + 'fixedTable' + (curDatarow + i);
 
-                if (band.attributes['xsi:type'] === 'BandData') {
-                    if (isRegion) {
-                        drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, fixedTableDivId, curDatarowInRegion, fixTableList, band);//numOfData추가. // YeSol > band 추가
+                    if (band.attributes['xsi:type'] === 'BandData') {
+                        if (isRegion) {
+                            drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, fixedTableDivId, curDatarowInRegion, fixTableList, band);//numOfData추가. // YeSol > band 추가
+                        } else {
+                            drawingFixedTableInDataBand(data, controlFixedTable, fixTableLabelList, fixedTableDivId, curDatarowInDataBand, fixTableList, band);//numOfData추가. // YeSol > band 추가
+                        }
                     } else {
-                        drawingFixedTableInDataBand(data, controlFixedTable, fixTableLabelList, fixedTableDivId, curDatarowInDataBand, fixTableList, band);//numOfData추가. // YeSol > band 추가
-                    }
-                } else {
-                    if (isRegion) {
-                        drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList, band);//numOfData추가. // YeSol > band 추가
-                    } else {
-                        drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList, band);//numOfData추가. // YeSol > band 추가
+                        if (isRegion) {
+                            drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList, band);//numOfData추가. // YeSol > band 추가
+                        } else {
+                            drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList, band);//numOfData추가. // YeSol > band 추가
+                        }
                     }
                 }
-            }
-            }else{//밴드 데이터 풋터일때는 for문 안돌리게
+            } else {//밴드 데이터 풋터일때는 for문 안돌리게
                 if (isRegion) {
                     drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList);
                 } else {

@@ -282,19 +282,19 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
             }
 
             if (band.attributes["xsi:type"] === "BandData") {
-                dataBanIinitialize(band, dt);
+                if (!band.masterBandName) {
+                    dataBandInitialize(band, dt);
+                }
+                tableLabelList = [];
             }
-
-
-            }
+        }
     });
 }
 /***********************************************************
  기능 : 데이터 밴드 출력이 끝난 뒤에 데이터 밴드 출력 필요한 변수 초기화
  만든이 : 구영준
  * *********************************************************/
-function dataBanIinitialize(band, dt){
-
+function dataBandInitialize(band, dt){
     if (dt != undefined && curDatarowInDataBand >= dt.length) {
         curDatarowInDataBand = 0;
         tableLabelList = [];
@@ -353,6 +353,7 @@ function drawBandData(groupFieldArray, band, layerName, reportHeight, parentBand
 
         } else if (isFixedTable == true && dt != undefined) {
             avaHeight = getAvaHeight(div_id, reportHeight);
+            numofData = 1;
             var divId = $('#' + div_id);
             divId.css({
                 'width': band.rectangle.width,
@@ -589,8 +590,8 @@ function joinDt(band, parentBand){
                         for (keyInSubBand in subBandData) {
                             if (subBandString == keyInSubBand) {
                                 if (masterBandData[keyInMasterBand]._text == subBandData[keyInSubBand]._text) {
-                                    if (groupFieldArray !== undefined && subBandData[keyInSubBand]._text == groupFieldArray[groupFieldNum][0]) {
-                                        band.whereTerms = groupFieldArray[groupFieldNum][0];
+                                    if (groupFieldArray !== undefined && subBandData[keyInSubBand]._text == groupFieldArray[groupFieldNum - 1][0]) {
+                                        band.whereTerms = groupFieldArray[groupFieldNum - 1][0];
                                         // parentBand.whereTerms = groupFieldArray[groupFieldNum][0];
                                         band.subBandFieldName = subBandString;
 
@@ -607,9 +608,9 @@ function joinDt(band, parentBand){
                     for (keyInSubBand in dataTable.DataSetName[band.dataTableName]) {
                         if (subBandString == keyInSubBand) {
                             if (masterBandData[keyInMasterBand]._text == dataTable.DataSetName[band.dataTableName][keyInSubBand]._text) {
-                                if (groupFieldArray !== undefined && dataTable.DataSetName[band.dataTableName][keyInSubBand]._text == groupFieldArray[groupFieldNum][0]) {
-                                    band.whereTerms = groupFieldArray[groupFieldNum][0];
-                                    parentBand.whereTerms = groupFieldArray[groupFieldNum][0];
+                                if (groupFieldArray !== undefined && dataTable.DataSetName[band.dataTableName][keyInSubBand]._text == groupFieldArray[groupFieldNum - 1][0]) {
+                                    band.whereTerms = groupFieldArray[groupFieldNum - 1][0];
+                                    parentBand.whereTerms = groupFieldArray[groupFieldNum - 1][0];
                                     band.subBandFieldName = subBandString;
 
                                 } else if (groupFieldArray === undefined) {
@@ -640,6 +641,7 @@ function joinDt(band, parentBand){
             }
         }
     }
+    console.log(joinDataTable);
     return joinDataTable;
 }
 
@@ -898,36 +900,43 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
                             }
                         }
                     } else if (isFixedTable == true && dt != undefined && numofData > 0) { // TODO 뭔가 이상해..
-                        var dataCount = groupFieldArray[groupFieldNum].length;
-                        var groupRemainData = (dataCount - groupDataRow);
-                        if (numofData > groupRemainData) { // 마지막 페이지
-                            if(curDatarowInDataBand >= dt.length) {
-                                curDatarow += groupFieldArray[groupFieldNum].length - 1;
-                                curDatarowInDataBand = 0;
-                                remainData = false;
-                                completeDataBand.push(band.id);
-                                // ingDataTableName = undefined;
-                            }else{
-                                curDatarow += groupFieldArray[groupFieldNum].length - 1;
-                                curDatarowInDataBand += groupFieldArray[groupFieldNum].length - 1;
-                                remainData = false;
-                                ingDataTableName = band.dataTableName;
-                            }
-                        } else { //마지막 페이지가 아닌 경우
-                            remainData = true;
-                            if (numofData > groupDataRow) {
-                                groupDataRow += (numofData - groupDataRow);
-                            } else {
-                                groupDataRow += numofData - 1;
-                            }
-                            ingDataTableName = band.dataTableName;
-                        }
+                        curDatarowInDataBand += numofData;
+                        ingDataTableName = band.dataTableName;
+                        //
+                        // var dataCount = groupFieldArray[groupFieldNum].length;
+                        // var groupRemainData = (dataCount - groupDataRow);
+                        // if (numofData > groupRemainData) { // 마지막 페이지
+                        //     if(curDatarowInDataBand >= dt.length) {
+                        //         curDatarow += groupFieldArray[groupFieldNum].length - 1;
+                        //         curDatarowInDataBand = 0;
+                        //         remainData = false;
+                        //         completeDataBand.push(band.id);
+                        //         // ingDataTableName = undefined;
+                        //     }else{
+                        //         curDatarow += groupFieldArray[groupFieldNum].length - 1;
+                        //         curDatarowInDataBand += groupFieldArray[groupFieldNum].length - 1;
+                        //         remainData = false;
+                        //         ingDataTableName = band.dataTableName;
+                        //     }
+                        // } else { //마지막 페이지가 아닌 경우
+                        //     remainData = true;
+                        //     curDatarowInDataBand += numofData;
+                        //     if (numofData > groupDataRow) {
+                        //         groupDataRow += (numofData - groupDataRow);
+                        //     } else {
+                        //         groupDataRow += numofData - 1;
+                        //     }
+                        //     ingDataTableName = band.dataTableName;
+                        // }
                     }
                 } else { //그룹 필드가 아닐 경우
                     if (isDynamicTable == true && dt != undefined && numofData > 0) {
-                        curDatarowInDataBand += numofData;
+                        if (!band.masterBandName) {
+                            curDatarowInDataBand += numofData;
+                            ingDataTableName = band.dataTableName;
+                        }
+
                         curDatarow += numofData;
-                        ingDataTableName = band.dataTableName;
 
                         if (band.controlList.anyType.MinimumRowCount !== undefined) {
                             var minimumRowCount = Number(band.controlList.anyType.MinimumRowCount._text);
@@ -936,7 +945,8 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
                             }
                         }
                     } else if (isFixedTable == true && dt != undefined && numofData > 0) {
-                        // curDatarowInDataBand += numofData;
+                        console.log(numofData);
+                        curDatarowInDataBand += numofData;
                         curDatarow += numofData;
                         if (curDatarowInDataBand >= dt.length) {
                             remainData = false;
@@ -1019,16 +1029,31 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
                             }
                         }
                     } else if (isFixedTable == true && dt != undefined && numofData > 0) {
-                        var dataCount = groupFieldArray[groupFieldNum].length;
-                        var groupRemainData = (dataCount - groupDataRow);
-                        if (numofData-groupDataRow >= groupRemainData) { // 마지막 페이지
+
+                        groupDataRow += numofData;
+                        if (groupFieldArray.length - 1 == groupFieldNum) {
                             groupFieldNum++;
-                            groupDataRow = 1;
-                            isBandGroupHeader = false;
-                            if (groupFieldNum == groupFieldArray.length) {
-                                ingDataTableName = undefined;
+                        } else {
+                            if (groupFieldArray[groupFieldNum].length - 1 <= groupDataRow) {
+                                groupFieldNum++;
+                                groupDataRow = 0;
+                                // curDatarowInDataBand = 0;
+                            } else {
+                                // groupDataRow += numofData;
                             }
                         }
+
+                        //
+                        // var dataCount = groupFieldArray[groupFieldNum].length;
+                        // var groupRemainData = (dataCount - groupDataRow);
+                        // if (numofData-groupDataRow >= groupRemainData) { // 마지막 페이지
+                        //     groupFieldNum++;
+                        //     groupDataRow = 1;
+                        //     isBandGroupHeader = false;
+                        //     if (groupFieldNum == groupFieldArray.length) {
+                        //         ingDataTableName = undefined;
+                        //     }
+                        // }
                     }
                 }
                 /**************************************************************************************

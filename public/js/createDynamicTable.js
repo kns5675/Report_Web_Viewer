@@ -200,8 +200,12 @@ function drawingDynamicTableTitleLabel(label, header_Name_Number, band) {
 function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId, numOfData, table, band, dt) {
     // var thCnt = tableId.find('th').length;
     var tempCurDataRow = curDatarow;
-    var rowLength = curDatarowInDataBand + numOfData; //한 페이지에 마지막으로 출력해야할 row
-    for (var j = curDatarowInDataBand; j < rowLength; j++) {
+    var temp = curDatarowInDataBand;
+    if (band.masterBandName) {
+        temp = 0;
+    }
+    var rowLength = temp + numOfData; //한 페이지에 마지막으로 출력해야할 row
+    for (var j = temp; j < rowLength; j++) {
         var data = dt[j];
         var minimumRow = false;
         var valueTrId = $("#dynamicValueLabel" + tempCurDataRow);
