@@ -52,7 +52,7 @@ var groupFieldArrayInRegion = [];
  기능 : ControlList의 유무를 판단하는 함수를 만든다.
  만든이 : 안예솔
  ******************************************************************/
-function judgementControlList(band, divId, numOfData) {
+function judgementControlList(band, divId, numOfData, dt) {
     if (band.groupFieldArray !== undefined) {
         groupFieldArray = band.groupFieldArray;
     }
@@ -60,10 +60,10 @@ function judgementControlList(band, divId, numOfData) {
         var controlList = band.controlList.anyType;
         if (Array.isArray(controlList)) {
             controlList.forEach(function (list) {
-                judgementLabel(list, divId, numOfData, band);
+                judgementLabel(list, divId, numOfData, band, dt);
             });
         } else {
-            judgementLabel(controlList, divId, numOfData, band);
+            judgementLabel(controlList, divId, numOfData, band, dt);
         }
     } else {
     }
@@ -75,9 +75,9 @@ function judgementControlList(band, divId, numOfData) {
 
  수정 : 하지연
  날짜 : 2018-09-18
- 수정 내용 : 고정테이블 부분 수정
+ 수정 내용 : 고정테이블 부분 추가 및 수정
  ******************************************************************/
-function judgementLabel(data, divId, numOfData, band) {
+function judgementLabel(data, divId, numOfData, band, dt) {
     var attr = data._attributes["xsi:type"];
     var band_name = band.attributes["xsi:type"];
     if (attr == "ControlDynamicTable") { // 동적 테이블
@@ -90,7 +90,7 @@ function judgementLabel(data, divId, numOfData, band) {
                 tableLabelList.push(tableLabel);
             }
         });
-        drawingDynamicTable(controlDynamicTable, tableLabelList, divId, numOfData, band);
+        drawingDynamicTable(controlDynamicTable, tableLabelList, divId, numOfData, band, dt);
     } else if (attr == "ControlFixedTable") { // 고정 테이블일때
         /*
         ToDo : 하나의 페이지에 고정테이블이 2개 이상 있을 경우 fixTableLabelList에 겹침
@@ -109,29 +109,41 @@ function judgementLabel(data, divId, numOfData, band) {
                 }
             });
         }
-        // 18.09.29 YeSol 추가
-        if (numOfData > 1) {
-            for (var i = 0; i < numOfData; i++) {
+        // 18.09.29 YeSol 추가 // 18.10.08 하지연 수정
+        if (numOfData > 1) {//numOfData가 1보다 클 때
+
+            if(band.attributes['xsi:type'] !== 'BandDataFooter'){// 하지연 추가
+                for (var i = 0; i < numOfData; i++) {
+                console.log("numOfData : ",numOfData);
                 var fixedTableDivId = divId + 'fixedTable' + (curDatarow + i);
+
                 if (band.attributes['xsi:type'] === 'BandData') {
                     if (isRegion) {
-                        drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, fixedTableDivId, curDatarowInRegion, fixTableList);//numOfData추가.
+                        drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, fixedTableDivId, curDatarowInRegion, fixTableList, band);//numOfData추가. // YeSol > band 추가
                     } else {
-                        drawingFixedTableInDataBand(data, controlFixedTable, fixTableLabelList, fixedTableDivId, curDatarowInDataBand, fixTableList);//numOfData추가.
+                        drawingFixedTableInDataBand(data, controlFixedTable, fixTableLabelList, fixedTableDivId, curDatarowInDataBand, fixTableList, band);//numOfData추가. // YeSol > band 추가
                     }
                 } else {
                     if (isRegion) {
-                        drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList);//numOfData추가.
+                        drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList, band);//numOfData추가. // YeSol > band 추가
                     } else {
-                        drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList);//numOfData추가.
+                        drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList, band);//numOfData추가. // YeSol > band 추가
                     }
                 }
             }
-        } else {
+            }else{//밴드 데이터 풋터일때는 for문 안돌리게
+                if (isRegion) {
+                    drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList);
+                } else {
+                    // console.log("여기1");
+                    drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList);
+                }
+            }
+        } else {//numOfData가 1보다 크지 않을 때
             if (isRegion) {
-                drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList);//numOfData추가.
+                drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList, band);//numOfData추가. // YeSol > band 추가
             } else {
-                drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList);//numOfData추가.
+                drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList, band);//numOfData추가. // YeSol > band 추가
             }
         }
     } else if (attr == "ControlLabel") {
@@ -331,6 +343,7 @@ function drawingSystemLabel(data, divId, band_name) {
     }
     labelPropertyApply(labelNbandInfo);
 }
+
 /******************************************************************
  기능 : SummaryLabel(요약 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 안예솔

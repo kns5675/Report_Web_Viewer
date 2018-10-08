@@ -19,7 +19,7 @@
  Date : 2018-08-27
  From hagdung-i
  ******************************************************************/
-function drawingDynamicTable(table, tableLabel, divId, numOfData, band) {
+function drawingDynamicTable(table, tableLabel, divId, numOfData, band, dt) {
     var div = $('#' + divId);
     div.append('<div id = "Table' + tableNum + '"></div>');
     var divIdTable = $('#Table' + tableNum);
@@ -54,14 +54,13 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData, band) {
 
     tableId.append('<tr id = "dynamicTitleLabel' + dynamicTitleLabelNum + '"></tr>');
 
-
-    var dt = dataTable.DataSetName[band.dataTableName];
     var header_Name_Number = 1;
+
     if (Array.isArray(tableLabel)) {
         tableLabel.forEach(function (label) {
             switch (label._attributes) {
                 case "DynamicTableTitleLabel" :
-                    drawingDynamicTableTitleLabel(label, header_Name_Number);
+                    drawingDynamicTableTitleLabel(label, header_Name_Number, band);
                     header_Name_Number++;
                     break;
                 case "DynamicTableValueLabel" :
@@ -83,7 +82,6 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData, band) {
         dynamicValueLabelNum++;
     }
 }
-
 function checkGroupHeader(band){
     var check = false;
 
@@ -102,7 +100,6 @@ function checkGroupHeader(band){
     }
     return check;
 }
-
 /******************************************************************
  기능 : DynamicTableValueLabel(동적 테이블 밸류 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 구영준
@@ -112,25 +109,23 @@ function checkGroupHeader(band){
  From hagdung-i
  *******************************************************************/
 function drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table, band) {
-
     var haveGroupHeaderBand = checkGroupHeader(band);
-
-    if (dt == undefined) { //without DataTable in DataBand
-        drawingDynamicTableValueLabelWithOutDataTable(label, tableId);
+    if (dt == undefined || dt.length == 0) { //without DataTable in DataBand
+        drawingDynamicTableValueLabelWithOutDataTable(label, tableId, band);
     } else if (isRegion == true) {
-        if(haveGroupHeaderBand){
-            //리전인 경우, 그룹필드가 있는 경우
-            drawingDynamicTableValueLabelWithGroupFieldArrayWithRegion(label, dt, tableId, numOfData, table);
-        } else {
+        if (groupFieldArray == undefined || groupFieldArray.length == 0) {
             //리전 인 경우, 그룹 필드가 없는 경우
-            drawingDynamicTableValueLabelWithoutGroupFieldArrayWithRegion(label, dt, tableId, numOfData, table);
+            drawingDynamicTableValueLabelWithoutGroupFieldArrayWithRegion(label, dt, tableId, numOfData, table, band);
+        } else {
+            //리전인 경우, 그룹필드가 있는 경우
+            drawingDynamicTableValueLabelWithGroupFieldArrayWithRegion(label, dt, tableId, numOfData, table, band);
         }
     } else {
         // if (groupFieldArray == undefined || groupFieldArray.length == 0) {
-        if(haveGroupHeaderBand){
-            drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, numOfData, table);
+        if(!haveGroupHeaderBand){
+            drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId, numOfData, table, band, dt);
         } else {
-            drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId, numOfData, table);
+            drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, numOfData, table, band, dt);
         }
     }
 }
@@ -139,9 +134,12 @@ function drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table, ban
  기능 : 동적테이블이에 데이터 테이블이 없을 경우 데이터 바인딩 없이 ValueLabel을 그려줌
  만든이 : 구영준
  **************************************************************************************/
-function drawingDynamicTableValueLabelWithOutDataTable(label, tableId) {
-    tableId.append('<tr id = "dynamicValueLabel' + dynamicValueLabelNum + '"></tr>');
-    var valueTrId = $("#dynamicValueLabel" + dynamicValueLabelNum);
+function drawingDynamicTableValueLabelWithOutDataTable(label, tableId, band) {
+    tableId.append('<tr id = "dynamicValueLabelWithOutDataTable' + dynamicValueLabelNum + '"></tr>');
+    var valueTrId = $("#dynamicValueLabelWithOutDataTable" + dynamicValueLabelNum);
+    // if(valueTrId.length < 1){
+    //     tableId.append('<tr id = "dynamicValueLabelWithOutDataTable' + dynamicValueLabelNum + '"></tr>');
+    // }
 
     valueTrId.append('<td id = "tableValueLabelNum' + tableValueLabelNum + '"></td>');
     valueTrId.css({
@@ -157,6 +155,7 @@ function drawingDynamicTableValueLabelWithOutDataTable(label, tableId) {
     tdId.addClass('Label DynamicTableHeader');
     tdId.addClass(label._attributes);
     // drd_javascript(label, tdId, label.startBindScript);
+
 }
 
 /******************************************************************
@@ -171,7 +170,7 @@ function drawingDynamicTableValueLabelWithOutDataTable(label, tableId) {
  Date : 2018-09-18
  From 구영준
  *******************************************************************/
-function drawingDynamicTableTitleLabel(label, header_Name_Number) {
+function drawingDynamicTableTitleLabel(label, header_Name_Number, band) {
     var titleTrId = $('#dynamicTitleLabel' + dynamicTitleLabelNum);
 
     titleTrId.append('<th id = "DynamicTableTitleLabel' + header_Name_Number + '_View_Page_Number' + thNum + '"></th>');
@@ -199,7 +198,7 @@ function drawingDynamicTableTitleLabel(label, header_Name_Number) {
  DynamicTableValueLabel(동적 테이블 밸류 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 구영준
  **************************************************************************************/
-function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId, numOfData, table) {
+function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId, numOfData, table, band, dt) {
     var rowLength = curDatarowInDataBand + numOfData; //한 페이지에 마지막으로 출력해야할 row
     // var thCnt = tableId.find('th').length;
     var tempCurDataRow = curDatarow;
@@ -212,10 +211,10 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
             tableId.append('<tr id = "dynamicValueLabel' + tempCurDataRow + '"></tr>');
         }
         if ((j >= dt.length) && table.minimumRowCount !== undefined) { // 최소행 개수
-            if (table.minimumRowCount != 1) { // 최소행 개수 1이 기본 값임
+            // if (table.minimumRowCount != 1) { // 최소행 개수 1이 기본 값임
                 data = dt[j - table.minimumRowCount];
                 minimumRow = true;
-            }
+            // }
         }
         if (label.dataType === 'ParameterLabel') {
             paramTable.NewDataSet.Table1.forEach(function (paramData) {
@@ -314,9 +313,10 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
  DynamicTableValueLabel(동적 테이블 밸류 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 구영준
  **************************************************************************************/
-function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, numOfData, table) {
+function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, numOfData, table, band) {
     var minimumRow = false;
     var data = groupFieldArray[groupFieldNum];
+
     if (table.minimumRowCount !== undefined && isMinimumRowCount == true) {
         var minimumCnt = Number(table.minimumRowCount);
         if (minimumCnt != 1 && (numOfData - groupDataRow) < minimumCnt) { // 최소행 개수 적용
@@ -422,7 +422,7 @@ function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, nu
     }
 }
 
-function drawingDynamicTableValueLabelWithGroupFieldArrayWithRegion(label, dt, tableId, numOfData, table) {
+function drawingDynamicTableValueLabelWithGroupFieldArrayWithRegion(label, dt, tableId, numOfData, table, band) {
     var minimumRow = false;
     var data = groupFieldArrayInRegion[groupFieldNumInRegion];
     if (table.minimumRowCount !== undefined && isMinimumRowCount == true) {
@@ -540,7 +540,7 @@ function drawingDynamicTableValueLabelWithGroupFieldArrayWithRegion(label, dt, t
     }
 }
 
-function drawingDynamicTableValueLabelWithoutGroupFieldArrayWithRegion(label, dt, tableId, numOfData, table) {
+function drawingDynamicTableValueLabelWithoutGroupFieldArrayWithRegion(label, dt, tableId, numOfData, table, band) {
     var rowLength = curDatarowInRegion + numOfData; //한 페이지에 마지막으로 출력해야할 row
     // var thCnt = tableId.find('th').length;
     var tempCurDataRow = curDatarow;
@@ -553,10 +553,10 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArrayWithRegion(label, dt
             tableId.append('<tr id = "dynamicValueLabel' + tempCurDataRow + '"></tr>');
         }
         if ((j >= dt.length) && table.minimumRowCount !== undefined) { // 최소행 개수
-            if (table.minimumRowCount != 1) { // 최소행 개수 1이 기본 값임
+            // if (table.minimumRowCount != 1) { // 최소행 개수 1이 기본 값임
                 data = dt[j - table.minimumRowCount];
                 minimumRow = true;
-            }
+            // }
         }
         if (label.dataType === 'ParameterLabel') {
             paramTable.NewDataSet.Table1.forEach(function (paramData) {

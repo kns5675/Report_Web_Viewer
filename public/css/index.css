@@ -28,12 +28,13 @@ ul#header_ul{
 ul#header_ul > li{
     display : inline-block;
     box-sizing: border-box;
+    padding : 0.2px;
 }
 
 ul#header_ul > li.header_btn:hover{
     cursor : pointer;
     background-color : lightblue;
-    border : 1px solid steelblue;
+    outline : 1px solid steelblue;
 }
 #page_nav{
     font-size : 18px;
@@ -102,7 +103,7 @@ li#saveAsImage:hover ul#saveImgList{
 
 #reportTemplate{
     z-index: -3;
-    /*padding-top : 160px;*/
+    padding-top : 160px;
 }
 
 #temp_reportTemplate{

@@ -178,9 +178,12 @@ function getNumOfDataInOnePage(tableLabel, divId) {
  : (밴드 길이 - 첫 행 높이) / 데이터 라벨 높이 => 한페이지에 들어가야할 밴드 개수
  만든이 : 구영준
  * *********************************************************/
-function getNumOfDataInOnePageNonObject(band, divId) {
+function getNumOfDataInOnePageNonObject(band, divId, dt) {
+    // var dt = dataTable.DataSetName[band.dataTableName];
+    if(dt.length == 0){
+        return Number(band.minimumRowCount);
+    }
 
-    var dt = dataTable.DataSetName[band.dataTableName];
     var bandDataHeight = 0;
     if (typeof divId == 'string') {
         bandDataHeight = $('#' + divId).height();

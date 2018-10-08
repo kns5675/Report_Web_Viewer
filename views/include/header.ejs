@@ -11,9 +11,9 @@
 
     <script>
         $(function(){
-            $('#print').click(function(){
-                pagePrint();//지연 - 페이지 비율을 100%로 고정하여 인쇄 페이지 이동
-            });
+            // $('#print').click(function(){
+            //     pagePrint();//지연 - 페이지 비율을 100%로 고정하여 인쇄 페이지 이동
+            // });
             $('#txtZoom').on("change",function(){
                 test();//지연 - 기존 zoomIn,zoomOut 값을 받아와 scale 조정
             });
@@ -159,9 +159,9 @@
       <ul id="saveImgList">
           <li id="saveAsPng" title="PNG로 내보내기"><img src="image/drd_image/export_png24.png"/> PNG</li>
           <li id="saveAsJpg" title="JPG로 내보내기"><img src="image/drd_image/export_jpg24.png"/> JPG</li>
-          <!--<li><img src="image/drd_image/export_bmp24.png"/>BMP</li>-->
-          <!--<li><img src="image/drd_image/export_tiff24.png"/>TIFF</li>-->
-          <!--<li><img src="image/drd_image/export_gif24.png"/>GIF</li>-->
+          <li id="saveAsBmp" title="BMP로 내보내기"><img src="image/drd_image/export_bmp24.png"/> BMP</li>
+          <li id="saveAsTiff" title="TIFF로 내보내기"><img src="image/drd_image/export_tiff24.png"/> TIFF</li>
+          <li id="saveAsGif" title="GIF로 내보내기"><img src="image/drd_image/export_gif24.png"/> GIF</li>
       </ul>
   </li>
 
@@ -181,7 +181,7 @@
   <li class="header_btn" title="HTML로 내보내기"><a id="saveAsHTML" type="button" style="text-decoration: none;"><img src="image/drd_image/top_btn_html1.png"></a></li>
   <li class="header_btn" id="image_upload_button" title="이미지 추가"><img src="image/drd_image/top_btn_img_plus1.png"/></li>
   <li class="header_btn" id="tableChoice" title="항목선택"><img src="image/drd_image/SelectColumn1.png"/></li>
-  <li><input type="button" value="리포트 선택" id="reportChoice"></li>
+  <li><button id="reportChoice">리포트 선택</button></li>
 </ul>
 </div>
   </body>

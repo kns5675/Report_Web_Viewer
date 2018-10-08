@@ -610,24 +610,6 @@ function report_backup() {
 }
 
 /***********************************************************************
- ?? 삭제 예정
- ***********************************************************************/
-function check_forceNextReport_in_Report(report) {
-    var bandGroupFooterIsTrue = false;
-    report.layers.designLayer.bands.forEach(function (band) {
-        if (band instanceof BandData && band.childFooterBands !== null) {
-            band.childFooterBands.forEach(function (childBand) {
-                if (childBand instanceof BandGroupFooter && childBand.forceNextReport === true)
-                    bandGroupFooterIsTrue = true;
-                else
-                    bandGroupFooterIsTrue = false;
-            });
-        }
-    });
-    return report.forceNextReport + bandGroupFooterIsTrue > 0 ? true : false;
-}
-
-/***********************************************************************
  기능 : 그룹 풋터 밴드가 존재하는지, 그룹 풋터 밴드의 속성중
  GroupFiledName이 존재하는지 체크
  만든이 : 전형준
@@ -654,12 +636,12 @@ function check_groupFieldName_in_GroupFooter(bands) {
 function check_forceNextReport_in_GroupFooter(bands) {
     var bool = false;
     bands.forEach(function (band) {
-        console.log("여긴 오나요");
+        // console.log("여긴 오나요");
         if (band instanceof BandData && band.childFooterBands !== null) {
-            console.log("데이터밴드가 있고 자식밴드가 있어요");
+            // console.log("데이터밴드가 있고 자식밴드가 있어요");
             band.childFooterBands.forEach(function (childBand) {
                 if (childBand instanceof BandGroupFooter && childBand.forceNextReport === true) {
-                    console.log("자식밴드중 그룹풋터밴드가 있고 리포트넘기기가 true예요");
+                    // console.log("자식밴드중 그룹풋터밴드가 있고 리포트넘기기가 true예요");
                     bool = true;
                 }
             });
