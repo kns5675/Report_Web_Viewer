@@ -263,7 +263,6 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                     if (!doneDataBand) {
                         if (band.masterBandName) {
                             //ToDo bands[0] 수정
-                            console.log(band)
                             dt = joinDt(band, bands[0]);
                         }else {
                             dt = dataTable.DataSetName[band.dataTableName];
@@ -283,7 +282,6 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
             }
 
             if (band.attributes["xsi:type"] === "BandData") {
-                dt = dataTable.DataSetName[ingDataTableName];
                 dataBanIinitialize(band, dt);
             }
 
@@ -582,7 +580,7 @@ function joinDt(band, parentBand){
         }
     });
     var parentColumnName = masterString[1].toUpperCase();
-    console.log(masterString[0]);
+    // console.log(masterString[0]); // 이게 parentBand의 데이터 테이블 이름
     dataTable.DataSetName[parentBand.dataTableName].forEach(function (masterBandData) {
         for (keyInMasterBand in masterBandData) {
             if (parentColumnName == keyInMasterBand) { // 인사기본.no_emp에서 no_emp부분
@@ -802,6 +800,7 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
         case 'BandData' :
             isMaximumRowCount = false;
             isMinimumRowCount = false;
+
             if (isRegion) { // 리전일 때
                 if (groupFieldArrayInRegion.length > 0 && band.childHeaderBands !== null) {
                     if (isDynamicTable == true && dt != undefined) {

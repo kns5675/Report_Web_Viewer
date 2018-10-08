@@ -9,8 +9,29 @@ function Lock_check(data, Label_id, div) { //라벨 데이터, 드래그 리사�
     if (editable_test == 'true') { // 편집이 가능할 때
         if (!data.lock) {
             if (div[0]) { //예외처리 수정.
-                Label_id.draggable({containment: "#" + div[0].id, zIndex: 999});
-                Label_id.resizable({containment: "#" + div[0].id, autoHide: true});
+                Label_id.draggable({
+                    containment: "#" + div[0].id,
+                    zIndex: 999,
+                    drag: function( event, ui ) {
+                        data.rectangle.x = ui.position.top;
+                        data.rectangle.y = ui.position.left;
+                        console.log("x : ",data.rectangle.x);
+                        console.log("y : ",data.rectangle.y);
+                        console.log("data : ",data);
+                    }
+                });
+                Label_id.resizable({
+                    containment: "#" + div[0].id,
+                    autoHide: true,
+                    resize: function (event, ui) {
+                        var width = ui.size.width;
+                        data.rectangle.width = ui.size.width;
+                        data.rectangle.height = ui.size.height;
+                        console.log("width : ",data.rectangle.width);
+                        console.log("height : ",data.rectangle.height);
+                        console.log("data : ",data);
+
+                    }});
             }
         } else {
             Label_id.addClass('Lock');
@@ -59,7 +80,14 @@ function Lock_Check_Table(data, drag, resize, div) { //테이블 데이터, 드�
         Lock_check = data.Lock._text;
     }
     if (!Lock_check) {
-        drag.draggable({containment: "#" + div[0].id, zIndex: 999});
+        drag.draggable({
+            containment: "#" + div[0].id,
+            zIndex: 999,
+            drag: function( event, ui ) { // 예솔 추가
+                data.rectangle.x = ui.position.top;
+                data.rectangle.y = ui.position.left;
+            }
+        });
         var width;
         $(function(){
             // $(".JCLRFlex")[0].style.width = "98%";
@@ -67,8 +95,13 @@ function Lock_Check_Table(data, drag, resize, div) { //테이블 데이터, 드�
                 resizeMode: 'overflow',
                 liveDrag: true,
                 fixed: true,
+                resize: function (event, ui) { // 예솔 추가
+                    var width = ui.size.width;
+                    data.rectangle.width = ui.size.width;
+                    data.rectangle.height = ui.size.height;
+                }});
                 // postbackSafe : true
-            });
+            // });
             // resize.resizable({
             //     containment: "#" + div[0].id,
             //     autoHide: true,
@@ -240,6 +273,8 @@ function shift_table_column_controller(resize_area, Unalterable_area, table_resi
                         e.style.width = width + "px";
                     }
                 });
+                // data.rectangle.width = ui.size.width; // 예솔 추가
+                // data.rectangle.height = ui.size.height; // 예솔 추가
                 console.log("width : ",width);
             }
         });
@@ -294,6 +329,8 @@ function after_table_column_controller() {
                                     e.style.width = width + "px";
                                 }
                             });
+                            data.rectangle.width = ui.size.width; // 예솔 추가
+                            data.rectangle.height = ui.size.height; // 예솔 추가
                         }
                     });
                 })(j);

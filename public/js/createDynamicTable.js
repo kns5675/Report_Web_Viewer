@@ -57,7 +57,6 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData, band, dt) {
     //ToDo 잘못됨
     // var dt = dataTable.DataSetName[band.dataTableName];
     var header_Name_Number = 1;
-
     if (Array.isArray(tableLabel)) {
         tableLabel.forEach(function (label) {
             switch (label._attributes) {
@@ -201,12 +200,11 @@ function drawingDynamicTableTitleLabel(label, header_Name_Number, band) {
  만든이 : 구영준
  **************************************************************************************/
 function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId, numOfData, table, band, dt) {
-    var rowLength = curDatarowInDataBand + numOfData; //한 페이지에 마지막으로 출력해야할 row
     // var thCnt = tableId.find('th').length;
     var tempCurDataRow = curDatarow;
+    var rowLength = curDatarowInDataBand + numOfData; //한 페이지에 마지막으로 출력해야할 row
     for (var j = curDatarowInDataBand; j < rowLength; j++) {
         var data = dt[j];
-
         var minimumRow = false;
         var valueTrId = $("#dynamicValueLabel" + tempCurDataRow);
         if (valueTrId.length < 1) {
