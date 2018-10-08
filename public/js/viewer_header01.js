@@ -12,6 +12,8 @@ var total_data;
 
 function file_download_data_get() {
     console.log("total_data : ",total_data);
+    alert("파일 저장 완료");
+    alert("Report_Web_Viewer/file_save 파일 하위에 저장됩니다.");
     var file_data = $("#file_data")[0].value;
     $("#file_data")[0].value = total_data;
     console.log("file_data : ",$("#file_data")[0].value);

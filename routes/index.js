@@ -15,7 +15,11 @@ var storage = multer.diskStorage({
 });
 var upload = multer({ storage: storage });
 
-var xml = fs.readFileSync('xml/인사기록부.xml', 'utf-8');
+var file_name;
+var db_name;
+var param_name;
+
+var xml = fs.readFileSync('xml/연말정산.xml', 'utf-8');
 var json_origin = convert.xml2json(xml, {compact: true});
 var json = json_origin.replace(/\\r/gi, '<br/>'); // 엔터키(\r)를 <br/>로 치환
 // var test = convert.json2xml(json, {compact: true});
@@ -50,19 +54,19 @@ router.post('/', upload.array('send_file', 3), function (req, res, next) {
     // res.send('Uploaded! : '+req.file); // object를 리턴함
     if(req.body.file_open_click){
         console.log(req.body.file_open_click);
-        var file_name = 'uploads/'+req.files[0].filename;
-        var db_name = 'uploads/'+req.files[1].filename;
-        var param_name = 'uploads/'+req.files[2].filename;
+        file_name = 'uploads/'+req.files[0].filename;
+        db_name = 'uploads/'+req.files[1].filename;
+        param_name = 'uploads/'+req.files[2].filename;
 
-        var xml = fs.readFileSync(file_name, 'utf-8');
-        var json_origin = convert.xml2json(xml, {compact: true});
-        var json = json_origin.replace(/\\r/gi, '<br/>');
+        xml = fs.readFileSync(file_name, 'utf-8');
+        json_origin = convert.xml2json(xml, {compact: true});
+        json = json_origin.replace(/\\r/gi, '<br/>');
 
-        var tempData = fs.readFileSync(db_name, 'utf-8');
-        var dataTable = convert.xml2json(tempData, {compact: true});
+        tempData = fs.readFileSync(db_name, 'utf-8');
+        dataTable = convert.xml2json(tempData, {compact: true});
 
-        var paramData = fs.readFileSync(param_name, 'utf-8');
-        var paramTable = convert.xml2json(paramData, {compact: true});
+        paramData = fs.readFileSync(param_name, 'utf-8');
+        paramTable = convert.xml2json(paramData, {compact: true});
 
         if(req.files[0]){
             res.render('index', {
@@ -73,6 +77,11 @@ router.post('/', upload.array('send_file', 3), function (req, res, next) {
             });
         }
     }else{  //file 저장 버튼 클릭시
+        console.log("req : ",req);
+
+        var file_name = req.body.send_file;
+        fs.writeFileSync("file_save/"+file_name+"xml", tempData, 'utf-8');
+
 
     }
 });

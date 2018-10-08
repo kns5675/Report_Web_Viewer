@@ -139,19 +139,16 @@ function drawingDynamicTableValueLabelWithOutDataTable(label, tableId, band) {
     // if(valueTrId.length < 1){
     //     tableId.append('<tr id = "dynamicValueLabelWithOutDataTable' + dynamicValueLabelNum + '"></tr>');
     // }
-
     valueTrId.append('<td id = "tableValueLabelNum' + tableValueLabelNum + '"></td>');
     valueTrId.css({
         'width': label.rectangle.width,
         'height': label.rectangle.height
     });
-
     var tdId = $('#tableValueLabelNum' + tableValueLabelNum++);
-
     setCssInTable(label, tdId);
 
     tdId.append(label.text);
-    tdId.addClass('Label DynamicTableHeader');
+    tdId.addClass('Label');
     tdId.addClass(label._attributes);
     // drd_javascript(label, tdId, label.startBindScript);
 
@@ -197,7 +194,7 @@ function drawingDynamicTableTitleLabel(label, header_Name_Number, band) {
  DynamicTableValueLabel(동적 테이블 밸류 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 구영준
  **************************************************************************************/
-function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId, numOfData, table, band, dt) {
+function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId, numOfData, table, band) {
     // var thCnt = tableId.find('th').length;
     var tempCurDataRow = curDatarow;
     var temp = curDatarowInDataBand;
@@ -250,7 +247,7 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
                     isData = true;
                     var valueTrId = $('#dynamicValueLabel' + tempCurDataRow);
                     var key_data = data[key]._text;
-                    var table_reform = table_format_check(data, valueTrId, key_data, table);
+                    var table_reform = table_format_check(data, valueTrId, key_data, label);
                     var tdId = 'tableValueLabelNum' + tableValueLabelNum++;
                     if (!minimumRow) {
                         if (label.labelTextType == 'Number' && label.format != undefined) { //td의 label 값을 p태그에 묶음.

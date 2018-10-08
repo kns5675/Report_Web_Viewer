@@ -204,6 +204,7 @@ function format_check(data) {
 function table_format_check(data, Label_id, key, table) {
     var test = table.formatType;
     var format = table.format;
+    var FieldName = table.fieldName;
     // var data_text;
     if (key != NaN) { //해당 데이터가 숫자일 경우
         if (test === "AmountSosu" || test === "MoneySosu" || test === "MoneySosu") {   //수량, 금액 소숫점 자리수 ###,###
@@ -243,62 +244,62 @@ function table_format_check(data, Label_id, key, table) {
             var month = format.toString().split("월");
             var day = format.toString().split("일");
 
-            if(dot[1]){ //도트 있을 때
-                parts = key.toString().split(".");
-                return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-            }
-            if(comma[1]){   //콤마 있을 때
-                parts = key.toString().split(",");
-                return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            }
-
-            if(year[1]){    //년도 있을 때
-                if(month[1]){
-                    if(day[0]){
-                        parts = key.toString().split("-");
-                        return parts[0]+"년"+parts[1]+"월"+parts[2]+"일";
-                    }else if(day[1]){
-
-                    }
-                }
-            }
-
             //날짜
             var Endate = format.toString().split("/");
-
-            if(Endate[1]){
-                if(Endate[2]){ // yyyy/mm/dd 형태일 경우
-                    parts = key.replace(/\B(?=(\d{4})+(?!\d))/g, "/");
-                    var parts2 = parts.split("/");
-                    if(parts2[1]){
-                        var parts3 = parts2[1].replace(/\B(?=(\d{2})+(?!\d))/g, "/");
-                        var total_date = parts2[0]+"/"+parts3;
-                        return total_date;
-                    }
-                }else{ //   yyyy/mm형태가 올 수 있음.
-                    parts = key.replace(/\B(?=(\d{4})+(?!\d))/g, "/");
-                }
-            }
 
             //주민번호
             var Social_Security_Number = format.toString().split("-");
 
-            if(Social_Security_Number[1] && !Social_Security_Number[2]){
-                parts = key.substring(0,6);
-                var parts2 = key.substring(6,14);
-                var return_val = parts+"-"+parts2;
-                return return_val;
-                // return parts[0].replace(/\B(?=(\d{6})+(?!\d))/g, "-");
+            if(key){
+                if(dot[1]){ //도트 있을 때
+                    parts = key.toString().split(".");
+                    return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                }
+                if(comma[1]){   //콤마 있을 때
+                    parts = key.toString().split(",");
+                    return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                }
+
+                if(year[1]){    //년도 있을 때
+                    if(month[1]){
+                        if(day[0]){
+                            parts = key.toString().split("-");
+                            return parts[0]+"년"+parts[1]+"월"+parts[2]+"일";
+                        }else if(day[1]){
+
+                        }
+                    }
+                }
+
+                if(Endate[1]){
+                    if(Endate[2]){ // yyyy/mm/dd 형태일 경우
+                        parts = key.replace(/\B(?=(\d{4})+(?!\d))/g, "/");
+                        var parts2 = parts.split("/");
+                        if(parts2[1]){
+                            var parts3 = parts2[1].replace(/\B(?=(\d{2})+(?!\d))/g, "/");
+                            var total_date = parts2[0]+"/"+parts3;
+                            return total_date;
+                        }
+                    }else{ //   yyyy/mm형태가 올 수 있음.
+                        parts = key.replace(/\B(?=(\d{4})+(?!\d))/g, "/");
+                    }
+                }
+
+                if(Social_Security_Number[1] && !Social_Security_Number[2]){
+                    parts = key.substring(0,6);
+                    var parts2 = key.substring(6,14);
+                    var return_val = parts+"-"+parts2;
+                    return return_val;
+                    // return parts[0].replace(/\B(?=(\d{6})+(?!\d))/g, "-");
+                }
+                return key;
             }
-
-
         } else {
             return key;
         }
     }else if(format){
-
+        return key;
     }
-    return key;
 }
 
 /******************************************************************
