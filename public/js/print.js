@@ -5,14 +5,16 @@
  ******************************************************************/
 function pagePrint(){
     try{
+        var temp_padding = $('#reportTemplate').css('padding-top');
+        $('#reportTemplate').css('padding-top', '0px');
         var flexiblecontent = document.getElementById("reportTemplate");
-
 
         if (jQuery.browser.msie) {
             flexiblecontent.style.zoom = 1.0;
             window.print();
             $("#copyOptions").val("--인쇄--").attr("selected","selected");
             //alert($("#txtZoom option:selected").val());
+            $('#reportTemplate').css('padding-top', temp_padding);
         }
         else {
             $(flexiblecontent).css('-webkit-transform','scale(' + (1.0) + ')');
@@ -33,6 +35,8 @@ function pagePrint(){
             $(flexiblecontent).css('-moz-transform-origin','0 0');
             $(flexiblecontent).css('-o-transform','scale(' + (nowsize) + ')');
             $(flexiblecontent).css('-o-transform-origin','0 0');
+            $('#reportTemplate').css('padding-top', temp_padding);
+            console.log("ㅎㅇ");
         }
     }catch(e){
         console.log(e.message);

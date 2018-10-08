@@ -108,14 +108,11 @@ function makeHTML(){
 function copyoptions(clicked_copy){
     clicked_copy = clicked_copy.toLowerCase();
     try{
-        if (clicked_copy == 'enhancedcopy'){
+        if (clicked_copy == 'enhancedcopy'){ // 고급인쇄설정
             $('#myModal').show();
         }else if(clicked_copy == 'print' || clicked_copy == 'copyoptions'){
             $('#myModal').css('display','none');
-            var temp_padding = $('#temp_reportTemplate').css('padding-top');
-            $('#temp_reportTemplate').css('padding-top', '0px');
             pagePrint();
-            $('#temp_reportTemplate').css('padding-top', temp_padding);
         }else{
             console.log("인식못했음");
         }
@@ -139,7 +136,7 @@ function sizechanged(){
  ******************************************************************/
 function test(){
     try {
-        var flexiblecontent = document.getElementById("temp_reportTemplate");
+        var flexiblecontent = document.getElementById("reportTemplate");
         var size = $("#txtZoom").val();
         $("#txtZoom").val(size);
 
@@ -177,7 +174,7 @@ function zoomIn(){
         $("#txtZoom option:last").attr("selected","selected");
 
         try {
-            var flexiblecontent = document.getElementById("temp_reportTemplate");
+            var flexiblecontent = document.getElementById("reportTemplate");
             $("#txtZoom").val(size);
             if (jQuery.browser.msie) {
                 flexiblecontent.style.zoom = size;
@@ -220,7 +217,7 @@ function zoomOut(){
 
         /*test();*/
         try {
-            var flexiblecontent = document.getElementById("temp_reportTemplate");
+            var flexiblecontent = document.getElementById("reportTemplate");
             $("#txtZoom").val(size);
             if (jQuery.browser.msie) {
                 flexiblecontent.style.zoom = size;
