@@ -119,6 +119,10 @@ li#saveAsImage:hover ul#saveImgList{
 #filemodalLayer .modalContent{width:250px; height:225px; border:1px solid #313e52; position:fixed; left:40%; top:35%; z-index:551; background:#fff; margin: 0px;}
 #filemodalLayer .modalContent button{right:0; top:0; cursor:pointer;}
 
+#file_download_modalLayer{display:none; position:relative;}
+#file_download_modalLayer .modalContent{width:250px; height:110px; border:1px solid #313e52; position:fixed; left:40%; top:35%; z-index:551; background:#fff; margin: 0px;}
+#file_download_modalLayer .modalContent button{right:0; top:0; cursor:pointer;}
+
 #image_dialog{display:none; position:relative;}
 #image_dialog #dialog{width:440px; height:200px; padding:20px; border:1px solid #ccc; position:fixed; left:50%; top:50%; z-index:551; background:#fff;}
 #image_dialog #dialog button{right:0; top:0; cursor:pointer;}

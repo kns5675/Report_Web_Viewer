@@ -121,6 +121,13 @@ div.room{
     font-size: 12px;
 }
 
+#file_download_modalLayer > .modalContent > .image_add_area > span {
+     margin-top: 4px;
+     background-color: #313e52;
+     color: white;
+     font-size: 12px;
+ }
+
 #image_dialog > #dialog > .image_add_area > span {
     margin-top: 4px;
     background-color: #313e52;

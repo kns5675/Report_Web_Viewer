@@ -620,7 +620,7 @@ function band_dbclick_event(data) {
                         console.log("bandId : ",bandId);
                         // shift_table_column_controller(thid, titleTrId, tableId, bandId);
                     }else{
-                        console.log("shift 클릭 안함.");
+                        // console.log("shift 클릭 안함.");
                     }
                 }
             });

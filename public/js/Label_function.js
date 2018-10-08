@@ -1,3 +1,4 @@
+var current_data;
 /******************************************************************
  기능 : 각각의 형태의 Label id와 데이터를 받아서 lock이 걸려있는 라벨을 제외한 라벨들의 위치 이동, 크기 조정 기능 추가.
  Date : 2018-08-24
@@ -5,7 +6,6 @@
  ******************************************************************/
 function Lock_check(data, Label_id, div) { //라벨 데이터, 드래그 리사이즈 영역(p의 div), 벗어나면 안되는 영역(밴드)
     var editable_test = data.editable;
-
     if (editable_test == 'true') { // 편집이 가능할 때
         if (!data.lock) {
             if (div[0]) { //예외처리 수정.
@@ -31,7 +31,8 @@ function Lock_check(data, Label_id, div) { //라벨 데이터, 드래그 리사�
                         console.log("height : ",data.rectangle.height);
                         console.log("data : ",data);
 
-                    }});
+                    }
+                });
             }
         } else {
             Label_id.addClass('Lock');
@@ -90,33 +91,48 @@ function Lock_Check_Table(data, drag, resize, div) { //테이블 데이터, 드�
         });
         var width;
         $(function(){
-            // $(".JCLRFlex")[0].style.width = "98%";
-            $(".table").colResizable({
-                resizeMode: 'overflow',
-                liveDrag: true,
-                fixed: true,
-                resize: function (event, ui) { // 예솔 추가
-                    var width = ui.size.width;
-                    data.rectangle.width = ui.size.width;
-                    data.rectangle.height = ui.size.height;
-                }});
-                // postbackSafe : true
-            // });
-            // resize.resizable({
-            //     containment: "#" + div[0].id,
-            //     autoHide: true,
-            //     resize: function (event, ui) {   //테이블사이즈는 가로만 조정 가능하도록.
-            //         ui.size.height = ui.originalSize.height;
-            //         width = ui.size.width;
-            //         var select_label = $("#" + this.id)[0].className.split(" ")[1];
-            //         $(".table").each(function (i, e) {
-            //             var total_col = $("#" + e.id)[0].className.split(" ")[1];
-            //             if (total_col === select_label) {
-            //                 e.style.width = width + "px";
-            //             }
-            //         });
+            // resize.colResizable({
+            //     resizeMode: 'overflow',
+            //     liveDrag: true,
+            //     fixed: true,
+            //     // postbackSafe : true
+            //     onResize: function (e, i) { //테이블의 사이즈가 변하면
+            //         var th = e.currentTarget.childNodes[0].cells; //헤더만
+            //         for(var i=0; i< th.length; i++){ //th
+            //             $(".DynamicTableTitleLabel"+i).each(function (index, e) {// th만큼 돌면서
+            //                 console.log("titleLabel : ",e.style.width);
+            //                 console.log("index : ",index);
+            //                 console.log("i : ",i);
+            //                 // e.style.width = th[i].style.width;
+            //             });
+            //             console.log("th : ",th[i].style.width);
+            //         }
+            //         // width = th.size.width;
+            //         // var resizing_label = this;
+            //         // var select_label = $("#" + resizing_label.id).text();
+            //         // $(".DynamicTableHeader").each(function (i, e) {
+            //         //     var total_col = $("#" + e.id).text();
+            //         //     if (total_col === select_label) {
+            //         //         e.style.width = width + "px";
+            //         //     }
+            //         // });
             //     }
             // });
+            resize.resizable({
+                containment: "#" + div[0].id,
+                autoHide: true,
+                resize: function (event, ui) {   //테이블사이즈는 가로만 조정 가능하도록.
+                    ui.size.height = ui.originalSize.height;
+                    width = ui.size.width;
+                    var select_label = $("#" + this.id)[0].className.split(" ")[1];
+                    $(".table").each(function (i, e) {
+                        var total_col = $("#" + e.id)[0].className.split(" ")[1];
+                        if (total_col === select_label) {
+                            e.style.width = width + "px";
+                        }
+                    });
+                }
+            });
         });
     } else {
         resize.addClass('Lock');
@@ -216,6 +232,66 @@ function table_format_check(data, Label_id, key, table) {
             } else {
                 return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             }
+        } else if(!test && format){
+            var parts;
+            //도트
+            var dot = format.toString().split(".");
+            //콤마
+            var comma = format.toString().split(",");
+            //한글 날짜
+            var year = format.toString().split("년");
+            var month = format.toString().split("월");
+            var day = format.toString().split("일");
+
+            if(dot[1]){ //도트 있을 때
+                parts = key.toString().split(".");
+                return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            }
+            if(comma[1]){   //콤마 있을 때
+                parts = key.toString().split(",");
+                return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            }
+
+            if(year[1]){    //년도 있을 때
+                if(month[1]){
+                    if(day[0]){
+                        parts = key.toString().split("-");
+                        return parts[0]+"년"+parts[1]+"월"+parts[2]+"일";
+                    }else if(day[1]){
+
+                    }
+                }
+            }
+
+            //날짜
+            var Endate = format.toString().split("/");
+
+            if(Endate[1]){
+                if(Endate[2]){ // yyyy/mm/dd 형태일 경우
+                    parts = key.replace(/\B(?=(\d{4})+(?!\d))/g, "/");
+                    var parts2 = parts.split("/");
+                    if(parts2[1]){
+                        var parts3 = parts2[1].replace(/\B(?=(\d{2})+(?!\d))/g, "/");
+                        var total_date = parts2[0]+"/"+parts3;
+                        return total_date;
+                    }
+                }else{ //   yyyy/mm형태가 올 수 있음.
+                    parts = key.replace(/\B(?=(\d{4})+(?!\d))/g, "/");
+                }
+            }
+
+            //주민번호
+            var Social_Security_Number = format.toString().split("-");
+
+            if(Social_Security_Number[1] && !Social_Security_Number[2]){
+                parts = key.substring(0,6);
+                var parts2 = key.substring(6,14);
+                var return_val = parts+"-"+parts2;
+                return return_val;
+                // return parts[0].replace(/\B(?=(\d{6})+(?!\d))/g, "-");
+            }
+
+
         } else {
             return key;
         }
@@ -236,23 +312,22 @@ function table_column_controller(resize_area, Unalterable_area) {
 
 
     if (Unalterable_area[0]) {
-        // resize_area.resizable({
-        //     containment: "#" + Unalterable_area[0].id,
-        //     autoHide: true,
-        //     resize: function (event, ui) {   //테이블사이즈는 가로만 조정 가능하도록.
-        //         ui.size.height = ui.originalSize.height;
-        //         width = ui.size.width;
-        //         var resizing_label = this;
-        //         var select_label = $("#" + resizing_label.id).text();
-        //         $(".DynamicTableHeader").each(function (i, e) {
-        //             var total_col = $("#" + e.id).text();
-        //             if (total_col === select_label) {
-        //                 console.log("e.id : ",e.id);
-        //                 e.style.width = width + "px";
-        //             }
-        //         });
-        //     }
-        // });
+        resize_area.resizable({
+            // containment: "#" + Unalterable_area[0].id,
+            autoHide: true,
+            resize: function (event, ui) {   //테이블사이즈는 가로만 조정 가능하도록.
+                ui.size.height = ui.originalSize.height;
+                width = ui.size.width;
+                var resizing_label = this;
+                var select_label = $("#" + resizing_label.id).text();
+                $(".DynamicTableHeader").each(function (i, e) {
+                    var total_col = $("#" + e.id).text();
+                    if (total_col === select_label) {
+                        e.style.width = width + "px";
+                    }
+                });
+            }
+        });
     }
 }
 
