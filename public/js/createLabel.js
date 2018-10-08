@@ -75,7 +75,7 @@ function judgementControlList(band, divId, numOfData) {
 
  수정 : 하지연
  날짜 : 2018-09-18
- 수정 내용 : 고정테이블 부분 수정
+ 수정 내용 : 고정테이블 부분 추가 및 수정
  ******************************************************************/
 function judgementLabel(data, divId, numOfData, band) {
     var attr = data._attributes["xsi:type"];
@@ -109,10 +109,14 @@ function judgementLabel(data, divId, numOfData, band) {
                 }
             });
         }
-        // 18.09.29 YeSol 추가
-        if (numOfData > 1) {
-            for (var i = 0; i < numOfData; i++) {
+        // 18.09.29 YeSol 추가 // 18.10.08 하지연 수정
+        if (numOfData > 1) {//numOfData가 1보다 클 때
+
+            if(band.attributes['xsi:type'] !== 'BandDataFooter'){// 하지연 추가
+                for (var i = 0; i < numOfData; i++) {
+                console.log("numOfData : ",numOfData);
                 var fixedTableDivId = divId + 'fixedTable' + (curDatarow + i);
+
                 if (band.attributes['xsi:type'] === 'BandData') {
                     if (isRegion) {
                         drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, fixedTableDivId, curDatarowInRegion, fixTableList);//numOfData추가.
@@ -122,16 +126,35 @@ function judgementLabel(data, divId, numOfData, band) {
                 } else {
                     if (isRegion) {
                         drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList);//numOfData추가.
-                    } else {
-                        drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList);//numOfData추가.
+                    } else {// 하지연 수정
+                        // console.log("여기0");
+                        // console.log(" controlFixedTable.length : ",controlFixedTable.length," numOfData : ",numOfData);
+                        // if(fixTableList.length < numOfData){//밴드가 밴드데이터 풋터일때에 대한 처리도 해줘야함
+                            //i = fixTableList.length;
+                            // console.log("if탔음 ");
+                            //console.log("changed i :",i);
+                            // drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList);
+                        // }else{
+                            // console.log("else 탔음 ",i, controlFixedTable.length);
+                            drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList);//numOfData추가.
+                        // }
                     }
                 }
             }
-        } else {
+            }else{//밴드 데이터 풋터일때는 for문 안돌리게
+                if (isRegion) {
+                    drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList);
+                } else {
+                    // console.log("여기1");
+                    drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList);
+                }
+            }
+        } else {//numOfData가 1보다 크지 않을 때
             if (isRegion) {
-                drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList);//numOfData추가.
+                drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList);
             } else {
-                drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList);//numOfData추가.
+                console.log("여기2");
+                drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList);
             }
         }
     } else if (attr == "ControlLabel") {
@@ -331,6 +354,7 @@ function drawingSystemLabel(data, divId, band_name) {
     }
     labelPropertyApply(labelNbandInfo);
 }
+
 /******************************************************************
  기능 : SummaryLabel(요약 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 안예솔
