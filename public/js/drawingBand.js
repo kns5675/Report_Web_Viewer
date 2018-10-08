@@ -36,8 +36,6 @@ var isBandGroupHeader = false;
  * from 안예솔
  **********************************************************/
 function drawBand(bands, layerName, reportHeight, parentBand) {
-    console.log(bands);
-
     var avaHeight = 0;
     var dt;
 

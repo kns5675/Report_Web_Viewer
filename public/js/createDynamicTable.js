@@ -115,8 +115,6 @@ function drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table, ban
 
     var haveGroupHeaderBand = checkGroupHeader(band);
 
-    console.log(band);
-
     if (dt == undefined) { //without DataTable in DataBand
         drawingDynamicTableValueLabelWithOutDataTable(label, tableId);
     } else if (isRegion == true) {
