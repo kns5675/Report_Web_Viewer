@@ -36,6 +36,8 @@ var isBandGroupHeader = false;
  * from 안예솔
  **********************************************************/
 function drawBand(bands, layerName, reportHeight, parentBand) {
+    console.log(bands);
+
     var avaHeight = 0;
     var dt;
 
@@ -897,7 +899,7 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
                                     band.push(arg);
                                     return band;
                                 })(parentBand);
-                                drawBand(parentBand, layerName, reportHeight, band);
+                                    drawBand(parentBand, layerName, reportHeight, band);
                             }
                         }
                     }

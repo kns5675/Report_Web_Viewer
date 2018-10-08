@@ -54,6 +54,7 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData, band) {
 
     tableId.append('<tr id = "dynamicTitleLabel' + dynamicTitleLabelNum + '"></tr>');
 
+
     var dt = dataTable.DataSetName[band.dataTableName];
     var header_Name_Number = 1;
     if (Array.isArray(tableLabel)) {
@@ -64,7 +65,7 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData, band) {
                     header_Name_Number++;
                     break;
                 case "DynamicTableValueLabel" :
-                    drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table);
+                    drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table, band);
                     break;
             }
         });
@@ -83,6 +84,25 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData, band) {
     }
 }
 
+function checkGroupHeader(band){
+    var check = false;
+
+    if(Array.isArray(band.childHeaderBands)){
+        band.childHeaderBands.forEach(function(childHeaderBand){
+            if(childHeaderBand.attributes["xsi:type"] == "BandGroupHeader"){
+                check = true;
+            }
+        });
+    }else{
+        if(!(band.childHeaderBands == null)) {
+            if (band.childHeaderBands.attributes["xsi:type"] == "BandGroupHeader") {
+                check = true;
+            }
+        }
+    }
+    return check;
+}
+
 /******************************************************************
  기능 : DynamicTableValueLabel(동적 테이블 밸류 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 구영준
@@ -91,22 +111,28 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData, band) {
  Date : 2018-08-29
  From hagdung-i
  *******************************************************************/
-function drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table) {
+function drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table, band) {
+
+    var haveGroupHeaderBand = checkGroupHeader(band);
+
+    console.log(band);
+
     if (dt == undefined) { //without DataTable in DataBand
         drawingDynamicTableValueLabelWithOutDataTable(label, tableId);
     } else if (isRegion == true) {
-        if (groupFieldArray == undefined || groupFieldArray.length == 0) {
-            //리전 인 경우, 그룹 필드가 없는 경우
-            drawingDynamicTableValueLabelWithoutGroupFieldArrayWithRegion(label, dt, tableId, numOfData, table);
-        } else {
+        if(haveGroupHeaderBand){
             //리전인 경우, 그룹필드가 있는 경우
             drawingDynamicTableValueLabelWithGroupFieldArrayWithRegion(label, dt, tableId, numOfData, table);
+        } else {
+            //리전 인 경우, 그룹 필드가 없는 경우
+            drawingDynamicTableValueLabelWithoutGroupFieldArrayWithRegion(label, dt, tableId, numOfData, table);
         }
     } else {
-        if (groupFieldArray == undefined || groupFieldArray.length == 0) {
-            drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId, numOfData, table);
-        } else {
+        // if (groupFieldArray == undefined || groupFieldArray.length == 0) {
+        if(haveGroupHeaderBand){
             drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, numOfData, table);
+        } else {
+            drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId, numOfData, table);
         }
     }
 }
