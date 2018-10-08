@@ -147,51 +147,27 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                     fromData.summaryType = fromData.SummaryType === undefined ? 'Sum' : fromData.SummaryType._text;//요약타입
                                     fromData.detailWhere = fromData.DetailWhere === undefined ? undefined : fromData.DetailWhere._text; //요약라벨 조건절
                                     fromData.fieldName = fromData.fieldName === undefined ? undefined : fromData.fieldName;//필드이름.
-
                                     var dt = dataTable.DataSetName[fromData.dataTableName];
-                                    var key_arr = Object.keys(dt[0]);
-
-                                    var key = null;
-                                    key_arr.forEach(function (obj) {//key값 설정
-                                        if (fromData.fieldName == obj) {
-                                            key = obj;
-                                            //console.log("key : ", key);
-                                            return;
-                                        }
-                                    });
-                                    //console.log("서머리타입이..", fromData.summaryType);
+                                    var key = fromData.fieldName;
 
                                     switch (fromData.summaryType) {
                                         case 'Sum' : //합계
                                             var summary_label_sum = 0;
                                             if (groupFieldArray.length !== 0) {//기준필드 있을때
                                                 for (var i = 0; i < groupFieldArray[groupFieldNum].length - 1; i++) {
-
                                                     summary_label_sum += Number(groupFieldArray[groupFieldNum][i + 1][key]._text);
-                                                    // console.log("기준필드 있을때 i : ", i," summary_label_sum : ",summary_label_sum);
-                                                    // console.log("fromData : ",fromData);
-
                                                 }
                                             } else {//기준필드없을때
                                                 for (var i = 0; i < dt.length; i++) {
-                                                    // console.log("dt.length : ",dt.length);
-                                                    // console.log("dt : ",dt);
-                                                    // console.log("!!key : ", key);
 
                                                     if(dt[i][key] !== undefined){
                                                         if(dt[i][key]._text !== undefined){
-                                                            // console.log("~~",Number(dt[i][key]._text));
                                                             summary_label_sum += Number(dt[i][key]._text);
                                                         }
                                                     }
                                                     // console.log("!!summary_label_sum : ",summary_label_sum);
                                                 }showDataLabel =  summary_label_sum;
                                             }
-
-
-                                            // if (isNaN(Number(fromData.text))) {
-                                            //     showDataLabel = "오류";
-                                            // }
                                             break;
                                         case 'Avg' : //평균
                                             var summary_label_sum = 0;
@@ -233,35 +209,35 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                         // console.log("1");
                                         if (fromData.fieldName !== undefined) {
                                             var fieldName = fromData.fieldName;
-                                            // console.log("fieldName : ", fieldName);
-                                            // console.log("2");
+                                            //console.log("fieldName : ", fieldName);
+                                            //console.log("2");
 
                                             if (groupFieldArray[groupFieldNum]) {
-                                                // console.log("3");
+                                                console.log("3");
                                                 if (groupFieldArray[groupFieldNum][1][fieldName]) {
-                                                    // console.log("4");
+                                                    console.log("4");
                                                     var showDataLabel = groupFieldArray[groupFieldNum][1][fieldName]._text;
                                                     if (showDataLabel !== undefined) {
-                                                        // console.log("5");
+                                                        console.log("5");
                                                         showDataLabel = showDataLabel
                                                     }
                                                     if (typeof showDataLabel === 'undefined') {
-                                                        // console.log("6");
+                                                        console.log("6");
                                                         showDataLabel = ' ';
                                                     }
                                                 }
-                                                // console.log("7");
+                                                console.log("7");
                                             } else {
                                                 // console.log("8");
                                                 console.log("그룹풋터밴드에 해당하는 총계나 그런애들에 대한 자바스크립트..? 처리가 필요함");
                                             }
                                         }
                                         if (typeof showDataLabel === 'undefined') {
-                                            console.log("9");
+                                            // console.log("9");
                                             // console.log("여기");
                                             showDataLabel = ' ';
                                         }
-                                        // console.log("어떤 내용써지는지 보자 : ",showDataLabel," typeof : ",typeof showDataLabel);
+                                        //console.log("어떤 내용써지는지 보자 : ",showDataLabel," typeof : ",typeof showDataLabel);
                                         var table_reform = table_format_check(data.Labels, tdIDwithS, showDataLabel, fromData);
                                         ThisfixedTableRow.append
                                         ('<td class="SummaryLabel" id = "' + tdId + rC2 + '_' + labelC + '">' +

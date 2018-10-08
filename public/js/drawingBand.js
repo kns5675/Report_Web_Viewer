@@ -1060,7 +1060,7 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
                                     band.push(arg);
                                     return band;
                                 })(parentBand);
-                                drawBand(parentBand, layerName, reportHeight, band);
+                                    drawBand(parentBand, layerName, reportHeight, band);
                             }
                         }
                     }

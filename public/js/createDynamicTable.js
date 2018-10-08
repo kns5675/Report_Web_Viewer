@@ -54,8 +54,6 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData, band, dt) {
 
     tableId.append('<tr id = "dynamicTitleLabel' + dynamicTitleLabelNum + '"></tr>');
 
-    //ToDo 잘못됨
-    // var dt = dataTable.DataSetName[band.dataTableName];
     var header_Name_Number = 1;
     if (Array.isArray(tableLabel)) {
         tableLabel.forEach(function (label) {
