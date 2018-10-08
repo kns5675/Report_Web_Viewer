@@ -96,7 +96,7 @@ function saving (){
  작성자 : 하지연
  ******************************************************************/
 function makeHTML(){
-    var thistext = $("#reportTemplate").html().toString();
+    var thistext = $("#temp_reportTemplate").html().toString();
     var pom = document.getElementById("saveAsHTML");
     pom.setAttribute('href','data:text/plain;charset=utf-8,'+ encodeURIComponent(thistext));
     pom.setAttribute('download','saveAsHTML.html');
@@ -136,7 +136,7 @@ function sizechanged(){
  ******************************************************************/
 function test(){
     try {
-        var flexiblecontent = document.getElementById("reportTemplate");
+        var flexiblecontent = document.getElementById("temp_reportTemplate");
         var size = $("#txtZoom").val();
         $("#txtZoom").val(size);
 
@@ -174,7 +174,7 @@ function zoomIn(){
         $("#txtZoom option:last").attr("selected","selected");
 
         try {
-            var flexiblecontent = document.getElementById("reportTemplate");
+            var flexiblecontent = document.getElementById("temp_reportTemplate");
             $("#txtZoom").val(size);
             if (jQuery.browser.msie) {
                 flexiblecontent.style.zoom = size;
@@ -217,7 +217,7 @@ function zoomOut(){
 
         /*test();*/
         try {
-            var flexiblecontent = document.getElementById("reportTemplate");
+            var flexiblecontent = document.getElementById("temp_reportTemplate");
             $("#txtZoom").val(size);
             if (jQuery.browser.msie) {
                 flexiblecontent.style.zoom = size;
@@ -689,3 +689,29 @@ function autoSize(pTagId) {
     });
 }
 
+function headerMenuPositionSetting(){
+    var menu = $('#header_ul');
+    var menu_li = $('#header_ul > li');
+    var pos_left = 0;
+    for(var i=0; i<menu_li.length; i++){
+        var li_id = menu_li.eq(i).attr('id');
+        menu_li.eq(i).css('left', pos_left + 'px');
+        if(li_id === 'page_nav') {
+            menu_li.eq(i).css('width', '80.8px');
+            pos_left -= 14;
+        } else if(li_id === 'FirstPage'){
+            pos_left -= 6;
+        } else if(li_id === 'NextPage'){
+            pos_left -= 6;
+        }
+
+
+        pos_left += Number(menu_li.eq(i).css('width').substring(0, menu_li.eq(i).css('width').length-2)) + 8;
+
+
+    }
+    menu.css('width', pos_left + 'px');
+    $('#page_nav').css('top', '3px');
+    $('#txtZoomLi').css('top', '5px');
+    // 항목선택 5, 4, 2, 3 px
+}

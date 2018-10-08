@@ -135,7 +135,7 @@
 
     <!--</div>-->
   <!--</div>-->
-  <li>
+  <li id="txtZoomLi">
     <select id="txtZoom">
       <option value="2.0">200%</option>
       <option value="1.5">150%</option>
@@ -181,7 +181,7 @@
   <li class="header_btn" title="HTML로 내보내기"><a id="saveAsHTML" type="button" style="text-decoration: none;"><img src="image/drd_image/top_btn_html1.png"></a></li>
   <li class="header_btn" id="image_upload_button" title="이미지 추가"><img src="image/drd_image/top_btn_img_plus1.png"/></li>
   <li class="header_btn" id="tableChoice" title="항목선택"><img src="image/drd_image/SelectColumn1.png"/></li>
-  <li><button id="reportChoice">리포트 선택</button></li>
+  <li id="reportChoice_li"><button id="reportChoice">리포트 선택</button></li>
 </ul>
 </div>
   </body>
@@ -203,6 +203,7 @@
         file_save();
         file_open()
         $("#h1 > .test").val();
+        headerMenuPositionSetting();
     });
 
 </script>

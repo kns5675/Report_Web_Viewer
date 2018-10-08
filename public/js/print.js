@@ -7,7 +7,9 @@ function pagePrint(){
     try{
         var temp_padding = $('#temp_reportTemplate').css('padding-top');
         $('#temp_reportTemplate').css('padding-top', '0px');
-        $('.pageforcopyratio').css('outline', 'none')
+        $('.pageforcopyratio').css('border', '3px solid black');
+        $('.pageforcopyratio').css('margin-bottom', '0px');
+
         var flexiblecontent = document.getElementById("temp_reportTemplate");
 
         if (jQuery.browser.msie) {
@@ -15,8 +17,10 @@ function pagePrint(){
             window.print();
             $("#copyOptions").val("--인쇄--").attr("selected","selected");
             //alert($("#txtZoom option:selected").val());
+
             $('#temp_reportTemplate').css('padding-top', temp_padding);
-            $('.pageforcopyratio').css('outline', 'outline', '1px solid black');
+            $('.pageforcopyratio').css('border', '1px solid black');
+            $('.pageforcopyratio').css('margin-bottom', '10px');
         }
         else {
             $(flexiblecontent).css('-webkit-transform','scale(' + (1.0) + ')');
@@ -37,9 +41,10 @@ function pagePrint(){
             $(flexiblecontent).css('-moz-transform-origin','0 0');
             $(flexiblecontent).css('-o-transform','scale(' + (nowsize) + ')');
             $(flexiblecontent).css('-o-transform-origin','0 0');
-            $('#temp_reportTemplate').css('padding-top', temp_padding);
-            $('.pageforcopyratio').css('outline', '1px solid black');
 
+            $('#temp_reportTemplate').css('padding-top', temp_padding);
+            $('.pageforcopyratio').css('border', '1px solid black');
+            $('.pageforcopyratio').css('margin-bottom', '10px');
         }
     }catch(e){
         console.log(e.message);

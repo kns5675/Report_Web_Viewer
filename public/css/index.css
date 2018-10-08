@@ -20,15 +20,20 @@ body{
 }
 
 ul#header_ul{
+    position : relative;
     margin : 0 auto;
     padding : 0;
     width : fit-content;
 }
 
 ul#header_ul > li{
+    position : absolute;
     display : inline-block;
     box-sizing: border-box;
     padding : 0.2px;
+}
+ul#header_ul > li#tableChoice{
+    padding : 5px 4px 2px 3px;
 }
 
 ul#header_ul > li.header_btn:hover{
@@ -46,6 +51,7 @@ ul#header_ul > li.header_btn:hover{
     height : 20px;
 }
 
+
 ul#copyOptions_list{
     position : absolute;
     display : none;
@@ -56,6 +62,7 @@ ul#copyOptions_list{
 ul#copyOptions_list > li{
     display : block;
     padding : 4px;
+    width : 92px;
 }
 ul#copyOptions_list > li:hover{
     background-color : #c5cedb;
@@ -71,11 +78,11 @@ ul#saveImgList{
     background-color : #e5e7ea;
     margin-top : 1px;
 }
-ul#saveImgList > li{
+ul#header_ul ul#saveImgList > li{
     display : block;
+    width : 64px;
     padding : 3px 10px 4px 1px;
     letter-spacing : normal;
-
 }
 
 ul#saveImgList > li:hover{
@@ -84,6 +91,10 @@ ul#saveImgList > li:hover{
 
 li#saveAsImage:hover ul#saveImgList{
     display : block;
+}
+ul#header_ul > li#reportChoice_li{
+    width : fit-content;
+    top : 4px;
 }
 #txtZoom{
     font-size : 18px;
@@ -177,6 +188,7 @@ th .DRDSEQ{
 .pageforcopyratio{
     z-index:0;
     margin: 0px auto 10px auto;
+    border : 1px solid black;
 }
 
 
