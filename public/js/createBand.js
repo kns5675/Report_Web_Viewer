@@ -92,22 +92,22 @@ function CreateBand(band, parentBand){
  * 작성자 : 전형준
  *****************************************************************************************/
 function setMasterBandNSubBand(input_bands){
-    input_bands.forEach(function(input_band) {
-
+    input_bands.forEach(function(sub_band, sub_index) {
         // 데이터 밴드가 아니라면 조기리턴
-        if (input_band.attributes["xsi:type"] !== "BandData"){
+        if (sub_band.attributes["xsi:type"] !== "BandData"){
             return;
         }
 
         // masterBand를 갖는 데이터밴드의 masterBand에 subBand를 만들어줌
         // hasSubBand 변수를 true로 세팅, subBandArr 변수에 서브밴드 객체들을 넣어줌
-        if(input_band.masterBandName !== undefined){
-            input_bands.forEach(function(band, index){
-                if(input_band.masterBandName === band.name){
-                    input_bands[index].hasSubBand = true;
-                    input_bands[index].subBandArr =
-                        (input_bands[index].subBandArr === undefined ? [] : input_bands[index].subBandArr);
-                    input_bands[index].subBandArr.push(input_band);
+        if(sub_band.masterBandName !== undefined){
+            input_bands.forEach(function(master_band, master_index){
+                if(sub_band.masterBandName === master_band.name){
+                    input_bands[master_index].hasSubBand = true;
+                    input_bands[master_index].subBandArr =
+                        (input_bands[master_index].subBandArr === undefined ? [] : input_bands[master_index].subBandArr);
+                    input_bands[master_index].subBandArr.push(sub_band); // 마스터 밴드에게는 서브밴드 객체를
+                    input_bands[sub_index].masterBandObj = input_bands[master_index]; //  서브 밴드에게는 마스터밴드 객체를
                 }
             });
         }

@@ -482,12 +482,12 @@ function setPage(report, width, height) {
     });
 
     var page = $('#page' + pageNum);
-    page.css('border', 'solid green');
-    page.css('background-color', 'transparent');
+    // page.css('border', 'solid green');
+    // page.css('background-color', 'white');
     page.css('position', 'relative');//추가 - 하지연
 
     var pageForCopyRatio = $('#pageForCopyRatio' + pageNum);
-    pageForCopyRatio.css('border', 'solid red');
+    pageForCopyRatio.css('border', 'solid black');
     pageForCopyRatio.css('background-color', 'lightgrey');
 
 }
