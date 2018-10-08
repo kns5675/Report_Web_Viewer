@@ -153,7 +153,7 @@ function judgementLabel(data, divId, numOfData, band) {
             if (isRegion) {
                 drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList);
             } else {
-                console.log("여기2");
+                //console.log("여기2");
                 drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList);
             }
         }
