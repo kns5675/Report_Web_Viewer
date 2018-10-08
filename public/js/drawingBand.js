@@ -16,9 +16,6 @@ var isMinimumRowCount = false;
 var isBandGroupHeader = false;
 
 
-
-
-
 /***********************************************************
  * 리포트에 밴드들을 그려줌(ChildBands 들을 그려주기 위해 재귀함수로 사용)
  * 인자 bands : 그려줄 밴드들 // layerName : 어느 Layer에 그려줄 지
@@ -641,7 +638,6 @@ function joinDt(band, parentBand){
             }
         }
     }
-    console.log(joinDataTable);
     return joinDataTable;
 }
 
@@ -945,7 +941,6 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
                             }
                         }
                     } else if (isFixedTable == true && dt != undefined && numofData > 0) {
-                        console.log(numofData);
                         curDatarowInDataBand += numofData;
                         curDatarow += numofData;
                         if (curDatarowInDataBand >= dt.length) {
@@ -1029,7 +1024,6 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
                             }
                         }
                     } else if (isFixedTable == true && dt != undefined && numofData > 0) {
-
                         groupDataRow += numofData;
                         if (groupFieldArray.length - 1 == groupFieldNum) {
                             groupFieldNum++;

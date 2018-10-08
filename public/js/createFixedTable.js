@@ -153,10 +153,11 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                     switch (fromData.summaryType) {
                                         case 'Sum' : //합계
                                             var summary_label_sum = 0;
-                                            if (groupFieldArray.length !== 0) {//기준필드 있을때
+                                            if (groupFieldArray.length !== 0) {//기준필드 있을때//테스트 안해봤음.
                                                 for (var i = 0; i < groupFieldArray[groupFieldNum].length - 1; i++) {
                                                     summary_label_sum += Number(groupFieldArray[groupFieldNum][i + 1][key]._text);
                                                 }
+                                                showDataLabel = summary_label_sum;
                                             } else {//기준필드없을때
                                                 for (var i = 0; i < dt.length; i++) {
 
@@ -165,7 +166,6 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                                             summary_label_sum += Number(dt[i][key]._text);
                                                         }
                                                     }
-                                                    // console.log("!!summary_label_sum : ",summary_label_sum);
                                                 }showDataLabel =  summary_label_sum;
                                             }
                                             break;
@@ -173,7 +173,7 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                             var summary_label_sum = 0;
                                             var summary_label_avg = 0;
 
-                                            if (groupFieldArray.length !== 0) { // 그룹 기준 필드가 있을 때
+                                            if (groupFieldArray.length !== 0) { // 그룹 기준 필드가 있을 때//테스트 안해봤음.
                                                 for (var i = 0; i < groupFieldArray[groupFieldNum].length - 1; i++) {
                                                     summary_label_sum += Number(groupFieldArray[groupFieldNum][i + 1][key]._text);
                                                 }
@@ -184,10 +184,7 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                                 }
                                                 summary_label_avg = summary_label_sum / dt.length;
                                             }
-                                            fromData.text = summary_label_sum;
-                                            if (isNaN(Number(fromData.text))) {
-                                                fromData.text = "오류!";
-                                            }
+                                            showDataLabel = summary_label_sum;
                                              // console.log("평균임여");
                                             break;
                                         case 'Max' :
@@ -308,7 +305,8 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
     ThisFixedTableData.css({
         'position': 'absolute',//니니
         'left': tdLeft + 'px',
-        'top': tdTop + 'px'
+        'top': tdTop + 'px',
+        'box-sizing': 'border-box'
     })
 
     if (fromData.noBorder == 'true') {//border 없을때
@@ -325,7 +323,8 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
             'padding': 0,
             'border-spacing': '0px',
             'border-collapse': 'collapse',
-            'color': fromData.textColor
+            'color': fromData.textColor,
+            'box-sizing': 'border-box'
         });
     } else {//border 있을때
         if (fromData.borderThickness !== undefined) {
@@ -345,8 +344,10 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
             var leftBorderColor = fromData.leftBorderColor === undefined ? 'black' : fromData.leftBorderColor;
 
             ThisFixedTableData.css({
-                'width': (width - (leftThickness + rightThickness)) + 'px',
-                'height': (height - (topThickness + bottomThickness)) + 'px',
+                // 'width': (width - (leftThickness + rightThickness)) + 'px',
+                // 'height': (height - (topThickness + bottomThickness)) + 'px',
+                'width': width + 'px',
+                'height': height + 'px',
                 'float': 'left',
                 'background-color': fromData.backGroundColor,
                 'font-size': fromData.fontSize,
@@ -363,6 +364,7 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
                 'white-space': 'nowrap',
                 'color': fromData.textColor,
                 'overflow': 'visible',
+                'box-sizing': 'border-box'
             });
         }
     }
@@ -385,7 +387,8 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
             ThisFixedTableDataP.css({
                 'width': ptToPx + 'px',
                 'height': (textWithoutSpaceLength * ptToPx) + 'px',
-                'display': 'inline-block'
+                'display': 'inline-block',
+                'box-sizing': 'border-box'
             });
             ThisFixedTableData.css({
                 'white-space': 'normal'
@@ -403,13 +406,15 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
                 if (tagPHeight !== undefined) {
                     if (fromData.rectangle.height - tagPHeight >= 0) {
                         var tagPmarginTop = (fromData.rectangle.height - tagPHeight) / 2;
+                        //console.log("tagPmarginTop : ",tagPmarginTop);
 
                         switch (VTextAlignment) {
                             case "Center": {
                                 ThisFixedTableDataP.css({
                                     '-webkit-margin-before': tagPmarginTop,
                                     'top': tagPmarginTop,
-                                    'display': 'inline-block'
+                                    'display': 'inline-block',
+                                    'box-sizing': 'border-box'
                                 });
                             }
                                 break;

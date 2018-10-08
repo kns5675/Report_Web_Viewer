@@ -116,6 +116,7 @@ function BandData(band){
     this.invisible = band.Invisible._text; // 감추기
     this.fixPriorGroupHeader = band.FixPriorGroupHeader._text; // 상위 그룹 헤더 고정
     this.fixPriorGroupFooter = band.FixPriorGroupFooter._text; // 상위 그룹 풋터 고정
+    this.masterBandObj = undefined;
     this.masterBandName = band.MasterBandName === undefined ? undefined : band.MasterBandName._text;
     this.hasSubBand = false; // 서브 밴드를 가지면 true, 안가지면 false
     this.subBandArr = undefined; // 서브 밴드를 가질 때 서브 밴드가 담길 배열
