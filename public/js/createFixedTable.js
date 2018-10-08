@@ -69,7 +69,7 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                         var ThisfixedTableRow = $("#fixedTableRow" + fixTableRowCount);
 
                         ThisfixedTableRow.css({
-                            'position': 'absolute',
+                            'position': 'absolute',//니니
                             'border-spacing': 0,
                             'margin': 0,
                             'padding': 0,
@@ -170,6 +170,9 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                                 for (var i = 0; i < groupFieldArray[groupFieldNum].length - 1; i++) {
 
                                                     summary_label_sum += Number(groupFieldArray[groupFieldNum][i + 1][key]._text);
+                                                    // console.log("기준필드 있을때 i : ", i," summary_label_sum : ",summary_label_sum);
+                                                    // console.log("fromData : ",fromData);
+
                                                 }
                                             } else {//기준필드없을때
                                                 for (var i = 0; i < dt.length; i++) {
