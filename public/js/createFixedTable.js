@@ -2,15 +2,13 @@
  기능 : FixedTable(고정 테이블)을 화면에 그려주는 함수를 만든다.
  만든이 : 하지연
  ******************************************************************/
-function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList) {
-    // console.log("divId : ",divId,"data : ",data,"controlFixedTable : ",controlFixedTable,"fixTableList : ",fixTableList,"fixTableList.length : ",fixTableList.length);
+function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList, band) {
     if (data.IsApprovalBox._text == "true") {
         // console.log("결재란");//결재란일 경우 처리 여기에. 코드 정리 필요..
     }
     var div = $('#' + divId);//divId = 밴드
     div.css('position', 'relative');
     div.css('border', '1px solid blue');
-    div.css('background-color', 'lightpink');
 
     div.append('<div id = "Table' + tableNum + '"></div>');//무의미한 테이블 div
     var divIdTable = $('#Table' + tableNum);
@@ -484,7 +482,7 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
  내용 : tr이 1개일 경우 td가 테이블 내에 제위치를 찾을 수 있도록 수정,
 
  ******************************************************************/
-function drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList) {
+function drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList, band) {
     // TODO 몇 번째 데이터를 찍고 있는지 알아야 함!
     if (data.IsApprovalBox._text == "true") {
         //결재란일 경우 결재란에 대한 처리를 여기에 해줘야함. 코드 정리는 필요..
@@ -585,34 +583,22 @@ function drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, d
                                             if (fieldName == groupFieldName) {
                                                 if (groupFieldArrayInRegion[groupFieldNumInRegion]) {
                                                     var showDataLabel = groupFieldArrayInRegion[groupFieldNumInRegion][0];
-                                                    if (showDataLabel !== undefined) {
-                                                        showDataLabel = showDataLabel
-                                                    }
-                                                    if (showDataLabel === 'undefined') {
-                                                        showDataLabel = ' ';
-                                                    }
-                                                    if (typeof showDataLabel == undefined) {
+                                                    if (showDataLabel === undefined) {
                                                         showDataLabel = ' ';
                                                     }
                                                 }
                                             } else {
                                                 if (groupFieldArrayInRegion[groupFieldNumInRegion]) {
-                                                    if (groupFieldArrayInRegion[groupFieldNumInRegion][1][fieldName]) {
-                                                        var showDataLabel = groupFieldArrayInRegion[groupFieldNumInRegion][1][fieldName]._text;
-                                                        if (showDataLabel !== undefined) {
-                                                            showDataLabel = showDataLabel
-                                                        }
-                                                        if (typeof showDataLabel === 'undefined') {
-                                                            showDataLabel = ' ';
-                                                        }
+                                                    if (groupFieldArrayInRegion[groupFieldNumInRegion][1][fieldName] !== undefined) {
+                                                        var showDataLabel;
+                                                        showDataLabel = groupFieldArrayInRegion[groupFieldNumInRegion][1][fieldName]._text;
+                                                    } else {
+                                                        showDataLabel = ' ';
                                                     }
                                                 } else {
-                                                    console.log("그룹풋터밴드에 해당하는 총계나 그런애들에 대한 자바스크립트..? 처리가 필요함");
+                                                    // console.log("그룹풋터밴드에 해당하는 총계나 그런애들에 대한 자바스크립트..? 처리가 필요함");
                                                 }
                                             }
-                                        }
-                                        if (typeof showDataLabel === 'undefined') {
-                                            showDataLabel = ' ';
                                         }
                                         var table_reform = table_format_check(data.Labels, tdIDwithS, showDataLabel, fromData);
                                         ThisfixedTableRow.append
@@ -683,7 +669,7 @@ function drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, d
  기능 : FixedTable(고정 테이블)이 데이터 밴드 안에 있을 경우에 화면에 그려주는 함수를 만든다.
  만든이 : 안예솔
  ******************************************************************/
-function drawingFixedTableInDataBand(data, controlFixedTable, fixTableLabelList, fixedTableDivId, curDataRowInDataBand, fixTableList) {
+function drawingFixedTableInDataBand(data, controlFixedTable, fixTableLabelList, fixedTableDivId, curDataRowInDataBand, fixTableList, band) {
     // TODO 몇 번째 데이터를 찍고 있는지 알아야 함!
     if (data.IsApprovalBox._text == "true") {
         //결재란일 경우 결재란에 대한 처리를 여기에 해줘야함. 코드 정리는 필요..
@@ -785,29 +771,20 @@ function drawingFixedTableInDataBand(data, controlFixedTable, fixTableLabelList,
                                             if (fieldName == groupFieldName) {
                                                 if (groupFieldArray[groupFieldNum]) {
                                                     var showDataLabel = groupFieldArray[groupFieldNum][0];
-                                                    if (showDataLabel !== undefined) {
-                                                        showDataLabel = showDataLabel
-                                                    }
-                                                    if (showDataLabel === 'undefined') {
-                                                        showDataLabel = ' ';
-                                                    }
-                                                    if (typeof showDataLabel == undefined) {
+                                                    if (showDataLabel === undefined) {
                                                         showDataLabel = ' ';
                                                     }
                                                 }
                                             } else {
                                                 if (groupFieldArray[groupFieldNum]) {
-                                                    if (groupFieldArray[groupFieldNum][1][fieldName]) {
-                                                        var showDataLabel = groupFieldArray[groupFieldNum][1][fieldName]._text;
-                                                        if (showDataLabel !== undefined) {
-                                                            showDataLabel = showDataLabel
-                                                        }
-                                                        if (typeof showDataLabel === 'undefined') {
-                                                            showDataLabel = ' ';
-                                                        }
+                                                    if (groupFieldArray[groupFieldNum][1][fieldName] !== undefined) {
+                                                        var showDataLabel;
+                                                        showDataLabel = groupFieldArray[groupFieldNum][1][fieldName]._text;
+                                                    } else {
+                                                        showDataLabel = ' ';
                                                     }
                                                 } else {
-                                                    console.log("그룹풋터밴드에 해당하는 총계나 그런애들에 대한 자바스크립트..? 처리가 필요함");
+                                                    // console.log("그룹풋터밴드에 해당하는 총계나 그런애들에 대한 자바스크립트..? 처리가 필요함");
                                                 }
                                             }
                                         } else { /////////// 추가한 부분

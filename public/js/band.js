@@ -117,8 +117,10 @@ function BandData(band){
     this.fixPriorGroupHeader = band.FixPriorGroupHeader._text; // 상위 그룹 헤더 고정
     this.fixPriorGroupFooter = band.FixPriorGroupFooter._text; // 상위 그룹 풋터 고정
     this.masterBandName = band.MasterBandName === undefined ? undefined : band.MasterBandName._text;
-    this.hasSubBand = false;
-    this.subBandArr = undefined;
+    this.hasSubBand = false; // 서브 밴드를 가지면 true, 안가지면 false
+    this.subBandArr = undefined; // 서브 밴드를 가질 때 서브 밴드가 담길 배열
+    this.whereTerms = undefined; // 마스터-서브 밴드의 관계가 있을 때 어떤 데이터를 가지고 있는지 알려주는 변수
+    this.subBandFieldName = undefined;
     this.autoSize = band.AutoSize._text; // 자동 높이 조정
     this.repeatNumber = band.RepeatNumber._text; // 반복 횟수
     this.dziName = band.DziName === undefined ? undefined : band.DziName._text; // 데이터 셋 이름
@@ -128,6 +130,8 @@ function BandData(band){
     this.isContainTypeCrossTable = band.IsContainTypeCrossTable._text; // 크로스탭 테이블 보유 여부
     this.isContainTypeRegion = band.IsContainTypeRegion._text; // 리전 보유 여부
     this.joinString = band.JoinString === undefined ? undefined : band.JoinString._text; // 디테일 Where절 조건
+    this.minimumRowCount = band.MinimumRowCount === undefined ? 1 : band.MinimumRowCount._text; // 디테일 Where절 조건
+
 }
 
 // 그룹 헤더 밴드

@@ -163,6 +163,12 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                             getFooterHeight(bands, band);
                         }
                     }
+                    if (band.masterBandName) {
+                        //ToDo bands[0] 수정
+                        dt = joinDt(band, bands[0]);
+                    }else {
+                        dt = dataTable.DataSetName[band.dataTableName];
+                    }
                     if (isRegion) { // 리전일 때
                         drawBandDataInRegion(groupFieldArrayInRegion, band, layerName, reportHeight, parentBand, div_id, dt);
                     } else { // 리전이 아닐 때
@@ -254,9 +260,15 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
             }
             if (band.attributes["xsi:type"] !== "BandSubReport") {
                 if (band.attributes["xsi:type"] === "BandData") {
-                    if (/*band.id == dataBand.id && */ !doneDataBand) {
-                        dt = dataTable.DataSetName[band.dataTableName];
-                        judgementControlList(band, div_id, numofData); // 라벨을 그려줌
+                    if (!doneDataBand) {
+                        if (band.masterBandName) {
+                            //ToDo bands[0] 수정
+                            console.log(band)
+                            dt = joinDt(band, bands[0]);
+                        }else {
+                            dt = dataTable.DataSetName[band.dataTableName];
+                        }
+                        judgementControlList(band, div_id, numofData, dt); // 라벨을 그려줌
                         afterjudgementControlListAction(band, div_id, layerName, reportHeight, parentBand, dt);
                     }
                 } else {
@@ -387,7 +399,7 @@ function drawBandData(groupFieldArray, band, layerName, reportHeight, parentBand
         if (isDynamicTable == true && dt != undefined) {
             var dataBandFooterHeight = 0;
             avaHeight = getAvaHeight(div_id, reportHeight);
-            numofData = getNumOfDataInOnePageNonObject(band, avaHeight);
+            numofData = getNumOfDataInOnePageNonObject(band, avaHeight, dt);
             dataBandHeight = getBandHeightOfDataBand(band, numofData);
 
             if (band.childFooterBands !== null) { // 자식 풋터 밴드에서 재호출
@@ -400,10 +412,10 @@ function drawBandData(groupFieldArray, band, layerName, reportHeight, parentBand
             if (Array.isArray(band.controlList.anyType)) {
                 band.controlList.anyType.forEach(function (anyType) {
                     if (anyType._attributes['xsi:type'] == 'ControlDynamicTable' && anyType.Labels !== undefined) {
-                        numofData = getNumOfDataInOnePageNonObject(band, div_id);
+                        numofData = getNumOfDataInOnePageNonObject(band, div_id, dt);
                         if (band.controlList.anyType.MinimumRowCount !== undefined) { // 최소 행 개수
                             var minimumRowCount = Number(band.controlList.anyType.MinimumRowCount._text);
-                            if ((dt.length - curDatarowInDataBand) < minimumRowCount && minimumRowCount != 1) {
+                            if ((dt.length - curDatarowInDataBand) < minimumRowCount /*&& minimumRowCount != 1*/) {
                                 numofData = minimumRowCount;
                                 isMinimumRowCount = false;
                             }
@@ -422,10 +434,10 @@ function drawBandData(groupFieldArray, band, layerName, reportHeight, parentBand
                 });
             } else {
                 if (band.controlList.anyType.Labels !== undefined) {
-                    numofData = getNumOfDataInOnePageNonObject(band, div_id);
+                    numofData = getNumOfDataInOnePageNonObject(band, div_id, dt);
                     if (band.controlList.anyType.MinimumRowCount !== undefined) { // 최소 행 개수
                         var minimumRowCount = Number(band.controlList.anyType.MinimumRowCount._text);
-                        if ((dt.length - curDatarowInDataBand) < minimumRowCount && minimumRowCount != 1) {
+                        if ((dt.length - curDatarowInDataBand) < minimumRowCount /*&& minimumRowCount != 1*/) {
                             numofData = minimumRowCount;
                             isMinimumRowCount = true;
                         }
@@ -479,6 +491,158 @@ function drawBandData(groupFieldArray, band, layerName, reportHeight, parentBand
             setWidthHeightInBand(div_id, band);
         }
     }
+    // if (band.hasSubBand) {
+    //     console.log(band.childFooterBands);
+    //     drawSubBand(band.subBandArr, layerName, reportHeight, band);
+    // }
+}
+
+function drawSubBand(bands, layerName, reportHeight, parentBand) {
+    bands.forEach(function (band) {
+        // dt = dataTable.DataSetName[band.dataTableName];
+        // 180910 YeSol 추가
+        var controlLists = [];
+        // var bands = report.layers.designLayer.bands;
+        controlLists.push(band.controlList.anyType); // dataBand의 controlList배열
+
+        isDynamicTable = false;
+        isFixedTable = false;
+        controlLists.forEach(function (controlList) {
+            if (controlList.length !== undefined) {
+                for (var i = 0; i < controlList.length; i++) {
+                    if (controlList[i]._attributes['xsi:type'] == 'ControlDynamicTable') {
+                        isDynamicTable = true;
+                        numofData = 0;
+                    }
+                    if (controlList[i]._attributes['xsi:type'] == 'ControlFixedTable') {
+                        isFixedTable = true;
+                        numofData = 0;
+                    }
+                }
+            } else {
+                if (controlList._attributes['xsi:type'] == 'ControlDynamicTable') {
+                    isDynamicTable = true;
+                    numofData = 0;
+                }
+                if (controlList._attributes['xsi:type'] == 'ControlFixedTable') {
+                    isFixedTable = true;
+                    numofData = 0;
+                }
+            }
+        });
+        if (band.childHeaderBands !== null) { // 자식헤더밴드에서 재호출
+            drawChildHeaderBand(band, layerName, reportHeight); // 자식 밴드를 그려주는 함수 호출
+        }
+        var div_id = 'band' + (bandNum++);
+
+        // if (band.attributes["xsi:type"] !== "BandSubReport") {
+        $('#' + layerName).append("<div id='" + div_id + "' class='Band " + band.attributes["xsi:type"] + "'>" + band.name + "</div>");
+
+        if (getAvaHeight(div_id, reportHeight) < Number(band.rectangle.height)) {
+            $('#' + div_id).remove();
+            return true;
+        }
+        if (bands.length > 1) {
+            if (isRegion) { // 리전일 때
+                getFooterHeightInRegion(bands, band);
+            } else { // 리전이 아닐 때
+                getFooterHeight(bands, band);
+            }
+        }
+
+        dt = joinDt(band, parentBand);
+
+        if (isRegion) { // 리전일 때
+            drawBandDataInRegion(groupFieldArrayInRegion, band, layerName, reportHeight, parentBand, div_id, dt);
+        } else { // 리전이 아닐 때
+            console.log(dt);
+            drawBandData(groupFieldArray, band, layerName, reportHeight, parentBand, div_id, dt);
+        }
+        // dt = dataTable.DataSetName[band.dataTableName];
+        judgementControlList(band, div_id, numofData); // 라벨을 그려줌
+        afterjudgementControlListAction(band, div_id, layerName, reportHeight, parentBand, dt);
+    });
+
+
+}
+
+function joinDt(band, parentBand){
+    var masterString;
+    var subBandString;
+    var joinDataTable = [];
+    var joinStrings = band.joinString.split('=');
+    joinStrings.forEach(function (joinString) {
+        joinString = joinString.trim();
+        joinString = joinString.split('.');
+        if (joinString.length > 1) {
+            masterString = joinString;
+        } else {
+            subBandString = joinString;
+            subBandString = subBandString[0].toUpperCase();
+        }
+    });
+    var parentColumnName = masterString[1].toUpperCase();
+    console.log(masterString[0]);
+    dataTable.DataSetName[parentBand.dataTableName].forEach(function (masterBandData) {
+        for (keyInMasterBand in masterBandData) {
+            if (parentColumnName == keyInMasterBand) { // 인사기본.no_emp에서 no_emp부분
+                if(Array.isArray(dataTable.DataSetName[band.dataTableName])) {
+                    dataTable.DataSetName[band.dataTableName].forEach(function (subBandData) {
+                        for (keyInSubBand in subBandData) {
+                            if (subBandString == keyInSubBand) {
+                                if (masterBandData[keyInMasterBand]._text == subBandData[keyInSubBand]._text) {
+                                    if (groupFieldArray !== undefined && subBandData[keyInSubBand]._text == groupFieldArray[groupFieldNum][0]) {
+                                        band.whereTerms = groupFieldArray[groupFieldNum][0];
+                                        // parentBand.whereTerms = groupFieldArray[groupFieldNum][0];
+                                        band.subBandFieldName = subBandString;
+
+                                    } else if (groupFieldArray === undefined) {
+                                        band.whereTerms = subBandData[keyInSubBand]._text;
+                                        // parentBand.whereTerms = subBandData[keyInSubBand]._text;
+                                        band.subBandFieldName = subBandString;
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }else{
+                    for (keyInSubBand in dataTable.DataSetName[band.dataTableName]) {
+                        if (subBandString == keyInSubBand) {
+                            if (masterBandData[keyInMasterBand]._text == dataTable.DataSetName[band.dataTableName][keyInSubBand]._text) {
+                                if (groupFieldArray !== undefined && dataTable.DataSetName[band.dataTableName][keyInSubBand]._text == groupFieldArray[groupFieldNum][0]) {
+                                    band.whereTerms = groupFieldArray[groupFieldNum][0];
+                                    parentBand.whereTerms = groupFieldArray[groupFieldNum][0];
+                                    band.subBandFieldName = subBandString;
+
+                                } else if (groupFieldArray === undefined) {
+                                    band.whereTerms = dataTable.DataSetName[band.dataTableName][keyInSubBand]._text;
+                                    parentBand.whereTerms = dataTable.DataSetName[band.dataTableName][keyInSubBand]._text;
+                                    band.subBandFieldName = subBandString;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    });
+    dt = dataTable.DataSetName[band.dataTableName];
+    if(Array.isArray(dt)){
+        dt.forEach(function (data) {
+            for (key in data) {
+                if(band.subBandFieldName == key && band.whereTerms == data[key]._text) {
+                    joinDataTable.push(data);
+                }
+            }
+        });
+    }else{
+        for (key in dt) {
+            if(band.subBandFieldName == key && band.whereTerms == dt[key]._text) {
+                joinDataTable.push(dt);
+            }
+        }
+    }
+    return joinDataTable;
 }
 
 
@@ -554,7 +718,7 @@ function drawBandDataInRegion(groupFieldArrayInRegion, band, layerName, reportHe
                         numofData = getNumOfDataInOnePageNonObject(band, div_id);
                         if (band.controlList.anyType.MinimumRowCount !== undefined) { // 최소 행 개수
                             var minimumRowCount = Number(band.controlList.anyType.MinimumRowCount._text);
-                            if ((dt.length - curDatarowInDataBand) < minimumRowCount && minimumRowCount != 1) {
+                            if ((dt.length - curDatarowInDataBand) < minimumRowCount /*&& minimumRowCount != 1*/) {
                                 numofData = minimumRowCount;
                                 isMinimumRowCount = false;
                             }
@@ -576,7 +740,7 @@ function drawBandDataInRegion(groupFieldArrayInRegion, band, layerName, reportHe
                     numofData = getNumOfDataInOnePageNonObject(band, div_id);
                     if (band.controlList.anyType.MinimumRowCount !== undefined) { // 최소 행 개수
                         var minimumRowCount = Number(band.controlList.anyType.MinimumRowCount._text);
-                        if ((dt.length - curDatarowInRegion) < minimumRowCount && minimumRowCount != 1) {
+                        if ((dt.length - curDatarowInRegion) < minimumRowCount /*&& minimumRowCount != 1*/) {
                             numofData = minimumRowCount;
                             isMinimumRowCount = true;
                         }
@@ -685,7 +849,7 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
                         }
                         if (band.controlList.anyType.MinimumRowCount !== undefined) {
                             var minimumRowCount = Number(band.controlList.anyType.MinimumRowCount._text);
-                            if (minimumRowCount != 1 && (dt.length - curDatarowInRegion) < minimumRowCount) {
+                            if (/*minimumRowCount != 1 &&*/ (dt.length - curDatarowInRegion) < minimumRowCount) {
                                 numofData = minimumRowCount;
                             }
                         }
@@ -700,7 +864,7 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
                         }
                         if (band.controlList.anyType.MinimumRowCount !== undefined) {
                             var minimumRowCount = Number(band.controlList.anyType.MinimumRowCount._text);
-                            if (minimumRowCount != 1 && (dt.length - curDatarowInRegion) < minimumRowCount) {
+                            if (/*minimumRowCount != 1 && */(dt.length - curDatarowInRegion) < minimumRowCount) {
                                 numofData = minimumRowCount;
                             }
                         }
@@ -768,7 +932,7 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
 
                         if (band.controlList.anyType.MinimumRowCount !== undefined) {
                             var minimumRowCount = Number(band.controlList.anyType.MinimumRowCount._text);
-                            if (minimumRowCount != 1 && (dt.length - curDatarowInDataBand) < minimumRowCount) {
+                            if (/*minimumRowCount != 1 &&*/ (dt.length - curDatarowInDataBand) < minimumRowCount) {
                                 numofData = minimumRowCount;
                             }
                         }
@@ -785,7 +949,7 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
                         }
                         if (band.controlList.anyType.MinimumRowCount !== undefined) {
                             var minimumRowCount = Number(band.controlList.anyType.MinimumRowCount._text);
-                            if (minimumRowCount != 1 && (dt.length - curDatarowInDataBand) < minimumRowCount) {
+                            if (/*minimumRowCount != 1 &&*/ (dt.length - curDatarowInDataBand) < minimumRowCount) {
                                 numofData = minimumRowCount;
                             }
                         }
