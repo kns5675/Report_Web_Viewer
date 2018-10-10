@@ -7,6 +7,9 @@ input[type="number"]#copyratio::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
+#copyratio{
+    margin-left : 5px;
+}
 .modal {
     display: none; /* Hidden by default */
     position: fixed; /* Stay in place */
@@ -100,6 +103,35 @@ input[type="number"]#copyratio::-webkit-inner-spin-button {
     float:left;
     /*background-color:mediumpurple;*/
 }
+#copywrap{
+    line-height : 46px;
+}
+#aproval_option{
+    height : 130px;
+}
+.aproval_img{
+    display : inline-block;
+    margin : 3px 0px 0px 20px;
+}
+.paper_row_img {
+    position : relative;
+    margin: 5px 0px 0px 8px;
+}
+.paper_row_img > label:last-child{
+    position : absolute;
+    margin : 2px 0px 0px 10px;
+    display : inline-block;
+}
+
+#direction_horizon{
+    display:inline-block;
+    margin-left:20px;"
+}
+.extraoption_select{
+    height : 24px;
+    margin-bottom : 4px;
+}
+
 .rightpart{
     float:left;
     width:40%;

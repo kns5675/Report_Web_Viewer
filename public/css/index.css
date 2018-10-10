@@ -28,7 +28,7 @@ ul#header_ul{
 
 ul#header_ul > li{
     position : absolute;
-    display : inline-block;
+    display : none;
     box-sizing: border-box;
     padding : 0.2px;
 }
@@ -96,6 +96,9 @@ ul#header_ul > li#reportChoice_li{
     width : fit-content;
     top : 4px;
 }
+/*#reportChoice_li:hover{*/
+    /*cursor : pointer;*/
+/*}*/
 #txtZoom{
     font-size : 18px;
 }

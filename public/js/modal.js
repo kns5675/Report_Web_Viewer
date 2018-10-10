@@ -380,7 +380,7 @@ function datePrinting() {
     const seconds = date.getSeconds();
     const totaldate = year+"-"+month+"-"+day+" "+hour +":"+seconds;
 
-    $(".page").each(function (i,e) {
+    $(".visiblePage").each(function (i,e) {
         console.log(e.id.replace(/[^0-9]/g,""));
         const row_interval = e.style.width.replace(/[^-\.0-9]/g,"")*0.83;
         const col_interval = e.style.height.replace(/[^-\.0-9]/g,"")*0.97;

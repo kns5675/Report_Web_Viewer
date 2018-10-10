@@ -676,6 +676,7 @@ function setCssInTable(label, tdId) {
             'font-color': label.textColor,
             'width': label.rectangle.width + 'px',
             'height': label.rectangle.height + 'px',
+            'box-sizing' : 'border-box',
             'white-space': 'nowrap',
             'padding' :'0px'
         });
