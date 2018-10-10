@@ -27,7 +27,6 @@ function file_download_data_get() {
 function file_save() {
     var modalLayer = $("#file_download_modalLayer");
     $("#saving").on("click", function () {
-        console.log("total_data.ReportTemplate.ReportList.anyType.Layers : ",total_data.ReportTemplate.ReportList.anyType);
         modalLayer.fadeIn("slow");
         // var Layers;
         // var Reports;

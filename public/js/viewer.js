@@ -1,6 +1,9 @@
 var docheight; //297
 var docwidth; //210
 var doc;// = new jsPDF('p','mm',[297,210]);
+var border_Width;
+var border_Color;
+var border_Style;
 /******************************************************************
  기능 : 이미지 내보내기, PDF내보내기, HTML내보내기 시 필요한 로딩화면 띄우기
  작성자 : 하지연
@@ -487,148 +490,158 @@ function howmanyPages(thisvalue){
 
 //학준 추가
 function band_dbclick_event(data) {
-    if (data.ReportTemplate.ReportList.anyType.Editable !== undefined) {
-        var Editable = data.ReportTemplate.ReportList.anyType.Editable._text;
-        if (Editable == "true") {
-            $(".NormalLabel_scope").on({
-                "dblclick": function () {
-                    var this_text;
-                    var this_id = this.children;
-                    for(var i=0; i<this_id.length; i++){
-                        if(this_id[i].id){
-                            this_text = $("#" + this_id[i].id)[0].innerText;
-                            var current = this.id;
-                            var current_width = this.style.width;
-                            var current_height = this.style.height;
+    var Editable;
+    if (data.ReportTemplate.ReportList.anyType.Editable === undefined) {
+        Editable = undefined;
+    }else{
+        Editable = data.ReportTemplate.ReportList.anyType.Editable._text;
+    }
+    if (Editable !== "false") {
+        $(".NormalLabel_scope").on({
+            "dblclick": function () {
+                var this_text;
+                var this_id = this.children;
+                for(var i=0; i<this_id.length; i++){
+                    if(this_id[i].id){
+                        this_text = $("#" + this_id[i].id)[0].innerText;
+                        var current = this.id;
+                        var current_width = this.style.width;
+                        var current_height = this.style.height;
 
-                            if ($("#text_area")[0] === undefined) {
-                                var text_div = document.createElement("div");
-                                text_div.id = "text_div";
+                        if ($("#text_area")[0] === undefined) {
+                            var text_div = document.createElement("div");
+                            text_div.id = "text_div";
 
-                                var text_area = document.createElement('textarea');
-                                text_area.id = "text_area";
-                                text_area.value = this_text;
-                                text_area.style.width = current_width;
-                                text_area.style.height = current_height;
-                                text_area.zIndex = 999;
+                            var text_area = document.createElement('textarea');
+                            text_area.id = "text_area";
+                            text_area.value = this_text;
+                            text_area.style.width = current_width;
+                            text_area.style.height = current_height;
+                            text_area.zIndex = 999;
+                            border_Width = this.style.borderWidth;
+                            border_Color = this.style.borderColor;
+                            border_Style = this.style.borderStyle;
 
-                                this.style.borderWidth = "3px";
-                                this.style.borderColor = "blue";
-                                this.style.borderStyle = "dotted solid";
+                            this.style.borderWidth = "3px";
+                            this.style.borderColor = "blue";
+                            this.style.borderStyle = "dotted solid";
 
-                                document.getElementById(current).appendChild(text_div);
-                                document.getElementById(text_div.id).appendChild(text_area);
+                            document.getElementById(current).appendChild(text_div);
+                            document.getElementById(text_div.id).appendChild(text_area);
 
-                                document.getElementById(text_area.id).focus();
-                            }
+                            document.getElementById(text_area.id).focus();
                         }
-                    }
-                },
-                "keydown": function (key) {
-                    if (key.keyCode === 13) { //enter 처리
-                        if (!key.shiftKey) {  //shift + enter 처리
-                            var insert_text = $("#text_area").val();
-                            var text_convert = insert_text.replace(/(?:\r\n|\r|\n)/g, '<br />'); // html 문법으로 변환.
-                            var this_id = this.children;
-                            for(var i=0; i<this_id.length; i++){
-                                if(this_id[i].id){
-                                    $("#" + this_id[i].id)[0].innerHTML = text_convert;
-                                    $("#text_div").remove();
-                                    this.style.borderWidth = "1px";
-                                    this.style.borderColor = "black";
-                                    this.style.borderStyle = "solid";
-                                }
-                            }
-
-                        }
-                    } else if (key.keyCode === 27) { //esc 처리
-                        $("#text_div").remove();
-                        this.style.borderWidth = "1px";
-                        this.style.borderColor = "black";
-                        this.style.borderStyle = "solid";
                     }
                 }
-            });
-            $(".DynamicTableHeader").on({
-                "dblclick": function () {
-                    var current = this.id;
-                    var current_width = this.style.width;
-                    var current_height = this.style.height;
-                    var current_id = $("#"+current)[0];
-                    console.log("current : ",current_id);
-                    var this_text = $("#" + current)[0].textContent;
-                    console.log("this_text : ",$("#" + current));
-                    if ($("#text_area")[0] === undefined) {
-                        var text_div = document.createElement("div");
-                        text_div.id = "text_div";
-
-                        var text_area = document.createElement('textarea');
-                        text_area.id = "text_area";
-                        text_area.value = this_text;
-                        text_area.style.width = current_width;
-                        text_area.style.height = current_height;
-                        text_area.zIndex = 999;
-
-                        this.style.borderWidth = "3px";
-                        this.style.borderColor = "blue";
-                        this.style.borderStyle = "dotted solid";
-
-                        document.getElementById(current).appendChild(text_div);
-                        document.getElementById(text_div.id).appendChild(text_area);
-
-                        document.getElementById(text_area.id).focus();
-                    }
-                },
-                "keydown": function (key) {
-                    if (key.keyCode === 13) {
-                        if (!key.shiftKey) {
-                            var insert_text = $("#text_area").val();
-                            var text_convert = insert_text.replace(/(?:\r\n|\r|\n)/g, '<br />'); // html 문법으로 변환.
-                            var id = $("#" + this.id)[0];
-
-                            console.log("id : ",id.children);
-                            for(var i=0; i< id.children.length; i++){
-                                if(id.children[i].tagName === "P"){
-                                    id.children[i].innerText = insert_text;
-                                }
+            },
+            "keydown": function (key) {
+                if (key.keyCode === 13) { //enter 처리
+                    if (!key.shiftKey) {  //shift + enter 처리
+                        var insert_text = $("#text_area").val();
+                        var text_convert = insert_text.replace(/(?:\r\n|\r|\n)/g, '<br />'); // html 문법으로 변환.
+                        var this_id = this.children;
+                        for(var i=0; i<this_id.length; i++){
+                            if(this_id[i].id){
+                                $("#" + this_id[i].id)[0].innerHTML = text_convert;
+                                $("#text_div").remove();
+                                this.style.borderWidth = border_Width;
+                                this.style.borderColor = border_Color;
+                                this.style.borderStyle = border_Style;
                             }
-                            // console.log("innerText : ",id.innerText.replace(/[^0-9a-zA-Z가-힣]/g, ""));
-                            console.log("insert_text : ", insert_text);
-                            console.log("text_convert : ", text_convert);
-                            $("#text_div").remove();
-                            this.style.borderWidth = "1px";
-                            this.style.borderColor = "black";
-                            this.style.borderStyle = "solid";
                         }
-                    } else if (key.keyCode === 27) {
-                        $("#text_div").remove();
-                        this.style.borderWidth = "1px";
-                        this.style.borderColor = "black";
-                        this.style.borderStyle = "solid";
-                    } else if(key.keyCode === 16){ //shift키 누르고 있을 때 column의 width값이 바뀌면 해당 column만 사이즈 조정 되는 것처럼 보이도록.
-                        console.log("test");
-                    }
-                },
-                "mouseover": function (event) {
-                    if(event.shiftKey){ //shift키 누르고 있을 때 column의 width값이 바뀌면 해당 column만 사이즈 조정 되는 것처럼 보이도록.
-                        console.log("test");
-                        var thid = $("#"+this.id);
-                        var titleTrId = $("#"+thid[0].parentElement.id);
-                        var tableId = $("#"+titleTrId[0].parentElement.id);
-                        var bandId = $("#"+tableId[0].parentElement.id);
-                        console.log("this : ",thid);
-                        console.log("bandId : ",bandId);
-                        // shift_table_column_controller(thid, titleTrId, tableId, bandId);
-                    }else{
-                        // console.log("shift 클릭 안함.");
-                    }
-                }
-            });
 
-            $('.NormalLabel').on("click", function () {
-                // autoSize(this.id);
-            });
-        }
+                    }
+                } else if (key.keyCode === 27) { //esc 처리
+                    console.log("this : ",this.style.borderWidth);
+                    $("#text_div").remove();
+                    this.style.borderWidth = border_Width;
+                    this.style.borderColor = border_Color;
+                    this.style.borderStyle = border_Style;
+                }
+            }
+        });
+        $(".DynamicTableHeader").on({
+            "dblclick": function () {
+                var current = this.id;
+                var current_width = this.style.width;
+                var current_height = this.style.height;
+                var current_id = $("#"+current)[0];
+                console.log("current : ",current_id);
+                var this_text = $("#" + current)[0].textContent;
+                console.log("this_text : ",$("#" + current));
+                if ($("#text_area")[0] === undefined) {
+                    var text_div = document.createElement("div");
+                    text_div.id = "text_div";
+
+                    var text_area = document.createElement('textarea');
+                    text_area.id = "text_area";
+                    text_area.value = this_text;
+                    text_area.style.width = current_width;
+                    text_area.style.height = current_height;
+                    text_area.zIndex = 999;
+                    border_Width = this.style.borderWidth;
+                    border_Color = this.style.borderColor;
+                    border_Style = this.style.borderStyle;
+
+                    this.style.borderWidth = "3px";
+                    this.style.borderColor = "blue";
+                    this.style.borderStyle = "dotted solid";
+
+                    document.getElementById(current).appendChild(text_div);
+                    document.getElementById(text_div.id).appendChild(text_area);
+
+                    document.getElementById(text_area.id).focus();
+                }
+            },
+            "keydown": function (key) {
+                if (key.keyCode === 13) {
+                    if (!key.shiftKey) {
+                        var insert_text = $("#text_area").val();
+                        var text_convert = insert_text.replace(/(?:\r\n|\r|\n)/g, '<br />'); // html 문법으로 변환.
+                        var id = $("#" + this.id)[0];
+
+                        console.log("id : ",id.children);
+                        for(var i=0; i< id.children.length; i++){
+                            if(id.children[i].tagName === "P"){
+                                id.children[i].innerText = insert_text;
+                            }
+                        }
+                        // console.log("innerText : ",id.innerText.replace(/[^0-9a-zA-Z가-힣]/g, ""));
+                        console.log("insert_text : ", insert_text);
+                        console.log("text_convert : ", text_convert);
+                        $("#text_div").remove();
+                        this.style.borderWidth = border_Width;
+                        this.style.borderColor = border_Color;
+                        this.style.borderStyle = border_Style;
+                    }
+                } else if (key.keyCode === 27) {
+                    $("#text_div").remove();
+                    this.style.borderWidth = border_Width;
+                    this.style.borderColor = border_Color;
+                    this.style.borderStyle = border_Style;
+                } else if(key.keyCode === 16){ //shift키 누르고 있을 때 column의 width값이 바뀌면 해당 column만 사이즈 조정 되는 것처럼 보이도록.
+                    console.log("test");
+                }
+            },
+            "mouseover": function (event) {
+                if(event.shiftKey){ //shift키 누르고 있을 때 column의 width값이 바뀌면 해당 column만 사이즈 조정 되는 것처럼 보이도록.
+                    console.log("test");
+                    var thid = $("#"+this.id);
+                    var titleTrId = $("#"+thid[0].parentElement.id);
+                    var tableId = $("#"+titleTrId[0].parentElement.id);
+                    var bandId = $("#"+tableId[0].parentElement.id);
+                    console.log("this : ",thid);
+                    console.log("bandId : ",bandId);
+                    // shift_table_column_controller(thid, titleTrId, tableId, bandId);
+                }else{
+                    // console.log("shift 클릭 안함.");
+                }
+            }
+        });
+
+        $('.NormalLabel').on("click", function () {
+            // autoSize(this.id);
+        });
     }
 }
 

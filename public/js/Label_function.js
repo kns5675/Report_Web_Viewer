@@ -201,10 +201,13 @@ function format_check(data) {
  Date : 2018-09-12
  만든이 : hagdung-i
  ******************************************************************/
-function table_format_check(data, Label_id, key, table) {
+function table_format_check(data, Label_id, key, table) { //현재 key와 table만 필수 key는 라벨에 그려지는 실제 데이터 table은 테이블의 정보를 담고있는 오브젝트.
     var test = table.formatType;
     var format = table.format;
     var FieldName = table.fieldName;
+    // console.log("test : ",test);
+    // console.log("format : ",format);
+    // console.log("FieldName : ",FieldName);
     // var data_text;
     if (key != NaN) { //해당 데이터가 숫자일 경우
         if (test === "AmountSosu" || test === "MoneySosu" || test === "MoneySosu") {   //수량, 금액 소숫점 자리수 ###,###
@@ -264,7 +267,17 @@ function table_format_check(data, Label_id, key, table) {
                     if(month[1]){
                         if(day[0]){
                             parts = key.toString().split("-");
-                            return parts[0]+"년"+parts[1]+"월"+parts[2]+"일";
+                            if(parts[1]){
+                                return parts[0]+"년"+parts[1]+"월"+parts[2]+"일";
+                            }else{
+                                parts = key.replace(/\B(?=(\d{4})+(?!\d))/g, "/");
+                                var parts2 = parts.split("/");
+                                if(parts2[1]){
+                                    var parts3 = parts2[1].replace(/\B(?=(\d{2})+(?!\d))/g, "월");
+                                    var total_date = parts2[0]+"년"+parts3+"일";
+                                    return total_date;
+                                }
+                            }
                         }else if(day[1]){
 
                         }
@@ -298,6 +311,8 @@ function table_format_check(data, Label_id, key, table) {
             return key;
         }
     }else if(format){
+        return key;
+    }else{
         return key;
     }
 }

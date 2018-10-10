@@ -1,3 +1,5 @@
+var pagecount_check = true;
+var pageprint_check = true;
 $(document).ready(function(){
     header_event_setting();
     jiyeons();
@@ -34,9 +36,15 @@ function header_event_setting(){
         var print = $('input[id="copydate_id"]:checked').val();
         console.log("print : ",print);
         if(print){
-            datePrinting();
+            if(pageprint_check){
+                datePrinting();
+            }
+            pageprint_check = false;
         }else{
-            $(".timePage").remove();
+            if(pageprint_check !== true) {
+                $(".timePage").remove();
+            }
+            pageprint_check = true;
         }
     });
     /******************************************************************
@@ -48,9 +56,15 @@ function header_event_setting(){
         var count = $('input[id="copycount_id"]:checked').val();
         console.log("count : ",count);
         if(count){
-            countPrinting();
+            if(pagecount_check) {
+                countPrinting();
+            }
+            pagecount_check = false;
         }else{
-            $(".countPage").remove();
+            if(pagecount_check !== true) {
+                $(".countPage").remove();
+            }
+            pagecount_check = true;
         }
     });
     /******************************************************************

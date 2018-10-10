@@ -77,10 +77,24 @@ router.post('/', upload.array('send_file', 3), function (req, res, next) {
             });
         }
     }else{  //file 저장 버튼 클릭시
-        console.log("req : ",req);
+        console.log("req.body.send_file : ",req.body.send_file);
+        console.log("req.body.send_db : ",req.body.send_db);
+        console.log("req.body.send_param : ",req.body.send_param);
 
         var file_name = req.body.send_file;
-        fs.writeFileSync("file_save/"+file_name+"xml", tempData, 'utf-8');
+        // var db_name = req.body.send_db;
+        // var param_name = req.body.send_param;
+
+
+        // json_origin = convert.json2xml(xml, {compact: true});
+        fs.writeFileSync("file_save/"+file_name+".xml", xml, 'utf-8');
+
+        // dataTable = convert.json2xml(tempData, {compact: true});
+        // fs.writeFileSync("file_save/"+db_name+".xml", tempData, 'utf-8');
+
+        // paramTable = convert.json2xml(paramData, {compact: true});
+        // fs.writeFileSync("file_save/"+param_name+".xml", paramData, 'utf-8');
+
 
 
     }
