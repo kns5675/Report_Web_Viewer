@@ -25,30 +25,34 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
     fixTableId.css({
         'width': controlFixedTable.rectangle.width,
         'height': controlFixedTable.rectangle.height,
-        'border-spacing': 0,
-        'padding': 0
+        'padding': '0',
+        'border-collapse': 'collapse',
+        'cellspacing': '0',
+        'cellpadding': '0',
+        'box-sizing': 'border-box'
     });
     var dt = Object.values(dataTable.DataSetName)[0];
 
     var fixTableWidth = controlFixedTable.rectangle.width;//고정테이블 width 값
     var fixTableHeight = controlFixedTable.rectangle.height;
-    var fixTableLabelListLength = Number(fixTableLabelList.length);//고정테이블 라벨리스트 라벨 갯수
+    var fixTableLabelListLength = Number(fixTableLabelList.length);//고정테이블 라벨리스트 라벨 개수
+
     function countingRows() {
-        var xZeroCount = 0;
+        var rowCount = 0;
         for (var q = 0; q < fixTableLabelListLength; q++) {
             if (fixTableLabelList[q].rectangle.x == '0') {
-                xZeroCount++;
+                rowCount++;
             }
         }
-        setRowCount(xZeroCount);
+        setRowCount(rowCount);
     }
 
     countingRows();
 
-    function setRowCount(xZeroCount) {
+    function setRowCount(rowCount) {
         var totalLabelWidth = 0;//라벨너비
         var labelCount = 0;//라벨개수
-        var rowCount = xZeroCount;//row개수
+        var rowCount;//row개수
 
         if (data.Labels) {//라벨 리스트 라벨 width, height값 가져오기
             for (var i = 0; i < fixTableLabelListLength; i++) {
@@ -58,25 +62,29 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
 
                 labelCount++;
                 totalLabelWidth += thisLabelWidth;
-
+                if(fixTableWidth == totalLabelWidth){
+                    var drawingTds = labelCount;
+                    totalLabelWidth = 0;
+                }
                 if (labelCount == fixTableLabelListLength) {
-                    // rowCount = xZeroCount;
 
                     for (var i = 1; i <= rowCount; i++) {
                         fixTableId.append('<tr id = "fixedTableRow' + fixTableRowCount + '"></tr>');
                         var ThisfixedTableRow = $("#fixedTableRow" + fixTableRowCount);
 
                         ThisfixedTableRow.css({
-                            'position': 'absolute',//니니
-                            'border-spacing': 0,
                             'margin': 0,
                             'padding': 0,
                             'top': 0,
                             'width': fixTableWidth,
                             'overflow': 'visible'
                         });
-
-                        var drawingTds = labelCount / rowCount;
+                        if(drawingTds==undefined){
+                            var drawingTds = labelCount / rowCount;
+                        }
+                        if(rowCount=1){
+                            var drawingTds = labelCount;
+                        }
 
                         tdDataBinding(ThisfixedTableRow, drawingTds);
                         fixTableRowCount++;
@@ -129,11 +137,11 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                     }
                                     break;
                                 case  "NormalLabel" :
-                                    if(fromData.text === undefined){
+                                    if (fromData.text === undefined) {
                                         fromData.text = ' ';
                                         var showDataLabel;
                                         showDataLabel = fromData.text;
-                                    }else if(fromData.text !== undefined){
+                                    } else if (fromData.text !== undefined) {
                                         var showDataLabel;
                                         showDataLabel = fromData.text;
                                     }
@@ -159,14 +167,17 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                                 }
                                                 showDataLabel = summary_label_sum;
                                             } else {//기준필드없을때
-                                                for (var i = 0; i < dt.length; i++) {
+                                                if (dt !== undefined) {
+                                                    for (var i = 0; i < dt.length; i++) {
 
-                                                    if(dt[i][key] !== undefined){
-                                                        if(dt[i][key]._text !== undefined){
-                                                            summary_label_sum += Number(dt[i][key]._text);
+                                                        if (dt[i][key] !== undefined) {
+                                                            if (dt[i][key]._text !== undefined) {
+                                                                summary_label_sum += Number(dt[i][key]._text);
+                                                            }
                                                         }
                                                     }
-                                                }showDataLabel =  summary_label_sum;
+                                                    showDataLabel = summary_label_sum;
+                                                }
                                             }
                                             break;
                                         case 'Avg' : //평균
@@ -185,7 +196,7 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                                 summary_label_avg = summary_label_sum / dt.length;
                                             }
                                             showDataLabel = summary_label_sum;
-                                             // console.log("평균임여");
+                                            // console.log("평균임여");
                                             break;
                                         case 'Max' :
                                             // console.log("최대값 임여");
@@ -266,10 +277,10 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                 'height': fixTableHeight,
                 'left': controlFixedTable.rectangle.x + 'px',
                 'top': controlFixedTable.rectangle.y + 'px',
-                //'border-collapse': 'collapse',
-                //'border':'0.5px solid black',//임시로 이렇게 줘봤음 일단
+                'border-collapse': 'collapse',
                 'border': '0px',
-                'border-spacing': '0px'
+                'cellspacing': '0',
+                //'box-sizing': 'border-box'
 
             });
             labelC++;
@@ -303,10 +314,12 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
         'left': 0
     });
     ThisFixedTableData.css({
-        'position': 'absolute',//니니
+        //'position': 'absolute',//니니
         'left': tdLeft + 'px',
         'top': tdTop + 'px',
-        'box-sizing': 'border-box'
+        'cellspacing': '0',
+        'box-sizing': 'border-box',
+        'border-collapse': 'collapse'
     })
 
     if (fromData.noBorder == 'true') {//border 없을때
@@ -321,9 +334,10 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
             'font-family': fromData.fontFamily,
             'font-weight': fromData.fontStyle,
             'padding': 0,
-            'border-spacing': '0px',
+            'margin': '0',
             'border-collapse': 'collapse',
             'color': fromData.textColor,
+            'cellspacing': '0',
             'box-sizing': 'border-box'
         });
     } else {//border 있을때
@@ -338,8 +352,8 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
             var topThickness = Number(fromData.borderThickness.top);
             var height = Number(fromData.rectangle.height);
             var width = Number(fromData.rectangle.width);
-            var topBorderColor  = fromData.topBorderColor === undefined ? 'black' : fromData.topBorderColor;
-            var bottomBorderColor  = fromData.bottomBorderColor === undefined ? 'black' : fromData.bottomBorderColor;
+            var topBorderColor = fromData.topBorderColor === undefined ? 'black' : fromData.topBorderColor;
+            var bottomBorderColor = fromData.bottomBorderColor === undefined ? 'black' : fromData.bottomBorderColor;
             var rightBorderColor = fromData.rightBorderColor === undefined ? 'black' : fromData.rightBorderColor;
             var leftBorderColor = fromData.leftBorderColor === undefined ? 'black' : fromData.leftBorderColor;
 
@@ -355,12 +369,11 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
                 'font-weight': fromData.fontStyle,
                 'padding': 0,
                 'margin': 0,
-                'border-top': topThickness + 'px ' + topBorderStyle +' '+ topBorderColor,
-                'border-bottom': bottomThickness + 'px ' + bottomBorderStyle +' '+ bottomBorderColor,
-                'border-right': rightThickness + 'px ' + rightBorderStyle +' '+ rightBorderColor,
-                'border-left': leftThickness + 'px ' + leftBorderStyle +' '+ leftBorderColor,
+                'border-top': topThickness + 'px ' + topBorderStyle + ' ' + topBorderColor,
+                'border-bottom': bottomThickness + 'px ' + bottomBorderStyle + ' ' + bottomBorderColor,
+                'border-right': rightThickness + 'px ' + rightBorderStyle + ' ' + rightBorderColor,
+                'border-left': leftThickness + 'px ' + leftBorderStyle + ' ' + leftBorderColor,
                 'border-collapse': 'collapse',
-                'border-spacing': '0px',
                 'white-space': 'nowrap',
                 'color': fromData.textColor,
                 'overflow': 'visible',
@@ -388,7 +401,7 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
                 'width': ptToPx + 'px',
                 'height': (textWithoutSpaceLength * ptToPx) + 'px',
                 'display': 'inline-block',
-                'box-sizing': 'border-box'
+                //  'box-sizing': 'border-box'
             });
             ThisFixedTableData.css({
                 'white-space': 'normal'
@@ -414,7 +427,7 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
                                     '-webkit-margin-before': tagPmarginTop,
                                     'top': tagPmarginTop,
                                     'display': 'inline-block',
-                                    'box-sizing': 'border-box'
+                                    // 'box-sizing': 'border-box'
                                 });
                             }
                                 break;
@@ -487,7 +500,6 @@ function drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, d
     fixTableId.css({
         'width': controlFixedTable.rectangle.width,
         'height': controlFixedTable.rectangle.height,
-        'border-spacing': 0,
         'padding': 0,
     });
     var dt = Object.values(dataTable.DataSetName)[0];
@@ -529,7 +541,6 @@ function drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, d
                         var ThisfixedTableRow = $("#fixedTableRow" + fixTableRowCount);
                         ThisfixedTableRow.css({
                             'position': 'absolute',
-                            'border-spacing': 0,
                             'margin': 0,
                             'padding': 0,
                             'top': 0,
@@ -631,8 +642,7 @@ function drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, d
                 'top': controlFixedTable.rectangle.y + 'px',
                 //'border-collapse': 'collapse',
                 //'border':'0.5px solid black',//임시로 이렇게 줘봤음 일단
-                'border': '0px',
-                'border-spacing': '0px'
+                'border': '0px'
             });
             labelC++;
             thNum++;
@@ -674,7 +684,6 @@ function drawingFixedTableInDataBand(data, controlFixedTable, fixTableLabelList,
     fixTableId.css({
         'width': controlFixedTable.rectangle.width,
         'height': controlFixedTable.rectangle.height,
-        'border-spacing': 0,
         'padding': 0
     });
     var dt = Object.values(dataTable.DataSetName)[0];
@@ -717,7 +726,6 @@ function drawingFixedTableInDataBand(data, controlFixedTable, fixTableLabelList,
 
                         ThisfixedTableRow.css({
                             'position': 'absolute',
-                            'border-spacing': 0,
                             'margin': 0,
                             'padding': 0,
                             'top': 0,
@@ -828,10 +836,10 @@ function drawingFixedTableInDataBand(data, controlFixedTable, fixTableLabelList,
                 'height': fixTableHeight,
                 'left': controlFixedTable.rectangle.x + 'px',
                 'top': controlFixedTable.rectangle.y + 'px',
-                //'border-collapse': 'collapse',
+                'border-collapse': 'collapse',
+                //'box-sizing':'border-box',
                 //'border':'0.5px solid black',//임시로 이렇게 줘봤음 일단
-                'border': '0px',
-                'border-spacing': '0px'
+                'border': '0px'
             });
             labelC++;
             thNum++;
