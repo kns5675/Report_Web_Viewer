@@ -19,7 +19,7 @@ function Label(data){
     this.imageTransparent = data.ImageTransparent === undefined ? 0 : data.ImageTransparent; // 이미지 투명도
     this.zOrder = data.ZOrder === undefined ? 0 : data.ZOrder._text;
 
-    this.borderThickness = (data.BorderThickness === undefined ? undefined : { // 테두리 두께 (있을 수도 있고 없을 수도 있는 속성)
+    this.borderThickness = (data.BorderThickness === undefined ? undefined : { // 테두리 두께
         left : (data.BorderThickness.Left === undefined ? 0 : data.BorderThickness.Left._text),
         top : (data.BorderThickness.Top === undefined ? 0 : data.BorderThickness.Top._text),
         right : (data.BorderThickness.Right === undefined ? 0 : data.BorderThickness.Right._text),
@@ -31,7 +31,7 @@ function Label(data){
     this.topBorderColor = data.TopBorderColor === undefined ? 'black' : data.TopBorderColor._text; // 위쪽 테두리 색
     this.bottomBorderColor = data.BottomBorderColor === undefined ? 'black' : (data.BottomBorderColor._text).trim(); // 아래쪽 테두리 색
 
-    this.borderDottedLines = data.BorderDottedLines === undefined ? undefined : { // 아마도 모든 라벨에 항상 있는 것 같음
+    this.borderDottedLines = data.BorderDottedLines === undefined ? undefined : {
         leftDashStyle : (data.BorderDottedLines.LeftDashStyle === undefined ? 'Solid' : data.BorderDottedLines.LeftDashStyle._text),
         rightDashStyle : (data.BorderDottedLines.RightDashStyle === undefined ? 'Solid' : data.BorderDottedLines.RightDashStyle._text),
         topDashStyle : (data.BorderDottedLines.TopDashStyle === undefined ? 'Solid' : data.BorderDottedLines.TopDashStyle._text),
@@ -66,7 +66,7 @@ function Label(data){
         }
     }
     this.isDrawUnderLine = data.IsDrawUnderLine === undefined ? false : data.IsDrawUnderLine._text; // 밑줄
-    this.isDrawStrikeOutLine = data.IsDrawStrikeOutLine === undefined ? false : data.IsDrawStrikeOutLine._text; // 중간줄
+    this.isDrawStrikeOutLine = data.IsDrawStrikeOutLine === undefined ? false : data.IsDrawStrikeOutLine._text; // 중간 줄
 
     // 내부 여백
     this.interMargin = (data.InterMargin === undefined ? undefined : {
@@ -102,12 +102,12 @@ function Label(data){
     this.text = data.Text === undefined ? undefined : data.Text._text;
     this.dziName = data.DziName === undefined ? undefined : data.DziName._text; // 데이터 셋 이름
     this.dataTableName = data.DataTableName === undefined ? undefined : data.DataTableName._text; // 데이터 테이블 이름
-    this.base64ImageFromViewer = data.Base64ImageFromViewer === undefined ? undefined : data.Base64ImageFromViewer._text; // 이미지 저장값을 예로 하는 경우 해당 이미지를 Base64형태로 변환하여 저장한다
+    this.base64ImageFromViewer = data.Base64ImageFromViewer === undefined ? undefined : data.Base64ImageFromViewer._text; // 이미지 저장값을 예로 하는 경우 해당 이미지를 Base64형태로 변환하여 저장
 
     this.labelTextType = data.LabelTextType === undefined ? undefined : data.LabelTextType._text; // 문자 형식
     this.format = (data.Format === undefined ? undefined : data.Format._text); // 표시 형식
-    this.startBindScript = data.StartBindScript === undefined ? undefined : data.StartBindScript._text; // 아마도 JavaScript 코드
-    this.reVectorValue = data.ReVectorValue === undefined ? 0 : data.ReVectorValue._text; // 아마도 장평 관련
+    this.startBindScript = data.StartBindScript === undefined ? undefined : data.StartBindScript._text; // JavaScript 코드
+    this.reVectorValue = data.ReVectorValue === undefined ? 0 : data.ReVectorValue._text; // 장평 관련
     this._formatFieldNone = data._formatFieldNone === undefined ? 0 : data._formatFieldNone._text;
 
     this.drawingType = data.DrawingType === undefined ? undefined : data.DrawingType._text; // 그리기 형태
@@ -153,12 +153,10 @@ function Label(data){
     this.verticalTextAlignment = data.VerticalTextAlignment === undefined ? 'Center' : data.VerticalTextAlignment._text; // 텍스트 수직 정렬
     this.textDirection = data.TextDirection === undefined ? 'Horizontal' : data.TextDirection._text; // 텍스트 방향 아마도 default horizontal
 
-    // this.grouppingRule = data.GroupingRule === undefined ? 'Merge' : data.GroupingRule._text; // 그룹핑규칙
-    this.grouppingRule = 'Merge'; // 그룹핑 규칙 (일단은 Merge만 될 거라고 해서 Merge로 해놓음)
+    this.grouppingRule = data.GroupingRule === undefined ? undefined : 'Merge'; // 그룹핑 규칙 (일단은 Merge만 될 거라고 해서 Merge로 해놓음)
 
     this.parameterName = data.ParameterName === undefined ? undefined : data.ParameterName._text; // 파라미터 이름 (테이블 내에 파라미터가 있을 때 ParameterName이 필요함)
 }
-
 
 /******************************************************************
  기능 : Table에 대한 객체를 만든다.
@@ -194,8 +192,6 @@ function Table(data){ // ControlList 밑에 anyType이 ControlFixedTable, Contro
     this.isPrintColumn = data.IsPrintColumn === undefined ? true : data.IsPrintColumn._text; // 테이블의 컬럼 출력 여부
 }
 
-
-
 /******************************************************************
  기능 : Table 객체를 상속 받는 FixedTable(고정 테이블)의 Label에 대한 객체를 만든다.
  만든이 : 안예솔
@@ -204,12 +200,9 @@ function FixedTableLabel(data, i){
     Label.apply(this, arguments);
 
     this._attributes = data._attributes["xsi:type"];
-
-    this.selected = data.Selected._text; // 테이블 라벨에만 있는 것 같음
+    this.selected = data.Selected._text;
     this.fieldName = data.FieldName === undefined ? 0 : data.FieldName._text;
-
 }
-
 
 /******************************************************************
  기능 : Table 객체를 상속 받는 DynamicTable(동적 테이블)의 Label에 대한 객체를 만든다.
@@ -217,12 +210,10 @@ function FixedTableLabel(data, i){
  ******************************************************************/
 function DynamicTableLabel(data, i){
     Label.apply(this, arguments);
-    // Table.apply(this, arguments);
 
-    // var tableLabelData = data.Labels.TableLabel;
     this._attributes = data._attributes["xsi:type"];
     this.selected = data.Selected._text; // 테이블 라벨에만 있는 것 같음
-    this.fieldName = data.FieldName === undefined ? 0 : data.FieldName._text; // 동적 테이블 밸류 라벨에만 있는 것 같음
+    this.fieldName = data.FieldName === undefined ? 0 : data.FieldName._text;
 }
 
 /******************************************************************

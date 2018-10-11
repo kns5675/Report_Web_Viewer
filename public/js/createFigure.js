@@ -45,6 +45,7 @@ function drawingRectangle(data, divId) {
     rectangleNum++;
     figureNum++;
 }
+
 /******************************************************************
  기능 : 원을 화면에 그려주는 함수를 만든다.
  만든이 : 안예솔
@@ -104,6 +105,7 @@ function drawingCircle(data, divId) {
     circleNum++;
     figureNum++;
 }
+
 /******************************************************************
  기능 : 선을 화면에 그려주는 함수를 만든다.
  만든이 : 안예솔
@@ -177,6 +179,7 @@ function drawingLine(data, divId) {
     lineNum++;
     figureNum++;
 }
+
 /******************************************************************
  기능 : 화살표를 화면에 그려주는 함수를 만든다.
  만든이 : 안예솔
@@ -198,8 +201,6 @@ function drawingArrow(data, divId) {
 
     Lock_check(data, figureId, div);
 
-    var x = parseInt(data.rectangle.x);
-    var y = parseInt(data.rectangle.y);
     var width = parseInt(data.rectangle.width);
     var height = parseInt(data.rectangle.height);
 
@@ -238,7 +239,7 @@ function drawingArrow(data, divId) {
             context.stroke();
             context.fill();
             break;
-        case "BackSlash" : // 제대로 안됨..ㅠ
+        case "BackSlash" : // 제대로 안됨
             context.moveTo(0, 0);
             context.lineTo(width, height-3);
             context.closePath();

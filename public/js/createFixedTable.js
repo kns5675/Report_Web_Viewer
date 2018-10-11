@@ -462,10 +462,7 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
             ThisFixedTableData.css("text-align", HTextAlignment);
         }
     }
-
     settingHorizontalTextAlignment(HTextAlignment);
-
-
 }
 
 /******************************************************************
@@ -473,11 +470,9 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
  만든이 : 안예솔
 
  수정 : 하지연
- 내용 : tr이 1개일 경우 td가 테이블 내에 제위치를 찾을 수 있도록 수정,
-
+ 내용 : tr이 1개일 경우 td가 테이블 내에 제위치를 찾을 수 있도록 수정
  ******************************************************************/
 function drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList, band) {
-    // TODO 몇 번째 데이터를 찍고 있는지 알아야 함!
     if (data.IsApprovalBox._text == "true") {
         //결재란일 경우 결재란에 대한 처리를 여기에 해줘야함. 코드 정리는 필요..
     }
@@ -527,13 +522,12 @@ function drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, d
 
         if (data.Labels) {//라벨 리스트 라벨 width, height값 가져오기
             for (var i = 0; i < fixTableLabelListLength; i++) {
-                var thisLabelWidth = Number(fixTableLabelList[i].rectangle.width);//
+                var thisLabelWidth = Number(fixTableLabelList[i].rectangle.width);
                 var thisLabelHeight = Number(fixTableLabelList[i].rectangle.height);
                 var thisLabelX = fixTableLabelList[i].rectangle.x;
 
                 labelCount++;
                 totalLabelWidth += thisLabelWidth;
-
                 if (labelCount == fixTableLabelListLength) {
                     // rowCount = xZeroCount;
                     for (var i = 1; i <= rowCount; i++) {
@@ -559,7 +553,7 @@ function drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, d
                         if (rowCount == '1') {
                             drawingTds = labelCount;
                         }
-                        for (rC2; rC2 <= drawingTds; rC2++) {
+                        for (var rC2 = 1; rC2 <= drawingTds; rC2++) {
                             var fromData = fixTableLabelList[rC2 - 1];
 
                             var tdLeft = fromData.rectangle.x;
@@ -604,6 +598,7 @@ function drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, d
                                     if (fromData.text === undefined) {
                                         fromData.text = ' ';
                                     }
+                                    console.log(fromData);
                                     ThisfixedTableRow.append('<td class="NormalLabel" id = "' + tdId + rC2 + '_' + labelC + '">' +
                                         '<p id="' + tdId + rC2 + '_p_' + labelC + '">' + table_format_check(data.Labels, tdIDwithS, fromData.text, fromData) + '</p></td>');
                                     // settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTableHeight);
