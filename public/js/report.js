@@ -10,6 +10,7 @@ var remainFooterBand = [];
 var remainFooterBandInRegion = [];
 var isDynamicTable = false;
 var isFixedTable = false;
+var annexPagerDataTableName = [];
 
 var isRegion = false;
 var tableLabelList = [];
@@ -73,7 +74,6 @@ function makeReportTemplate(data, subReport) {
         //                 initializeVariable();
         //             });
         //         }
-
         //ToDo 하나의 페이지에 여러개의 데이터 밴드 가능 수정 필요
         dataBands.forEach(function (dataBand) {
             var controlLists = dataBand.controlList.anyType;
@@ -91,7 +91,15 @@ function makeReportTemplate(data, subReport) {
             }
         });
 
-        makeReport(report, arrRegion);
+        if(report.annexPaper == 'true'){ //별지 출력
+            annexPagerDataTableName.forEach(function(dataTableName){
+                if(dataBands[0].dataTableName == dataTableName){
+                    makeReport(report, arrRegion);
+                }
+            });
+        }else{
+            makeReport(report, arrRegion) ;
+        }
         initializeVariable();
 
         // var isDataBand = completeDataBand.find(function(completeData){
@@ -141,8 +149,6 @@ function makeReport(report, arrRegion) {
 
     pageNum++;
 
-//    console.log(curDatarowInDataBand);
-//    console.log(ingDataTableName);
     // 현재 찍힌 데이터 로우 행이 전체 데이터 보다 작을 경우 재귀함수
     // 클 경우 함수 종료 후 다음 리포트 생성
     if (dataTable.DataSetName[ingDataTableName] != undefined) {
@@ -202,7 +208,6 @@ function setDesignLayer(report, dataBand) {
 
     var layerName = "designLayer" + pageNum;
     var reportHeight = report.rectangle.height;
-
 
     if (remainFooterBand.length > 0) {
         var bands = report.layers.designLayer.bands;

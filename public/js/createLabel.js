@@ -26,6 +26,8 @@ var groupFieldNum = 0; // 그룹으로 묶었을 경우 BandGroupHeader에서 Da
 var groupFieldNumInRegion = 0;
 var tableNum = 1;
 var dynamicTableNum = 1;
+var dynamicTableAnnexedPaperOutPut = 0;
+var annexPaperOutputNum = 0;
 var fixedTableNum = 1; // 지연추가
 var dynamicTitleLabelNum = 1;
 var thNum = 1;
@@ -109,42 +111,12 @@ function judgementLabel(data, divId, numOfData, band, dt) {
                 }
             });
         }
-        // 18.09.29 YeSol 추가 // 18.10.08 하지연 수정
-        if (numOfData > 1) {//numOfData가 1보다 클 때
-
-            if(band.attributes['xsi:type'] !== 'BandDataFooter'){// 하지연 추가
-                for (var i = 0; i < numOfData; i++) {
-                    var fixedTableDivId = divId + 'fixedTable' + (curDatarow + i);
-
-                    if (band.attributes['xsi:type'] === 'BandData') {
-                        if (isRegion) {
-                            drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, fixedTableDivId, curDatarowInRegion, fixTableList, band);//numOfData추가. // YeSol > band 추가
-                        } else {
-                            drawingFixedTableInDataBand(data, controlFixedTable, fixTableLabelList, fixedTableDivId, curDatarowInDataBand, fixTableList, band);//numOfData추가. // YeSol > band 추가
-                        }
-                    } else {
-                        if (isRegion) {
-                            drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList, band);//numOfData추가. // YeSol > band 추가
-                        } else {
-                            drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList, band);//numOfData추가. // YeSol > band 추가
-                        }
-                    }
-                }
-            } else {//밴드 데이터 풋터일때는 for문 안돌리게
-                if (isRegion) {
-                    drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList);
-                } else {
-                    // console.log("여기1");
-                    drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList);
-                }
-            }
-        } else {//numOfData가 1보다 크지 않을 때
-            if (isRegion) {
-                drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList, band);//numOfData추가. // YeSol > band 추가
-            } else {
-                drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList, band);//numOfData추가. // YeSol > band 추가
-            }
+        if (isRegion) {
+            drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList, band);//numOfData추가. // YeSol > band 추가
+        } else {
+            drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList, band);//numOfData추가. // YeSol > band 추가
         }
+
     } else if (attr == "ControlLabel") {
         if (!(data.DataType === undefined)) {
             switch (data.DataType._text) {

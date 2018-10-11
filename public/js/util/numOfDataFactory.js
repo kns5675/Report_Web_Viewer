@@ -5,7 +5,13 @@
  만든이 : 구영준
  * *********************************************************/
 function getNumOfDataWithGroupField(band, avaHeight) {
+    if(groupFieldArray.length == 0){
+        return Number(band.minimumRowCount);
+    }
+
     var tableSpacing = 0;
+    var titleHeight = 0;
+    var valueHeight = 0;
     var dynamicTable;
     if (Array.isArray(band.controlList.anyType)) {
         band.controlList.anyType.forEach(function (anyType) {
@@ -21,18 +27,22 @@ function getNumOfDataWithGroupField(band, avaHeight) {
             tableSpacing = Number(dynamicTable.Rectangle.Y._text);
         }
         var dataCount = groupFieldArrayInRegion[groupFieldNumInRegion].length;
-        var labels = dynamicTable.Labels.TableLabel;
+        var tableLabels = dynamicTable.Labels.TableLabel;
 
-        var titleHeight = Number(labels[0].Rectangle.Height._text);
-        var valueHeight = Number(labels[labels.length - 1].Rectangle.Height._text);
-        var bandGroupFooterHeight = 0;
-
-        band.childFooterBands.forEach(function (child) {
-            bandGroupFooterHeight = child.rectangle.height;
+        tableLabels.forEach(function(tableLabel){
+            if(tableLabel._attributes["xsi:type"] == "DynamicTableTitleLabel"){
+                if(titleHeight < Number(tableLabel.Rectangle.Height._text)){
+                    titleHeight = Number(tableLabel.Rectangle.Height._text);
+                }
+            }else{
+                if(valueHeight < Number(tableLabel.Rectangle.Height._text)){
+                    valueHeight = Number(tableLabel.Rectangle.Height._text);
+                }
+            }
         });
 
         //ToDo 확인 필요
-        var numofData = Math.floor((avaHeight - titleHeight - tableSpacing) / valueHeight) + 1;
+        var numofData = Math.floor((avaHeight - titleHeight - tableSpacing ) / valueHeight) + 1;
         var groupRemainData = (dataCount - groupDataRowInRegion);
 
         if (numofData - groupDataRowInRegion > groupRemainData || groupDataRowInRegion >= numofData) { // 마지막 페이지

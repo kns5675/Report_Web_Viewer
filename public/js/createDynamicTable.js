@@ -53,7 +53,6 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData, band, dt) {
     });
 
     tableId.append('<tr id = "dynamicTitleLabel' + dynamicTitleLabelNum + '"></tr>');
-
     var header_Name_Number = 1;
     if (Array.isArray(tableLabel)) {
         tableLabel.forEach(function (label) {
@@ -67,6 +66,34 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData, band, dt) {
                     break;
             }
         });
+
+        if(!dynamicTableIsForceOverRow){
+            dynamicTable_resizing_div_packing.append('<table><tr id =   "annexedPaperOutput' + annexPaperOutputNum + '"></tr></table>');
+            var $trId = '#annexedPaperOutput' + annexPaperOutputNum++;
+            var annextrId = $($trId);
+            annextrId.append('<td id = "tableValueLabelNum' + tableValueLabelNum + '">'+ '별지출력' +'</td>');
+            annextrId.css({
+                'position' : 'absolute',
+                'width': '100px',
+                'height': '35px',
+                'z-index' : '999',
+                'left' : table.rectangle.width/2 - 50 + 'px',
+                'top' : $('#dynamicTable' + dynamicTableNum).height()/2 + 'px',
+            });
+            var annextdId = $('#tableValueLabelNum' + tableValueLabelNum++);
+            annextdId.css({
+                'width': '100px',
+                'height': '35px',
+                'position' : 'absolute',
+                'z-index' : '999',
+                'border' : '1px solid',
+                'background-color' : 'white',
+                'text-align' : 'center',
+                'vertical-align' : 'middle',
+                'font-size': 'x-large'
+            });
+
+        }
 
         tableId.css({
             'border': '1px solid red',
@@ -83,20 +110,22 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData, band, dt) {
 }
 function checkGroupHeader(band){
     var check = false;
-
-    if(Array.isArray(band.childHeaderBands)){
-        band.childHeaderBands.forEach(function(childHeaderBand){
-            if(childHeaderBand.attributes["xsi:type"] == "BandGroupHeader"){
-                check = true;
-            }
-        });
-    }else{
-        if(!(band.childHeaderBands == null)) {
-            if (band.childHeaderBands.attributes["xsi:type"] == "BandGroupHeader") {
-                check = true;
+    if(band.childHeaderBands != undefined && groupFieldArray.length > 0){
+        if(Array.isArray(band.childHeaderBands)){
+            band.childHeaderBands.forEach(function(childHeaderBand){
+                if(childHeaderBand.attributes["xsi:type"] == "BandGroupHeader"){
+                    check = true;
+                }
+            });
+        }else{
+            if(!(band.childHeaderBands == null)) {
+                if (band.childHeaderBands.attributes["xsi:type"] == "BandGroupHeader") {
+                    check = true;
+                }
             }
         }
     }
+
     return check;
 }
 /******************************************************************
@@ -112,7 +141,7 @@ function drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table, ban
     if (dt == undefined || dt.length == 0) { //without DataTable in DataBand
         drawingDynamicTableValueLabelWithOutDataTable(label, tableId, band);
     } else if (isRegion == true) {
-        if (groupFieldArray == undefined || groupFieldArray.length == 0) {
+        if(!haveGroupHeaderBand){
             //리전 인 경우, 그룹 필드가 없는 경우
             drawingDynamicTableValueLabelWithoutGroupFieldArrayWithRegion(label, dt, tableId, numOfData, table, band);
         } else {
@@ -120,13 +149,44 @@ function drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table, ban
             drawingDynamicTableValueLabelWithGroupFieldArrayWithRegion(label, dt, tableId, numOfData, table, band);
         }
     } else {
-        // if (groupFieldArray == undefined || groupFieldArray.length == 0) {
-        if(!haveGroupHeaderBand){
-            drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId, numOfData, table, band, dt);
-        } else {
-            drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, numOfData, table, band, dt);
+        if(!dynamicTableIsForceOverRow) {
+            drawingDynamicTableAnnexedPaperOutPut(label, tableId, numOfData);
+        }else{
+            if(!haveGroupHeaderBand){
+                drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId, numOfData, table, band, dt);
+            } else {
+                drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, numOfData, table, band, dt);
+            }
         }
+
     }
+}
+
+/**************************************************************************************
+ 기능 : 동적테이블이에 데이터 테이블이 없을 경우 데이터 바인딩 없이 ValueLabel을 그려줌
+ 만든이 : 구영준
+ **************************************************************************************/
+function drawingDynamicTableAnnexedPaperOutPut(label, tableId, numOfData) {
+    tableId.append('<tr id = "drawingDynamicTableAnnexedPaperOutPut' + dynamicTableAnnexedPaperOutPut + '"></tr>');
+    var valueTrId = $("#drawingDynamicTableAnnexedPaperOutPut" + dynamicTableAnnexedPaperOutPut);
+
+    for(var i=0; i<numOfData; i++){
+        valueTrId.append('<td id = "tableValueLabelNum' + tableValueLabelNum + '"></td>');
+        valueTrId.css({
+            'width': label.rectangle.width,
+            'height': label.rectangle.height
+        });
+
+        var tdId = $('#tableValueLabelNum' + tableValueLabelNum++);
+        setCssInTable(label, tdId);
+
+        tdId.append(label.text);
+        tdId.addClass('Label');
+        tdId.addClass(label._attributes);
+        // drd_javascript(label, tdId, label.startBindScript);
+    }
+
+    dynamicTableAnnexedPaperOutPut++;
 }
 
 /**************************************************************************************
@@ -201,6 +261,7 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
     if (band.masterBandName) {
         temp = 0;
     }
+
     var rowLength = temp + numOfData; //한 페이지에 마지막으로 출력해야할 row
     for (var j = temp; j < rowLength; j++) {
         var data = dt[j];

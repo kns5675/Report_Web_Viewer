@@ -61,36 +61,43 @@ function getBandHeightOfDataBand(band, numOfData) {
     var titleBorderBottomThickness = 0;
     var valueBorderBottomThickness = 0;
     var allLabelBorderThickness;
-    var isDynamicInBandData = false;
+    var isDynamicTable = false;
 
     if (controlLists.length > 1) {
         controlLists.forEach(function (controlList) {
             if (controlList._attributes["xsi:type"] == "ControlDynamicTable") {
-                isDynamicInBandData = true;
+                isDynamicTable = true;
                 labels.push(controlList);
                 if (controlList.Rectangle.Y !== undefined) {
                     tableSpacing = Number(controlList.Rectangle.Y._text);
                 } else {
                     tableSpacing = 0;
                 }
+            }else if (controlList._attributes["xsi:type"] == "ControlFixedTable") {
+                isDynamicTable = false;
             }
         });
     } else {
         if (controlLists._attributes["xsi:type"] == "ControlDynamicTable") {
-            isDynamicInBandData = true;
+            isDynamicTable = true;
             labels.push(controlLists);
             if (controlLists.Rectangle.Y !== undefined) {
                 tableSpacing = Number(controlLists.Rectangle.Y._text);
+            }else if (controlList._attributes["xsi:type"] == "ControlFixedTable") {
+                isDynamicTable = false;
             }
         }
     }
     labels.forEach(function (label) {
         var tableLabels = label.Labels.TableLabel;
-        labelHeight += Number(tableLabels[0].Rectangle.Height._text);
-        valueHeight += Number(tableLabels[tableLabels.length - 1].Rectangle.Height._text);
+
+        // labelHeight += Number(tableLabels[0].Rectangle.Height._text);
         tableLabels.forEach(function (tableLabel) {
             tableLabel = new DynamicTableLabel(tableLabel, i);
             if (tableLabel._attributes == "DynamicTableTitleLabel") {
+                if(labelHeight < Number(tableLabel.rectangle.height)){
+                    labelHeight = Number(tableLabel.rectangle.height);
+                }
                 var labelBottom = Number(tableLabel.borderThickness.bottom);
                 var labelTop = Number(tableLabel.borderThickness.top);
 
@@ -100,6 +107,9 @@ function getBandHeightOfDataBand(band, numOfData) {
                 if (titleBorderTopThickness < Number(tableLabel.borderThickness.top))
                     titleBorderTopThickness = labelTop;
             } else {
+                if(valueHeight < Number(tableLabel.rectangle.height)){
+                    valueHeight = Number(tableLabel.rectangle.height);
+                }
                 if (Number(tableLabel.borderThickness) === undefined) {
                     valueBorderBottomThickness = 0;
                 } else {
@@ -114,7 +124,7 @@ function getBandHeightOfDataBand(band, numOfData) {
     allLabelBorderThickness = valueBorderBottomThickness * numOfData + titleBorderBottomThickness + titleBorderTopThickness;
 
     //ToDo 테이블 두께에 따라 1px 정도씩 오차가 생김
-    if (isDynamicInBandData) {
+    if (isDynamicTable) {
         return tableSpacing + labelHeight + (valueHeight * numOfData) + allLabelBorderThickness;
     } else {
         return band.rectangle.height;
@@ -178,46 +188,55 @@ function getNumOfDataInOnePage(tableLabel, divId) {
  : (밴드 길이 - 첫 행 높이) / 데이터 라벨 높이 => 한페이지에 들어가야할 밴드 개수
  만든이 : 구영준
  * *********************************************************/
-function getNumOfDataInOnePageNonObject(band, divId, dt) {
-    // var dt = dataTable.DataSetName[band.dataTableName];
+function getNumOfDataInOnePageNonObject(band, avaHeight) {
+    var dt = dataTable.DataSetName[band.dataTableName];
+    var tableSpacing = 0;
+    var tableLabels;
+    var dynamicTable;
+    var titleHeight = 0;
+    var valueHeight = 0;
+
     if(dt.length == 0){
         return Number(band.minimumRowCount);
     }
 
-    var bandDataHeight = 0;
-    if (typeof divId == 'string') {
-        bandDataHeight = $('#' + divId).height();
-    } else if (typeof divId == 'number') {
-        bandDataHeight = divId;
+    if (typeof avaHeight == 'string') {
+        avaHeight = $('#' + avaHeight).height();
+    } else if (typeof avaHeight == 'number') {
+        avaHeight = avaHeight;
     }
 
-    var tableSpacing = 0;
-    var tableLabel;
     if (Array.isArray(band.controlList.anyType)) {
         band.controlList.anyType.forEach(function (anyType) {
-            if (anyType._attributes['xsi:type'] == 'ControlDynamicTable' && anyType.Labels !== undefined) {
-                tableLabel = anyType.Labels.TableLabel;
-                if (anyType.Rectangle.Y !== undefined) {
-                    tableSpacing = Number(anyType.Rectangle.Y._text);
-                }
+            if (anyType._attributes['xsi:type'] === 'ControlDynamicTable') {
+                dynamicTable = anyType;
             }
         });
     } else {
-        tableLabel = band.controlList.anyType.Labels.TableLabel;
-        if (band.controlList.anyType.Rectangle.Y !== undefined) {
-            tableSpacing = Number(band.controlList.anyType.Rectangle.Y._text);
-        }
+        dynamicTable = band.controlList.anyType;
     }
-    var firstLine = Number(tableLabel[0].Rectangle.Height._text);
-    var dataLine = Number(tableLabel[tableLabel.length - 1].Rectangle.Height._text);
 
-    var numofData = Math.floor((bandDataHeight - firstLine - tableSpacing) / dataLine);
+    tableLabels = dynamicTable.Labels.TableLabel;
+    if (dynamicTable.Rectangle.Y !== undefined) {
+        tableSpacing = Number(dynamicTable.Rectangle.Y._text);
+    }
+
+    tableLabels.forEach(function(tableLabel){
+        if(tableLabel._attributes["xsi:type"] == "DynamicTableTitleLabel"){
+            if(titleHeight < Number(tableLabel.Rectangle.Height._text)){
+                titleHeight = Number(tableLabel.Rectangle.Height._text);
+            }
+        }else{
+            if(valueHeight < Number(tableLabel.Rectangle.Height._text)){
+                valueHeight = Number(tableLabel.Rectangle.Height._text);
+            }
+        }
+    });
+
+    var numofData = Math.floor((avaHeight - titleHeight - tableSpacing) / valueHeight);
 
     if (numofData > dt.length) {
         return dt.length;
-    // }else if(curDatarowInDataBand + numofData > dt.length){
-    //     return dt.length - curDatarowInDataBand;
-    // }
     }else {
         return numofData;
     }
