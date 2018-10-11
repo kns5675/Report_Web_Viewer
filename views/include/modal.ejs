@@ -8,8 +8,8 @@
 <body>
 <div class="modal-content">
     <div class="upperbar" style="width:100%;">
-        <span style="width:50%; text-align:left; float:left;margin-left:10px;">고급인쇄설정</span>
-        <span id="closebtn"class="pop_bt" style="cursor:pointer;float:right;margin-right:10px;">X</span>
+        <span style="width:50%; text-align:left; float:left;margin:6px 0px 0px 10px;">고급인쇄설정</span>
+        <span id="closebtn"class="pop_bt" style="cursor:pointer;float:right;margin:2px 3px 0px 0px; padding:4px 8px 3px 6px;">X</span>
     </div>
     <div class="downpart">
         <!--<form id="modalForm" name="modalForm" onsubmit="return beforeSubmit();">-->
@@ -18,16 +18,18 @@
             <span class="subject">인쇄설정</span>
             <div class="partstyle">
                 <div class="partstyle2" style="height:50px;">
-                    <span>인쇄 배율</span>
-                    <input id="copyratio" name="copyratio" type="text" value="100"
-                           autofocus style="width:70px; ime-mode: disabled">&nbsp;%
-                    <p id="warning" style="display:block; color:darkred; margin-top:10px; font-size:9px;"></p>
-                    <p id="warning2" style="display:block; color:darkred; margin-top:10px; font-size:9px;"></p>
+                    <div id="copywrap">
+                        <span>인쇄 배율</span>
+                        <input id="copyratio" name="copyratio" type="text" value="100"
+                               autofocus style="width:70px; ime-mode: disabled">&nbsp;%
+                        <p id="warning" style="display:block; color:darkred; margin-top:10px; font-size:9px;"></p>
+                        <p id="warning2" style="display:block; color:darkred; margin-top:10px; font-size:9px;"></p>
+                    </div>
                 </div>
             </div>
 
             <span class="subject">결재란 설정</span>
-            <div class="partstyle">
+            <div class="partstyle" id="aproval_option">
                 <div class="partstyle2" style="height:50px;">
                     <div class="div1">
                         <span>인쇄여부</span>
@@ -49,10 +51,12 @@
                         <span>인쇄 위치</span>
                     </div>
                     <div class="div2">
-                        <label><input type="radio" name="titleposition" value="타이틀상단"checked="checked"/>타이틀상단</label>
+                        <label><input type="radio" id="title_top" name="titleposition" value="타이틀상단"checked="checked"/>타이틀상단</label>
+                        <label for="title_top" class="aproval_img"><img src="image/drd_image/print_img_title1_normal1.png"/></label>
                     </div>
                     <div class="div3">
-                        <label><input type="radio" name="titleposition" value="타이틀하단"/>타이틀하단</label>
+                        <label><input type="radio" id="title_bottom" name="titleposition" value="타이틀하단"/>타이틀하단</label>
+                        <label for="title_bottom" class="aproval_img"><img src="image/drd_image/print_img_title2_normal1.png"/></label>
                     </div>
                 </div>
 
@@ -116,8 +120,15 @@
                     </div>
                     <div class="div4">
                         <div class="paper_row_col">
-                            <input type="radio" class="direction" name="direction" value="세로" checked="checked">세로
-                            <input type="radio" class="direction" name="direction" value="가로">가로
+                            <input type="radio" id="direction_vertical" class="direction"
+                                   name="direction" value="세로" checked="checked"><label for="direction_vertical">세로</label>
+                            <input type="radio" id="direction_horizon" class="direction"
+                                   name="direction" value="가로"><label for="direction_horizon">가로</label>
+                            <br>
+                            <div class="paper_row_img">
+                                <label for="direction_vertical"><img src="image/drd_image/print_img_height_normal1.png"/></label>
+                                <label for="direction_horizon"><img src="image/drd_image/print_img_width_normal1.png"/></label>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -152,7 +163,7 @@
                         </label>
                     </div>
                     <div class="div4">
-                        <select id="extraheadoptions" disabled>
+                        <select class="extraoption_select" id="extraheadoptions" disabled>
                             <option>상단좌측</option>
                             <option>상단중앙</option>
                             <option>상단우측</option>
@@ -170,7 +181,7 @@
                         </label>
                     </div>
                     <div class="div4">
-                        <select id="extratailoptions" disabled>
+                        <select class="extraoption_select" id="extratailoptions" disabled>
                             <option>하단좌측</option>
                             <option>하단중앙</option>
                             <option>하단우측</option>

@@ -41,14 +41,13 @@ function getNumOfDataWithGroupField(band, avaHeight) {
             }
         });
 
-        //ToDo 확인 필요
-        var numofData = Math.floor((avaHeight - titleHeight - tableSpacing ) / valueHeight) + 1;
+        var avaDataInPage = Math.floor((avaHeight - titleHeight - tableSpacing) / valueHeight) + 1;
         var groupRemainData = (dataCount - groupDataRowInRegion);
 
-        if (numofData - groupDataRowInRegion > groupRemainData || groupDataRowInRegion >= numofData) { // 마지막 페이지
+        if (avaDataInPage - groupDataRowInRegion > groupRemainData || groupDataRowInRegion >= avaDataInPage) { // 마지막 페이지
             return dataCount;
         } else { //마지막 페이지가 아닌 경우
-            return numofData;
+            return avaDataInPage;
         }
     } else { // 리전이 아닐 때
         if (dynamicTable.Rectangle.Y !== undefined) {
@@ -65,31 +64,29 @@ function getNumOfDataWithGroupField(band, avaHeight) {
             bandGroupFooterHeight = child.rectangle.height;
         });
 
-        //ToDo 확인 필요
-        var numofData = Math.floor((avaHeight - titleHeight - tableSpacing) / valueHeight) + 1;
+        var avaDataInPage = Math.floor((avaHeight - titleHeight - tableSpacing) / valueHeight) + 1;
         var groupRemainData = (dataCount - groupDataRow);
 
-        if(groupDataRow >= numofData){
-            if (numofData >= groupRemainData) { // 마지막 페이지
+        if(groupDataRow >= avaDataInPage){
+            if (avaDataInPage >= groupRemainData) { // 마지막 페이지
                 return dataCount;
             }else if(groupDataRow == 1){
-                return numofData
+                return avaDataInPage
             } else { //마지막 페이지가 아닌 경우
-                return numofData + groupDataRow;
+                return avaDataInPage + groupDataRow;
             }
         }else{
-            if (numofData + groupDataRow > dataCount) { // 마지막 페이지
+            if (avaDataInPage + groupDataRow > dataCount) { // 마지막 페이지
                 return dataCount;
             }else if(groupDataRow == 1){
-                return numofData
+                return avaDataInPage
             } else { //중간페이지
-                return numofData + groupDataRow;
+                return avaDataInPage + groupDataRow;
             }
         }
     }
-
 }
-// TODO 미구현된 부분임!!!
+
 /***********************************************************
  기능 : 고정 테이블에서 그룹 필드가 있을 때의 구현
  만든이 : 안예솔
@@ -114,7 +111,6 @@ function getNumOfDataWithGroupFieldInFixedTable(band, avaHeight) {
             bandGroupFooterHeight = child.rectangle.height;
         });
 
-        //ToDo 확인 필요
         var numofData = Math.floor((avaHeight - titleHeight - tableSpacing) / valueHeight) + 1;
         var groupRemainData = (dataCount - groupDataRowInRegion);
 
@@ -138,7 +134,6 @@ function getNumOfDataWithGroupFieldInFixedTable(band, avaHeight) {
             bandGroupFooterHeight = child.rectangle.height;
         });
 
-        //ToDo 확인 필요
         var numofData = Math.floor((avaHeight - titleHeight - tableSpacing) / valueHeight) + 1;
         var groupRemainData = (dataCount - groupDataRow);
 
@@ -148,5 +143,4 @@ function getNumOfDataWithGroupFieldInFixedTable(band, avaHeight) {
             return numofData;
         }
     }
-
 }

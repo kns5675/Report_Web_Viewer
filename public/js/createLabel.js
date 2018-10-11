@@ -4,7 +4,6 @@ document.write("<script type='text/javascript' src='/js/additionalControl.js' ><
 
 var labelList = [];
 var tableLabelList = [];
-var fixTableLabelList = [];
 var tableList = [];
 var fixTableList = [];
 var systemLabelNum = 1;
@@ -14,14 +13,7 @@ var normalLabelNum = 1;
 var expressionNum = 1;
 var groupLabelNum = 1;
 var parameterLabelNum = 1;
-var tableTitleLabelNum = 1;
 var tableValueLabelNum = 1;
-var dateNum = 1;
-var timeNum = 1;
-var dateTimeNum = 1;
-var pageNumberNum = 1;
-var pageNumTotalPageNum = 1;
-var totalPageNum = 1;
 var groupFieldNum = 0; // 그룹으로 묶었을 경우 BandGroupHeader에서 DataLabel을 사용했을 때 몇 번째 그룹이 출력중인지 알 수 있는 변수
 var groupFieldNumInRegion = 0;
 var tableNum = 1;
@@ -32,22 +24,13 @@ var fixedTableNum = 1; // 지연추가
 var dynamicTitleLabelNum = 1;
 var thNum = 1;
 var dynamicValueLabelNum = 1;
-//var fixedValueLabelNum =1; //지연추가
 var fixedTableLabelNum = 1; //지연추가
 var groupFieldArray = [];
-var titleArray = []; // 그룹으로 묶었을 경우 titleName으로만 접근이 가능해져서 그 titleName을 담을 배열
-var titleSet;
-var valueSet = 0;
 var regionNum = 1;
 var fixTableRowCount = 0;
 var labelC = 0;
-
 var rC2 = 1;
-
-var row = 0;
 var verticalPNum = 0;
-var plusRowNum = 0;
-
 var groupFieldArrayInRegion = [];
 
 /******************************************************************
@@ -221,6 +204,10 @@ function drawingRegion(data, divId) {
         var dt;
         var groupFieldNameInRegion;
         groupFieldArrayInRegion = [];
+        if (!remainData && !remainDataInRegion) {
+            remainDataInRegion = true; // 추가 181010
+            groupFieldNumInRegion = 0; // 추가 181010
+        }
         var childHeaderBands = dataBand.childHeaderBands;
         var sort;
         var i = 0;
@@ -267,14 +254,11 @@ function drawingRegion(data, divId) {
                 }
             }
 
-            if (sort == 'ASC') {
-                // 기준 필드 정렬 순서가 오름차순일 때!
+            if (sort == 'ASC') { // 기준 필드 정렬 순서가 오름차순일 때!
                 groupFieldArrayInRegion.sort();
             }
-            if (sort == 'DESC') {
-                // 기준 필드 정렬 순서가 내림차순일 때!
+            if (sort == 'DESC') { // 기준 필드 정렬 순서가 내림차순일 때!
                 groupFieldArrayInRegion.sort(descSorting);
-
                 function descSorting(a, b) {
                     if (a > b) return -1;
                     if (b > a) return 1;
@@ -285,7 +269,6 @@ function drawingRegion(data, divId) {
         drawBand(bands, regionName, regionHeight, undefined);
         isRegion = false;
     });
-
     regionNum++
 }
 
@@ -311,7 +294,7 @@ function drawingSystemLabel(data, divId, band_name) {
         label_scope: "NormalLabel_scope",
         labelNum: systemLabelNum,
         label_type: data.dataType
-    }
+    };
     labelPropertyApply(labelNbandInfo);
 }
 
@@ -377,7 +360,7 @@ function drawingDataLabel(data, divId, band_name) {
         labelNum: dataLabelNum,
         label_type: data.dataType,
         dataTableName: data.dataTableName
-    }
+    };
     labelPropertyApply(labelNbandInfo);
 }
 
@@ -407,7 +390,7 @@ function drawingNormalLabel(data, divId, band_name) {
         label_scope: "NormalLabel_scope",
         labelNum: normalLabelNum,
         label_type: data.dataType
-    }
+    };
     labelPropertyApply(labelNbandInfo);
 }
 
@@ -433,7 +416,7 @@ function drawingExpression(data, divId, band_name) {
         label_scope: "NormalLabel_scope",
         labelNum: expressionNum,
         label_type: data.dataType
-    }
+    };
     labelPropertyApply(labelNbandInfo);
 }
 
@@ -458,7 +441,7 @@ function drawingGroupLabel(data, divId, band_name) {
         label_scope: "NormalLabel_scope",
         labelNum: groupLabelNum,
         label_type: data.dataType
-    }
+    };
     labelPropertyApply(labelNbandInfo);
 }
 
@@ -480,7 +463,7 @@ function drawingParameterLabel(data, divId, band_name) {
         label_scope: "NormalLabel_scope",
         labelNum: parameterLabelNum,
         label_type: data.dataType
-    }
+    };
     labelPropertyApply(labelNbandInfo);
 }
 
@@ -504,12 +487,10 @@ function resize_event_reSetting() {
  만든이 : hagdung-i
  ******************************************************************/
 function label_text_Setting(labelNbandInfo) {
-
     labelNbandInfo.labelId.append('<p id = "P' + labelNbandInfo.label_type + labelNbandInfo.labelNum + '"></p>');
     Lock_check(labelNbandInfo.data, labelNbandInfo.labelId, labelNbandInfo.div);
 
     var pId = $('#P' + labelNbandInfo.label_type + labelNbandInfo.labelNum);
-
 
     if (labelNbandInfo.label_type === "SystemLabel") {
         var date = new Date();
@@ -1055,9 +1036,12 @@ function characterSpacing(text, spacing, pTagId) {
     }
 }
 
-
+/******************************************************************
+ 기능 : Label의 visible, border, 라벨 형태, 그라데이션, 자동 줄바꿈 속성과
+        바코드, QR코드를 구현한다.
+ 만든이 : 전형준, 안예솔
+ ******************************************************************/
 function labelPropertyApply(labelNbandInfo) {
-
     labelNbandInfo.div = $('#' + labelNbandInfo.divId);
     labelNbandInfo.div.css('position', 'relative');
     labelNbandInfo.div.append('<div id = "' + labelNbandInfo.label_type + labelNbandInfo.labelNum + '"></div>');
@@ -1102,8 +1086,6 @@ function labelPropertyApply(labelNbandInfo) {
         'position': 'absolute',
         'left': labelNbandInfo.data.rectangle.x + 'px',
         'top': labelNbandInfo.data.rectangle.y + 'px',
-        // 'text-align': 'center',
-        // 'overflow': 'visible',
         'zIndex': z_index,
         'white-space': 'nowrap', // 줄바꿈 안되게하는거
         'background-color': labelNbandInfo.data.backGroundColor, // 배경색

@@ -2,7 +2,7 @@
 // 각 Band 객체들을 정의한 File.
 // 모든 Band들은 'Band' 객체를 상속하여 생성된다
 var bandNum = 1;
-
+var idNum = 1;
 
 /********** 기본 밴드 객체 - 모든 밴드는 이 객체를 상속해서 사용 ************
  * 작성자 : 전형준
@@ -12,7 +12,8 @@ function Band(data){
     // Bands에서 0번째 Band의 ParentID가 없음..
 
     this.attributes = data._attributes; // 속성(밴드 타입)
-    this.id = data.Id._text; // ID
+    this.id = data.Id._text + '-' + idNum; // ID
+    idNum++;
     this.parentBand = undefined;
     this.name = data.Name._text; // 이름
     this.rectangle = { // 레이아웃(위치 + 크기)

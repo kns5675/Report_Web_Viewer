@@ -18,6 +18,8 @@ var report_wrap_arr_html = null;
 var completeDataBand = []; // 0918 예솔 추가 : 출력이 끝난 데이터 밴드의 id를 담는 배열
 var ingDataTableName = undefined;
 
+var passPage = true;
+
 /******************************************************************
  기능 : 하나의 리포트를 다 출력 시킨 후에 사용한 전역 변수들 초기화
  만든이 : 구영준
@@ -138,27 +140,61 @@ function makeReportTemplate(data, subReport) {
 /******************************************************************
  기능 : make report in function makeReportTemplate
  author : powerku
+
+ 수정 사항 : 리포트 속성 중 페이지 넘기기 속성 구현
+ 수정한 사람 : 안예솔
  ******************************************************************/
 function makeReport(report, arrRegion) {
     reportPageCnt++;
     if (pageNum === '1') {
 
     }
-    setPage(report);
-    setReport(report);
 
-    pageNum++;
+    // 리포트에서 페이지 넘기기 속성에 대한 구현
+    if (!passPage) {
+        var layerName = "designLayer" + pageNum;
+        var reportHeightString = $('#' + layerName).css('height');
+        var reportHeight = reportHeightString.substring(0, reportHeightString.length-2);
+        var usedHeight = 0;
+
+        var pageInnerBandWithoutRegion = $('#' + layerName + ' .Band:not(".regionBand")');
+        for(var i=0; i<pageInnerBandWithoutRegion.length; i++){
+            usedHeight += Number(pageInnerBandWithoutRegion.eq(i).css('height').substring(
+                0, pageInnerBandWithoutRegion.eq(i).css('height').length-2
+            ));
+        }
+        var availableHeight = reportHeight - usedHeight;
+        var bandsHeight = 0;
+        for(var j = 0; j < report.layers.designLayer.bands.length; j++) {
+            bandsHeight += Number(report.layers.designLayer.bands[j].rectangle.height);
+        }
+        if (availableHeight >= bandsHeight) {
+            drawBand(report.layers.designLayer.bands, layerName, reportHeight);
+        } else {
+            pageNum++;
+            setPage(report);
+            setReport(report);
+        }
+        passPage = true;
+    } else {
+        if (report.forceNewPage == 'false') {
+            passPage = false;
+        }
+        setPage(report);
+        setReport(report);
+
+        if (passPage) {
+            pageNum++;
+        }
+    }
+
+    if (report.forceNewPage == 'false') {
+        passPage = false;
+    }
 
     // 현재 찍힌 데이터 로우 행이 전체 데이터 보다 작을 경우 재귀함수
     // 클 경우 함수 종료 후 다음 리포트 생성
     if (dataTable.DataSetName[ingDataTableName] != undefined) {
-        // if(curDatarowInDataBand < dataTable.DataSetName[ingDataTableName].length) {
-        //     if (isDynamicTable) {
-        //
-        //     } else if (isFixedTable) {
-        //
-        //     }
-        // }
         if (curDatarowInDataBand < dataTable.DataSetName[ingDataTableName].length && isDynamicTable == true) {
             reportPageCnt++;
             if (arrRegion[0] != undefined) {
@@ -189,7 +225,7 @@ function makeReport(report, arrRegion) {
  날짜 : 2018 - 09 - 03
  내용 : 디자인 레이어에 position지정
  ******************************************************************/
-function setDesignLayer(report, dataBand) {
+function setDesignLayer(report) {
     $(('#page' + pageNum)).append('<div id="designLayer' + pageNum + '"class = designLayer></div>');
 
     setDesignLayerDirection(report);

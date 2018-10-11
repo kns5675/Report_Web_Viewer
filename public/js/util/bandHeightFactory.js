@@ -87,7 +87,6 @@ function getAvaHeight(div_id, reportHeight) {
     return avaHeight;
 }
 
-
 /***********************************************************
  기능 : 데이터밴드 childHeaderBand 길이 구함
  **********************************************************/
@@ -225,10 +224,6 @@ function getChildBandHeight(band) {
                         if (curDatarowInRegion + numofData > dt.length) {
                             childBandsHeight += Number(childBand.rectangle.height);
                         }
-                        // if (!remainDataInRegion) { // 데이터 출력이 끝났을 때 나옴
-                        //     console.log(numofData);
-                        //     childBandsHeight += Number(childBand.rectangle.height);
-                        // }
                     } else { // 리전이 아닐 때
                         if (curDatarowInDataBand + lastPageDataCnt > dt.length) { // 데이터 출력이 끝났을 때 나옴
                             childBandsHeight += Number(childBand.rectangle.height);

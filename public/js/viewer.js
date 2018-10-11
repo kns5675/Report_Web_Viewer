@@ -726,5 +726,6 @@ function headerMenuPositionSetting(){
     menu.css('width', pos_left + 'px');
     $('#page_nav').css('top', '3px');
     $('#txtZoomLi').css('top', '5px');
+    menu_li.css('display', 'inline-block');
     // 항목선택 5, 4, 2, 3 px
 }
