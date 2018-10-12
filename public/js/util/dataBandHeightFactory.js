@@ -83,7 +83,7 @@ function getBandHeightOfDataBand(band, numOfData) {
             labels.push(controlLists);
             if (controlLists.Rectangle.Y !== undefined) {
                 tableSpacing = Number(controlLists.Rectangle.Y._text);
-            }else if (controlList._attributes["xsi:type"] == "ControlFixedTable") {
+            }else if (controlLists._attributes["xsi:type"] == "ControlFixedTable") {
                 isDynamicTable = false;
             }
         }
