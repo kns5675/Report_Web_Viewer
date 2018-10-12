@@ -188,15 +188,16 @@ function getNumOfDataInOnePage(tableLabel, divId) {
  : (밴드 길이 - 첫 행 높이) / 데이터 라벨 높이 => 한페이지에 들어가야할 밴드 개수
  만든이 : 구영준
  * *********************************************************/
-function getNumOfDataInOnePageNonObject(band, avaHeight) {
-    var dt = dataTable.DataSetName[band.dataTableName];
+function getNumOfDataInOnePageNonObject(band, avaHeight, dt) {
+    // var dt = dataTable.DataSetName[band.dataTableName];
     var tableSpacing = 0;
     var tableLabels;
     var dynamicTable;
     var titleHeight = 0;
     var valueHeight = 0;
+    var dtLength = dt == undefined ? 0 : dt.length;
 
-    if(dt.length == 0){
+    if (dtLength == 0) {
         return Number(band.minimumRowCount);
     }
 
@@ -235,8 +236,8 @@ function getNumOfDataInOnePageNonObject(band, avaHeight) {
 
     var numofData = Math.floor((avaHeight - titleHeight - tableSpacing) / valueHeight);
 
-    if (numofData > dt.length) {
-        return dt.length;
+    if (numofData > dtLength) {
+        return dtLength;
     }else {
         return numofData;
     }
@@ -273,7 +274,7 @@ function getNumOfDataInOnePageNonObjectInFixedTable(band, divId) {
     }
 
     var numofData = Math.floor(bandDataHeight / fixedTableHeight);
-    if (numofData > dt.length) {
+    if (numofData > dtLength) {
         return dt.length;
     } else {
         return numofData;
