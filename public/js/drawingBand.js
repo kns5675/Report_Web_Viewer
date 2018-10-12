@@ -506,7 +506,8 @@ function joinDt(band, parentBand) {
                         for (keyInSubBand in subBandData) {
                             if (subBandString == keyInSubBand) {
                                 if (masterBandData[keyInMasterBand]._text == subBandData[keyInSubBand]._text) {
-                                    if (groupFieldArrayTemp !== undefined && subBandData[keyInSubBand]._text == groupFieldArray[groupFieldNum - 1][0]) {
+                                    console.log(groupFieldNumTemp);
+                                    if (groupFieldArrayTemp !== undefined && subBandData[keyInSubBand]._text == groupFieldArrayTemp[groupFieldNumTemp - 1][0]) {
                                         band.whereTerms = groupFieldArrayTemp[groupFieldNumTemp - 1][0];
                                         band.subBandFieldName = subBandString;
                                     } else if (groupFieldArrayTemp === undefined) {
@@ -521,7 +522,7 @@ function joinDt(band, parentBand) {
                     for (keyInSubBand in dataTable.DataSetName[band.dataTableName]) {
                         if (subBandString == keyInSubBand) {
                             if (masterBandData[keyInMasterBand]._text == dataTable.DataSetName[band.dataTableName][keyInSubBand]._text) {
-                                if (groupFieldArrayTemp !== undefined && dataTable.DataSetName[band.dataTableName][keyInSubBand]._text == groupFieldArray[groupFieldNum - 1][0]) {
+                                if (groupFieldArrayTemp !== undefined && dataTable.DataSetName[band.dataTableName][keyInSubBand]._text == groupFieldArrayTemp[groupFieldNumTemp - 1][0]) {
                                     band.whereTerms = groupFieldArrayTemp[groupFieldNumTemp - 1][0];
                                     band.subBandFieldName = subBandString;
                                 } else if (groupFieldArrayTemp === undefined) {
@@ -737,34 +738,26 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
                 if (isDynamicTable == true && dt != undefined && numofData > 0) { //그룹일 경우
                     var dataCount = groupFieldArrayTemp[groupFieldNumTemp].length;
                     var groupRemainData = (dataCount - groupDataRowTemp);
-                    if(groupDataRow >= numofData) {
-                        if (numofData >= groupRemainData) { // 마지막 페이지
-                            var minRowCnt = $('#' + layerName).find('.minRow').length;
-                            curDatarow += groupFieldArrayTemp[groupFieldNumTemp].length - 1 + minRowCnt;
-                            curDataRowTemp += groupFieldArrayTemp[groupFieldNumTemp].length - 1;
+                    if (numofData - groupDataRowTemp >= groupRemainData) { // 마지막 페이지
+                        var minRowCnt = $('#' + layerName).find('.minRow').length;
+                        curDatarow += groupFieldArrayTemp[groupFieldNumTemp].length - 1 + minRowCnt;
+                        curDataRowTemp += groupFieldArrayTemp[groupFieldNumTemp].length - 1;
+                        remainDataTemp = false;
+                        ingDataTableName = band.dataTableName;
+                    } else { //마지막 페이지가 아닌 경우
+                        if(!dynamicTableIsForceOverRow){
                             remainDataTemp = false;
-                            ingDataTableName = band.dataTableName;
-                        } else { //마지막 페이지가 아닌 경우
+                        }else{
                             remainDataTemp = true;
-                            if (numofData > groupDataRowTemp) {
-                                groupDataRowTemp += (numofData - groupDataRowTemp);
-                            } else {
-                                groupDataRowTemp += numofData - 1;
-                            }
-                            ingDataTableName = band.dataTableName;
                         }
-                    }else{
-                            if (numofData + groupDataRow > dataCount) { // 마지막 페이지
-                                curDatarow += groupFieldArray[groupFieldNum].length - 1;
-                                curDatarowInDataBand += groupFieldArray[groupFieldNum].length - 1;
-                                remainData = false;
-                                ingDataTableName = band.dataTableName;
-                            } else { //마지막 페이지가 아닌 경우
-                                remainData = true;
-                                groupDataRow += (numofData - groupDataRow);
-                                ingDataTableName = band.dataTableName;
-                            }
+                        if (numofData > groupDataRowTemp) {
+                            groupDataRowTemp += (numofData - groupDataRowTemp);
+                        } else {
+                            groupDataRowTemp += numofData - 1;
+                        }
+                        ingDataTableName = band.dataTableName;
                     }
+
                 } else if (isFixedTable == true && dt != undefined && numofData > 0) {
                     curDataRowTemp += numofData;
                     ingDataTableName = band.dataTableName;
@@ -856,11 +849,15 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
              *
              **************************************************************************************/
             parentBand = (parentBand === undefined ? band.parentBand : parentBand);
+            console.log(dt);
             if (dt != undefined) {
+                console.log(checkGroupHeader(band.parentBand));
                 if (checkGroupHeader(band.parentBand)) {
                     if (isDynamicTable == true && dt != undefined && numofData > 0) {
                         var dataCount = groupFieldArrayTemp[groupFieldNumTemp].length;
                         var groupRemainData = (dataCount - groupDataRowTemp);
+                        console.log(groupDataRowTemp);
+                        console.log(numofData);
                         if (groupDataRowTemp >= numofData) {
                             if (numofData >= groupRemainData) { // 마지막 페이지
                                 groupFieldNumTemp++;
@@ -1041,6 +1038,7 @@ function drawChildFooterBand(band, layerName, reportHeight) {
                 } else {
                     remainDataTemp = remainData;
                 }
+                console.log(remainDataTemp);
                 if (!remainDataTemp) { // 리전이 아닐 때
                     childFooterBandArray.push(childBand);
                 } else {
