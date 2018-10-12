@@ -25,11 +25,13 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
     fixTableId.css({
         'width': controlFixedTable.rectangle.width,
         'height': controlFixedTable.rectangle.height,
-        'padding': '0',
-        'border-collapse': 'collapse',
-        'cellspacing': '0',
-        'cellpadding': '0',
-        'box-sizing': 'border-box'
+        'border-spacing': 0,
+        'padding': 0
+        // 'padding': '0',
+        // 'border-collapse': 'collapse',
+        // 'cellspacing': '0',
+        // 'cellpadding': '0',
+        // 'box-sizing': 'border-box'
     });
     var dt = Object.values(dataTable.DataSetName)[0];
 
@@ -277,9 +279,11 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                 'height': fixTableHeight,
                 'left': controlFixedTable.rectangle.x + 'px',
                 'top': controlFixedTable.rectangle.y + 'px',
-                'border-collapse': 'collapse',
                 'border': '0px',
-                'cellspacing': '0',
+                'border-spacing': '0px'
+                // 'border-collapse': 'collapse',
+                // 'border': '0px',
+                // 'cellspacing': '0',
                 //'box-sizing': 'border-box'
 
             });
@@ -314,12 +318,12 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
         'left': 0
     });
     ThisFixedTableData.css({
-        //'position': 'absolute',//니니
+        'position': 'absolute',//니니
         'left': tdLeft + 'px',
         'top': tdTop + 'px',
-        'cellspacing': '0',
+        // 'cellspacing': '0',
         'box-sizing': 'border-box',
-        'border-collapse': 'collapse'
+        // 'border-collapse': 'collapse'
     })
 
     if (fromData.noBorder == 'true') {//border 없을때
@@ -334,10 +338,11 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
             'font-family': fromData.fontFamily,
             'font-weight': fromData.fontStyle,
             'padding': 0,
-            'margin': '0',
+            // 'margin': '0',
+            'border-spacing': '0px',
             'border-collapse': 'collapse',
             'color': fromData.textColor,
-            'cellspacing': '0',
+            // 'cellspacing': '0',
             'box-sizing': 'border-box'
         });
     } else {//border 있을때
@@ -374,6 +379,7 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
                 'border-right': rightThickness + 'px ' + rightBorderStyle + ' ' + rightBorderColor,
                 'border-left': leftThickness + 'px ' + leftBorderStyle + ' ' + leftBorderColor,
                 'border-collapse': 'collapse',
+                'border-spacing': '0px', //
                 'white-space': 'nowrap',
                 'color': fromData.textColor,
                 'overflow': 'visible',
@@ -401,7 +407,7 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
                 'width': ptToPx + 'px',
                 'height': (textWithoutSpaceLength * ptToPx) + 'px',
                 'display': 'inline-block',
-                //  'box-sizing': 'border-box'
+                'box-sizing': 'border-box'
             });
             ThisFixedTableData.css({
                 'white-space': 'normal'
@@ -427,7 +433,7 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
                                     '-webkit-margin-before': tagPmarginTop,
                                     'top': tagPmarginTop,
                                     'display': 'inline-block',
-                                    // 'box-sizing': 'border-box'
+                                    'box-sizing': 'border-box'
                                 });
                             }
                                 break;
