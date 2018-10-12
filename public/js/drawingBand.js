@@ -334,7 +334,8 @@ function drawBandData(groupFieldArray, band, layerName, reportHeight, parentBand
                     }
                 });
             }else{
-                if(band.controlList._attributes["xsi:type"] == "ControlDynamicTable"){
+                console.log(band);
+                if(band.controlList.anyType._attributes["xsi:type"] == "ControlDynamicTable"){
                     dynamicTable = band.controlList;
                 }
             }
@@ -408,11 +409,10 @@ function drawBandData(groupFieldArray, band, layerName, reportHeight, parentBand
                     }
                 });
             }else{
-                if(band.controlList._attributes["xsi:type"] == "ControlDynamicTable"){
-                    dynamicTable = band.controlList;
+                if(band.controlList.anyType._attributes["xsi:type"] == "ControlDynamicTable"){
+                    dynamicTable = band.controlList.anyType;
                 }
             }
-
             if (dynamicTable._attributes['xsi:type'] == 'ControlDynamicTable' && dynamicTable.Labels !== undefined) {
                 if (dynamicTable.MinimumRowCount !== undefined) { // 최소 행 개수
                     var minimumRowCount = Number(dynamicTable.MinimumRowCount._text);
