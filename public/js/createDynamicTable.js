@@ -760,6 +760,7 @@ function setCssInTable(label, tdId, text) {
         'width': label.rectangle.width + 'px',
         'height': label.rectangle.height + 'px',
         'box-sizing' : 'border-box',
-        'padding' :'0px',
+        'padding' :'0px 3px',
+        'text-align' : label.horizontalTextAlignment,
     });
 }
