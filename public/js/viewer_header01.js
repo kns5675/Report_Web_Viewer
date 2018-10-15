@@ -8,16 +8,17 @@ var imagedivid;
 var set_buttonid;
 var imagezIndex = 401;
 var total_data;
+var total_report;
+var total_band;
+var total_label;
 
 
 function file_download_data_get() {
-    console.log("total_data : ",total_data);
+    $("#file_data")[0].value = JSON.stringify(total_data);
+
     alert("파일 저장 완료");
     alert("Report_Web_Viewer/file_save 파일 하위에 저장됩니다.");
-    var file_data = $("#file_data")[0].value;
-    $("#file_data")[0].value = total_data;
-    console.log("file_data : ",$("#file_data")[0].value);
-
+    // return total_data;
 }
 
 /******************************************************************
@@ -70,84 +71,101 @@ function Band_forEach(bands) {
     if(bands[1]){
         bands.forEach(function (e, i) {
             if(e.ControlList.anyType){
-                label_id = e.ControlList.anyType;
+                console.log("111111111 : ",e.ControlList.anyType);
+                if(e.ControlList.anyType[1]){
+                    label_id = e.ControlList.anyType[i].Labels; //고쳐야 할 수도.
+                    Label_forEach(label_id, temp);
+                }else{
+                    label_id = e.ControlList.anyType.Labels;
+                    if(label_id["TableLabel"]){
+                        label_id = label_id.TableLabel;
+                    }
+                    Label_forEach(label_id, temp);
+                }
             }
-            console.log("e.ControlList.anyType : ",e.ControlList.anyType);
-            console.log("i : ",i);
-            // if(){
-            //
-            // }
-            Label_forEach(label_id, temp);
         });
     }else{
+        console.log("bands.ControlList.anyType : ",bands);
         if(bands.ControlList.anyType){
             label_id = bands.ControlList.anyType;
-            label_id.forEach(function (e, i) {
-                // console.log("e : ",e);
-            });
+            console.log("2222 : ",label_id);
+            if(label_id[1]){
+                Label_forEach(label_id);
+            }else{ //라벨이 하나만 있거나 없을 때 처리
+                label_id = bands.ControlList.anyType.Labels;
+                console.log("33333 : ",label_id);
+                Label_forEach(label_id);
+            }
         }
     }
 
 }
 
 function Label_forEach(label_id) {
-    // console.log("label_id : ",label_id);
-    if(label_id._attributes["xsi:type"] === "ControlDynamicTable"){
-        var table = label_id.Labels.TableLabel;
-        table.forEach(function (e, i) {
-            // console.log("e : ",e);
+    console.log("label_id : ",label_id);
+    label_id.forEach(function (e, i) {
+        console.log("e : ",e);
+        if(e._attributes["xsi:type"]) {
+            if (e._attributes["xsi:type"] === "DynamicTableTitleLabel") {
+                var Height = e.Rectangle.Height._text;
 
-        });
-    }else if(label_id._attributes["xsi:type"] === "ControlFixedTable"){
+                console.log("Height : ",Height);
+                // table.forEach(function (e, i) {
+                //     console.log("e : ",e);
+                //
+                // });
+            } else if (e._attributes["xsi:type"] === "ControlFixedTable") {
 
-    }else if(label_id._attributes["xsi:type"] === "ControlLabel"){
-        if(label_id.DataType){
-            if(label_id.DataType._text === "SystemLabel"){
-                // console.log("label_id : ",label_id.Name._text);
-                var count = 0;
-                if(label_id.Name){
-                    $("."+label_id.Name._text).each(function (i, e) {
-                        // console.log("label_id.Rectangle.Width : ", label_id.Rectangle.Width);
-                        // var next_element = $("."+label_id.Name._text)[i+1];
-                        var element_width = e.style.width.replace(/[^0-9]/g, '');
-                        // console.log("element_width : ",element_width);
-                        if(element_width !== label_id.Rectangle.Width._text){ //이 위쪽에서 수정된 하나의 값만 찾아서 해당 값으로 모두 바꿔주는 로직이 필요.
-                            // label_id.Rectangle.Width._text = element_width;  //모두 바꿔줄 필요없이 들어갈 하나의 값만 바꾸면되는데?
-                            temp = element_width;
-                            var total_count = $("."+label_id.Name._text).length;
-                            $("."+label_id.Name._text).each(function (i, e) {
-                                console.log("temp : ",temp);
-                                if(temp !== e.style.width.replace(/[^0-9]/g, '')){
-                                    count++;
+            } else if (e._attributes["xsi:type"] === "ControlLabel") {
+                if (e.DataType) {
+                    if (e.DataType._text === "SystemLabel") {
+                        // console.log("label_id : ",label_id.Name._text);
+                        var count = 0;
+                        if (label_id.Name) {
+                            $("." + label_id.Name._text).each(function (i, e) {
+                                // console.log("label_id.Rectangle.Width : ", label_id.Rectangle.Width);
+                                // var next_element = $("."+label_id.Name._text)[i+1];
+                                var element_width = e.style.width.replace(/[^0-9]/g, '');
+                                // console.log("element_width : ",element_width);
+                                if (element_width !== e.Rectangle.Width._text) { //이 위쪽에서 수정된 하나의 값만 찾아서 해당 값으로 모두 바꿔주는 로직이 필요.
+                                    // label_id.Rectangle.Width._text = element_width;  //모두 바꿔줄 필요없이 들어갈 하나의 값만 바꾸면되는데?
+                                    temp = element_width;
+                                    var total_count = $("." + e.Name._text).length;
+                                    $("." + e.Name._text).each(function (i, e) {
+                                        console.log("temp : ", temp);
+                                        if (temp !== e.style.width.replace(/[^0-9]/g, '')) {
+                                            count++;
+                                        }
+                                        console.log("count : ", count);
+                                        if (count + 1 === total_count) {
+                                            console.log("label_id.Rectangle.Width._text에 temp를 넣는 시점.");
+                                            e.Rectangle.Width._text = temp;
+                                        }
+                                    });
+                                    // console.log("temp : ",temp);
                                 }
-                                console.log("count : ",count);
-                                if(count+1 === total_count){
-                                    console.log("label_id.Rectangle.Width._text에 temp를 넣는 시점.");
-                                    label_id.Rectangle.Width._text = temp;
-                                }
+                                // if(e.style.height !==label_id.Rectangle.Height){
+                                //     label_id.Rectangle.Height = e.style.height;
+                                // }
+                                // if(e.style.left !==label_id.Rectangle.X){
+                                //     label_id.Rectangle.X = e.style.left;
+                                // }
+                                // if(e.style.top !==label_id.Rectangle.X){
+                                //     label_id.Rectangle.X = e.style.top;
+                                // }
+                                // var label_name = e.id.replace(/[^a-zA-Z]/g, '');
+                                // if(label_name === "SystemLabel"){
+                                //
+                                // }
                             });
-                            // console.log("temp : ",temp);
                         }
-                        // if(e.style.height !==label_id.Rectangle.Height){
-                        //     label_id.Rectangle.Height = e.style.height;
-                        // }
-                        // if(e.style.left !==label_id.Rectangle.X){
-                        //     label_id.Rectangle.X = e.style.left;
-                        // }
-                        // if(e.style.top !==label_id.Rectangle.X){
-                        //     label_id.Rectangle.X = e.style.top;
-                        // }
-                        // var label_name = e.id.replace(/[^a-zA-Z]/g, '');
-                        // if(label_name === "SystemLabel"){
-                        //
-                        // }
-                    });
-                }
-            }else{
+                    } else {
 
+                    }
+                }
             }
         }
-    }
+    });
 }
 
 function saving_data_binding(data){

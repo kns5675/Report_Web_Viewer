@@ -18,7 +18,7 @@ var upload = multer({ storage: storage });
 var db_name;
 var param_name;
 
-var xml = fs.readFileSync('xml/기부금명세서.xml', 'utf-8');
+var xml = fs.readFileSync('xml/연말정산.xml', 'utf-8');
 var json_origin = convert.xml2json(xml, {compact: true});
 var json = json_origin.replace(/\\r/gi, '<br/>'); // 엔터키(\r)를 <br/>로 치환
 
@@ -65,13 +65,12 @@ router.post('/', upload.array('send_file', 3), function (req, res, next) {
             });
         }
     }else{  //file 저장 버튼 클릭시
-        console.log("req.body.send_file : ",req.body.send_file);
-        console.log("req.body.send_db : ",req.body.send_db);
-        console.log("req.body.send_param : ",req.body.send_param);
-
         var file_name = req.body.send_file;
+        var file_data = req.body.file_data;
 
-        fs.writeFileSync("file_save/"+file_name+".xml", xml, 'utf-8');
+        json_origin = convert.json2xml(file_data, {compact: true});
+        xml = fs.writeFileSync("file_save/"+file_name+".xml", json_origin, 'utf-8');
+
     }
 });
 
