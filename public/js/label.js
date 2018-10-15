@@ -202,6 +202,8 @@ function FixedTableLabel(data, i){
 
     this._attributes = data._attributes["xsi:type"];
     this.selected = data.Selected._text;
+    this.summaryType = data.SummaryType === undefined ? 'Sum' : data.SummaryType._text; // 요약 타입
+    this.selected = data.Selected._text; // 테이블 라벨에만 있는 것 같음
     this.fieldName = data.FieldName === undefined ? 0 : data.FieldName._text;
 }
 
