@@ -290,7 +290,6 @@ function NextPage(){
  ******************************************************************/
 function LastPage(pagecount){
     $("#LastPage").on("click",function () {
-        // var Last = $(".page").length;
         var Last = $(".visiblePage").length;
         var page = $("#page"+Last).offset().top-185;
         $(window).scrollTop(page);
@@ -303,7 +302,6 @@ function LastPage(pagecount){
  ******************************************************************/
 function HeaderFixAndPageScroll(pagecount) {
     var jbOffset = $( '#header' ).offset();
-    // $( '#header' )[0].style.width = "100%";
     $( window ).scroll( function() {
         if ( $( document ).scrollTop() > jbOffset.top ) {
             $( '#header' ).addClass( 'jbFixed' );
@@ -319,7 +317,6 @@ function HeaderFixAndPageScroll(pagecount) {
  만든이 : hagdung-i
  ******************************************************************/
 function PageValue() {
-    // $(".page").each(function (i, e) {
     $(".visiblePage").each(function (i, e) {
         var page = $("#"+e.id).offset().top-500;
         if($( document ).scrollTop() >= page){

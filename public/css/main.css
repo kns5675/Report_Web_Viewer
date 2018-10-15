@@ -104,7 +104,7 @@ input[type="number"]#copyratio::-webkit-inner-spin-button {
     /*background-color:mediumpurple;*/
 }
 #copywrap{
-    line-height : 46px;
+    line-height : 22px;
 }
 #aproval_option{
     height : 130px;
@@ -228,4 +228,8 @@ span.subject{
     /*background-color:lightblue;*/
     margin-right: 2%;
     height:380px;
+}
+.temp_headerNfooter{
+    z-index : -9999;
+    visibility: hidden;
 }

@@ -93,8 +93,13 @@ li#saveAsImage:hover ul#saveImgList{
     display : block;
 }
 ul#header_ul > li#reportChoice_li{
-    width : fit-content;
-    top : 4px;
+    padding : 4px 2px 1px 2px;
+    /*width : fit-content;*/
+    /*top : 4px;*/
+}
+img#reportChoice {
+    width: 28px;
+    height: 28px;
 }
 /*#reportChoice_li:hover{*/
     /*cursor : pointer;*/

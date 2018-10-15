@@ -438,9 +438,6 @@ function setReport(report) {
 
     // makeTableByData();
 
-    // drawBand(report); // 추가 - 전형준
-
-    // reportNum++; // pageNum으로 대체되어 본 함수 빠져나간 뒤에 pageNum++만 - 형준
 }
 
 /******************************************************************
@@ -581,13 +578,11 @@ function temp_to_reportTemplate() {
     var str = "";
 
     for (var i = 0; i < wrap_arr_clone.length; i++) {
-        // console.log(i+1 + "번째 리포트");
         // '리포트'의 리포트 넘기기가 true일 때
         if (wrap_arr_clone[i].length > 0
             && (reportTemplate.reportList[i].forceNextReport // 리포트의 리포트 넘기기가 true
                 // || check_groupFieldName_in_GroupFooter(reportTemplate.reportList[i].layers.designLayer.bands))){
             )) {
-            // console.log("리포트의 리포트 넘기기가 true");
             str += wrap_arr_clone[i][0];
             wrap_arr_clone[i].shift();
         }
@@ -681,12 +676,9 @@ function check_groupFieldName_in_GroupFooter(bands) {
 function check_forceNextReport_in_GroupFooter(bands) {
     var bool = false;
     bands.forEach(function (band) {
-        // console.log("여긴 오나요");
         if (band instanceof BandData && band.childFooterBands !== null) {
-            // console.log("데이터밴드가 있고 자식밴드가 있어요");
             band.childFooterBands.forEach(function (childBand) {
                 if (childBand instanceof BandGroupFooter && childBand.forceNextReport === true) {
-                    // console.log("자식밴드중 그룹풋터밴드가 있고 리포트넘기기가 true예요");
                     bool = true;
                 }
             });
@@ -709,7 +701,6 @@ function reNumbering() {
     var cnt = 1;
 
     for (var i = 0; i < pageforcopyratio_div_arr.length; i++) {
-        // console.log(i);
         if (pageforcopyratio_div_arr.eq(i).css('display') !== 'none') {
             pageforcopyratio_div_arr.eq(i).attr('id', 'pageForCopyRatio' + (cnt));
             page_div_arr.eq(i).attr('id', 'page' + (cnt));
@@ -717,8 +708,6 @@ function reNumbering() {
         } else {
             pageforcopyratio_div_arr.eq(i).removeAttr('id');
             page_div_arr.eq(i).removeAttr('id');
-            // pageforcopyratio_div_arr.eq(i).removeUniqueId();
-            // page_div_arr.eq(i).removeUniqueId();
         }
     }
 
@@ -727,22 +716,4 @@ function reNumbering() {
     $('#TotalPage').text(total_page_count);
     HeaderFixAndPageScroll(total_page_count);
     LastPage(total_page_count);
-    // HeaderFixAndPageScroll(total_page_count);
-
-    // console.log(remove_page_arr);
-    // console.log("============");
-    //
-    // for(var i=0; i<remove_page_arr.length; i++){
-    //     pageforcopyratio_div_arr.splice(remove_page_arr[0], 1);
-    //     page_div_arr.splice(remove_page_arr[0], 1);
-    //     console.log("삭제!");
-    // }
-    //
-    // console.log("pagecory length : " + pageforcopyratio_div_arr.length);
-    // console.log("page length : " + page_div_arr.length);
-    //
-    // for(var i=0; i<pageforcopyratio_div_arr.length; i++){
-    //     pageforcopyratio_div_arr.eq(i).attr('id', 'pageforcopyratio'+(i+1));
-    //     page_div_arr.eq(i).attr('id', 'page'+(i+1));
-    // }
 }

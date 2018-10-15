@@ -214,7 +214,7 @@ function getBandHeightOfDataBand(band, numOfData) {
 
     //ToDo 테이블 두께에 따라 1px 정도씩 오차가 생김
     if (isDynamicTable) {
-        return tableSpacing + labelHeight + (valueHeight * numOfData) + allLabelBorderThickness;
+        return Math.round(tableSpacing + labelHeight + (valueHeight * numOfData) + allLabelBorderThickness);
     } else {
         return band.rectangle.height;
     }

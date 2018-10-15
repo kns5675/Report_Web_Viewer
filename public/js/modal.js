@@ -34,7 +34,6 @@ function header_event_setting(){
      ******************************************************************/
     $(".copydate").on("change",function () {
         var print = $('input[id="copydate_id"]:checked').val();
-        console.log("print : ",print);
         if(print){
             if(pageprint_check){
                 datePrinting();
@@ -464,43 +463,74 @@ function countPrinting() {
  내용 : 페이지 좌표를 계산해서 머리글 영역을 잡고, 그려주는 함수.
  ******************************************************************/
 function header_test(value, input_value) {
-    $(".page").each(function (i,e) {
+    var all_page = $(".page");
+    var header_pos = $('#extraheadoptions').val();
+
+    all_page.each(function (i,e) {
         var not_input;
-        if(input_value != undefined){ //input 창에 입력이 없을 경우엔 빈칸으로 설정.
+        var display_none_chk = (all_page.eq(i).parents('.pageforcopyratio').css('display') === 'none');
+        if (input_value != undefined) { //input 창에 입력이 없을 경우엔 빈칸으로 설정.
             not_input = input_value;
-        }else{
+        } else {
             not_input = " ";
         }
         // 페이지 좌표 계산.
-        const row_interval = e.style.width.replace(/[^-\.0-9]/g,"")*value;
+        // const row_interval = e.style.width.replace(/[^-\.0-9]/g,"")*value;
         const col_interval = e.style.height.replace(/[^-\.0-9]/g,"")*0.01;
         //영역 잡고, 그려줌.
         const PageHeader = document.createElement("div");
-        PageHeader.id = "PageHeader" + e.id.replace(/[^0-9]/g, "");
+        PageHeader.id = "PageHeader" + (i + 1);
         PageHeader.className = "PageHeader";
-        PageHeader.style.position = "absolute";
-        PageHeader.style.left = row_interval+"%";
-        PageHeader.style.top = col_interval+"%";
-        PageHeader.style.width = "100px";
-        PageHeader.style.height = "50px";
         PageHeader.style.zIndex = "999";
 
         const header_Packing = document.createElement("div");
-        header_Packing.id = "headerData" + e.id.replace(/[^0-9]/g, "");
+        header_Packing.id = "headerData" + (i + 1);
         header_Packing.className = "headerData";
 
-        const header_tag = document.createElement("input");
-        header_tag.id = "header_tag" + e.id.replace(/[^0-9]/g, "");
-        header_tag.value = not_input;
-        header_tag.type = "text";
+        const header_tag = document.createElement("span");
+        header_tag.id = "header_tag" + (i + 1);
+        header_tag.innerText = not_input;
         header_tag.style.backgroundColor = "rgba(255, 255, 255, 0)";
         header_tag.style.border = "none";
-        header_tag.readOnly = true;
         header_tag.style.fontSize = "12px";
 
-        document.getElementById("page" + e.id.replace(/[^0-9]/g, "")).appendChild(PageHeader);
+        all_page.eq(i).append(PageHeader);
         document.getElementById(PageHeader.id).appendChild(header_Packing);
         document.getElementById(header_Packing.id).appendChild(header_tag);
+        PageHeader.style.position = "absolute";
+
+        $('#temp_header').html($('#PageHeader' + (i + 1)).clone());
+
+        if (header_pos == '상단좌측') {
+            PageHeader.style.left =
+                (stringToNumberByPx(all_page.eq(i).children('.designLayer').css('margin-left')) !== 0) ?
+                    all_page.eq(i).children('.designLayer').css('margin-left') : '40px';
+        } else if (header_pos == '상단우측') {
+            PageHeader.style.right =
+                (stringToNumberByPx(all_page.eq(i).children('.designLayer').css('margin-right')) !== 0) ?
+                    all_page.eq(i).children('.designLayer').css('margin-right') : '40px';
+        } else if (header_pos == '상단중앙') {
+            if (display_none_chk) {
+                all_page.eq(i).parents('.pageforcopyratio').css('display', 'block');
+            }
+            PageHeader.style.left =
+                (stringToNumberByPx(all_page.eq(i).css('width')) / 2)
+                - (stringToNumberByPx($('#temp_header').children('.PageHeader').css('width')) / 2) + 'px';
+            if (display_none_chk) {
+                all_page.eq(i).parents('.pageforcopyratio').css('display', 'none');
+            }
+        }
+
+        // top 좌표
+
+        if(stringToNumberByPx(all_page.eq(i).children('.designLayer').css('margin-top')) >= 21) {
+            PageHeader.style.top =
+                stringToNumberByPx(all_page.eq(i).children('.designLayer').css('margin-top')) - 21 + 'px';
+        } else{
+            PageHeader.style.top = col_interval+"%";
+        }
+
+        $('#temp_header').empty();
     });
 }
 /******************************************************************
@@ -510,7 +540,6 @@ function header_test(value, input_value) {
  내용 : 머리글 셀렉트 박스를 통해 입력 받는 값에 따라 머리글 영역의 좌표를 변경해주는 함수.
  ******************************************************************/
 function header_location(input_value){
-    console.log($("#extraheadoptions").val());
     if($("#extraheadoptions").val() ==="상단좌측"){
         var value = 0.1;
         if($(".PageHeader").length != 0){
@@ -545,43 +574,79 @@ function header_location(input_value){
  ******************************************************************/
 function footer_test(value, input_value) {
     var not_input;
-    console.log("input_value : ",input_value);
+    var all_page = $(".page");
+    var footer_pos = $('#extratailoptions').val();
+
     if(input_value != undefined){
         not_input = input_value;
     }else{
         not_input = " ";
     }
-    $(".page").each(function (i,e) {
+
+    all_page.each(function (i,e) {
+        var display_none_chk = (all_page.eq(i).parents('.pageforcopyratio').css('display') === 'none');
         // 페이지 좌표 계산.
-        const row_interval = e.style.width.replace(/[^-\.0-9]/g,"")*value;
+        // const row_interval = e.style.width.replace(/[^-\.0-9]/g,"")*value;
         const col_interval = e.style.height.replace(/[^-\.0-9]/g,"")*0.97;
+        ;
         //영역 잡고, 그려줌.
         const PageFooter = document.createElement("div");
-        PageFooter.id = "PageFooter" + e.id.replace(/[^0-9]/g, "");
+        PageFooter.id = "PageFooter" + (i+1);
         PageFooter.className = "PageFooter";
         PageFooter.style.position = "absolute";
-        PageFooter.style.left = row_interval+"%";
-        PageFooter.style.top = col_interval+"%";
-        PageFooter.style.width = "100px";
-        PageFooter.style.height = "50px";
         PageFooter.style.zIndex = "999";
 
         const footer_Packing = document.createElement("div");
-        footer_Packing.id = "footerData" + e.id.replace(/[^0-9]/g, "");
-        footer_Packing.className = "footerData";
+        footer_Packing.id = "FooterData" + (i+1);
+        footer_Packing.className = "FooterData";
 
-        const footer_tag = document.createElement("input");
-        footer_tag.id = "footer_tag" + e.id.replace(/[^0-9]/g, "");
-        footer_tag.value = not_input;
-        footer_tag.type = "text";
+        const footer_tag = document.createElement("span");
+        footer_tag.id = "footer_tag" + (i+1);
+        footer_tag.innerText = not_input;
         footer_tag.style.backgroundColor = "rgba(255, 255, 255, 0)";
         footer_tag.style.border = "none";
-        footer_tag.readOnly = true;
         footer_tag.style.fontSize = "12px";
 
-        document.getElementById("page" + e.id.replace(/[^0-9]/g, "")).appendChild(PageFooter);
+        all_page.eq(i).append(PageFooter);
         document.getElementById(PageFooter.id).appendChild(footer_Packing);
         document.getElementById(footer_Packing.id).appendChild(footer_tag);
+
+        $('#temp_footer').html($('#PageFooter' + (i + 1)).clone());
+        PageFooter.style.position = 'absolute';
+
+        if(footer_pos === '하단좌측'){
+            PageFooter.style.left =
+                (stringToNumberByPx(all_page.eq(i).children('.designLayer').css('margin-left')) !== 0) ?
+                    all_page.eq(i).children('.designLayer').css('margin-left') : '40px';
+        } else if(footer_pos === '하단우측'){
+            PageFooter.style.right =
+                (stringToNumberByPx(all_page.eq(i).children('.designLayer').css('margin-right')) !== 0) ?
+                    all_page.eq(i).children('.designLayer').css('margin-right') : '40px';
+        } else if(footer_pos === '하단중앙'){
+            if (display_none_chk) {
+                all_page.eq(i).parents('.pageforcopyratio').css('display', 'block');
+            }
+            PageFooter.style.left =
+                (stringToNumberByPx(all_page.eq(i).css('width')) / 2)
+                - (stringToNumberByPx($('#temp_footer').children('.PageFooter').css('width')) / 2) + 'px';
+            if (display_none_chk) {
+                all_page.eq(i).parents('.pageforcopyratio').css('display', 'none');
+            }
+        }
+
+        // top 위치 세팅
+        if(stringToNumberByPx(all_page.eq(i).children('.designLayer').css('margin-bottom')) >= 21) {
+            PageFooter.style.top =
+                (
+                    stringToNumberByPx(all_page.eq(i).children('.designLayer').css('margin-top')) +
+                    stringToNumberByPx(all_page.eq(i).children('.designLayer').css('height'))
+                ) + 'px';
+                all_page.eq(i).children('.designLayer').css('height');
+                    // stringToNumberByPx(all_page.eq(i).children('.designLayer').css('margin-top')) - 21 + 'px';
+        } else{
+            PageFooter.style.top = col_interval+"%";
+        }
+       $('#temp_footer').empty();
     });
 }
 /******************************************************************
@@ -591,7 +656,6 @@ function footer_test(value, input_value) {
  내용 : 꼬리글 셀렉트 박스를 통해 입력 받는 값에 따라 꼬리글 영역의 좌표를 변경해주는 함수.
  ******************************************************************/
 function footer_location(input_value){
-    console.log($("#extratailoptions").val());
     if($("#extratailoptions").val() ==="하단좌측"){
         var value = 0.1;
         if($(".PageFooter").length != 0){
@@ -698,12 +762,10 @@ function copyRatioCheck(){
         eCopyRate = (Number(eCopyRate))/100;
 
         $(".page").each(function (i, e) {
-            // console.log("e : ", e.id);
             var idnum = e.id.replace(/[^0-9]/g,'');
 
             eCopyRatio(eCopyRate, idnum);//인쇄배율 변경 펑션
         });
-        //close_pop1();
     }
 }
 /******************************************************************
@@ -743,7 +805,6 @@ function eCopyRatio(eCopyRate, idnum){
         //'page' + idnum
         var ecopyratio = eCopyRate;
         ecopyratio = Number(ecopyratio);
-        // console.log("eCopyRatioContent : ",eCopyRatioContent);
       /*  alert(ecopyratio);*/
         if (jQuery.browser.msie) {
             eCopyRatioContent.style.zoom = ecopyratio;
@@ -800,9 +861,7 @@ function removeChar(event) {
  만든이 : 하지연
  ******************************************************************/
 function tiltPrice(){
-    console.log("들어왔음 tilt Pirce");
     if ($("input:checkbox[name='pricetilt']").prop("checked")) {
-        console.log("check되있음");
         $('.MoneySosu').css('font-style', 'italic');
     } else {
         $('.MoneySosu').css('font-style', 'normal');
