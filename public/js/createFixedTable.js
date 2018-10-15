@@ -14,9 +14,7 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
     divIdTable.css({
         'top': 0
     });
-
     var temp_table_class = controlFixedTable.id.substring(0, 4); // 임시로 table을 인식하기 위한 번호 - 전형준
-
     divIdTable.append('<table id="fixedTable' + fixedTableNum + '" class="table table-' + temp_table_class + '"></table>');
     var fixTableId = $('#fixedTable' + fixedTableNum);//고정테이블
     rC2 = 1;
@@ -31,7 +29,6 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
     var fixTableWidth = controlFixedTable.rectangle.width;//고정테이블 width 값
     var fixTableHeight = controlFixedTable.rectangle.height;
     var fixTableLabelListLength = Number(fixTableLabelList.length);//고정테이블 라벨리스트 라벨 개수
-
     function countingRows() {
         var rowCount = 0;
         for (var q = 0; q < fixTableLabelListLength; q++) {
@@ -41,7 +38,6 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
         }
         setRowCount(rowCount);
     }
-
     countingRows();
 
     function setRowCount(rowCount) {
@@ -62,7 +58,6 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                     totalLabelWidth = 0;
                 }
                 if (labelCount == fixTableLabelListLength) {
-
                     for (var i = 1; i <= rowCount; i++) {
                         fixTableId.append('<tr id = "fixedTableRow' + fixTableRowCount + '"></tr>');
                         var ThisfixedTableRow = $("#fixedTableRow" + fixTableRowCount);
@@ -80,11 +75,9 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                         if(rowCount=1){
                             var drawingTds = labelCount;
                         }
-
                         tdDataBinding(ThisfixedTableRow, drawingTds);
                         fixTableRowCount++;
                     }
-
                     function tdDataBinding(ThisfixedTableRow, drawingTds) {
                         var tdId = 'FixedTableLabel_';
                         if (rC2 > drawingTds) {
@@ -200,62 +193,41 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                                 summary_label_avg = summary_label_sum / dt.length;
                                             }
                                             showDataLabel = summary_label_avg;
-                                            // console.log("평균임여");
                                             break;
                                         case 'Max' :
-                                            // console.log("최대값 임여");
                                             break;
                                         case 'Min' :
-                                            // console.log("최소값 임여");
                                             break;
                                         case 'Cnt' :
-                                            // console.log("개수 임여");
                                             break;
                                         default : //none
-                                            // console.log("default 임여");
                                             break;
-
                                     }
-
                                     if (groupFieldArray !== undefined) {
-                                        // console.log("1");
                                         if (fromData.fieldName !== undefined) {
                                             var fieldName = fromData.fieldName;
-                                            //console.log("fieldName : ", fieldName);
-                                            //console.log("2");
-
                                             if (groupFieldArray[groupFieldNum]) {
-                                                // console.log("3");
                                                 if (groupFieldArray[groupFieldNum][1][fieldName]) {
-                                                    // console.log("4");
                                                     var showDataLabel = groupFieldArray[groupFieldNum][1][fieldName]._text;
                                                     if (showDataLabel !== undefined) {
-                                                        // console.log("5");
                                                         showDataLabel = showDataLabel
                                                     }
                                                     if (typeof showDataLabel === 'undefined') {
-                                                        // console.log("6");
                                                         showDataLabel = ' ';
                                                     }
                                                 }
-                                                // console.log("7");
                                             } else {
-                                                // console.log("8");
                                                 console.log("그룹풋터밴드에 해당하는 총계나 그런애들에 대한 자바스크립트..? 처리가 필요함");
                                             }
                                         }
                                         if (typeof showDataLabel === 'undefined') {
-                                            // console.log("9");
-                                            // console.log("여기");
                                             showDataLabel = ' ';
                                         }
-                                        //console.log("어떤 내용써지는지 보자 : ",showDataLabel," typeof : ",typeof showDataLabel);
                                         var table_reform = table_format_check(data.Labels, tdIDwithS, showDataLabel, fromData);
                                         ThisfixedTableRow.append
                                         ('<td class="SummaryLabel" id = "' + tdId + rC2 + '_' + labelC + '">' +
                                             '<p id="' + tdId + rC2 + '_p_' + labelC + '">' + table_reform + '</p>' +
                                             '</td>');
-
                                         var fixedtable_tdId = $('#' + tdId + rC2 + '_' + labelC);
                                         fixedtable_tdId[0].real_id = fromData.id;
                                         var tdId_javascript = $("#" + tdIDMaking);
@@ -267,8 +239,6 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                     break;
                             }
                             settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTableHeight, tdLeft, tdTop);
-
-                            // // drd_javascript(label, tdId_javascript, label.startBindScript, rC2, data[temp]);
                         }
                     }
                 }
@@ -309,6 +279,7 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
  만든이 : 하지연
  ******************************************************************/
 function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTableHeight, tdLeft, tdTop) {
+
     var ThisFixedTableData = $("#" + tdId + rC2 + '_' + labelC);
     var ThisFixedTableDataP = $("#" + tdId + rC2 + '_p_' + labelC);
 
@@ -316,6 +287,7 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
     var thisTextLength = String(fromData.text).length;
     var textWithoutSpace = String(thisText).replace(/(\s*)/g, "");
     var textSize = fromData.fontSize.split('pt')[0];
+    var fontWeight = fromData.fontWeight===undefined?'normal':fromData.fontWeight;
     var textWithoutSpaceLength = textWithoutSpace.length;
 
     ThisFixedTableDataP.css({
@@ -327,6 +299,7 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
         'left': tdLeft + 'px',
         'top': tdTop + 'px',
         'box-sizing': 'border-box',
+        'font-weight': fontWeight
     });
 
     if (fromData.noBorder == 'true') {//border 없을때
@@ -510,7 +483,7 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
  만든이 : 안예솔
 
  수정 : 하지연
- 내용 : tr이 1개일 경우 td가 테이블 내에 제위치를 찾을 수 있도록 수정
+ 내용 : 고정테이블이 리전안에 잘 그려질 수 있도록 전반적인 수정
  ******************************************************************/
 function drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList, band) {
     if (data.IsApprovalBox._text == "true") {
@@ -641,14 +614,10 @@ function drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, d
                                     }
                                     ThisfixedTableRow.append('<td class="NormalLabel" id = "' + tdId + rC2 + '_' + labelC + '">' +
                                         '<p id="' + tdId + rC2 + '_p_' + labelC + '">' + table_format_check(data.Labels, tdIDwithS, fromData.text, fromData) + '</p></td>');
-                                    //settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTableHeight);
-                                    // settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTableHeight);
-                                    // setTable();
                                     var tdId_javascript = $("#" + tdIDMaking);
                                     tdId_javascript.addClass("FixedTableLabel");
                                     break;
                                 case "SummaryLabel" :
-                                    //console.log("SummaryLabel 들어왔음", " 1 : ", data.Labels, " 2 : ", fromData.text, " 3 : ", fromData);
                                     fromData.summaryType = fromData.SummaryType === undefined ? 'Sum' : fromData.SummaryType._text;//요약타입
                                     fromData.detailWhere = fromData.DetailWhere === undefined ? undefined : fromData.DetailWhere._text; //요약라벨 조건절
                                     fromData.fieldName = fromData.fieldName === undefined ? undefined : fromData.fieldName;//필드이름.
@@ -787,6 +756,9 @@ function drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, d
 /******************************************************************
  기능 : FixedTable(고정 테이블)이 데이터 밴드 안에 있을 경우에 화면에 그려주는 함수를 만든다.
  만든이 : 안예솔
+
+ 수정 : 하지연
+ 내용 : 고정테이블이 리전안에 잘 그려질 수 있도록 전반적인 수정
  ******************************************************************/
 function drawingFixedTableInDataBand(data, controlFixedTable, fixTableLabelList, fixedTableDivId, curDataRowInDataBand, fixTableList, band) {
     // TODO 몇 번째 데이터를 찍고 있는지 알아야 함!
