@@ -33,6 +33,8 @@ var rC2 = 1;
 var verticalPNum = 0;
 var groupFieldArrayInRegion = [];
 
+var saving_data;
+
 /******************************************************************
  기능 : ControlList의 유무를 판단하는 함수를 만든다.
  만든이 : 안예솔
@@ -291,7 +293,7 @@ function drawingSystemLabel(data, divId, band_name) {
         band_name: band_name !== undefined ? band_name : undefined,
         div: $('#' + divId),
         labelId: $('#' + data.dataType + systemLabelNum++),
-        label_scope: "NormalLabel_scope",
+        label_scope: "NormalLabel_scope " + data.name,
         labelNum: systemLabelNum,
         label_type: data.dataType
     };
@@ -491,6 +493,7 @@ function label_text_Setting(labelNbandInfo) {
     Lock_check(labelNbandInfo.data, labelNbandInfo.labelId, labelNbandInfo.div);
 
     var pId = $('#P' + labelNbandInfo.label_type + labelNbandInfo.labelNum);
+    pId[0].real_id = labelNbandInfo.data.id;
 
     if (labelNbandInfo.label_type === "SystemLabel") {
         var date = new Date();
@@ -686,18 +689,20 @@ function label_text_Setting(labelNbandInfo) {
     if (labelNbandInfo.label_type === "ParameterLabel") {
         paramTable.NewDataSet.Table1.forEach(function (paramData) {
             if (labelNbandInfo.data.parameterName == paramData.Key._text) {
-                labelNbandInfo.data.text = paramData.Value._text;
+                var paramdata_text = table_format_check(null, null, paramData.Value._text, labelNbandInfo.data);
+                labelNbandInfo.data.text = paramdata_text;
             }
         });
     }
-
     if (labelNbandInfo.label_type === "DataLabel") {
         var dt = dataTable.DataSetName[labelNbandInfo.dataTableName];
-
         if (dt != undefined) {
             if (groupFieldArray !== undefined) {
                 pId.append(groupFieldArray[groupFieldNum][0]);
-                labelNbandInfo.data.text = pId.text();
+                //예시가 없음 추후 수정 필요 할 수 있음.
+                var DataLabel_text = table_format_check(null, null, groupFieldArray[groupFieldNum][0], labelNbandInfo.data);
+                // labelNbandInfo.data.text = pId.text();
+                labelNbandInfo.data.text = DataLabel_text;
             }
         }
     }
@@ -1046,7 +1051,6 @@ function labelPropertyApply(labelNbandInfo) {
     labelNbandInfo.div.css('position', 'relative');
     labelNbandInfo.div.append('<div id = "' + labelNbandInfo.label_type + labelNbandInfo.labelNum + '"></div>');
     labelNbandInfo.labelId = $('#' + labelNbandInfo.label_type + labelNbandInfo.labelNum);
-
     labelNbandInfo.labelId.addClass(labelNbandInfo.label_scope);
     Lock_check(labelNbandInfo.data, labelNbandInfo.labelId, labelNbandInfo.div);
 

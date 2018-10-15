@@ -50,12 +50,12 @@ function makeReportTemplate(data, subReport) {
     reportTemplate.reportList.forEach(function (value, i) {
         ++reportNum;
         $('#temp_reportTemplate').append("<div id='report_wrap" + reportNum + "' class='report_wrap'></div>");
-
         var report = reportTemplate.reportList[i];
         var bands = report.layers.designLayer.bands;
         var dataBands = [];
         var arrRegion = [];
 
+        total_report  = report; //reportTemplate.reportList[i]
         bands.forEach(function (band) {
             if (band.attributes['xsi:type'] == 'BandData') {
                 dataBands.push(band);
@@ -272,6 +272,7 @@ function setDesignLayer(report) {
         drawBand(returnBands, layerName, reportHeight);
         remainFooterBand = [];
     } else {
+
         drawBand(report.layers.designLayer.bands, layerName, reportHeight); // 추가 - 전형준
     }
 }
@@ -502,7 +503,6 @@ function setPage(report, width, height) {
     $('#report_wrap' + reportNum).append(
         '<div id="pageForCopyRatio' + pageNum + '" class="pageforcopyratio paperType-' + paperType + '"></div>'
     );//수정 - 하지연
-
     $('#pageForCopyRatio' + pageNum).append(
         '<div id="page' + pageNum + '" class="visiblePage page paperType-' + paperType + '"></div>'
     ); //수정 - 하지연

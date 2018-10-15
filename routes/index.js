@@ -65,13 +65,12 @@ router.post('/', upload.array('send_file', 3), function (req, res, next) {
             });
         }
     }else{  //file 저장 버튼 클릭시
-        console.log("req.body.send_file : ",req.body.send_file);
-        console.log("req.body.send_db : ",req.body.send_db);
-        console.log("req.body.send_param : ",req.body.send_param);
-
         var file_name = req.body.send_file;
+        var file_data = req.body.file_data;
 
-        fs.writeFileSync("file_save/"+file_name+".xml", xml, 'utf-8');
+        json_origin = convert.json2xml(file_data, {compact: true});
+        xml = fs.writeFileSync("file_save/"+file_name+".xml", json_origin, 'utf-8');
+
     }
 });
 

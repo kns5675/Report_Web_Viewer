@@ -228,10 +228,10 @@ function drawingDynamicTableValueLabelWithOutDataTable(label, tableId, band) {
  *******************************************************************/
 function drawingDynamicTableTitleLabel(label, header_Name_Number, band) {
     var titleTrId = $('#dynamicTitleLabel' + dynamicTitleLabelNum);
-
+    titleTrId.addClass("dynamicTitleLabel");
     titleTrId.append('<th id = "DynamicTableTitleLabel' + header_Name_Number + '_View_Page_Number' + thNum + '"></th>');
     var thId = $('#DynamicTableTitleLabel' + header_Name_Number + "_View_Page_Number" + thNum);
-
+    thId.addClass("DynamicTableTitleLabel"+header_Name_Number);
     setCssInTable(label, thId);
     // thId.append(label.text);
     if (label.dataType === 'ParameterLabel') {
@@ -243,8 +243,11 @@ function drawingDynamicTableTitleLabel(label, header_Name_Number, band) {
     }
     thId.append('<p id="title_P_tag' + thNum + '" style="margin: 0px;">' + label.text + '</p>');
     thId.addClass('Label DynamicTableHeader');
+    if(label.editable !== "false"){
+        thId.addClass("Editable");
+    }
     thId.addClass(label._attributes);
-    table_column_controller(thId, titleTrId);
+    table_column_controller(thId, titleTrId, label);
     // drd_javascript(label, thId, label.startBindScript);
 }
 

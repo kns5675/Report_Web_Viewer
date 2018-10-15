@@ -5,8 +5,9 @@ var current_data;
  만든이 : hagdung-i
  ******************************************************************/
 function Lock_check(data, Label_id, div) { //라벨 데이터, 드래그 리사이즈 영역(p의 div), 벗어나면 안되는 영역(밴드)
-    var editable_test = data.editable;
-    if (editable_test == 'true') { // 편집이 가능할 때
+    var editable = data.editable;
+    if (editable !== 'false') { // 편집이 가능할 때 editable !== 'false'
+        Label_id.addClass("Editable");
         if (!data.lock) {
             if (div[0]) { //예외처리 수정.
                 Label_id.draggable({
@@ -15,9 +16,7 @@ function Lock_check(data, Label_id, div) { //라벨 데이터, 드래그 리사�
                     drag: function( event, ui ) {
                         data.rectangle.x = ui.position.top;
                         data.rectangle.y = ui.position.left;
-                        console.log("x : ",data.rectangle.x);
-                        console.log("y : ",data.rectangle.y);
-                        console.log("data : ",data);
+                        label_data_update(data);
                     }
                 });
                 Label_id.resizable({
@@ -27,10 +26,7 @@ function Lock_check(data, Label_id, div) { //라벨 데이터, 드래그 리사�
                         var width = ui.size.width;
                         data.rectangle.width = ui.size.width;
                         data.rectangle.height = ui.size.height;
-                        console.log("width : ",data.rectangle.width);
-                        console.log("height : ",data.rectangle.height);
-                        console.log("data : ",data);
-
+                        label_data_update(data);
                     }
                 });
             }
@@ -40,6 +36,102 @@ function Lock_check(data, Label_id, div) { //라벨 데이터, 드래그 리사�
     } else {
         Label_id.addClass('nEdit');
     }
+}
+/******************************************************************
+ 기능 : 파일 내보내기 기능 구현을 위해 수정된 라벨의 데이터를 데이터 바인딩이 되지 않은 total_data로 묶어주는 함수.
+ Date : 2018-10-11
+ 만든이 : hagdung-i
+ ******************************************************************/
+function label_data_update(data, editable) {
+    total_band = total_data.ReportTemplate.ReportList.anyType.Layers.anyType[1].Bands.anyType;
+    total_band.forEach(function (TB,Ti) { //밴드의 child들의 속성이 변경될때 역바인딩하는 로직
+        if(TB.ChildHeaderBands.anyType){ //차일드헤더밴드가 있을때
+            var Header_band = TB.ChildHeaderBands.anyType;
+            if(TB.ChildHeaderBands.anyType[1]){
+                Header_band.forEach(function (HB, Bi) {
+                    if(HB.ControlList){
+                        var header_label =  HB.ControlList.anyType;
+                        header_label.forEach(function (HL, Li) {
+                            if(HL.Id){
+                                if(HL.Id._text === data.id){
+                                    HL.Rectangle.Height._text = String(data.rectangle.height);
+                                    HL.Rectangle.Width._text = String(data.rectangle.width);
+                                    HL.Rectangle.X._text = String(data.rectangle.x);
+                                    HL.Rectangle.Y._text = String(data.rectangle.y);
+
+                                    HB.ControlList.anyType[Li] = HL;
+                                    TB.ChildHeaderBands.anyType[Bi] = HB;
+                                    total_data.ReportTemplate.ReportList.anyType.Layers.anyType[1].Bands.anyType[Ti] = TB;
+                                }
+                            }
+                        });
+                    }
+                });
+            }else{
+                var header_label =  Header_band.ControlList.anyType;
+                if(header_label){
+                    if(header_label[1]){ //라벨이 복수개일때
+                        header_label.forEach(function (HL, Li) { //반복문
+                            if(data){
+                                if(HL.Id._text === data.id){
+                                    if(HL.Rectangle.Height){
+                                        HL.Rectangle.Height._text = String(data.rectangle.height);
+                                    }
+                                    if(HL.Rectangle.Width){
+                                        HL.Rectangle.Width._text = String(data.rectangle.width);
+                                    }
+                                    if(HL.Rectangle.X){
+                                        HL.Rectangle.X._text = String(data.rectangle.x);
+                                    }
+                                    if(HL.Rectangle.Y){
+                                        HL.Rectangle.Y._text = String(data.rectangle.y);
+                                    }
+                                    Header_band.ControlList.anyType[Li].Rectangle = HL.Rectangle;
+                                    TB.ChildHeaderBands.anyType = Header_band;
+                                    total_data.ReportTemplate.ReportList.anyType.Layers.anyType[1].Bands.anyType[Ti] = TB;
+                                }
+                            }else{
+                                if(HL.Id._text === editable[1]){
+                                    HL.Text._text = editable[0];
+                                    //total_data 생성(파일 저장시)
+                                    Header_band.ControlList.anyType[Li].Text._text = HL.Text._text;
+                                    TB.ChildHeaderBands.anyType = Header_band;
+                                    total_data.ReportTemplate.ReportList.anyType.Layers.anyType[1].Bands.anyType[Ti] = TB;
+                                }
+                            }
+                        });
+                    }else{//라벨이 단수개일때(fixedtable)
+                    }
+                }
+            }
+        }
+        var controlList = TB.ControlList.anyType;
+        if(controlList){//controlList가 있고 (라벨리스트)
+            if(controlList[1]){//controlList가 여러개일때
+                controlList.forEach(function (CL, Ci) {
+                    if(CL.Labels){
+                        var labels = CL.Labels.TableLabel;
+                        if(labels){
+                            labels.forEach(function (label, Li) {
+                                if(label.Id._text === editable[1]){
+                                    console.log("id : ",editable[1]);
+                                    label.Text._text = editable[0];
+                                    controlList[Ci].Labels.TableLabel[Li].Text._text = label.Text._text;
+                                    total_data.ReportTemplate.ReportList.anyType.Layers.anyType[1].Bands.anyType[Ti][Ci] = controlList;
+                                }
+                            });
+                        }
+                    }
+                });
+            }else{ //controlList가 하나일때
+                if(TB.ControlList.anyType.Labels){
+                    TB.ControlList.anyType.Labels.forEach(function (e, i) {
+
+                    });
+                }
+            }
+        }
+    });
 }
 
 /******************************************************************
@@ -74,69 +166,80 @@ function after_Lock_check() {
  만든이 : hagdung-i
  ******************************************************************/
 function Lock_Check_Table(data, drag, resize, div) { //테이블 데이터, 드래거블 지정할 영역, 리사이즈 영역, 위치 이동시 벗어나면 안되는 영역
-    var Lock_check;
-    if (data.Lock === undefined) {
-        Lock_check = data.Lock;
-    } else {
-        Lock_check = data.Lock._text;
-    }
-    if (!Lock_check) {
-        drag.draggable({
-            containment: "#" + div[0].id,
-            zIndex: 999,
-            drag: function( event, ui ) { // 예솔 추가
-                data.rectangle.x = ui.position.top;
-                data.rectangle.y = ui.position.left;
-            }
-        });
-        var width;
-        $(function(){
-            // resize.colResizable({
-            //     resizeMode: 'overflow',
-            //     liveDrag: true,
-            //     fixed: true,
-            //     // postbackSafe : true
-            //     onResize: function (e, i) { //테이블의 사이즈가 변하면
-            //         var th = e.currentTarget.childNodes[0].cells; //헤더만
-            //         for(var i=0; i< th.length; i++){ //th
-            //             $(".DynamicTableTitleLabel"+i).each(function (index, e) {// th만큼 돌면서
-            //                 console.log("titleLabel : ",e.style.width);
-            //                 console.log("index : ",index);
-            //                 console.log("i : ",i);
-            //                 // e.style.width = th[i].style.width;
-            //             });
-            //             console.log("th : ",th[i].style.width);
-            //         }
-            //         // width = th.size.width;
-            //         // var resizing_label = this;
-            //         // var select_label = $("#" + resizing_label.id).text();
-            //         // $(".DynamicTableHeader").each(function (i, e) {
-            //         //     var total_col = $("#" + e.id).text();
-            //         //     if (total_col === select_label) {
-            //         //         e.style.width = width + "px";
-            //         //     }
-            //         // });
-            //     }
-            // });
-            resize.resizable({
-                containment: "#" + div[0].id,
-                autoHide: true,
-                resize: function (event, ui) {   //테이블사이즈는 가로만 조정 가능하도록.
-                    ui.size.height = ui.originalSize.height;
-                    width = ui.size.width;
-                    var select_label = $("#" + this.id)[0].className.split(" ")[1];
-                    $(".table").each(function (i, e) {
-                        var total_col = $("#" + e.id)[0].className.split(" ")[1];
-                        if (total_col === select_label) {
-                            e.style.width = width + "px";
-                        }
-                    });
-                }
-            });
-        });
-    } else {
-        resize.addClass('Lock');
-    }
+//     var editable = data.editable;
+//     if (editable !== 'false') { // 편집이 가능할 때
+//         var Lock_check;
+//         if (data.Lock === undefined) {
+//             Lock_check = data.Lock;
+//         } else {
+//             Lock_check = data.Lock._text;
+//         }
+//         if (!Lock_check) {
+//             drag.draggable({
+//                 containment: "#" + div[0].id,
+//                 zIndex: 999,
+//                 drag: function (event, ui) { // 예솔 추가
+//                     data.rectangle.x = ui.position.top;
+//                     data.rectangle.y = ui.position.left;
+//                     label_data_update(data);
+//                 }
+//             });
+//             var width;
+//             $(function () {
+//                 resize.resizable({
+//                     containment: "#" + div[0].id,
+//                     autoHide: true,
+//                     resize: function (event, ui) {   //테이블사이즈는 가로만 조정 가능하도록.
+//                         data.rectangle.height = ui.originalSize.height;
+//                         data.rectangle.width = ui.size.width;
+//                         var select_label = $("#" + this.id)[0].className.split(" ")[1];
+//                         $(".table").each(function (i, e) {
+//                             var total_col = $("#" + e.id)[0].className.split(" ")[1];
+//                             if (total_col === select_label) {
+//                                 e.style.width = data.rectangle.width + "px";
+//                                 label_data_update(data);
+//                             }
+//                         });
+//                     }
+//                 });
+//             });
+//         } else {
+//             resize.addClass('Lock');
+//         }
+//     }
+}
+
+/******************************************************************
+ 기능 : 테이블 항목별 크기조정 기능
+ Date : 2018-08-30
+ 만든이 : hagdung-i
+ ******************************************************************/
+function table_column_controller(resize_area, Unalterable_area, label) {
+    // var width;
+    // if(label.editable !== "true"){
+    //     if(!label.Lock){
+    //         if (Unalterable_area[0]) {
+    //             resize_area.resizable({
+    //                 // containment: "#" + Unalterable_area[0].id,
+    //                 autoHide: true,
+    //                 resize: function (event, ui) {   //테이블사이즈는 가로만 조정 가능하도록.
+    //                     ui.size.height = ui.originalSize.height;
+    //                     label.rectangle.width = ui.size.width;
+    //                     console.log("label : ",label);
+    //                     var resizing_label = this;
+    //                     var select_label = $("#" + resizing_label.id).text();
+    //                     $(".DynamicTableHeader").each(function (i, e) {
+    //                         var total_col = $("#" + e.id).text();
+    //                         if (total_col === select_label) {
+    //                             e.style.width = label.rectangle.width + "px";
+    //                             label_data_update(label);
+    //                         }
+    //                     });
+    //                 }
+    //             });
+    //         }
+    //     }
+    // }
 }
 
 /******************************************************************
@@ -317,35 +420,7 @@ function table_format_check(data, Label_id, key, table) { //현재 key와 table�
     }
 }
 
-/******************************************************************
- 기능 : 테이블 항목별 크기조정 기능
- Date : 2018-08-30
- 만든이 : hagdung-i
- ******************************************************************/
-function table_column_controller(resize_area, Unalterable_area) {
-    var width;
-    // $(".table th").colResizable();
 
-
-    if (Unalterable_area[0]) {
-        resize_area.resizable({
-            // containment: "#" + Unalterable_area[0].id,
-            autoHide: true,
-            resize: function (event, ui) {   //테이블사이즈는 가로만 조정 가능하도록.
-                ui.size.height = ui.originalSize.height;
-                width = ui.size.width;
-                var resizing_label = this;
-                var select_label = $("#" + resizing_label.id).text();
-                $(".DynamicTableHeader").each(function (i, e) {
-                    var total_col = $("#" + e.id).text();
-                    if (total_col === select_label) {
-                        e.style.width = width + "px";
-                    }
-                });
-            }
-        });
-    }
-}
 
 function shift_table_column_controller(resize_area, Unalterable_area, table_resize_area, table_Unalterable_area) {
     var width;

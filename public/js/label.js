@@ -123,7 +123,7 @@ function Label(data){
     this.visible = data.Visible === undefined ? true : data.Visible._text; // VISIBLE Default : true
     this.numberToTextType = data.NumberToTextType === undefined ? false : data.NumberToTextType._text; // 금액 표시 방법
     this.isSameWidth = data.IsSameWidth === undefined ? false : data.IsSameWidth._text; // 글자 크기 동일 여부
-    this.editable = data.Editable === undefined ? 'true' : data.Editable._text; // 편집 가능
+    this.editable = data.Editable === undefined ? undefined : data.Editable._text; // 편집 가능
 
     this.backGroundColor = data.BackgGoundColor === undefined ? 'white' : data.BackgGoundColor._text; // 바탕색
     this.clipping = data.Clipping === undefined ? false : data.Clipping._text; // 클립핑 default : false
@@ -190,6 +190,7 @@ function Table(data){ // ControlList 밑에 anyType이 ControlFixedTable, Contro
     this.IsdynamicBinding = data.IsdynamicBinding === undefined ? undefined : data.IsdynamicBinding._text; // 결재란의 컬럼을 동적으로 (수정 못하니까 신경 안써도 됨)
 
     this.isPrintColumn = data.IsPrintColumn === undefined ? true : data.IsPrintColumn._text; // 테이블의 컬럼 출력 여부
+    this.editable = data.Editable === undefined ? undefined : data.Editable._text; // 편집 가능
 }
 
 /******************************************************************

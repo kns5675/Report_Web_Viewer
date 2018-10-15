@@ -26,7 +26,7 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
         'width': controlFixedTable.rectangle.width,
         'height': controlFixedTable.rectangle.height,
         'border-spacing': 0,
-        'padding': 0
+        'padding': 0,
         // 'padding': '0',
         // 'border-collapse': 'collapse',
         // 'cellspacing': '0',
@@ -149,8 +149,14 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                     }
                                     ThisfixedTableRow.append('<td class="NormalLabel" id = "' + tdId + rC2 + '_' + labelC + '">' +
                                         '<p id="' + tdId + rC2 + '_p_' + labelC + '">' + table_format_check(data.Labels, tdIDwithS, showDataLabel, fromData) + '</p></td>');
+                                    var fixedtable_tdId = $('#' + tdId + rC2 + '_' + labelC);
+                                    fixedtable_tdId[0].real_id = fromData.id;
                                     settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTableHeight, tdLeft, tdTop);
                                     var tdId_javascript = $("#" + tdIDMaking);
+                                    if(fromData.editable !== "false"){
+                                        tdId_javascript.addClass("Editable");
+                                    }
+                                    tdId_javascript.addClass("DynamicTableHeader");
                                     break;
                                 case "SummaryLabel" :
                                     //console.log("SummaryLabel 들어왔음", " 1 : ", data.Labels, " 2 : ", fromData.text, " 3 : ", fromData);
@@ -223,20 +229,20 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                             //console.log("2");
 
                                             if (groupFieldArray[groupFieldNum]) {
-                                                console.log("3");
+                                                // console.log("3");
                                                 if (groupFieldArray[groupFieldNum][1][fieldName]) {
-                                                    console.log("4");
+                                                    // console.log("4");
                                                     var showDataLabel = groupFieldArray[groupFieldNum][1][fieldName]._text;
                                                     if (showDataLabel !== undefined) {
-                                                        console.log("5");
+                                                        // console.log("5");
                                                         showDataLabel = showDataLabel
                                                     }
                                                     if (typeof showDataLabel === 'undefined') {
-                                                        console.log("6");
+                                                        // console.log("6");
                                                         showDataLabel = ' ';
                                                     }
                                                 }
-                                                console.log("7");
+                                                // console.log("7");
                                             } else {
                                                 // console.log("8");
                                                 console.log("그룹풋터밴드에 해당하는 총계나 그런애들에 대한 자바스크립트..? 처리가 필요함");
@@ -253,7 +259,14 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                         ('<td class="SummaryLabel" id = "' + tdId + rC2 + '_' + labelC + '">' +
                                             '<p id="' + tdId + rC2 + '_p_' + labelC + '">' + table_reform + '</p>' +
                                             '</td>');
+
+                                        var fixedtable_tdId = $('#' + tdId + rC2 + '_' + labelC);
+                                        fixedtable_tdId[0].real_id = fromData.id;
                                         var tdId_javascript = $("#" + tdIDMaking);
+                                        if(fromData.editable !== "false"){
+                                            tdId_javascript.addClass("Editable");
+                                        }
+                                        tdId_javascript.addClass("DynamicTableHeader");
                                     }
                                     break;
                             }
