@@ -90,7 +90,10 @@ function judgementLabel(data, divId, numOfData, band, dt) {
 
         if (fixTableLabels) {
             fixTableLabels.forEach(function (label, i) {
+              //  console.log("label : ",label);
                 var fixtableLabel = new FixedTableLabel(label, i);
+              //  console.log("fixtableLabel : ", fixtableLabel);
+
                 if (fixTableLabelList.length < fixTableLabels.length) { // 수정 : 하지연
                     fixTableLabelList.push(fixtableLabel);
                 }
@@ -669,22 +672,6 @@ function label_text_Setting(labelNbandInfo) {
         'margin-right': '10px',
         'margin-left': '10px'
     });
-
-    // 금액 표시 방법 한글
-    // if (data.numberToTextType == 'KOR') {
-    //     var KOR = numberToKOR((data.text).replace(/[^0-9]/g, ""));
-    //     var tempKOR = (data.text).match(/[0-9]/gi);
-    //     var toStringKOR = tempKOR[0];
-    //     for (var i = 1; i < tempKOR.length; i++) {
-    //         toStringKOR += tempKOR[i];
-    //     }
-    //     toStringKOR = toStringKOR.toString();
-    // }
-    //
-    // // 금액 표시 방법 한자
-    // if (data.numberToTextType == 'CHN') {
-    //     var CHN = numberToCHN((data.text).replace(/[^0-9]/g, ""));
-    // }
 
     if (labelNbandInfo.label_type === "ParameterLabel") {
         paramTable.NewDataSet.Table1.forEach(function (paramData) {

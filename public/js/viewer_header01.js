@@ -46,7 +46,7 @@ function file_save() {
     });
     $("#file_download_button").on("click", function () {
         var test = $("#file_name")[0].value;
-        console.log("test: ",test);
+        //console.log("test: ",test);
         modalLayer.fadeOut("slow");
     });
     $("#file_download_cancel").on("click", function () {
@@ -71,7 +71,7 @@ function Band_forEach(bands) {
     if(bands[1]){
         bands.forEach(function (e, i) {
             if(e.ControlList.anyType){
-                console.log("111111111 : ",e.ControlList.anyType);
+               // console.log("111111111 : ",e.ControlList.anyType);
                 if(e.ControlList.anyType[1]){
                     label_id = e.ControlList.anyType[i].Labels; //고쳐야 할 수도.
                     Label_forEach(label_id, temp);
@@ -85,15 +85,15 @@ function Band_forEach(bands) {
             }
         });
     }else{
-        console.log("bands.ControlList.anyType : ",bands);
+        //console.log("bands.ControlList.anyType : ",bands);
         if(bands.ControlList.anyType){
             label_id = bands.ControlList.anyType;
-            console.log("2222 : ",label_id);
+          //  console.log("2222 : ",label_id);
             if(label_id[1]){
                 Label_forEach(label_id);
             }else{ //라벨이 하나만 있거나 없을 때 처리
                 label_id = bands.ControlList.anyType.Labels;
-                console.log("33333 : ",label_id);
+            //    console.log("33333 : ",label_id);
                 Label_forEach(label_id);
             }
         }
@@ -102,14 +102,14 @@ function Band_forEach(bands) {
 }
 
 function Label_forEach(label_id) {
-    console.log("label_id : ",label_id);
+    //console.log("label_id : ",label_id);
     label_id.forEach(function (e, i) {
-        console.log("e : ",e);
+       // console.log("e : ",e);
         if(e._attributes["xsi:type"]) {
             if (e._attributes["xsi:type"] === "DynamicTableTitleLabel") {
                 var Height = e.Rectangle.Height._text;
 
-                console.log("Height : ",Height);
+              //  console.log("Height : ",Height);
                 // table.forEach(function (e, i) {
                 //     console.log("e : ",e);
                 //
@@ -132,13 +132,13 @@ function Label_forEach(label_id) {
                                     temp = element_width;
                                     var total_count = $("." + e.Name._text).length;
                                     $("." + e.Name._text).each(function (i, e) {
-                                        console.log("temp : ", temp);
+                                       // console.log("temp : ", temp);
                                         if (temp !== e.style.width.replace(/[^0-9]/g, '')) {
                                             count++;
                                         }
-                                        console.log("count : ", count);
+                                       // console.log("count : ", count);
                                         if (count + 1 === total_count) {
-                                            console.log("label_id.Rectangle.Width._text에 temp를 넣는 시점.");
+                                           // console.log("label_id.Rectangle.Width._text에 temp를 넣는 시점.");
                                             e.Rectangle.Width._text = temp;
                                         }
                                     });
@@ -179,7 +179,7 @@ function file_open() {
 
     var modalLayer = $("#filemodalLayer");
     $("#file_opener").on("click", function () {
-        console.log("window : ",window.reportTemplate);
+      //  console.log("window : ",window.reportTemplate);
         $("#filemodalLayer").fadeIn("slow");
     });
 
@@ -202,9 +202,9 @@ function file_open_submit(file, db, param) {
     var param_ckeck_xml = param[0].value.match(/(.xml)$/);
     if(file_ckeck_xml && db_ckeck_xml && param_ckeck_xml){ //입력 파일이 .xml 파일일 때
         alert("입력한 파일을 기준으로 새로 그립니다.");
-        console.log("file_name : ",file[0].value);
-        console.log("db : ",db[0].value);
-        console.log("param : ",param[0].value);
+        // console.log("file_name : ",file[0].value);
+        // console.log("db : ",db[0].value);
+        // console.log("param : ",param[0].value);
     }else{
         alert("xml 파일만 입력이 가능합니다.");
         return null;
@@ -290,7 +290,6 @@ function NextPage(){
  ******************************************************************/
 function LastPage(pagecount){
     $("#LastPage").on("click",function () {
-        // var Last = $(".page").length;
         var Last = $(".visiblePage").length;
         var page = $("#page"+Last).offset().top-185;
         $(window).scrollTop(page);
@@ -303,7 +302,6 @@ function LastPage(pagecount){
  ******************************************************************/
 function HeaderFixAndPageScroll(pagecount) {
     var jbOffset = $( '#header' ).offset();
-    // $( '#header' )[0].style.width = "100%";
     $( window ).scroll( function() {
         if ( $( document ).scrollTop() > jbOffset.top ) {
             $( '#header' ).addClass( 'jbFixed' );
@@ -319,7 +317,6 @@ function HeaderFixAndPageScroll(pagecount) {
  만든이 : hagdung-i
  ******************************************************************/
 function PageValue() {
-    // $(".page").each(function (i, e) {
     $(".visiblePage").each(function (i, e) {
         var page = $("#"+e.id).offset().top-500;
         if($( document ).scrollTop() >= page){
@@ -637,11 +634,11 @@ $(function() {
                         var reader = new FileReader();
                         var dwadaw = reader.readAsText(fileList [0]);
 
-                        console.log("reader : ",fileList [0]);
+                        //console.log("reader : ",fileList [0]);
                         if (fileList && fileList[0]) {
                             var reader = new FileReader();
                             reader.onload = function(e) {
-                                console.log("e.target.result : ",e.target.result);
+                               // console.log("e.target.result : ",e.target.result);
                             };
                             reader.readAsDataURL(fileList[0]);
                         }

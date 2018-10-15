@@ -159,6 +159,8 @@ function getBandHeightOfDataBand(band, numOfData) {
                 } else {
                     tableSpacing = 0;
                 }
+            } else if (controlList._attributes["xsi:type"] == "ControlFixedTable") {
+                isDynamicTable = false;
             }else if (controlList._attributes["xsi:type"] == "ControlFixedTable") {
                 if(controlList.Rectangle.Y != undefined){
                     if (dynamicTableY < Number(controlList.Rectangle.Y._text)){
@@ -173,7 +175,7 @@ function getBandHeightOfDataBand(band, numOfData) {
             labels.push(controlLists);
             if (controlLists.Rectangle.Y !== undefined) {
                 tableSpacing = Number(controlLists.Rectangle.Y._text);
-            }else if (controlLists._attributes["xsi:type"] == "ControlFixedTable") {
+            } else if (controlLists._attributes["xsi:type"] == "ControlFixedTable") {
                 isDynamicTable = false;
             }
         }
@@ -203,18 +205,18 @@ function getBandHeightOfDataBand(band, numOfData) {
                     valueBorderBottomThickness = 0;
                 } else {
                     var labelBottom = Number(tableLabel.borderThickness.bottom);
-                    if (valueBorderBottomThickness < Number(tableLabel.borderThickness.bottom))
+                    if (valueBorderBottomThickness < labelBottom) {
                         valueBorderBottomThickness = labelBottom;
+                    }
                 }
             }
         });
     });
 
     allLabelBorderThickness = valueBorderBottomThickness * numOfData + titleBorderBottomThickness + titleBorderTopThickness;
-
     //ToDo 테이블 두께에 따라 1px 정도씩 오차가 생김
     if (isDynamicTable) {
-        return tableSpacing + labelHeight + (valueHeight * numOfData) + allLabelBorderThickness;
+        return Math.round(tableSpacing + labelHeight + (valueHeight * numOfData) + allLabelBorderThickness);
     } else {
         return band.rectangle.height;
     }
@@ -327,44 +329,6 @@ function getNumOfDataInOnePageNonObject(band, avaHeight, dt) {
 
     if (numofData > dtLength || dynamicTable.IsForceOverRow._text == 'false') {
         return dtLength;
-    } else {
-        return numofData;
-    }
-}
-
-// TODO 미구현2!!!!!!!!!!!!!!!!!
-/***********************************************************
- 기능 : 객체 생성 없이 한 페이지에 들어갈 데이터 개수 구하기 (고정 테이블)
- 만든이 : 안예솔
- * *********************************************************/
-function getNumOfDataInOnePageNonObjectInFixedTable(band, divId) {
-    var dt = dataTable.DataSetName[band.dataTableName];
-    var bandDataHeight = 0;
-    if (typeof divId == 'string') {
-        bandDataHeight = $('#' + divId).height();
-    } else if (typeof divId == 'number') {
-        bandDataHeight = divId;
-    }
-
-    var fixedTableHeight = 0;
-
-    if (Array.isArray(band.controlList.anyType)) {
-        band.controlList.anyType.forEach(function (anyType) {
-            if (anyType._attributes['xsi:type'] == 'ControlFixedTable' && anyType.Labels !== undefined) {
-                if (anyType.Rectangle.Height !== undefined) {
-                    fixedTableHeight = Number(anyType.Rectangle.Height._text);
-                }
-            }
-        });
-    } else {
-        if (band.Rectangle.Height !== undefined) {
-            fixedTableHeight = Number(band.Rectangle.Height._text);
-        }
-    }
-
-    var numofData = Math.floor(bandDataHeight / fixedTableHeight);
-    if (numofData > dtLength) {
-        return dt.length;
     } else {
         return numofData;
     }

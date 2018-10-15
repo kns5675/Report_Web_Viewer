@@ -57,7 +57,6 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                     break;
                 case 'BandData' :
                     dt = dataTable.DataSetName[band.dataTableName];
-                    // 180910 YeSol 추가
                     var controlLists = [];
                     controlLists.push(band.controlList.anyType); // dataBand의 controlList배열
 
@@ -170,7 +169,7 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                     }
                     if (band.masterBandName) {
                         dt = joinDt(band, band.masterBandObj);
-                    }else {
+                    } else {
                         dt = dataTable.DataSetName[band.dataTableName];
                     }
                     if (isRegion) { // 리전일 때
@@ -340,7 +339,7 @@ function drawBandData(groupFieldArray, band, layerName, reportHeight, parentBand
                             numofData = maximumRowCount + groupDataRow;
                             isMaximumRowCount = true;
                         }else{
-                            numofData = maximumRowCount + 1
+                            numofData = maximumRowCount + 1;
                             dynamicTableIsForceOverRow = false;
                             annexPagerDataTableName.push(band.dataTableName);
                         }
@@ -527,7 +526,7 @@ function drawBandDataInRegion(groupFieldArrayInRegion, band, layerName, reportHe
                 });
             } else {
                 if (band.controlList.anyType._attributes["xsi:type"] == "ControlDynamicTable") {
-                    dynamicTable = band.controlList;
+                    dynamicTable = band.controlList.anyType;
                 }
             }
             if (dynamicTable.FixRowCount !== undefined) { // 최대 행 개수
@@ -538,7 +537,7 @@ function drawBandDataInRegion(groupFieldArrayInRegion, band, layerName, reportHe
                             numofData = maximumRowCount + 1;
                             isMaximumRowCount = true;
                         } else {
-                            numofData = maximumRowCount + 1
+                            numofData = maximumRowCount + 1;
                             dynamicTableIsForceOverRow = false;
                             annexPagerDataTableName.push(band.dataTableName);
                         }
@@ -649,7 +648,7 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
                         remainDataTemp = false;
                         ingDataTableName = band.dataTableName;
                     } else { //마지막 페이지가 아닌 경우
-                        if(!dynamicTableIsForceOverRow){
+                        if (!dynamicTableIsForceOverRow){
                             remainDataTemp = false;
                         }else{
                             remainDataTemp = true;

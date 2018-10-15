@@ -39,7 +39,7 @@ function Label(data){
     }; // 테두리 점선
     this.noBorder = data.NoBorder === undefined ? false : data.NoBorder._text; // 테두리 없음
 
-    this.enableBorder = (data.EnableBorder === undefined ? undefined : { // 고정 값이라서 구현할 필요 없을 듯!
+    this.enableBorder = (data.EnableBorder === undefined ? undefined : {
         boolean1 : data.EnableBorder.boolean[0]._text,
         boolean2 : data.EnableBorder.boolean[1]._text,
         boolean3 : data.EnableBorder.boolean[2]._text,
@@ -151,7 +151,7 @@ function Label(data){
 
     this.horizontalTextAlignment = data.HorizontalTextAlignment === undefined ? 'Center' : (data.HorizontalTextAlignment._text).trim(); // 텍스트 수평 정렬
     this.verticalTextAlignment = data.VerticalTextAlignment === undefined ? 'Center' : data.VerticalTextAlignment._text; // 텍스트 수직 정렬
-    this.textDirection = data.TextDirection === undefined ? 'Horizontal' : data.TextDirection._text; // 텍스트 방향 아마도 default horizontal
+    this.textDirection = data.TextDirection === undefined ? 'Horizontal' : data.TextDirection._text; // 텍스트 방향
 
     this.grouppingRule = data.GroupingRule === undefined ? undefined : 'Merge'; // 그룹핑 규칙 (일단은 Merge만 될 거라고 해서 Merge로 해놓음)
 
@@ -202,6 +202,8 @@ function FixedTableLabel(data, i){
 
     this._attributes = data._attributes["xsi:type"];
     this.selected = data.Selected._text;
+    this.summaryType = data.SummaryType === undefined ? 'Sum' : data.SummaryType._text; // 요약 타입
+    this.selected = data.Selected._text; // 테이블 라벨에만 있는 것 같음
     this.fieldName = data.FieldName === undefined ? 0 : data.FieldName._text;
 }
 
