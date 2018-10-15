@@ -60,6 +60,11 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData, band, dt) {
                     break;
             }
         });
+        tableId.css({
+            'border': '1px solid red',
+            'border-collapse': 'collapse',
+            'text-align': 'center',
+        });
 
         if(!dynamicTableIsForceOverRow){
             dynamicTable_resizing_div_packing.append('<table><tr id =   "annexedPaperOutput' + annexPaperOutputNum + '"></tr></table>');
@@ -72,7 +77,7 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData, band, dt) {
                 'height': '35px',
                 'z-index' : '999',
                 'left' : table.rectangle.width/2 - 50 + 'px',
-                'top' : $('#dynamicTable' + dynamicTableNum).height()/2 + 'px',
+                'top' : $('#dynamicTable' + dynamicTableNum).height() + 'px',
             });
             var annextdId = $('#tableValueLabelNum' + tableValueLabelNum++);
             annextdId.css({
@@ -86,22 +91,29 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData, band, dt) {
                 'vertical-align' : 'middle',
                 'font-size': 'x-large'
             });
-
+            dynamicTableAnnexedPaperOutPut += numOfData;
         }
-
-        tableId.css({
-            'border': '1px solid red',
-            'border-collapse': 'collapse',
-            'text-align': 'center',
-        });
 
         tableNum++;
         dynamicTableNum++;
         thNum++;
         dynamicTitleLabelNum++;
         dynamicValueLabelNum++;
+
+        var dataBandHeight = getBandDataHeight(band, tableId.css('height'));
+        $('#' + divId).css({
+            'width': band.rectangle.width,
+            'height': dataBandHeight,
+            'overflow': 'hidden'
+        });
     }
 }
+
+/**********************************************************************************************************************
+ 기능 : 그룹 밴드 여부를 판단하는 함수
+ 만든이 : 구영준
+ Data : 2018-10-15
+ ********************************************************************************************************************/
 function checkGroupHeader(band){
     var check = false;
     if(band.childHeaderBands != undefined && groupFieldArray.length > 0){
@@ -119,7 +131,6 @@ function checkGroupHeader(band){
             }
         }
     }
-
     return check;
 }
 /******************************************************************
@@ -158,15 +169,13 @@ function drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table, ban
  만든이 : 구영준
  **************************************************************************************/
 function drawingDynamicTableAnnexedPaperOutPut(label, tableId, numOfData) {
-    tableId.append('<tr id = "drawingDynamicTableAnnexedPaperOutPut' + dynamicTableAnnexedPaperOutPut + '"></tr>');
-    var valueTrId = $("#drawingDynamicTableAnnexedPaperOutPut" + dynamicTableAnnexedPaperOutPut);
-
-    for(var i=0; i<numOfData; i++){
+    for(var i=1; i<numOfData; i++) {
+        var rowNum = dynamicTableAnnexedPaperOutPut + i;
+        var valueTrId = $("#drawingDynamicTableAnnexedPaperOutPut" + rowNum );
+        if (valueTrId.length < 1) {
+            tableId.append('<tr id = "drawingDynamicTableAnnexedPaperOutPut' + rowNum + '"></tr>');
+        }
         valueTrId.append('<td id = "tableValueLabelNum' + tableValueLabelNum + '"></td>');
-        valueTrId.css({
-            'width': label.rectangle.width,
-            'height': label.rectangle.height
-        });
 
         var tdId = $('#tableValueLabelNum' + tableValueLabelNum++);
         setCssInTable(label, tdId);
@@ -177,7 +186,7 @@ function drawingDynamicTableAnnexedPaperOutPut(label, tableId, numOfData) {
         // drd_javascript(label, tdId, label.startBindScript);
     }
 
-    dynamicTableAnnexedPaperOutPut++;
+    // dynamicTableAnnexedPaperOutPut++;
 }
 
 /**************************************************************************************
@@ -382,6 +391,7 @@ function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, nu
         if (minimumRow && data[j] === undefined) {
             temp = data.length - 1;
             rowNum += 'min';
+
         }
         var $trId = '#dynamicValueLabel' + rowNum;
         var valueTrId = $($trId);
@@ -390,79 +400,95 @@ function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, nu
             tableId.append('<tr id =   "dynamicValueLabel' + rowNum + '"></tr>');
         }
         // TODO 수정 해야할 부분이 있을 것 같음
-        if (label.dataType === 'ParameterLabel') {
-            paramTable.NewDataSet.Table1.forEach(function (paramData) {
-                if (label.parameterName == paramData.Key._text) {
-                    label.text = paramData.Value._text;
-                }
-            });
-            var tdId = 'tableValueLabelNum' + tableValueLabelNum++;
-            var key = label.parameterName;
-            if (!minimumRow) {
-                valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '"><p id="value_P_tag' + thNum + '" style="margin: 0px;">' + label.text + '</p></td>');
-            } else { // 최소행 개수
-                valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '"></td>');
-            }
-            tdId = $('#' + tdId);
-            setCssInTable(label, tdId);
-        } else {
-            var isData = false; //Label과 DataTable Data값을 비교하는 변수
-            for (var key in data[temp]) {
-                valueTrId = $($trId);
-                if (label.fieldName == key) {
-                    isData = true;
-                    var key_data = data[temp][key]._text;
-                    var table_reform = table_format_check(data, valueTrId, key_data, label);
-                    var tdId = 'tableValueLabelNum' + tableValueLabelNum++;
-                    if (minimumRow && (j >= data.length)) {
-                        valueTrId.append(
-                            '<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '"></td>'
-                        );
-                    } else {
-                        if (label.labelTextType == 'Number' && label.format != undefined) {
-                            valueTrId.append(
-                                '<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '"><p id="value_P_tag' + thNum + '" style="margin: 0px;">' + table_reform + '</p></td>'
-                            );
-                        } else {
-                            valueTrId.append(
-                                '<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '">' + table_reform + '</td>'
-                            );
-                        }
+        switch (label.dataType) {
+            case 'ParameterLabel':
+                paramTable.NewDataSet.Table1.forEach(function (paramData) {
+                    if (label.parameterName == paramData.Key._text) {
+                        label.text = paramData.Value._text;
                     }
-                    if (label.dataType == 'GroupLabel' && j == numOfData - 1 && label.grouppingRule == 'Merge') { // 그룹 라벨
-                        var i = 0;
-                        var tableValueLabelNum2 = tableValueLabelNum - 1;
-
-                        for (i; i <= j - groupDataRow; i++) {
-                            var groupLabel = $('#tableValueLabelNum' + (tableValueLabelNum2 - i));
-                            var priorGroupLabel = $('#tableValueLabelNum' + (tableValueLabelNum2 - (i + 1)));
-
-                            if ((groupLabel.attr('class') == priorGroupLabel.attr('class')) && groupLabel.text() == priorGroupLabel.text()) {
-                                groupLabelNum++;
-                                groupLabel.remove();
-                                if (groupLabelNum == (j - groupDataRow + 1)) {
-                                    priorGroupLabel.attr('rowspan', groupLabelNum);
-                                }
-                            } else {
-                                if (groupLabelNum != 1) {
-                                    groupLabel.attr('rowspan', groupLabelNum);
-                                    groupLabelNum = 1;
-                                }
-                            }
-                        }
-                    }
-                    var tdId = $('#' + tdId);
-                    setCssInTable(label, tdId);
-                }
-            }
-            if(!isData){  // Label은 있지만 데이터가 없을 때
+                });
                 var tdId = 'tableValueLabelNum' + tableValueLabelNum++;
+                var key = label.parameterName;
+                if (!minimumRow) {
+                    valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '"><p id="value_P_tag' + thNum + '" style="margin: 0px;">' + label.text + '</p></td>');
+                } else { // 최소행 개수
+                    valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '"></td>');
+                    valueTrId.addClass('minRow');
+                }
+                tdId = $('#' + tdId);
+                setCssInTable(label, tdId);
+                break;
+            case 'NormalLabel':
+                var tdId = 'tableValueLabelNum' + tableValueLabelNum++;
+                var labelText = label.text == undefined ? '' : label.text;
                 valueTrId.append(
-                    '<td id = "' + tdId + '" class="' + label.fieldName + ' Label ' + label._attributes + ' ' + label.dataType + '"></td>'
+                    '<td id = "' + tdId + '" class="' + label.fieldName + ' Label ' + label._attributes + ' ' + label.dataType + '">' + labelText + '</td>'
                 );
                 tdId = $('#' + tdId);
                 setCssInTable(label, tdId);
-            }
+                break;
+            case "DataLabel":
+                var isData = false; //Label과 DataTable Data값을 비교하는 변수
+                for (var key in data[temp]) {
+                    valueTrId = $($trId);
+                    if (label.fieldName == key) {
+                        isData = true;
+                        var key_data = data[temp][key]._text;
+                        var table_reform = table_format_check(data, valueTrId, key_data, label);
+                        var tdId = 'tableValueLabelNum' + tableValueLabelNum++;
+                        if (minimumRow && (j >= data.length)) {
+                            valueTrId.append(
+                                '<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '"></td>'
+                            );
+                            valueTrId.addClass('minRow');
+                        } else {
+                            if (label.labelTextType == 'Number' && label.format != undefined) {
+                                valueTrId.append(
+                                    '<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '"><p id="value_P_tag' + thNum + '" style="margin: 0px;">' + table_reform + '</p></td>'
+                                );
+                            } else {
+                                valueTrId.append(
+                                    '<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '">' + table_reform + '</td>'
+                                );
+                            }
+                        }
+                        if (label.dataType == 'GroupLabel' && j == numOfData - 1 && label.grouppingRule == 'Merge') { // 그룹 라벨
+                            var i = 0;
+                            var tableValueLabelNum2 = tableValueLabelNum - 1;
+
+                            for (i; i <= j - groupDataRow; i++) {
+                                var groupLabel = $('#tableValueLabelNum' + (tableValueLabelNum2 - i));
+                                var priorGroupLabel = $('#tableValueLabelNum' + (tableValueLabelNum2 - (i + 1)));
+
+                                if ((groupLabel.attr('class') == priorGroupLabel.attr('class')) && groupLabel.text() == priorGroupLabel.text()) {
+                                    groupLabelNum++;
+                                    groupLabel.remove();
+                                    if (groupLabelNum == (j - groupDataRow + 1)) {
+                                        priorGroupLabel.attr('rowspan', groupLabelNum);
+                                    }
+                                } else {
+                                    if (groupLabelNum != 1) {
+                                        groupLabel.attr('rowspan', groupLabelNum);
+                                        groupLabelNum = 1;
+                                    }
+                                }
+                            }
+                        }
+                        var tdId = $('#' + tdId);
+                        setCssInTable(label, tdId, table_reform);
+
+
+                    }
+                }
+                if (!isData) {  // Label은 있지만 데이터가 없을 때
+                    var tdId = 'tableValueLabelNum' + tableValueLabelNum++;
+                    valueTrId.append(
+                        '<td id = "' + tdId + '" class="' + label.fieldName + ' Label ' + label._attributes + ' ' + label.dataType + '"></td>'
+                    );
+                    tdId = $('#' + tdId);
+                    setCssInTable(label, tdId);
+                }
+                break;
         }
     }
 }
@@ -702,7 +728,7 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArrayWithRegion(label, dt
  기능 : 동적테이블이에 Css  세팅
  만든이 : 구영준
  **************************************************************************************/
-function setCssInTable(label, tdId) {
+function setCssInTable(label, tdId, text) {
     if (label.noBorder == 'true') {
         tdId.css('border', 'none');
     } else {
@@ -722,20 +748,15 @@ function setCssInTable(label, tdId) {
             tdId.css('border', '1px solid black');
         }
     }
-
-    // if(tdId[0]){
-        // $("#"+tdId[0].id)[0].style.padding ="0px";
-        tdId.css({
-            'background-color': label.backGroundColor,
-            'font-size': label.fontSize,
-            'font-family': label.fontFamily,
-            'font-weight': label.fontStyle,
-            'font-color': label.textColor,
-            'width': label.rectangle.width + 'px',
-            'height': label.rectangle.height + 'px',
-            'box-sizing' : 'border-box',
-            'white-space': 'nowrap',
-            'padding' :'0px'
-        });
-    // }
+    tdId.css({
+        'background-color': label.backGroundColor,
+        'font-size': label.fontSize,
+        'font-family': label.fontFamily,
+        'font-weight': label.fontStyle,
+        'font-color': label.textColor,
+        'width': label.rectangle.width + 'px',
+        'height': label.rectangle.height + 'px',
+        'box-sizing' : 'border-box',
+        'padding' :'0px',
+    });
 }

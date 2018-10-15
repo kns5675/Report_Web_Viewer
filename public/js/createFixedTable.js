@@ -604,7 +604,6 @@ function drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, d
                                     if (fromData.text === undefined) {
                                         fromData.text = ' ';
                                     }
-                                    console.log(fromData);
                                     ThisfixedTableRow.append('<td class="NormalLabel" id = "' + tdId + rC2 + '_' + labelC + '">' +
                                         '<p id="' + tdId + rC2 + '_p_' + labelC + '">' + table_format_check(data.Labels, tdIDwithS, fromData.text, fromData) + '</p></td>');
                                     // settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTableHeight);

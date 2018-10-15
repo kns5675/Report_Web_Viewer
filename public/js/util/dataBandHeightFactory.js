@@ -38,6 +38,91 @@ function getNumOfPage(report) {
     }
 }
 
+function getBandDataHeight(band, dynamicTableHeight) {
+    var controlLists = band.controlList.anyType;
+    // var bandHeight = Number(band.rectangle.height);
+    var tableSpacing = 0;
+    var labels = [];
+    var labelHeight = 0;
+    var valueHeight = 0;
+    var titleBorderTopThickness = 0;
+    var titleBorderBottomThickness = 0;
+    var valueBorderBottomThickness = 0;
+    var allLabelBorderThickness;
+    var isDynamicTable = false;
+    var dynamicTableY = 0;
+    dynamicTableHeight = dynamicTableHeight.split('px');
+    if (controlLists.length > 1) {
+        controlLists.forEach(function (controlList) {
+            if (controlList._attributes["xsi:type"] == "ControlDynamicTable") {
+                isDynamicTable = true;
+                labels.push(controlList);
+                if (controlList.Rectangle.Y !== undefined) {
+                    tableSpacing = Number(controlList.Rectangle.Y._text);
+                    dynamicTableY = Number(controlList.Rectangle.Y._text);
+                } else {
+                    tableSpacing = 0;
+                }
+            }else if (controlList._attributes["xsi:type"] == "ControlFixedTable") {
+                if(controlList.Rectangle.Y != undefined){
+                    if (dynamicTableY < Number(controlList.Rectangle.Y._text)){
+                        isDynamicTable = false;
+                    }
+                }
+            }
+        });
+    } else {
+        if (controlLists._attributes["xsi:type"] == "ControlDynamicTable") {
+            isDynamicTable = true;
+            labels.push(controlLists);
+            if (controlLists.Rectangle.Y !== undefined) {
+                tableSpacing = Number(controlLists.Rectangle.Y._text);
+            }else if (controlLists._attributes["xsi:type"] == "ControlFixedTable") {
+                isDynamicTable = false;
+            }
+        }
+    }
+    labels.forEach(function (label) {
+        var tableLabels = label.Labels.TableLabel;
+
+        tableLabels.forEach(function (tableLabel) {
+            tableLabel = new DynamicTableLabel(tableLabel, i);
+            if (tableLabel._attributes == "DynamicTableTitleLabel") {
+                if(labelHeight < Number(tableLabel.rectangle.height)){
+                    labelHeight = Number(tableLabel.rectangle.height);
+                }
+                var labelBottom = Number(tableLabel.borderThickness.bottom);
+                var labelTop = Number(tableLabel.borderThickness.top);
+
+                if (titleBorderBottomThickness < Number(tableLabel.borderThickness.bottom))
+                    titleBorderBottomThickness = labelBottom;
+
+                if (titleBorderTopThickness < Number(tableLabel.borderThickness.top))
+                    titleBorderTopThickness = labelTop;
+            } else {
+                if(valueHeight < Number(tableLabel.rectangle.height)){
+                    valueHeight = Number(tableLabel.rectangle.height);
+                }
+                if (Number(tableLabel.borderThickness) === undefined) {
+                    valueBorderBottomThickness = 0;
+                } else {
+                    var labelBottom = Number(tableLabel.borderThickness.bottom);
+                    if (valueBorderBottomThickness < Number(tableLabel.borderThickness.bottom))
+                        valueBorderBottomThickness = labelBottom;
+                }
+            }
+        });
+    });
+
+    // allLabelBorderThickness = valueBorderBottomThickness * numOfData + titleBorderBottomThickness + titleBorderTopThickness;
+    //ToDo 테이블 두께에 따라 1px 정도씩 오차가 생김
+    if (isDynamicTable) {
+        return tableSpacing + Number(dynamicTableHeight[0]) + 1;
+    } else {
+        return band.rectangle.height;
+    }
+}
+
 
 /********************************************************************************************
  기능 :  데이터 밴드 길이 계산
@@ -62,7 +147,7 @@ function getBandHeightOfDataBand(band, numOfData) {
     var valueBorderBottomThickness = 0;
     var allLabelBorderThickness;
     var isDynamicTable = false;
-
+    var dynamicTableY = 0;
     if (controlLists.length > 1) {
         controlLists.forEach(function (controlList) {
             if (controlList._attributes["xsi:type"] == "ControlDynamicTable") {
@@ -70,11 +155,16 @@ function getBandHeightOfDataBand(band, numOfData) {
                 labels.push(controlList);
                 if (controlList.Rectangle.Y !== undefined) {
                     tableSpacing = Number(controlList.Rectangle.Y._text);
+                    dynamicTableY = Number(controlList.Rectangle.Y._text);
                 } else {
                     tableSpacing = 0;
                 }
             }else if (controlList._attributes["xsi:type"] == "ControlFixedTable") {
-                isDynamicTable = false;
+                if(controlList.Rectangle.Y != undefined){
+                    if (dynamicTableY < Number(controlList.Rectangle.Y._text)){
+                        isDynamicTable = false;
+                    }
+                }
             }
         });
     } else {
@@ -91,7 +181,6 @@ function getBandHeightOfDataBand(band, numOfData) {
     labels.forEach(function (label) {
         var tableLabels = label.Labels.TableLabel;
 
-        // labelHeight += Number(tableLabels[0].Rectangle.Height._text);
         tableLabels.forEach(function (tableLabel) {
             tableLabel = new DynamicTableLabel(tableLabel, i);
             if (tableLabel._attributes == "DynamicTableTitleLabel") {
@@ -234,11 +323,11 @@ function getNumOfDataInOnePageNonObject(band, avaHeight, dt) {
         }
     });
 
-    var numofData = Math.floor((avaHeight - titleHeight - tableSpacing) / valueHeight);
+    var numofData = Math.ceil((avaHeight - titleHeight - tableSpacing) / valueHeight);
 
-    if (numofData > dtLength) {
+    if (numofData > dtLength || dynamicTable.IsForceOverRow._text == 'false') {
         return dtLength;
-    }else {
+    } else {
         return numofData;
     }
 }

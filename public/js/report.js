@@ -3,6 +3,7 @@ var pageNum = 1;
 var reportNum = 0;
 var reportPageCnt = 0;
 var curDatarow = 0;
+var minmimumRowNum = 0;
 var curDatarowInDataBand = 0;
 var curDatarowInRegion = 0;
 var groupFieldArray = [];
@@ -95,6 +96,7 @@ function makeReportTemplate(data, subReport) {
 
         if(report.annexPaper == 'true'){ //별지 출력
             annexPagerDataTableName.forEach(function(dataTableName){
+
                 if(dataBands[0].dataTableName == dataTableName){
                     makeReport(report, arrRegion);
                 }

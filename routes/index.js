@@ -15,26 +15,17 @@ var storage = multer.diskStorage({
 });
 var upload = multer({ storage: storage });
 
-var file_name;
 var db_name;
 var param_name;
 
-var xml = fs.readFileSync('xml/거래명세서.xml', 'utf-8');
+var xml = fs.readFileSync('xml/기부금명세서.xml', 'utf-8');
 var json_origin = convert.xml2json(xml, {compact: true});
 var json = json_origin.replace(/\\r/gi, '<br/>'); // 엔터키(\r)를 <br/>로 치환
-// var test = convert.json2xml(json, {compact: true});
-// var overlap =
-// var temp_file_name = "message"+overlap+".xml";
-// fs.writeFile('xml/'+, test, (err) => {
-//     if (err) throw err;
-//     console.log('The file has been saved!');
-// });
 
-var tempData = fs.readFileSync('xml/거래명세서_data.xml', 'utf-8');
-// var tempData = fs.readFileSync('xml/GroupParameterData.xml', 'utf-8');
+var tempData = fs.readFileSync('xml/기부금명세서_data.xml', 'utf-8');
 var dataTable = convert.xml2json(tempData, {compact: true});
 
-var paramData = fs.readFileSync('xml/거래명세서_Param.xml', 'utf-8');
+var paramData = fs.readFileSync('xml/기부금명세서_Param.xml', 'utf-8');
 var paramTable = convert.xml2json(paramData, {compact: true});
 
 
@@ -45,13 +36,10 @@ router.get('/', function (req, res) {
         data: json,
         dataTable: dataTable,
         paramTable: paramTable,
-        // subReport: dataTable2,
-        // dataTable2: dataTable3
     });
 });
 
 router.post('/', upload.array('send_file', 3), function (req, res, next) {
-    // res.send('Uploaded! : '+req.file); // object를 리턴함
     if(req.body.file_open_click){
         console.log(req.body.file_open_click);
         file_name = 'uploads/'+req.files[0].filename;
@@ -82,21 +70,8 @@ router.post('/', upload.array('send_file', 3), function (req, res, next) {
         console.log("req.body.send_param : ",req.body.send_param);
 
         var file_name = req.body.send_file;
-        // var db_name = req.body.send_db;
-        // var param_name = req.body.send_param;
 
-
-        // json_origin = convert.json2xml(xml, {compact: true});
         fs.writeFileSync("file_save/"+file_name+".xml", xml, 'utf-8');
-
-        // dataTable = convert.json2xml(tempData, {compact: true});
-        // fs.writeFileSync("file_save/"+db_name+".xml", tempData, 'utf-8');
-
-        // paramTable = convert.json2xml(paramData, {compact: true});
-        // fs.writeFileSync("file_save/"+param_name+".xml", paramData, 'utf-8');
-
-
-
     }
 });
 

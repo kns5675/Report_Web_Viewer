@@ -41,8 +41,9 @@ function getNumOfDataWithGroupField(band, avaHeight) {
             }
         });
 
-        var avaDataInPage = Math.floor((avaHeight - titleHeight - tableSpacing) / valueHeight) + 1;
+        var avaDataInPage = Math.ceil((avaHeight - titleHeight - tableSpacing) / valueHeight);
         var groupRemainData = (dataCount - groupDataRowInRegion);
+
 
         if (avaDataInPage - groupDataRowInRegion > groupRemainData || groupDataRowInRegion >= avaDataInPage) { // 마지막 페이지
             return dataCount;
@@ -64,7 +65,7 @@ function getNumOfDataWithGroupField(band, avaHeight) {
             bandGroupFooterHeight = child.rectangle.height;
         });
 
-        var avaDataInPage = Math.floor((avaHeight - titleHeight - tableSpacing) / valueHeight) + 1;
+        var avaDataInPage = Math.ceil((avaHeight - titleHeight - tableSpacing) / valueHeight);
         var groupRemainData = (dataCount - groupDataRow);
 
         if(groupDataRow >= avaDataInPage){
