@@ -48,7 +48,6 @@ function getBandDataHeight(band, dynamicTableHeight) {
     var titleBorderTopThickness = 0;
     var titleBorderBottomThickness = 0;
     var valueBorderBottomThickness = 0;
-    var allLabelBorderThickness;
     var isDynamicTable = false;
     var dynamicTableY = 0;
     dynamicTableHeight = dynamicTableHeight.split('px');
@@ -65,8 +64,10 @@ function getBandDataHeight(band, dynamicTableHeight) {
                 }
             }else if (controlList._attributes["xsi:type"] == "ControlFixedTable") {
                 if(controlList.Rectangle.Y != undefined){
-                    if (dynamicTableY < Number(controlList.Rectangle.Y._text)){
-                        isDynamicTable = false;
+                    if(controlList.Labels.TableLabel !== undefined){
+                        if (dynamicTableY < Number(controlList.Rectangle.Y._text)){
+                            isDynamicTable = false;
+                        }
                     }
                 }
             }
@@ -114,7 +115,6 @@ function getBandDataHeight(band, dynamicTableHeight) {
         });
     });
 
-    // allLabelBorderThickness = valueBorderBottomThickness * numOfData + titleBorderBottomThickness + titleBorderTopThickness;
     //ToDo 테이블 두께에 따라 1px 정도씩 오차가 생김
     if (isDynamicTable) {
         return tableSpacing + Number(dynamicTableHeight[0]) + 1;

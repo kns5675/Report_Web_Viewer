@@ -515,7 +515,7 @@ function drawingDynamicTableValueLabelWithGroupFieldArrayWithRegion(label, dt, t
 
         var rowNum = curDatarow + j;
         if (minimumRow && data[j] === undefined) {
-            temp = data.length - 1;
+             temp = data.length - 1;
             rowNum += 'min';
         }
 
