@@ -30,7 +30,7 @@ function ControlRectangle(data) {
     Figure.apply(this, arguments);
 
     this.backgroundColor = data.BackGroundColor._text;
-    this.trangsparent = data.Transparent._text; // 뭐지?
+    this.trangsparent = data.Transparent._text;
     this.borderColor = data.BorderColor._text;
     this.roundingValue = data.RoundingValue._text;
     this.recDashStyle = data.RecDashStyle._text;

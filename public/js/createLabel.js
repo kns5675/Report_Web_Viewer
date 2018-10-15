@@ -673,22 +673,6 @@ function label_text_Setting(labelNbandInfo) {
         'margin-left': '10px'
     });
 
-    // 금액 표시 방법 한글
-    // if (data.numberToTextType == 'KOR') {
-    //     var KOR = numberToKOR((data.text).replace(/[^0-9]/g, ""));
-    //     var tempKOR = (data.text).match(/[0-9]/gi);
-    //     var toStringKOR = tempKOR[0];
-    //     for (var i = 1; i < tempKOR.length; i++) {
-    //         toStringKOR += tempKOR[i];
-    //     }
-    //     toStringKOR = toStringKOR.toString();
-    // }
-    //
-    // // 금액 표시 방법 한자
-    // if (data.numberToTextType == 'CHN') {
-    //     var CHN = numberToCHN((data.text).replace(/[^0-9]/g, ""));
-    // }
-
     if (labelNbandInfo.label_type === "ParameterLabel") {
         paramTable.NewDataSet.Table1.forEach(function (paramData) {
             if (labelNbandInfo.data.parameterName == paramData.Key._text) {

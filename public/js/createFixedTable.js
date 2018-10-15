@@ -419,9 +419,6 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
 
     function settingVerticalTextAlignment(VTextAlignment) {
         if (VTextAlignment !== undefined) {
-
-
-
             if (ThisFixedTableDataP.css('height') !== undefined) {
                 var tagPHeight = Number(ThisFixedTableDataP.css('height').split('px')[0]);
                 var dataHeight = Number(ThisFixedTableData.css('height').split('px')[0]);
@@ -492,7 +489,6 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
                         }
                             break;
                     }
-
                 }
             }
         }
@@ -722,22 +718,16 @@ function drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, d
                                             //console.log("2");
 
                                             if (groupFieldArray[groupFieldNum]) {
-                                                console.log("3");
                                                 if (groupFieldArray[groupFieldNum][1][fieldName]) {
-                                                    console.log("4");
                                                     var showDataLabel = groupFieldArray[groupFieldNum][1][fieldName]._text;
                                                     if (showDataLabel !== undefined) {
-                                                        console.log("5");
                                                         showDataLabel = showDataLabel
                                                     }
                                                     if (typeof showDataLabel === 'undefined') {
-                                                        console.log("6");
                                                         showDataLabel = ' ';
                                                     }
                                                 }
-                                                console.log("7");
                                             } else {
-                                                // console.log("8");
                                                 console.log("그룹풋터밴드에 해당하는 총계나 그런애들에 대한 자바스크립트..? 처리가 필요함");
                                             }
                                         }
