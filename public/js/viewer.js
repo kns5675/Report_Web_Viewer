@@ -420,17 +420,17 @@ function setImageType(typeofimages){
  작성자 : 하지연
  ******************************************************************/
 function saveImages(typeofimages, currentindex){
-    console.log("받아오는 이미지 타입 : " + typeofimages);
+    //console.log("받아오는 이미지 타입 : " + typeofimages);
     var pageForCopyRatioNum = $(".pageforcopyratio").length;
-    console.log("총 페이지 수 : " + pageForCopyRatioNum);
+    //console.log("총 페이지 수 : " + pageForCopyRatioNum);
 
     var values = [1,2,3,4,5,6,7,8,9,10];
     // var currentindex ;
    return {
        next: function(){
            html2canvas(document.querySelector("#pageForCopyRatio"+currentindex)).then(canvas => {
-               console.log("html2canvas 까지 들어왔음 : " + currentindex);
-               console.log("html2canvas 안에서 typeof images 찍어봄 : " + typeofimages);
+               //console.log("html2canvas 까지 들어왔음 : " + currentindex);
+               //console.log("html2canvas 안에서 typeof images 찍어봄 : " + typeofimages);
                document.body.appendChild(canvas);
                var img = canvas.toDataURL("image/"+ typeofimages).replace("image/"+ typeofimages,"image/octet-stream");
                window.open().document.write('<img src="' + img + '" />');
@@ -450,26 +450,26 @@ function saveImages(typeofimages, currentindex){
 }
 
 function saveSaveSave(canvas, typeofimages){
-    console.log("savesavesave들어옴");
-    console.log("typeofimages : " + typeofimages);
+    //console.log("savesavesave들어옴");
+    //console.log("typeofimages : " + typeofimages);
 
     if(typeofimages == 'png'){
-        console.log("png임");
+        //console.log("png임");
         return Canvas2Image.saveAsPNG(canvas);
     }else{
-        console.log("jpeg임");
+        //console.log("jpeg임");
         return Canvas2Image.saveAsJPEG(canvas);
     }
 }
 function saveSaveSave1(canvas, typeofimages, enumber){
-    console.log("savesavesave들어옴 enumber는 : " + enumber );
-    console.log("typeofimages : " + typeofimages);
+    //console.log("savesavesave들어옴 enumber는 : " + enumber );
+    //console.log("typeofimages : " + typeofimages);
 
     if(typeofimages == 'png'){
-        console.log("png임");
+        //console.log("png임");
         return Canvas2Image.saveAsPNG(canvas);
     } else {
-        console.log("jpeg임");
+        //console.log("jpeg임");
         return Canvas2Image.saveAsJPEG(canvas);
     }
 }

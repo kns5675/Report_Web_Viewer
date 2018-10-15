@@ -425,8 +425,8 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
             if (ThisFixedTableDataP.css('height') !== undefined) {
                 var tagPHeight = Number(ThisFixedTableDataP.css('height').split('px')[0]);
                 var dataHeight = Number(ThisFixedTableData.css('height').split('px')[0]);
-                console.log("라인height : ",)
-                console.log("버티컬텍스트, data h : ",ThisFixedTableData.css('height')," ",dataHeight," datap h : ",ThisFixedTableDataP.css('height')," ",tagPHeight);
+               // console.log("라인height : ",)
+              //  console.log("버티컬텍스트, data h : ",ThisFixedTableData.css('height')," ",dataHeight," datap h : ",ThisFixedTableDataP.css('height')," ",tagPHeight);
                 var tagPmarginTop = (dataHeight - tagPHeight) / 2;
                 if(tagPHeight < dataHeight){
                     if (tagPHeight !== undefined) {
