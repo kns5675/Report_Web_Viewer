@@ -636,7 +636,7 @@ function z_index_setting(band_name) {
     } else if (band_name == "BandForeGround") {
         var z_index = 100;
     } else {
-        var z_index = 2;
+        var z_index = 999;
     }
     return z_index;
 }

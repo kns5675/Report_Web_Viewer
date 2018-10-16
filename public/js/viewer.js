@@ -692,7 +692,6 @@ function autoSize(pTagId) {
     tag.parent().css({
         'width': widths + 'px',
         'height': height + 'px'
-        // 'top': (height*1 + fontSize[0]*1) + 'px'
     });
     tag.css({
         'margin-left': '3px',
@@ -704,8 +703,10 @@ function autoSize(pTagId) {
 
 function headerMenuPositionSetting(){
     var menu = $('#header_ul');
+    menu.css('width', '739.047px');
     var menu_li = $('#header_ul > li');
     var pos_left = 0;
+
     for(var i=0; i<menu_li.length; i++){
         var li_id = menu_li.eq(i).attr('id');
         menu_li.eq(i).css('left', pos_left + 'px');
@@ -717,15 +718,8 @@ function headerMenuPositionSetting(){
         } else if(li_id === 'NextPage'){
             pos_left -= 6;
         }
-
-
-        pos_left += Number(menu_li.eq(i).css('width').substring(0, menu_li.eq(i).css('width').length-2)) + 8;
-
-
+        pos_left += stringToNumberByPx(menu_li.eq(i).css('width')) + 8;
     }
-    menu.css('width', pos_left + 'px');
-    $('#page_nav').css('top', '3px');
-    $('#txtZoomLi').css('top', '5px');
+
     menu_li.css('display', 'inline-block');
-    // 항목선택 5, 4, 2, 3 px
 }
