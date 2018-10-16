@@ -117,7 +117,7 @@ function copyoptions(clicked_copy){
             $('#myModal').css('display','none');
             pagePrint();
         }else{
-            console.log("인식못했음");
+            //console.log("인식못했음");
         }
     }catch(e){
         console.log(e.message);
@@ -369,7 +369,7 @@ function imageOptions(export_img){
             setImageType(typeofimages);
             endingLoading();
         }else{
-            console.log("인식못했음");
+            //console.log("인식못했음");
         }
     }catch(e){
         console.log(e.message);
