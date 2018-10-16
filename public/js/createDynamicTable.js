@@ -171,22 +171,21 @@ function drawingDynamicTableValueLabel(label, dt, tableId, numOfData, table, ban
 function drawingDynamicTableAnnexedPaperOutPut(label, tableId, numOfData) {
     for(var i=1; i<numOfData; i++) {
         var rowNum = dynamicTableAnnexedPaperOutPut + i;
+
         var valueTrId = $("#drawingDynamicTableAnnexedPaperOutPut" + rowNum );
         if (valueTrId.length < 1) {
             tableId.append('<tr id = "drawingDynamicTableAnnexedPaperOutPut' + rowNum + '"></tr>');
         }
+        valueTrId = $("#drawingDynamicTableAnnexedPaperOutPut" + rowNum );
+
         valueTrId.append('<td id = "tableValueLabelNum' + tableValueLabelNum + '"></td>');
 
         var tdId = $('#tableValueLabelNum' + tableValueLabelNum++);
-        setCssInTable(label, tdId);
-
         tdId.append(label.text);
         tdId.addClass('Label');
         tdId.addClass(label._attributes);
-        // drd_javascript(label, tdId, label.startBindScript);
+        setCssInTable(label, tdId);
     }
-
-    // dynamicTableAnnexedPaperOutPut++;
 }
 
 /**************************************************************************************
