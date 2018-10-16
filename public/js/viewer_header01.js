@@ -29,20 +29,6 @@ function file_save() {
     var modalLayer = $("#file_download_modalLayer");
     $("#saving").on("click", function () {
         modalLayer.fadeIn("slow");
-        // var Layers;
-        // var Reports;
-        //
-        // if(total_data.ReportTemplate.ReportList.anyType.Layers){
-        //     Layers = total_data.ReportTemplate.ReportList.anyType.Layers.anyType;
-        //     Layer_forEach(Layers);
-        //
-        // }else{//report가 여러장일 경우
-        //     Reports = total_data.ReportTemplate.ReportList.anyType;
-        //     Reports.forEach(function (e, i) {
-        //         Layers = e.Layers.anyType;
-        //         Layer_forEach(Layers);
-        //     });
-        // }
     });
     $("#file_download_button").on("click", function () {
         var test = $("#file_name")[0].value;
@@ -56,118 +42,6 @@ function file_save() {
         modalLayer.fadeOut("slow");
     });
 }
-
-function Layer_forEach(Layers) {
-
-    Layers.forEach(function (e, i) {
-        var bands = e.Bands.anyType;
-        Band_forEach(bands);
-    });
-}
-
-function Band_forEach(bands) {
-    var label_id;
-    var temp;
-    if(bands[1]){
-        bands.forEach(function (e, i) {
-            if(e.ControlList.anyType){
-               // console.log("111111111 : ",e.ControlList.anyType);
-                if(e.ControlList.anyType[1]){
-                    label_id = e.ControlList.anyType[i].Labels; //고쳐야 할 수도.
-                    Label_forEach(label_id, temp);
-                }else{
-                    label_id = e.ControlList.anyType.Labels;
-                    if(label_id["TableLabel"]){
-                        label_id = label_id.TableLabel;
-                    }
-                    Label_forEach(label_id, temp);
-                }
-            }
-        });
-    }else{
-        //console.log("bands.ControlList.anyType : ",bands);
-        if(bands.ControlList.anyType){
-            label_id = bands.ControlList.anyType;
-          //  console.log("2222 : ",label_id);
-            if(label_id[1]){
-                Label_forEach(label_id);
-            }else{ //라벨이 하나만 있거나 없을 때 처리
-                label_id = bands.ControlList.anyType.Labels;
-            //    console.log("33333 : ",label_id);
-                Label_forEach(label_id);
-            }
-        }
-    }
-
-}
-
-function Label_forEach(label_id) {
-    //console.log("label_id : ",label_id);
-    label_id.forEach(function (e, i) {
-       // console.log("e : ",e);
-        if(e._attributes["xsi:type"]) {
-            if (e._attributes["xsi:type"] === "DynamicTableTitleLabel") {
-                var Height = e.Rectangle.Height._text;
-
-              //  console.log("Height : ",Height);
-                // table.forEach(function (e, i) {
-                //     console.log("e : ",e);
-                //
-                // });
-            } else if (e._attributes["xsi:type"] === "ControlFixedTable") {
-
-            } else if (e._attributes["xsi:type"] === "ControlLabel") {
-                if (e.DataType) {
-                    if (e.DataType._text === "SystemLabel") {
-                        // console.log("label_id : ",label_id.Name._text);
-                        var count = 0;
-                        if (label_id.Name) {
-                            $("." + label_id.Name._text).each(function (i, e) {
-                                // console.log("label_id.Rectangle.Width : ", label_id.Rectangle.Width);
-                                // var next_element = $("."+label_id.Name._text)[i+1];
-                                var element_width = e.style.width.replace(/[^0-9]/g, '');
-                                // console.log("element_width : ",element_width);
-                                if (element_width !== e.Rectangle.Width._text) { //이 위쪽에서 수정된 하나의 값만 찾아서 해당 값으로 모두 바꿔주는 로직이 필요.
-                                    // label_id.Rectangle.Width._text = element_width;  //모두 바꿔줄 필요없이 들어갈 하나의 값만 바꾸면되는데?
-                                    temp = element_width;
-                                    var total_count = $("." + e.Name._text).length;
-                                    $("." + e.Name._text).each(function (i, e) {
-                                       // console.log("temp : ", temp);
-                                        if (temp !== e.style.width.replace(/[^0-9]/g, '')) {
-                                            count++;
-                                        }
-                                       // console.log("count : ", count);
-                                        if (count + 1 === total_count) {
-                                           // console.log("label_id.Rectangle.Width._text에 temp를 넣는 시점.");
-                                            e.Rectangle.Width._text = temp;
-                                        }
-                                    });
-                                    // console.log("temp : ",temp);
-                                }
-                                // if(e.style.height !==label_id.Rectangle.Height){
-                                //     label_id.Rectangle.Height = e.style.height;
-                                // }
-                                // if(e.style.left !==label_id.Rectangle.X){
-                                //     label_id.Rectangle.X = e.style.left;
-                                // }
-                                // if(e.style.top !==label_id.Rectangle.X){
-                                //     label_id.Rectangle.X = e.style.top;
-                                // }
-                                // var label_name = e.id.replace(/[^a-zA-Z]/g, '');
-                                // if(label_name === "SystemLabel"){
-                                //
-                                // }
-                            });
-                        }
-                    } else {
-
-                    }
-                }
-            }
-        }
-    });
-}
-
 function saving_data_binding(data){
     total_data = data;
 }
@@ -369,7 +243,6 @@ function readURL(input) {
     if($("#dialog_div"+ImageNum)[0]){
         $("#dialog_div"+ImageNum).remove();
     }
-    // tag_Making(scope);
     tag_Making(scope).then(function (resolve) {
         image_setting();
     });
@@ -432,7 +305,6 @@ async function tag_Making(scope, imgae_src, imgnum) {
     var setdiv = document.createElement("div");
     setdiv.id = "setdiv"+ImageNum;
     setdiv.style.position = "absolute";
-    // setdiv.className  = "setting_button";
 
     var set_button = document.createElement("input");
     set_buttonid = "image_button"+ImageNum;
@@ -485,35 +357,44 @@ function image_moal_fadeout() {
  만든이 : hagdung-i
  ******************************************************************/
 function image_level(level, ImageNum, index) {
+    var length = $(".ImageDiv").length;
     $(".ImageDiv").each(function (i, e) {
-        if(level === "up"){ //이미지 순서 앞으로/뒤로
-            if($("#imagediv"+ImageNum)[0].style.zIndex < e.style.zIndex){ //선택한 이미지보다 zindex가 크거나 같은 애가 있을 경우
-                if(index) {  //맨 앞으로인지 그냥 앞으로 인지 구분
-                    if (e.style.zIndex >= 999) {
-                        //이미 맨 앞으로 보낸 이미지가 있는지(999보다 클때), 현재 이미지가 그보다 작거나 같은지 구분
-                        $("#imagediv" + ImageNum)[0].style.zIndex = e.style.zIndex * 1 + 1;
-                    } else {
-                        $("#imagediv" + ImageNum)[0].style.zIndex = 999;
-                    }
-                }else {
-                    $("#imagediv" + ImageNum)[0].style.zIndex = e.style.zIndex * 1 + 1;   //큰애보다 1만 더 크게
-                }
-            }else if($("#imagediv"+ImageNum)[0].style.zIndex === e.style.zIndex){//작을 경우도 자기 자신에 1만 증가.
-                $("#imagediv"+ImageNum)[0].style.zIndex = e.style.zIndex*1+10;
+        if(length === 1){ //이미지 1개일 때
+            if (level === "up") { //이미지 순서 앞으로/뒤로
+                $("#imagediv" + ImageNum)[0].style.zIndex = 999;
+            } else if (level === "down") {
+                $("#imagediv" + ImageNum)[0].style.zIndex = -1;
             }
-        }else if (level === "down"){
-            if($("#imagediv"+ImageNum)[0].style.zIndex > e.style.zIndex){
-                if(index) {  //맨 앞으로인지 그냥 앞으로 인지 구분
-                    if (e.style.zIndex <= -1) {   //이미 맨 뒤로 보낸 이미지가 있는지 구분
-                        $("#imagediv" + ImageNum)[0].style.zIndex = e.style.zIndex * 1 - 1;
+        }else { //이미지 여러개일때
+            if (level === "up") { //이미지 순서 앞으로/뒤로
+                if ($("#imagediv" + ImageNum)[0].style.zIndex < e.style.zIndex) { //선택한 이미지보다 zindex가 크거나 같은 애가 있을 경우
+                    if (index) {  //맨 앞으로인지 그냥 앞으로 인지 구분
+                        if (e.style.zIndex >= 999) {
+                            //이미 맨 앞으로 보낸 이미지가 있는지(999보다 클때), 현재 이미지가 그보다 작거나 같은지 구분
+                            $("#imagediv" + ImageNum)[0].style.zIndex = e.style.zIndex * 1 + 1;
+                        } else {
+                            $("#imagediv" + ImageNum)[0].style.zIndex = 999;
+                        }
                     } else {
-                        $("#imagediv" + ImageNum)[0].style.zIndex = -1;
+                        $("#imagediv" + ImageNum)[0].style.zIndex = e.style.zIndex * 1 + 1;   //큰애보다 1만 더 크게
                     }
-                }else {
-                    $("#imagediv" + ImageNum)[0].style.zIndex = e.style.zIndex * 1-1;   //큰애보다 1만 더 크게
+                } else if ($("#imagediv" + ImageNum)[0].style.zIndex === e.style.zIndex) {//작을 경우도 자기 자신에 1만 증가.
+                    $("#imagediv" + ImageNum)[0].style.zIndex = e.style.zIndex * 1 + 10;
                 }
-            }else if($("#imagediv"+ImageNum)[0].style.zIndex === e.style.zIndex){//작을 경우도 자기 자신에 1만 증가.
-                $("#imagediv"+ImageNum)[0].style.zIndex = e.style.zIndex*1-10;
+            } else if (level === "down") {
+                if ($("#imagediv" + ImageNum)[0].style.zIndex > e.style.zIndex) {
+                    if (index) {  //맨 앞으로인지 그냥 앞으로 인지 구분
+                        if (e.style.zIndex <= -1) {   //이미 맨 뒤로 보낸 이미지가 있는지 구분
+                            $("#imagediv" + ImageNum)[0].style.zIndex = e.style.zIndex * 1 - 1;
+                        } else {
+                            $("#imagediv" + ImageNum)[0].style.zIndex = -1;
+                        }
+                    } else {
+                        $("#imagediv" + ImageNum)[0].style.zIndex = e.style.zIndex * 1 - 1;   //큰애보다 1만 더 크게
+                    }
+                } else if ($("#imagediv" + ImageNum)[0].style.zIndex === e.style.zIndex) {//작을 경우도 자기 자신에 1만 증가.
+                    $("#imagediv" + ImageNum)[0].style.zIndex = e.style.zIndex * 1 - 10;
+                }
             }
         }
     });
@@ -539,8 +420,6 @@ async function image_setting(){
     });
     var modalLayer = $("#image_dialog");
     var dialog = $("#dialog");
-    // var dialog_div = $("#dialog_div");
-    // dialog_div.css({"visibility": "hidden"});
     var marginLeft = dialog.outerWidth()/2;
     var marginTop = dialog.outerHeight()/2;
     /******************************************************************
@@ -609,16 +488,23 @@ async function image_setting(){
  만든이 : hagdung-i
  ******************************************************************/
 $(function() {
+    /******************************************************************
+     기능 : 이미지 추가 기능의 파일 관련 기능.
+     만든이 : hagdung-i
+     ******************************************************************/
     $('#image_insert').on("change", function () {
         if(this.value){
             var test = this.value;
             if(test){
-                // console.log("test : ",test);
                 readURL(this);
             }
         }
     });
-
+    /******************************************************************
+     기능 : 파일 열기 기능의 파일 관련 기능.
+     날짜 : 2018-10-10
+     만든이 : hagdung-i
+     ******************************************************************/
     $("#file_insert").on("change", function () {
         if(this.value){
             var test = this.value;
@@ -634,11 +520,9 @@ $(function() {
                         var reader = new FileReader();
                         var dwadaw = reader.readAsText(fileList [0]);
 
-                        //console.log("reader : ",fileList [0]);
                         if (fileList && fileList[0]) {
                             var reader = new FileReader();
                             reader.onload = function(e) {
-                               // console.log("e.target.result : ",e.target.result);
                             };
                             reader.readAsDataURL(fileList[0]);
                         }
@@ -657,8 +541,6 @@ $(function() {
 });
 function DRD_button() {
     $("#DRD_Start").on("click", function () {
-
-        // shell.echo('hello world');
     });
 }
 /******************************************************************

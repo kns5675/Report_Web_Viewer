@@ -1,4 +1,3 @@
-var current_data;
 /******************************************************************
  기능 : 각각의 형태의 Label id와 데이터를 받아서 lock이 걸려있는 라벨을 제외한 라벨들의 위치 이동, 크기 조정 기능 추가.
  Date : 2018-08-24
@@ -39,12 +38,110 @@ function Lock_check(data, Label_id, div) { //라벨 데이터, 드래그 리사�
 }
 /******************************************************************
  기능 : 파일 내보내기 기능 구현을 위해 수정된 라벨의 데이터를 데이터 바인딩이 되지 않은 total_data로 묶어주는 함수.
+        리전을 제외한 부분 완료.
  Date : 2018-10-11
  만든이 : hagdung-i
  ******************************************************************/
 function label_data_update(data, editable) {
-    total_band = total_data.ReportTemplate.ReportList.anyType.Layers.anyType[1].Bands.anyType;
-    total_band.forEach(function (TB,Ti) { //밴드의 child들의 속성이 변경될때 역바인딩하는 로직
+
+    if(total_data.ReportTemplate.ReportList){ //리포트가 있나
+        var unbinding_total_report = total_data.ReportTemplate.ReportList.anyType;
+        if(unbinding_total_report[1]){ //리포트가 여러갠가
+            unbinding_total_report.forEach(function (Report, Index) {
+                if(Report.Layers.anyType[1]){ //디자인레이어가 있는가
+                    if(Report.Layers.anyType[1].Bands){ //밴드가 있는가
+                        total_band = Report.Layers.anyType[1].Bands.anyType;
+                        unbinding(total_band, data, editable);
+                    }
+                }else{ //디자인 레이어 없을 경우
+
+                }
+            });
+        }else{ //리포트가 1개일 경우 (거래명세서)
+            total_band = total_data.ReportTemplate.ReportList.anyType.Layers.anyType[1].Bands.anyType;
+            unbinding(total_band, data, editable);
+        }
+    }
+
+}
+
+/******************************************************************
+ 기능 : 파일 내보내기 기능의 밴드 하위 역바인딩 로직
+        ChildFooterBands ,리전을 제외한 부분 완료.
+ Date : 2018-10-15
+ 만든이 : hagdung-i
+ ******************************************************************/
+function unbinding(total_band, data, editable) {
+    if(total_band[1]){ //밴드가 복수 개의 경우
+        total_band.forEach(function (TB,Ti) { //밴드의 child들의 속성이 변경될때 역바인딩하는 로직
+            ChildHeaderBands_check(data, editable, TB, Ti);
+            var controlList = TB.ControlList.anyType;
+            ControlList_check(controlList, TB, editable, Ti);
+        });
+    }else{ //밴드가 1개일 때
+        ChildHeaderBands_check(data, editable, total_band, 0);
+        var controlList = total_band.ControlList.anyType;
+        ControlList_check(controlList, total_band, editable, 0);
+    }
+}
+
+/******************************************************************
+ 기능 : 파일 내보내기 기능의 ControlList(Label) 하위 역바인딩 로직
+        ChildFooterBands ,리전을 제외한 부분 완료.
+ Date : 2018-10-15
+ 만든이 : hagdung-i
+ ******************************************************************/
+function ControlList_check(controlList, TB, editable, Ti) {
+    if(controlList){//controlList가 있고 (라벨리스트)
+        if(controlList[1]){//controlList가 여러개일때
+            controlList.forEach(function (CL, Ci) {
+                if(CL.Labels){
+                    var labels = CL.Labels.TableLabel;
+                    if(labels){
+                        labels.forEach(function (label, Li) {
+                            if(label.Id._text === editable[1]){
+                                label.Text._text = editable[0];
+                                controlList[Ci].Labels.TableLabel[Li].Text._text = label.Text._text;
+                                total_data.ReportTemplate.ReportList.anyType.Layers.anyType[1].Bands.anyType[Ti][Ci] = controlList;
+                            }
+                        });
+                    }
+                }
+            });
+        }else{ //controlList가 하나일때
+            if(TB.ControlList.anyType.Labels){
+
+            }
+
+            if(controlList.Layers){
+                var Layers = controlList.Layers;
+                if(Layers){
+                    if(Layers.anyType[1]){
+                        Layers.forEach(function (e, i) {
+                            Layers[i];
+                        });
+                    }else{
+                        var Bands = Layers.Bands;
+                        if(Bands){
+                            if(Bands.anyType[1]){
+
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/******************************************************************
+ 기능 : 파일 내보내기 기능의 ChildHeaderBands 부분 하위 역바인딩 로직
+ ChildFooterBands ,리전을 제외한 부분 완료.
+ Date : 2018-10-15
+ 만든이 : hagdung-i
+ ******************************************************************/
+function ChildHeaderBands_check(data, editable, TB, Ti) {
+    if(TB.ChildHeaderBands){
         if(TB.ChildHeaderBands.anyType){ //차일드헤더밴드가 있을때
             var Header_band = TB.ChildHeaderBands.anyType;
             if(TB.ChildHeaderBands.anyType[1]){
@@ -105,33 +202,7 @@ function label_data_update(data, editable) {
                 }
             }
         }
-        var controlList = TB.ControlList.anyType;
-        if(controlList){//controlList가 있고 (라벨리스트)
-            if(controlList[1]){//controlList가 여러개일때
-                controlList.forEach(function (CL, Ci) {
-                    if(CL.Labels){
-                        var labels = CL.Labels.TableLabel;
-                        if(labels){
-                            labels.forEach(function (label, Li) {
-                                if(label.Id._text === editable[1]){
-                                    console.log("id : ",editable[1]);
-                                    label.Text._text = editable[0];
-                                    controlList[Ci].Labels.TableLabel[Li].Text._text = label.Text._text;
-                                    total_data.ReportTemplate.ReportList.anyType.Layers.anyType[1].Bands.anyType[Ti][Ci] = controlList;
-                                }
-                            });
-                        }
-                    }
-                });
-            }else{ //controlList가 하나일때
-                if(TB.ControlList.anyType.Labels){
-                    TB.ControlList.anyType.Labels.forEach(function (e, i) {
-
-                    });
-                }
-            }
-        }
-    });
+    }
 }
 
 /******************************************************************
@@ -163,6 +234,10 @@ function after_Lock_check() {
 
  수정 : 사이즈 조정시 전체 페이지의 해당 테이블은 모두 수정되도록 수정.
  Date : 2018-09-12
+ 만든이 : hagdung-i
+
+ 수정 : 테이블의 리사이즈, 드래그 기능이 원하는 기능과 다른 점이 있어, 추후 재개발시 참고등으로 필요할 것으로 판단하여 남김.
+ Date : 2018-09-15
  만든이 : hagdung-i
  ******************************************************************/
 function Lock_Check_Table(data, drag, resize, div) { //테이블 데이터, 드래거블 지정할 영역, 리사이즈 영역, 위치 이동시 벗어나면 안되는 영역
@@ -213,6 +288,10 @@ function Lock_Check_Table(data, drag, resize, div) { //테이블 데이터, 드�
  기능 : 테이블 항목별 크기조정 기능
  Date : 2018-08-30
  만든이 : hagdung-i
+
+ 수정 : 테이블의 리사이즈, 드래그 기능이 원하는 기능과 다른 점이 있어, 추후 재개발시 참고등으로 필요할 것으로 판단하여 남김.
+ Date : 2018-09-15
+ 만든이 : hagdung-i
  ******************************************************************/
 function table_column_controller(resize_area, Unalterable_area, label) {
     // var width;
@@ -225,7 +304,6 @@ function table_column_controller(resize_area, Unalterable_area, label) {
     //                 resize: function (event, ui) {   //테이블사이즈는 가로만 조정 가능하도록.
     //                     ui.size.height = ui.originalSize.height;
     //                     label.rectangle.width = ui.size.width;
-    //                     console.log("label : ",label);
     //                     var resizing_label = this;
     //                     var select_label = $("#" + resizing_label.id).text();
     //                     $(".DynamicTableHeader").each(function (i, e) {
@@ -244,6 +322,9 @@ function table_column_controller(resize_area, Unalterable_area, label) {
 
 /******************************************************************
  기능 : 위의 Lock_Check_Table 이벤트를 새로 그려준 element에게도 먹여주기 위한 함수
+
+ 위와 동일한 이유로 남김.
+
  Date : 2018-09-27
  만든이 : hyeongdyun-i
  ******************************************************************/
@@ -303,14 +384,15 @@ function format_check(data) {
  수정 : 사이즈 조정시 전체 페이지의 해당 테이블은 모두 수정되도록 수정.
  Date : 2018-09-12
  만든이 : hagdung-i
+
+ 수정 : 한글/숫자 날짜, 주민등록번호, 도트, 콤마 등의 폰트 포맷 정규식 추가.
+ Date : 2018-10-12
+ 만든이 : hagdung-i
  ******************************************************************/
 function table_format_check(data, Label_id, key, table) { //현재 key와 table만 필수 key는 라벨에 그려지는 실제 데이터 table은 테이블의 정보를 담고있는 오브젝트.
     var test = table.formatType;
     var format = table.format;
     var FieldName = table.fieldName;
-    // console.log("test : ",test);
-    // console.log("format : ",format);
-    // console.log("FieldName : ",FieldName);
     // var data_text;
     if (key != NaN) { //해당 데이터가 숫자일 경우
         if (test === "AmountSosu" || test === "MoneySosu" || test === "MoneySosu") {   //수량, 금액 소숫점 자리수 ###,###
@@ -409,6 +491,8 @@ function table_format_check(data, Label_id, key, table) { //현재 key와 table�
                     // return parts[0].replace(/\B(?=(\d{6})+(?!\d))/g, "-");
                 }
                 return key;
+            }else{//0일때
+                return key;
             }
         } else {
             return key;
@@ -441,7 +525,6 @@ function shift_table_column_controller(resize_area, Unalterable_area, table_resi
                 });
                 // data.rectangle.width = ui.size.width; // 예솔 추가
                 // data.rectangle.height = ui.size.height; // 예솔 추가
-                console.log("width : ",width);
             }
         });
         if(table_resize_area){
@@ -453,7 +536,6 @@ function shift_table_column_controller(resize_area, Unalterable_area, table_resi
             //         ui.size.height = ui.originalSize.height;
             //         width = ui.size.width;
             //         var select_label = $("#" + this.id)[0].className.split(" ")[1];
-            //         console.log("select_label : ",select_label);
             //         $(".table").each(function (i, e) {
             //             var total_col = $("#" + e.id)[0].className.split(" ")[1];
             //             if (total_col === select_label) {
@@ -543,8 +625,6 @@ function Transparent_Cloak(imageTransparent, image) {
         var TransparentOX = imageTransparent.IsUseTransParent._text;
         if (TransparentOX) {  //투명도 여부를 확인
             var TransparentColor = imageTransparent.TransParentColor._text;
-            // image_id.css({'filter':'chroma(color=#FF97A6)'});
-            //#fb99a6
             return TransparentColor;
         }
     }
@@ -569,6 +649,8 @@ function z_index_setting(band_name) {
  추가 : DRD 자바스크립트 세부적 추가 기능 구현
  Date : 2018-09-27
  만든이 : hagdung-i
+
+ *추후 자바스크립트 편집 기능 참조 사항.
  ******************************************************************/
 function drd_javascript(label, labelId, script, key, data) {
     if (labelId !== undefined && script !== undefined) {
@@ -598,7 +680,7 @@ function str_replace(str, searchStr, replaceStr) {
 }
 
 /******************************************************************
- 기능 :
+ 기능 : 자바스크립트 관련 기능.
  Date : 2018-09-24
  만든이 : hagdung-i
  ******************************************************************/

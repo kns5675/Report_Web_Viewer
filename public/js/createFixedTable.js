@@ -38,6 +38,7 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
         }
         setRowCount(rowCount);
     }
+
     countingRows();
 
     function setRowCount(rowCount) {
@@ -53,7 +54,7 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
 
                 labelCount++;
                 totalLabelWidth += thisLabelWidth;
-                if(fixTableWidth == totalLabelWidth){
+                if (fixTableWidth == totalLabelWidth) {
                     var drawingTds = labelCount;
                     totalLabelWidth = 0;
                 }
@@ -69,15 +70,16 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                             'width': fixTableWidth,
                             'overflow': 'visible'
                         });
-                        if(drawingTds==undefined){
+                        if (drawingTds == undefined) {
                             var drawingTds = labelCount / rowCount;
                         }
-                        if(rowCount=1){
+                        if (rowCount = 1) {
                             var drawingTds = labelCount;
                         }
                         tdDataBinding(ThisfixedTableRow, drawingTds);
                         fixTableRowCount++;
                     }
+
                     function tdDataBinding(ThisfixedTableRow, drawingTds) {
                         var tdId = 'FixedTableLabel_';
                         if (rC2 > drawingTds) {
@@ -122,6 +124,7 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                             '<p id="' + tdId + rC2 + '_p_' + labelC + '">' + table_reform + '</p>' +
                                             '</td>');
                                         var tdId_javascript = $("#" + tdIDMaking);
+                                        tdId_javascript.addClass("FixedTableLabel");
                                     }
                                     break;
                                 case  "NormalLabel" :
@@ -139,10 +142,11 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                     fixedtable_tdId[0].real_id = fromData.id;
                                     settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTableHeight, tdLeft, tdTop);
                                     var tdId_javascript = $("#" + tdIDMaking);
-                                    if(fromData.editable !== "false"){
+                                    if (fromData.editable !== "false") {
                                         tdId_javascript.addClass("Editable");
                                     }
                                     tdId_javascript.addClass("DynamicTableHeader");
+                                    tdId_javascript.addClass("FixedTableLabel");
                                     break;
                                 case "SummaryLabel" :
                                     var dt = dataTable.DataSetName[fromData.dataTableName];
@@ -182,8 +186,8 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                             } else {
                                                 if (dt !== undefined) {
                                                     for (var i = 0; i < dt.length; i++) {
-                                                        if(dt[i][key] !== undefined){
-                                                            if(dt[i][key]._text !== undefined){
+                                                        if (dt[i][key] !== undefined) {
+                                                            if (dt[i][key]._text !== undefined) {
                                                                 summary_label_sum += Number(dt[i][key]._text);
                                                             }
                                                         }
@@ -195,12 +199,68 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                             showDataLabel = summary_label_avg;
                                             break;
                                         case 'Max' :
+                                            var temp_arr = [];
+
+                                            if (groupFieldArray.length != 0) {// 그룹 기준 필드가 있을 때
+                                                for (var i = 0; i < groupFieldArray[groupFieldNum].length - 1; i++) {
+                                                    temp_arr.push(Number(groupFieldArray[groupFieldNum][i+1][key]._text));
+                                                }
+                                                var summary_label_max = temp_arr.reduce(function(previous, current){
+                                                    return previous > current ? previous : current;
+                                                });
+                                            } else {
+                                                for(var i = 0; i < dt.length; i++){
+                                                    if(dt[i][key]){
+                                                        if(dt[i][key]._text != undefined){
+                                                            temp_arr.push(Number(dt[i][key]._text));
+                                                        }
+                                                    }else{
+                                                        temp_arr.push(Number(0));
+                                                    }
+                                                }
+                                                var summary_label_max = temp_arr.reduce(function(previous, current){
+                                                    return previous > current ? previous:current;
+                                                });
+                                            }
+                                            showDataLabel = summary_label_max;
                                             break;
                                         case 'Min' :
+                                            var temp_arr = [];
+
+                                            if (groupFieldArray.length != 0) {// 그룹 기준 필드가 있을 때
+                                                for (var i = 0; i < groupFieldArray[groupFieldNum].length - 1; i++) {
+                                                    temp_arr.push(Number(groupFieldArray[groupFieldNum][i+1][key]._text));
+                                                }
+                                                var summary_label_min = temp_arr.reduce(function(previous, current){
+                                                    return previous > current ? current : previous;
+                                                });
+                                            } else {
+                                                for(var i = 0; i < dt.length; i++){
+                                                    if(dt[i][key]){
+                                                        if(dt[i][key]._text != undefined){
+                                                            temp_arr.push(Number(dt[i][key]._text));
+                                                        }
+                                                    }else{
+                                                        temp_arr.push(Number(0));
+                                                    }
+                                                }
+                                                var summary_label_min = temp_arr.reduce(function(previous, current){
+                                                    return previous > current ? current : previous;
+                                                });
+                                            }
+                                            showDataLabel = summary_label_min;
                                             break;
                                         case 'Cnt' :
+                                            var summary_label_cnt = 0;
+                                            if (groupFieldArray.length !== 0) { // 그룹 기준 필드가 있을 때//테스트 안해봤음.
+                                                summary_label_cnt = groupFieldArray[groupFieldNum].length - 1;
+                                            } else {
+                                                summary_label_cnt = dt.length;
+                                            }
+                                            showDataLabel = summary_label_cnt;
                                             break;
                                         default : //none
+                                            showDataLabel = 'Default';
                                             break;
                                     }
                                     if (groupFieldArray !== undefined) {
@@ -231,10 +291,11 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                         var fixedtable_tdId = $('#' + tdId + rC2 + '_' + labelC);
                                         fixedtable_tdId[0].real_id = fromData.id;
                                         var tdId_javascript = $("#" + tdIDMaking);
-                                        if(fromData.editable !== "false"){
+                                        if (fromData.editable !== "false") {
                                             tdId_javascript.addClass("Editable");
                                         }
                                         tdId_javascript.addClass("DynamicTableHeader");
+                                        tdId_javascript.addClass("FixedTableLabel");
                                     }
                                     break;
                             }
@@ -287,7 +348,7 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
     var thisTextLength = String(fromData.text).length;
     var textWithoutSpace = String(thisText).replace(/(\s*)/g, "");
     var textSize = fromData.fontSize.split('pt')[0];
-    var fontWeight = fromData.fontWeight===undefined?'normal':fromData.fontWeight;
+    var fontWeight = fromData.fontWeight === undefined ? 'normal' : fromData.fontWeight;
     var textWithoutSpaceLength = textWithoutSpace.length;
 
     ThisFixedTableDataP.css({
@@ -395,14 +456,11 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
             if (ThisFixedTableDataP.css('height') !== undefined) {
                 var tagPHeight = Number(ThisFixedTableDataP.css('height').split('px')[0]);
                 var dataHeight = Number(ThisFixedTableData.css('height').split('px')[0]);
-               // console.log("라인height : ",)
-              //  console.log("버티컬텍스트, data h : ",ThisFixedTableData.css('height')," ",dataHeight," datap h : ",ThisFixedTableDataP.css('height')," ",tagPHeight);
                 var tagPmarginTop = (dataHeight - tagPHeight) / 2;
-                if(tagPHeight < dataHeight){
+                if (tagPHeight < dataHeight) {
                     if (tagPHeight !== undefined) {
                         if (dataHeight - tagPHeight >= 0) {
 
-                            //console.log("tagPmarginTop : ",tagPmarginTop);
 
                             switch (VTextAlignment) {
                                 case "Center": {
@@ -433,7 +491,7 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
                             }
                         }
                     }
-                }else if(dataHeight < tagPHeight){
+                } else if (dataHeight < tagPHeight) {
                     switch (VTextAlignment) {
                         case "Center": {
                             ThisFixedTableDataP.css({
@@ -453,7 +511,6 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
                         }
                             break;
                         case "Bottom": {
-                            console.log("bottom들어옴");
                             ThisFixedTableDataP.css({
                                 '-webkit-margin-before': tagPmarginTop * 2,
                                 'top': tagPmarginTop * 2,
@@ -472,9 +529,16 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
 
     function settingHorizontalTextAlignment(HTextAlignment) {
         if (HTextAlignment !== undefined) {
+            if(HTextAlignment=='Right'){
+                ThisFixedTableDataP.css('margin-right','7px');
+            }else if(HTextAlignment=='Left'){
+                ThisFixedTableDataP.css('margin-left','7px');
+            }else if(HTextAlignment=='Center'){
+            }
             ThisFixedTableData.css("text-align", HTextAlignment);
         }
     }
+
     settingHorizontalTextAlignment(HTextAlignment);
 }
 
@@ -883,6 +947,7 @@ function drawingFixedTableInDataBand(data, controlFixedTable, fixTableLabelList,
                                             settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTableHeight);
                                             setTable();
                                             var tdId_javascript = $("#" + tdIDMaking);
+                                            tdId_javascript.addClass("FixedTableLabel");
                                             if (curDataRowInDataBand < dt.length) {
                                                 curDataRowInDataBand++;
                                             }
@@ -898,6 +963,7 @@ function drawingFixedTableInDataBand(data, controlFixedTable, fixTableLabelList,
                                         settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTableHeight);
                                         setTable();
                                         var tdId_javascript = $("#" + tdIDMaking);
+                                        tdId_javascript.addClass("FixedTableLabel");
                                     }
                                     break;
                                 case  "NormalLabel" :
@@ -906,6 +972,7 @@ function drawingFixedTableInDataBand(data, controlFixedTable, fixTableLabelList,
                                     settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTableHeight);
                                     setTable();
                                     var tdId_javascript = $("#" + tdIDMaking);
+                                    tdId_javascript.addClass("FixedTableLabel");
                                     break;
                                 // case "SummaryLabel" :
                                 //     var label = new DataLabel(data);
