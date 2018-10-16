@@ -231,13 +231,22 @@ function drawingDynamicTableTitleLabel(label, header_Name_Number, band) {
     var th = document.createElement("th");
     var thId = 'DynamicTableTitleLabel' + header_Name_Number + '_View_Page_Number' + thNum;
     var className = "DynamicTableTitleLabel"+ header_Name_Number
-    var table_reform = table_format_check(data, thId, label.text, label);
     var p = document.createElement("p");
     var pId = 'title_P_tag' + thNum;
     th.id = thId;
     th.className = className;
     th.className = 'Label DynamicTableHeader';
     th.className = label._attributes;
+
+    if (label.dataType === 'ParameterLabel') {
+        paramTable.NewDataSet.Table1.forEach(function (paramData) {
+
+            if (label.parameterName == paramData.Key._text) {
+                label.text = paramData.Value._text;
+            }
+        });
+    }
+    var table_reform = table_format_check(data, thId, label.text, label);
 
     titleTrId.appendChild(th)
 
@@ -246,13 +255,6 @@ function drawingDynamicTableTitleLabel(label, header_Name_Number, band) {
     th.appendChild(p);
 
     setCssInTableDomObject(label, th);
-    if (label.dataType === 'ParameterLabel') {
-        paramTable.NewDataSet.Table1.forEach(function (paramData) {
-            if (label.parameterName == paramData.Key._text) {
-                label.text = paramData.Value._text;
-            }
-        });
-    }
 
     if(label.editable !== "false"){
         th.className = "Editable";
@@ -793,9 +795,9 @@ function setCssInTableDomObject(label, tdId, text) {
             var bottomBorder = borderDottedLine(label.borderDottedLines.bottomDashStyle);
             var topBorder = borderDottedLine(label.borderDottedLines.topDashStyle);
             tdId.style.borderLeft = label.borderThickness.left + 'px ' + leftBorder + ' ' + label.leftBorderColor;
-            tdId.style.borderRight = label.borderThickness.left + 'px ' + rightBorder + ' ' + label.leftBorderColor;
-            tdId.style.borderBottom = label.borderThickness.left + 'px ' + bottomBorder + ' ' + label.leftBorderColor;
-            tdId.style.borderTop = label.borderThickness.left + 'px ' + topBorder + ' ' + label.leftBorderColor;
+            tdId.style.borderRight = label.borderThickness.right + 'px ' + rightBorder + ' ' + label.leftBorderColor;
+            tdId.style.borderBottom = label.borderThickness.bottom + 'px ' + bottomBorder + ' ' + label.leftBorderColor;
+            tdId.style.borderTop = label.borderThickness.top + 'px ' + topBorder + ' ' + label.leftBorderColor;
             tdId.style.borderSpacing = '0px';
 
         } else {

@@ -685,12 +685,17 @@ function label_text_Setting(labelNbandInfo) {
         var dt = dataTable.DataSetName[labelNbandInfo.dataTableName];
         if (dt != undefined) {
             if (groupFieldArray !== undefined) {
-                pId.append(groupFieldArray[groupFieldNum][0]);
+
                 //예시가 없음 추후 수정 필요 할 수 있음.
-                var DataLabel_text = table_format_check(null, null, groupFieldArray[groupFieldNum][0], labelNbandInfo.data);
+                for(key in groupFieldArray[groupFieldNum][1]) {
+                    if (key === labelNbandInfo.data.fieldName) {
+                        pId.append(groupFieldArray[groupFieldNum][1][key]._text);
+                        var DataLabel_text = table_format_check(null, null, groupFieldArray[groupFieldNum][1][key]._text, labelNbandInfo.data);
+                    }
+                }
                 // labelNbandInfo.data.text = pId.text();
                 pId[0].text = DataLabel_text;
-                console.log("pId : ",pId);
+
                 labelNbandInfo.data.text = DataLabel_text;
             }
         }
