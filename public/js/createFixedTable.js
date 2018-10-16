@@ -122,6 +122,7 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                             '<p id="' + tdId + rC2 + '_p_' + labelC + '">' + table_reform + '</p>' +
                                             '</td>');
                                         var tdId_javascript = $("#" + tdIDMaking);
+                                        tdId_javascript.addClass("FixedTableLabel");
                                     }
                                     break;
                                 case  "NormalLabel" :
@@ -143,6 +144,7 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                         tdId_javascript.addClass("Editable");
                                     }
                                     tdId_javascript.addClass("DynamicTableHeader");
+                                    tdId_javascript.addClass("FixedTableLabel");
                                     break;
                                 case "SummaryLabel" :
                                     var dt = dataTable.DataSetName[fromData.dataTableName];
@@ -235,6 +237,7 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                             tdId_javascript.addClass("Editable");
                                         }
                                         tdId_javascript.addClass("DynamicTableHeader");
+                                        tdId_javascript.addClass("FixedTableLabel");
                                     }
                                     break;
                             }
@@ -883,6 +886,7 @@ function drawingFixedTableInDataBand(data, controlFixedTable, fixTableLabelList,
                                             settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTableHeight);
                                             setTable();
                                             var tdId_javascript = $("#" + tdIDMaking);
+                                            tdId_javascript.addClass("FixedTableLabel");
                                             if (curDataRowInDataBand < dt.length) {
                                                 curDataRowInDataBand++;
                                             }
@@ -898,6 +902,7 @@ function drawingFixedTableInDataBand(data, controlFixedTable, fixTableLabelList,
                                         settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTableHeight);
                                         setTable();
                                         var tdId_javascript = $("#" + tdIDMaking);
+                                        tdId_javascript.addClass("FixedTableLabel");
                                     }
                                     break;
                                 case  "NormalLabel" :
@@ -906,6 +911,7 @@ function drawingFixedTableInDataBand(data, controlFixedTable, fixTableLabelList,
                                     settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTableHeight);
                                     setTable();
                                     var tdId_javascript = $("#" + tdIDMaking);
+                                    tdId_javascript.addClass("FixedTableLabel");
                                     break;
                                 // case "SummaryLabel" :
                                 //     var label = new DataLabel(data);

@@ -1,9 +1,5 @@
 var pagecount_check = true;
 var pageprint_check = true;
-$(document).ready(function(){
-    header_event_setting();
-    jiyeons();
-});
 
 /******************************************************************
  기능 : 각 기능별 이벤트 시작점.
@@ -53,7 +49,6 @@ function header_event_setting(){
      ******************************************************************/
     $(".copycount").on("change", function () {
         var count = $('input[id="copycount_id"]:checked').val();
-       // console.log("count : ",count);
         if(count){
             if(pagecount_check) {
                 countPrinting();
@@ -182,10 +177,8 @@ function jiyeons() {
 function paper_setting(setting) {
     //용지방향 설정 가로와 세로를 서로 뒤바꿔주는 식의 형태인데, 가로에 해당하는 라디오 박스가 선택 되어 있을 때만 초기화시 세로로 되돌림.
     var checked_check = $('input:radio[name="direction"]').prop("checked");
-   // console.log("checked_check : ",checked_check);
     if(setting){    //x 버튼 누르면 초기화
         if(!checked_check){ //x버튼을 눌럿을 때, 체크가 있는 값이 가로이면
-        //    console.log("reset");
             paperDirection();
             $("input:radio[name='direction']:radio[value='세로']").prop("checked",true);
             $("input:radio[name='direction']:radio[value='가로']").prop("checked",false);
@@ -193,7 +186,6 @@ function paper_setting(setting) {
             // paperDirection();
         }
     }else{
-       // console.log("not reset");
         paperDirection();
     }
 }
@@ -317,15 +309,18 @@ function extra_tail_using_check() {
  내용 : 페이지 세로/가로 값을 반전 시키는 함수.
  ******************************************************************/
 function paperDirection() {
-
+    var temp;
+    var temp2;
     $(".pageforcopyratio").each(function (i, e) {
-        var temp = e.style.width;
-        e.style.width = e.style.height;
+        var width = e.style.width.replace(/[^0-9.]/g, '');
+        var height = e.style.height.replace(/[^0-9.]/g, '');
+        temp = width + "px";
+        temp2 = height + "px";
+        e.style.width = temp2;
         e.style.height = temp;
     });
     $(".forcopyratio").each(function (i, e) {
         var temp = e.style.width;
-        //console.log("temp : ",temp);
         e.style.width = e.style.height;
         e.style.height = temp;
     });
@@ -335,13 +330,11 @@ function paperDirection() {
         e.style.height = temp;
     });
     $(".designLayer").each(function (i, e) {
-      //  console.log("designLayer 돌아감");
         var temp = e.style.width;
         e.style.width = e.style.height;
         e.style.height = temp;
     });
     $(".foreGroundLayer").each(function (i, e) {
-       // console.log("designLayer 돌아감");
         var temp = e.style.width;
         e.style.width = e.style.height;
         e.style.height = temp;
@@ -350,19 +343,6 @@ function paperDirection() {
     $(".Band").each(function (i, e) {
         e.style.width = "100%";
     });
-
-    // var width = $("#pageForCopyRatio1")[0].style.width;
-    // var height = $("#pageForCopyRatio1")[0].style.height;
-    // var temp = width;
-    // height = width;
-    // width = temp;
-    // console.log("width : ",width);
-    // console.log("height : ",height);
-    // console.log("data : ",data);
-    // width = height;
-    //     e.style.width = e.style.height;
-    //     e.style.height = temp;
-    // removePage(data, width, height);
 }
 /******************************************************************
  기능 : 날짜 그리는 함수.
@@ -380,13 +360,8 @@ function datePrinting() {
     const totaldate = year+"-"+month+"-"+day+" "+hour +":"+seconds;
 
     $(".visiblePage").each(function (i,e) {
-       // console.log(e.id.replace(/[^0-9]/g,""));
         const row_interval = e.style.width.replace(/[^-\.0-9]/g,"")*0.83;
         const col_interval = e.style.height.replace(/[^-\.0-9]/g,"")*0.97;
-      //  console.log("row_interval : ",row_interval);
-      //   console.log("col_interval : ",col_interval);
-      //   console.log("$(\"#page\"+e.id.replace(/[^0-9]/g,\"\")).offset().left :",$("#page"+e.id.replace(/[^0-9]/g,"")).offset().left);
-      //   console.log("offset : ",$("#page"+e.id.replace(/[^0-9]/g,"")).offset().top);
         const time_area = document.createElement("div");
         time_area.id = "time_area"+e.id.replace(/[^0-9]/g,"");
         time_area.style.position = "absolute";
@@ -424,7 +399,6 @@ function datePrinting() {
 function countPrinting() {
 
     $(".visiblePage").each(function (i,e) {
-     //   console.log(e.id.replace(/[^0-9]/g, ""));
         const col_interval = e.style.width.replace(/[^-\.0-9]/g,"")*0.91;
         const row_interval = e.style.height.replace(/[^-\.0-9]/g,"")*0.97;
         const count_area = document.createElement("div");
@@ -699,7 +673,7 @@ function dataValidity2(){
             this.value="";
         }
     }catch(e){
-       // console.log(e.message);
+
     }
 }
 /******************************************************************
@@ -711,9 +685,7 @@ function changeColor(tds){
     tds = parseInt(tds);
     tds = tds-1;
     $(".modaltd").each(function (i, e) {
-       // console.log(e.id);
         var tdid = e.id.replace(/[^0-9]/g, "");
-       // console.log(tdid);
         if (tds >= tdid) {
             $("table#modaltable tr:eq(0) td:eq(" + tdid + ")").css("background-color", "white");
             $("table#modaltable tr:eq(1) td:eq(" + tdid + ")").css("background-color", "#E6E6FA");
@@ -737,7 +709,6 @@ function beforeSubmit(){
         eCopyRate = (Number(eCopyRate))/100;
 
         $(".page").each(function (i, e) {
-            // console.log("e : ", e.id);
             var idnum = e.id.replace(/[^0-9]/g,'');
 
             eSetFont();
@@ -820,7 +791,7 @@ function eCopyRatio(eCopyRate, idnum){
         }
     }
     catch(e) {
-      //  console.log(e.message);
+
     }
 }
 /******************************************************************

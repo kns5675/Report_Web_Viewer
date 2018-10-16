@@ -66,7 +66,6 @@ async function beforeSaving(pageOrientation, docwidth1, docheight1) {
 function createPdf(pageOrientation,docwidth1,docheight1){
     return new Promise(function(resolve){
         doc = new jsPDF(pageOrientation,'mm',[docheight1,docwidth1]);
-        //console.log("docheight1 : "+docheight1 + " docwidth1 : "+docwidth1);
         var area;
         var totalnum = $(".pageforcopyratio").length;
         $(".pageforcopyratio").each(function (i, e) {
@@ -484,10 +483,6 @@ jQuery.browser = {}; //jQuery.browser.msie 사용 위함.
     }
 })();
 
-function howmanyPages(thisvalue){
-    alert("this value : " + thisvalue);
-}
-
 //학준 추가
 function band_dbclick_event(data) {
     var Editable;
@@ -572,6 +567,7 @@ function band_dbclick_event(data) {
                 var current_id = $("#"+current)[0];
                 var this_text = $("#" + current)[0].textContent;
                 var editableYN = current_id.className.toString().split("Editable")[1];
+                var fixedTableYN = current_id.className.toString().split("FixedTableLabel")[1];
                 if(editableYN){
                     if ($("#text_area")[0] === undefined) {
                         var text_div = document.createElement("div");
@@ -582,9 +578,11 @@ function band_dbclick_event(data) {
                         text_area.value = this_text;
                         text_area.style.width = current_width;
                         text_area.style.height = current_height;
-                        text_area.style.left = "0px";
-                        text_area.style.top = "0px";
-                        text_area.style.position = "absolute";
+                        if(fixedTableYN){   //fixedTable일때만 적용.
+                            text_area.style.left = "0px";
+                            text_area.style.top = "0px";
+                            text_area.style.position = "absolute";
+                        }
                         text_area.zIndex = 1000;
                         border_Width = this.style.borderWidth;
                         border_Color = this.style.borderColor;
