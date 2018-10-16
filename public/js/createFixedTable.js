@@ -529,9 +529,9 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
 
     function settingHorizontalTextAlignment(HTextAlignment) {
         if (HTextAlignment !== undefined) {
-            var pWidth = ThisFixedTableDataP.css('width');
-            var dataWidth = ThisFixedTableData.css('width');
-            var subtraction = pWidth-dataWidth;
+            var pWidth = (ThisFixedTableDataP.css('width')).split('px')[0];
+            var dataWidth = (ThisFixedTableData.css('width')).split('px')[0];
+            var subtraction =dataWidth-pWidth;
             if(HTextAlignment=='Right'){
                 if(subtraction > 7){
                 ThisFixedTableDataP.css('margin-right','7px');}
