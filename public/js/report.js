@@ -61,13 +61,15 @@ function makeReportTemplate(data, subReport) {
                 dataBands.push(band);
             }
         });
-
+        /******************************************************************
+         기능 : 밴드 중에 서브리포트가 존재할 경우 모든 페이지를 끝낸 이후에 리포트를 추가해주는 로직
+         날짜 : 2018-10-15
+         만든이 : 김학준
+         ******************************************************************/
         // subReport_click = report.layers.designLayer.bands;
         //         subReport_click.forEach(function (value, j) {
         //             if(subReport_click[j].attributes["xsi:type"] === "BandSubReport"){
-        //                 console.log("subReport_click[j] : ",subReport_click[j]);
         //                 subReport_yes = subReport_click[j];
-        //                 console.log("subReport_yes : ",subReport_yes);
         //             }
         //         });
         //         if(subReport_yes){

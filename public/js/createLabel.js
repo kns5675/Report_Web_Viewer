@@ -689,6 +689,8 @@ function label_text_Setting(labelNbandInfo) {
                 //예시가 없음 추후 수정 필요 할 수 있음.
                 var DataLabel_text = table_format_check(null, null, groupFieldArray[groupFieldNum][0], labelNbandInfo.data);
                 // labelNbandInfo.data.text = pId.text();
+                pId[0].text = DataLabel_text;
+                console.log("pId : ",pId);
                 labelNbandInfo.data.text = DataLabel_text;
             }
         }
@@ -1059,7 +1061,8 @@ function labelPropertyApply(labelNbandInfo) {
                 'border-right': labelNbandInfo.data.borderThickness.right + 'px ' + rightBorder + ' ' + labelNbandInfo.data.rightBorderColor,
                 'border-bottom': labelNbandInfo.data.borderThickness.bottom + 'px ' + bottomBorder + ' ' + labelNbandInfo.data.bottomBorderColor,
                 'border-top': labelNbandInfo.data.borderThickness.top + 'px ' + topBorder + ' ' + labelNbandInfo.data.topBorderColor,
-                'zIndex': 0
+                'zIndex' : 0,
+                'pointer-events' : 'auto'
             });
         } else {
             labelNbandInfo.labelId.css({
@@ -1123,7 +1126,8 @@ function labelPropertyApply(labelNbandInfo) {
         labelNbandInfo.labelId.children('div:last-child').css({
             'font-size': '15px',
             'font-weight': 'bold',
-            'line-height': '15px'
+            'line-height': '15px',
+            'pointer-events': 'auto'
         });
 
         // 바코드를 감싸는 div의 크기를 글씨 div의 높이 +  바코드 div의 높이로 설정

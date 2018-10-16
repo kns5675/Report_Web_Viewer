@@ -75,7 +75,7 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData, band, dt) {
                 'position' : 'absolute',
                 'width': '100px',
                 'height': '35px',
-                'z-index' : '2',
+                'z-index' : '999',
                 'left' : table.rectangle.width/2 - 50 + 'px',
                 'top' : $('#dynamicTable' + dynamicTableNum).height() + 'px',
             });
@@ -84,7 +84,7 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData, band, dt) {
                 'width': '100px',
                 'height': '35px',
                 'position' : 'absolute',
-                'z-index' : '2',
+                'z-index' : '999',
                 'border' : '1px solid',
                 'background-color' : 'white',
                 'text-align' : 'center',
@@ -286,13 +286,13 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
                     label.text = paramData.Value._text;
                 }
             });
-            thId.append('<p id="value_P_tag' + thNum + '">' + label.text + '</p>');
+            thId.append('<p id="value_P_tag' + tableValueLabelNum + '">' + label.text + '</p>');
             var valueTrId = $('#dynamicValueLabel' + tempCurDataRow);
             var tdId = 'tableValueLabelNum' + tableValueLabelNum++;
+            var table_reform = table_format_check(data, valueTrId, label.text, label);
             var key = label.parameterName;
             if (!minimumRow) {  //td의 label 값을 p태그에 묶음.
-                var table_reform = table_format_check(data, valueTrId, label.text, label);
-                valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '"><p id="value_P_tag' + thNum + '" style="margin: 0px;">' + table_reform + '</p></td>');
+                valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '"><p id="value_P_tag' + tableValueLabelNum + '" style="margin: 0px;">' + table_reform + '</p></td>');
             } else { // 최소행 개수
                 valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '"></td>');
             }
@@ -317,7 +317,7 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
                     var tdId = 'tableValueLabelNum' + tableValueLabelNum++;
                     if (!minimumRow) {
                         if (label.labelTextType == 'Number' && label.format != undefined) { //td의 label 값을 p태그에 묶음.
-                            valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '"><p id="value_P_tag' + thNum + '" style="margin: 0px;">' + table_reform + '</p></td>');
+                            valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '"><p id="value_P_tag' + tableValueLabelNum + '" style="margin: 0px;">' + table_reform + '</p></td>');
                             isData = true;
                         } else {
                             valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '">' + table_reform + '</td>');
@@ -414,11 +414,11 @@ function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, nu
                 });
                 var tdId = 'tableValueLabelNum' + tableValueLabelNum++;
                 var key = label.parameterName;
+                var table_reform = table_format_check(data, valueTrId, label.text, label);
                 if (!minimumRow) {
-                    var table_reform = table_format_check(data, valueTrId, label.text, label);
-                    valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '"><p id="value_P_tag' + thNum + '" style="margin: 0px;">' + table_reform + '</p></td>');
+                    valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '"><p id="value_P_tag' + tableValueLabelNum + '" style="margin: 0px;">' + table_reform + '</p></td>');
                 } else { // 최소행 개수
-                    valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '"></td>');
+                    valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '"><p id="value_P_tag' + tableValueLabelNum + '" style="margin: 0px;">' + label.text + '</p></td>');
                     valueTrId.addClass('minRow');
                 }
                 tdId = $('#' + tdId);
@@ -429,7 +429,7 @@ function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, nu
                 var labelText = label.text == undefined ? '' : label.text;
                 var table_reform = table_format_check(data, valueTrId, labelText, label);
                 valueTrId.append(
-                    '<td id = "' + tdId + '" class="' + label.fieldName + ' Label ' + label._attributes + ' ' + label.dataType + '">' + table_reform + '</td>'
+                    '<td id = "' + tdId + '" class="' + label.fieldName + ' Label ' + label._attributes + ' ' + label.dataType + '"><p id="value_P_tag' + tableValueLabelNum + '" style="margin: 0px;">' + table_reform + '</p></td>'
                 );
                 tdId = $('#' + tdId);
                 setCssInTable(label, tdId);
@@ -451,11 +451,11 @@ function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, nu
                         } else {
                             if (label.labelTextType == 'Number' && label.format != undefined) {
                                 valueTrId.append(
-                                    '<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '"><p id="value_P_tag' + thNum + '" style="margin: 0px;">' + table_reform + '</p></td>'
+                                    '<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '"><p id="value_P_tag' + tableValueLabelNum + '" style="margin: 0px;">' + table_reform + '</p></td>'
                                 );
                             } else {
                                 valueTrId.append(
-                                    '<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '">' + table_reform + '</td>'
+                                    '<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '"><p id="value_P_tag' + tableValueLabelNum + '" style="margin: 0px;">' + table_reform + '</p></td>'
                                 );
                             }
                         }
