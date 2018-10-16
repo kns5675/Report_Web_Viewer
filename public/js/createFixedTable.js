@@ -529,6 +529,12 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
 
     function settingHorizontalTextAlignment(HTextAlignment) {
         if (HTextAlignment !== undefined) {
+            if(HTextAlignment=='Right'){
+                ThisFixedTableDataP.css('margin-right','7px');
+            }else if(HTextAlignment=='Left'){
+                ThisFixedTableDataP.css('margin-left','7px');
+            }else if(HTextAlignment=='Center'){
+            }
             ThisFixedTableData.css("text-align", HTextAlignment);
         }
     }
