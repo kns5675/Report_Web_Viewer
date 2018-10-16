@@ -115,6 +115,7 @@ function getBandDataHeight(band, dynamicTableHeight) {
         });
     });
 
+    // allLabelBorderThickness = valueBorderBottomThickness * numOfData + titleBorderBottomThickness + titleBorderTopThickness;
     //ToDo 테이블 두께에 따라 1px 정도씩 오차가 생김
     if (isDynamicTable) {
         return tableSpacing + Number(dynamicTableHeight[0]) + 1;

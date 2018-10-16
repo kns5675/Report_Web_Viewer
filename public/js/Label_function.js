@@ -491,6 +491,8 @@ function table_format_check(data, Label_id, key, table) { //현재 key와 table�
                     // return parts[0].replace(/\B(?=(\d{6})+(?!\d))/g, "-");
                 }
                 return key;
+            }else{//0일때
+                return key;
             }
         } else {
             return key;
