@@ -77,7 +77,17 @@ function createPdf(pageOrientation,docwidth1,docheight1){
         doc = new jsPDF(pageOrientation,'mm',[docheight1,docwidth1]);
         var area;
         var flexiblecontent = document.getElementById("temp_reportTemplate");
-        var size = flexiblecontent.style.transform.replace(/[^0-9]/g,'');
+        var dot = flexiblecontent.style.transform.split(".");
+        var size;
+
+        if(dot[1]){
+            var hundred = dot[0].replace(/[^0-9]/g,'');
+            var ten = dot[1].replace(/[^0-9]/g,'');
+            var percentage = Number(hundred + '.' + ten);
+            size = percentage;
+        }else{
+            size = flexiblecontent.style.transform.replace(/[^0-9]/g,'');
+        }
         var totalnum = $(".pageforcopyratio").length;
         $(".pageforcopyratio").each(function (i, e) {
             // docheight = (e.style.height).replace(/[^0-9]/g,'');
