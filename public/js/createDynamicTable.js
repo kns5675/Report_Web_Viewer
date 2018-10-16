@@ -320,7 +320,7 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
                             valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '"><p id="value_P_tag' + tableValueLabelNum + '" style="margin: 0px;">' + table_reform + '</p></td>');
                             isData = true;
                         } else {
-                            valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '">' + table_reform + '</td>');
+                            valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '"><p id="value_P_tag' + tableValueLabelNum + '" style="margin: 0px;">' + table_reform + '</p></td>');
                             isData = true;
                         }
                     } else { // 최소행 개수
