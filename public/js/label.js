@@ -125,7 +125,7 @@ function Label(data){
     this.isSameWidth = data.IsSameWidth === undefined ? false : data.IsSameWidth._text; // 글자 크기 동일 여부
     this.editable = data.Editable === undefined ? undefined : data.Editable._text; // 편집 가능
 
-    this.backGroundColor = data.BackgGoundColor === undefined ? 'white' : data.BackgGoundColor._text; // 바탕색
+    this.backGroundColor = data.BackgGoundColor === undefined ? 'none' : data.BackgGoundColor._text; // 바탕색
     this.clipping = data.Clipping === undefined ? false : data.Clipping._text; // 클립핑 default : false
     // true일 때 -> 텍스트의 길이가 라벨의 너비보다 긴 경우 라벨의 너비에 맞춰 넘어가는 글자들은 제거하고 출력하는 옵션
     this.borderLineLocation = data.BorderLineLocation === undefined ? undefined : data.BorderLineLocation._text; // 테두리 라인 위치 (구현 X)
