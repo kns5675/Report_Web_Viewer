@@ -23,7 +23,8 @@ ul#header_ul{
     position : relative;
     margin : 0 auto;
     padding : 0;
-    width : fit-content;
+    width : 739.047px;
+    height: 50px;
 }
 
 ul#header_ul > li{
@@ -42,6 +43,7 @@ ul#header_ul > li.header_btn:hover{
     outline : 1px solid steelblue;
 }
 #page_nav{
+    top : 3px;
     font-size : 18px;
 }
 
@@ -49,6 +51,9 @@ ul#header_ul > li.header_btn:hover{
     font-size : 18px;
     width : 38px;
     height : 20px;
+}
+#txtZoomLi{
+    top : 5px;
 }
 
 

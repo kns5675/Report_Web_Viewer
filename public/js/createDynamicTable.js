@@ -258,6 +258,7 @@ function drawingDynamicTableTitleLabel(label, header_Name_Number, band) {
  만든이 : 구영준
  **************************************************************************************/
 function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId, numOfData, table, band) {
+    // var thCnt = tableId.find('th').length;
     var tempCurDataRow = curDatarow;
     var temp = curDatarowInDataBand;
     if (band.masterBandName) {
