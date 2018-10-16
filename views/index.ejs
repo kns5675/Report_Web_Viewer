@@ -63,6 +63,7 @@
             $('.BandPageFooter').css('position', 'absolute');
             // temp_to_reportTemplate();
             drawPageNumberInSystemLabel();
+            $('#load').hide();
 
         });
     </script>
@@ -70,9 +71,31 @@
         * {
             letter-spacing: -1.181pt;
         }
+        #load {
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            position: fixed;
+            display: block;
+            opacity: 0.8;
+            background: white;
+            z-index: 99;
+            text-align: center;
+        }
+
+        #load > img {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            z-index: 100;
+        }
     </style>
 </head>
 <body>
+<div id="load">
+    <img src="image/loading.gif" alt="loading">
+</div>
 <div id="header"></div>
 <div id="myModal" class="modal" style="/*pointer-events: auto;*/"></div><!-- 고급인쇄 모달창 -->
 <div id="loadingModal" class="modal" style="/*pointer-events: auto;*/"></div><!-- pdf,html등 내보내기에 필요한 로딩창 -->
