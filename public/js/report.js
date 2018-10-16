@@ -106,13 +106,6 @@ function makeReportTemplate(data, subReport) {
         }
         initializeVariable();
 
-        // var isDataBand = completeDataBand.find(function(completeData){
-        //     return dataBand.id = completeData;
-        // });
-        // if(isDataBand == undefined){
-        //     completeDataBand.push(dataBand.id);
-        // }
-        // });
     });
     // 서브리포트 밴드가 있을 경우 사이즈를 확인해서 너무 큰 경우 마지막 페이지에 추가됨.
     // if(subReport_yes){
@@ -206,14 +199,16 @@ function makeReport(report, arrRegion) {
                     reportPageCnt = 1;
                     completeDataBand.push(arrRegion[0].Id._text);
                 }
-            } else {
+            }else {
                 makeReport(report, arrRegion);
             }
         } else if (isFixedTable == true && curDatarowInDataBand < dataTable.DataSetName[ingDataTableName].length) {
             makeReport(report, arrRegion);
-        } else {
+        }  else {
             reportPageCnt = 1;
         }
+    } else if(remainFooterBand.length > 0){
+        makeReport(report, arrRegion);
     } else {
         reportPageCnt = 1;
     }
