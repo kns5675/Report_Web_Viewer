@@ -227,13 +227,26 @@ function drawingDynamicTableValueLabelWithOutDataTable(label, tableId, band) {
  From 구영준
  *******************************************************************/
 function drawingDynamicTableTitleLabel(label, header_Name_Number, band) {
-    var titleTrId = $('#dynamicTitleLabel' + dynamicTitleLabelNum);
-    titleTrId.addClass("dynamicTitleLabel");
-    titleTrId.append('<th id = "DynamicTableTitleLabel' + header_Name_Number + '_View_Page_Number' + thNum + '"></th>');
-    var thId = $('#DynamicTableTitleLabel' + header_Name_Number + "_View_Page_Number" + thNum);
-    thId.addClass("DynamicTableTitleLabel"+ header_Name_Number);
-    setCssInTable(label, thId);
-    // thId.append(label.text);
+
+    var titleTrId = document.getElementById('dynamicTitleLabel' + dynamicTitleLabelNum);
+    var th = document.createElement("th");
+    var thId = 'DynamicTableTitleLabel' + header_Name_Number + '_View_Page_Number' + thNum;
+    var className = "DynamicTableTitleLabel"+ header_Name_Number
+    var table_reform = table_format_check(data, thId, label.text, label);
+    var p = document.createElement("p");
+    var pId = 'title_P_tag' + thNum;
+    th.id = thId;
+    th.className = className;
+    th.className = 'Label DynamicTableHeader';
+    th.className = label._attributes;
+
+    titleTrId.appendChild(th)
+
+    p.id = pId;
+    p.innerHTML = table_reform;
+    th.appendChild(p);
+
+    setCssInTableDomObject(label, th);
     if (label.dataType === 'ParameterLabel') {
         paramTable.NewDataSet.Table1.forEach(function (paramData) {
             if (label.parameterName == paramData.Key._text) {
@@ -241,15 +254,11 @@ function drawingDynamicTableTitleLabel(label, header_Name_Number, band) {
             }
         });
     }
-    var table_reform = table_format_check(data, thId, label.text, label);
-    thId.append('<p id="title_P_tag' + thNum + '" style="margin: 0px;">' + table_reform + '</p>');
-    thId.addClass('Label DynamicTableHeader');
+
     if(label.editable !== "false"){
-        thId.addClass("Editable");
+        th.className = "Editable";
     }
-    thId.addClass(label._attributes);
     table_column_controller(thId, titleTrId, label);
-    // drd_javascript(label, thId, label.startBindScript);
 }
 
 
@@ -730,6 +739,8 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArrayWithRegion(label, dt
     }
 }
 
+
+
 /**************************************************************************************
  기능 : 동적테이블이에 Css  세팅
  만든이 : 구영준
@@ -767,3 +778,40 @@ function setCssInTable(label, tdId, text) {
         'text-align' : label.horizontalTextAlignment,
     });
 }
+
+/**************************************************************************************
+ 기능 : 동적테이블이에 Css  세팅
+ 만든이 : 구영준
+ **************************************************************************************/
+function setCssInTableDomObject(label, tdId, text) {
+    if (label.noBorder == 'true') {
+        tdId.style.border =  'none';
+    } else {
+        if (label.borderThickness !== undefined) {
+            var leftBorder = borderDottedLine(label.borderDottedLines.leftDashStyle);
+            var rightBorder = borderDottedLine(label.borderDottedLines.rightDashStyle);
+            var bottomBorder = borderDottedLine(label.borderDottedLines.bottomDashStyle);
+            var topBorder = borderDottedLine(label.borderDottedLines.topDashStyle);
+            tdId.style.borderLeft = label.borderThickness.left + 'px ' + leftBorder + ' ' + label.leftBorderColor;
+            tdId.style.borderRight = label.borderThickness.left + 'px ' + rightBorder + ' ' + label.leftBorderColor;
+            tdId.style.borderBottom = label.borderThickness.left + 'px ' + bottomBorder + ' ' + label.leftBorderColor;
+            tdId.style.borderTop = label.borderThickness.left + 'px ' + topBorder + ' ' + label.leftBorderColor;
+            tdId.style.borderSpacing = '0px';
+
+        } else {
+            tdId.style.border = '1px solid black';
+        }
+    }
+    tdId.style.backgroundColor = label.backGroundColor;
+    tdId.style.fontSize = label.fontSize;
+    tdId.style.fontFamily = label.fontFamily;
+    tdId.style.fontWeight = label.fontStyle;
+    tdId.style.color = label.textColor;
+    tdId.style.width = label.rectangle.width + 'px';
+    tdId.style.height = label.rectangle.height + 'px';
+    tdId.style.boxSizing = 'border-box';
+    tdId.style.padding = '0px 3px';
+    tdId.style.textAlign = label.horizontalTextAlignment;
+
+}
+
