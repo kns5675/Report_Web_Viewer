@@ -16,7 +16,16 @@ function beginLoading(imageName) {
  기능 : 이미지 내보내기, PDF내보내기, HTML내보내기 시 필요한 로딩화면 없애기
  작성자 : 하지연
  ******************************************************************/
-function endingLoading(){
+function endingLoading(size){
+    var flexiblecontent = document.getElementById("temp_reportTemplate");
+
+    $(flexiblecontent).css('-webkit-transform','scale(' + (size) + ')');
+    $(flexiblecontent).css('-webkit-transform-origin','0 0');
+    $(flexiblecontent).css('-moz-transform','scale(' + (size) + ')');
+    $(flexiblecontent).css('-moz-transform-origin','0 0');
+    $(flexiblecontent).css('-o-transform','scale(' + (size) + ')');
+    $(flexiblecontent).css('-o-transform-origin','0 0');
+
     $("#loadingModal").css("display","none");
 }
 /******************************************************************
@@ -27,10 +36,10 @@ async function makePdf() {
     return new Promise(function(resolve){
         var docwidth1 = Number(($("#page1").css("width")).replace(/[^0-9]/g, ''));
         var docheight1 = Number(($("#page1").css("height")).replace(/[^0-9]/g, ''));
-        docwidth1 = ((docwidth1 / 96) * 25.4).toFixed(1);
+        /*docwidth1 = ((docwidth1 / 96) * 25.4).toFixed(1);
         docheight1 = ((docheight1 / 96) * 0.254).toFixed(1);
         docwidth1 = Math.floor(Number(docwidth1)) - 1;
-        docheight1 = Math.floor(Number(docheight1)) - 1;
+        docheight1 = Math.floor(Number(docheight1)) - 1;*/
         var data=100;
         //Dr Viewer의 고급인쇄에서 용지방향을 바꿨을 경우 pdf orientation값 변경 처리
         var pageOrientation;
@@ -67,22 +76,37 @@ function createPdf(pageOrientation,docwidth1,docheight1){
     return new Promise(function(resolve){
         doc = new jsPDF(pageOrientation,'mm',[docheight1,docwidth1]);
         var area;
+        var flexiblecontent = document.getElementById("temp_reportTemplate");
+        var size = flexiblecontent.style.transform.replace(/[^0-9]/g,'');
         var totalnum = $(".pageforcopyratio").length;
         $(".pageforcopyratio").each(function (i, e) {
-            docheight = (e.style.height).replace(/[^0-9]/g,'');
-            docheight = (((Number(docheight))/96)*2.54).toFixed(1);
-            docheight = Math.floor(Number(docheight))-1;
-
-            docwidth = (e.style.width).replace(/[^0-9]/g,'');
-            docwidth = (((Number(docwidth))/96)*25.4).toFixed(1);
-            docwidth = Math.floor(Number(docwidth))-1;
+            // docheight = (e.style.height).replace(/[^0-9]/g,'');
+            // docheight = (((Number(docheight))/96)*2.54).toFixed(1);
+            // docheight = Math.floor(Number(docheight))-1;
+            //
+            // docwidth = (e.style.width).replace(/[^0-9]/g,'');
+            // docwidth = (((Number(docwidth))/96)*25.4).toFixed(1);
+            // docwidth = Math.floor(Number(docwidth))-1;
 
             var pageForCopyRatioNum = e.id.replace(/[^0-9]/g,'');
+            var returnSize = size;
+
+            if(size !== 1){
+                size =1;
+                $(flexiblecontent).css('-webkit-transform','scale(' + (size) + ')');
+                $(flexiblecontent).css('-webkit-transform-origin','0 0');
+                $(flexiblecontent).css('-moz-transform','scale(' + (size) + ')');
+                $(flexiblecontent).css('-moz-transform-origin','0 0');
+                $(flexiblecontent).css('-o-transform','scale(' + (size) + ')');
+                $(flexiblecontent).css('-o-transform-origin','0 0');
+                size = returnSize;
+            }
+
             html2canvas(document.querySelector("#pageForCopyRatio"+pageForCopyRatioNum)).then(canvas => {
                 var img = canvas.toDataURL("image/png");
                 doc.addPage().addImage(img,'PNG',0,0,docwidth1,docheight1);
                 if(i+1 ==totalnum){
-                    area = [pageOrientation, docwidth1, docheight1];
+                    area = [pageOrientation, docwidth1, docheight1,size];
                     resolve(area);
                 }
             });
@@ -177,6 +201,8 @@ function zoomIn(){
 
         try {
             var flexiblecontent = document.getElementById("temp_reportTemplate");
+            // var flexiblecontent = document.getElementById("reportTemplate");
+
             $("#txtZoom").val(size);
             if (jQuery.browser.msie) {
                 flexiblecontent.style.zoom = size;
@@ -449,30 +475,21 @@ function saveImages(typeofimages, currentindex){
 }
 
 function saveSaveSave(canvas, typeofimages){
-    //console.log("savesavesave들어옴");
-    //console.log("typeofimages : " + typeofimages);
 
     if(typeofimages == 'png'){
-        //console.log("png임");
         return Canvas2Image.saveAsPNG(canvas);
     }else{
-        //console.log("jpeg임");
         return Canvas2Image.saveAsJPEG(canvas);
     }
 }
 function saveSaveSave1(canvas, typeofimages, enumber){
-    //console.log("savesavesave들어옴 enumber는 : " + enumber );
-    //console.log("typeofimages : " + typeofimages);
 
     if(typeofimages == 'png'){
-        //console.log("png임");
         return Canvas2Image.saveAsPNG(canvas);
     } else {
-        //console.log("jpeg임");
         return Canvas2Image.saveAsJPEG(canvas);
     }
 }
-
 jQuery.browser = {}; //jQuery.browser.msie 사용 위함.
 (function () {
     jQuery.browser.msie = false;

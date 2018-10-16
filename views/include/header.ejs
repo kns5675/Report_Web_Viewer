@@ -37,15 +37,16 @@
             $("div.room").mouseleave(function(){
                 $(this).css("background-color","white");  //지연 - 여러페이지보기 front개발중 개발 보류
             });
-            $("#saveAsPdf").on("click", function(){
+            $("#saveAsPdf").on("click", function(){ //지연 - pdf내보내기
                 var imageName = "PDF";
                 beginLoading(imageName);
                 $("#loadingModal").css("display","block");
-                makePdf().then(function(area){
+
+                makePdf().then(function(area){//makePdf()실행 이후 실행되는 function = then이하
                     beforeSaving(area[0], area[1], area[2]).then(function(area){
-                        createPdf(area[0], area[1], area[2]).then(function(){
+                        createPdf(area[0], area[1], area[2]).then(function(area){
                             saving();
-                            endingLoading();
+                            endingLoading(area[3]);
                           }
                         );
                     });
@@ -179,7 +180,7 @@
         file_save();
         file_open();
         header_event_setting();
-        jiyeons();
+        header_event_setting2();
         $("#h1 > .test").val();
         $('#header_ul > li').css('display', 'inline-block');
     });
