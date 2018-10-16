@@ -75,7 +75,7 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData, band, dt) {
                 'position' : 'absolute',
                 'width': '100px',
                 'height': '35px',
-                'z-index' : '999',
+                'z-index' : '2',
                 'left' : table.rectangle.width/2 - 50 + 'px',
                 'top' : $('#dynamicTable' + dynamicTableNum).height() + 'px',
             });
@@ -84,7 +84,7 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData, band, dt) {
                 'width': '100px',
                 'height': '35px',
                 'position' : 'absolute',
-                'z-index' : '999',
+                'z-index' : '2',
                 'border' : '1px solid',
                 'background-color' : 'white',
                 'text-align' : 'center',
@@ -231,7 +231,7 @@ function drawingDynamicTableTitleLabel(label, header_Name_Number, band) {
     titleTrId.addClass("dynamicTitleLabel");
     titleTrId.append('<th id = "DynamicTableTitleLabel' + header_Name_Number + '_View_Page_Number' + thNum + '"></th>');
     var thId = $('#DynamicTableTitleLabel' + header_Name_Number + "_View_Page_Number" + thNum);
-    thId.addClass("DynamicTableTitleLabel"+header_Name_Number);
+    thId.addClass("DynamicTableTitleLabel"+ header_Name_Number);
     setCssInTable(label, thId);
     // thId.append(label.text);
     if (label.dataType === 'ParameterLabel') {
@@ -241,7 +241,8 @@ function drawingDynamicTableTitleLabel(label, header_Name_Number, band) {
             }
         });
     }
-    thId.append('<p id="title_P_tag' + thNum + '" style="margin: 0px;">' + label.text + '</p>');
+    var table_reform = table_format_check(data, thId, label.text, label);
+    thId.append('<p id="title_P_tag' + thNum + '" style="margin: 0px;">' + table_reform + '</p>');
     thId.addClass('Label DynamicTableHeader');
     if(label.editable !== "false"){
         thId.addClass("Editable");
@@ -289,7 +290,8 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
             var tdId = 'tableValueLabelNum' + tableValueLabelNum++;
             var key = label.parameterName;
             if (!minimumRow) {  //td의 label 값을 p태그에 묶음.
-                valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '"><p id="value_P_tag' + thNum + '" style="margin: 0px;">' + label.text + '</p></td>');
+                var table_reform = table_format_check(data, valueTrId, label.text, label);
+                valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '"><p id="value_P_tag' + thNum + '" style="margin: 0px;">' + table_reform + '</p></td>');
             } else { // 최소행 개수
                 valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '"></td>');
             }
@@ -412,7 +414,8 @@ function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, nu
                 var tdId = 'tableValueLabelNum' + tableValueLabelNum++;
                 var key = label.parameterName;
                 if (!minimumRow) {
-                    valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '"><p id="value_P_tag' + thNum + '" style="margin: 0px;">' + label.text + '</p></td>');
+                    var table_reform = table_format_check(data, valueTrId, label.text, label);
+                    valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '"><p id="value_P_tag' + thNum + '" style="margin: 0px;">' + table_reform + '</p></td>');
                 } else { // 최소행 개수
                     valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '"></td>');
                     valueTrId.addClass('minRow');
@@ -423,8 +426,9 @@ function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, nu
             case 'NormalLabel':
                 var tdId = 'tableValueLabelNum' + tableValueLabelNum++;
                 var labelText = label.text == undefined ? '' : label.text;
+                var table_reform = table_format_check(data, valueTrId, labelText, label);
                 valueTrId.append(
-                    '<td id = "' + tdId + '" class="' + label.fieldName + ' Label ' + label._attributes + ' ' + label.dataType + '">' + labelText + '</td>'
+                    '<td id = "' + tdId + '" class="' + label.fieldName + ' Label ' + label._attributes + ' ' + label.dataType + '">' + table_reform + '</td>'
                 );
                 tdId = $('#' + tdId);
                 setCssInTable(label, tdId);
@@ -759,6 +763,7 @@ function setCssInTable(label, tdId, text) {
         'width': label.rectangle.width + 'px',
         'height': label.rectangle.height + 'px',
         'box-sizing' : 'border-box',
-        'padding' :'0px',
+        'padding' :'0px 3px',
+        'text-align' : label.horizontalTextAlignment,
     });
 }
