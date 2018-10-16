@@ -540,19 +540,18 @@ function band_dbclick_event(data) {
                                 text_area.value = this_text;
                                 text_area.style.width = current_width;
                                 text_area.style.height = current_height;
-                                text_area.zIndex = 999;
-                                border_Width = this.style.borderWidth;
-                                border_Color = this.style.borderColor;
-                                border_Style = this.style.borderStyle;
-
-                                this.style.borderWidth = "3px";
-                                this.style.borderColor = "blue";
-                                this.style.borderStyle = "dotted solid";
+                                text_area.style.left = "0px";
+                                text_area.style.top = "0px";
+                                text_area.style.position = "absolute";
 
                                 document.getElementById(current).appendChild(text_div);
                                 document.getElementById(text_div.id).appendChild(text_area);
 
                                 document.getElementById(text_area.id).focus();
+
+                                $("#"+text_area.id).on("blur", function () {
+                                    $("#text_div").remove();
+                                });
                             }
                         }
                     }
@@ -571,18 +570,12 @@ function band_dbclick_event(data) {
                                 label_data_update(null, editable);
                                 $("#" + this_id[i].id)[0].innerHTML = text_convert;
                                 $("#text_div").remove();
-                                this.style.borderWidth = border_Width;
-                                this.style.borderColor = border_Color;
-                                this.style.borderStyle = border_Style;
                             }
                         }
 
                     }
                 } else if (key.keyCode === 27) { //esc 처리
                     $("#text_div").remove();
-                    this.style.borderWidth = border_Width;
-                    this.style.borderColor = border_Color;
-                    this.style.borderStyle = border_Style;
                 }
             }
         });
@@ -610,20 +603,14 @@ function band_dbclick_event(data) {
                             text_area.style.top = "0px";
                             text_area.style.position = "absolute";
                         }
-                        text_area.zIndex = 1000;
-                        border_Width = this.style.borderWidth;
-                        border_Color = this.style.borderColor;
-                        border_Style = this.style.borderStyle;
-
-
-                        this.style.borderWidth = "3px";
-                        this.style.borderColor = "blue";
-                        this.style.borderStyle = "dotted solid";
-
                         document.getElementById(current).appendChild(text_div);
                         document.getElementById(text_div.id).appendChild(text_area);
 
                         document.getElementById(text_area.id).focus();
+
+                        $("#"+text_area.id).on("blur", function () {
+                            $("#text_div").remove();
+                        });
                     }
                 }
             },
@@ -643,15 +630,9 @@ function band_dbclick_event(data) {
                             }
                         }
                         $("#text_div").remove();
-                        this.style.borderWidth = border_Width;
-                        this.style.borderColor = border_Color;
-                        this.style.borderStyle = border_Style;
                     }
                 } else if (key.keyCode === 27) {
                     $("#text_div").remove();
-                    this.style.borderWidth = border_Width;
-                    this.style.borderColor = border_Color;
-                    this.style.borderStyle = border_Style;
                 } else if(key.keyCode === 16){ //shift키 누르고 있을 때 column의 width값이 바뀌면 해당 column만 사이즈 조정 되는 것처럼 보이도록.
                 }
             },
