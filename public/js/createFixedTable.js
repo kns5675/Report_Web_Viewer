@@ -529,6 +529,18 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
 
     function settingHorizontalTextAlignment(HTextAlignment) {
         if (HTextAlignment !== undefined) {
+            var pWidth = (ThisFixedTableDataP.css('width')).split('px')[0];
+            var dataWidth = (ThisFixedTableData.css('width')).split('px')[0];
+            var subtraction =dataWidth-pWidth;
+            if(HTextAlignment=='Right'){
+                if(subtraction > 7){
+                ThisFixedTableDataP.css('margin-right','7px');}
+            }else if(HTextAlignment=='Left'){
+               if(subtraction > 7){
+                   ThisFixedTableDataP.css('margin-left','7px');
+               }
+            }else if(HTextAlignment=='Center'){
+            }
             ThisFixedTableData.css("text-align", HTextAlignment);
         }
     }
