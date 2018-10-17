@@ -221,6 +221,18 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
                     setWidthHeightInBand(div_id, band);
 
                     break;
+                case 'BandDataFooter' :
+                    avaHeight = getAvaHeight(div_id, reportHeight);
+                    if (avaHeight < Number(band.rectangle.height)) {
+                        band.parentBand = parentBand;
+                        remainFooterBand.push(band);
+                        $('#' + div_id).remove();
+                        return false;
+                    }
+                    inVisible(div_id, band);
+                    setWidthHeightInBand(div_id, band);
+
+                    break;
                 case 'BandSubReport' :
                     setWidthHeightInBand(div_id, band);
                     $('#' + div_id).css({
@@ -369,7 +381,6 @@ function drawBandData(groupFieldArray, band, layerName, reportHeight, parentBand
 
             avaHeight = getAvaHeight(div_id, reportHeight);
             numofData = getNumOfDataInOnePageNonObject(band, avaHeight, dt);
-
             if (Array.isArray(band.controlList.anyType)) {
                 band.controlList.anyType.forEach(function (controlList) {
                     if (controlList._attributes["xsi:type"] == "ControlDynamicTable") {
@@ -396,7 +407,7 @@ function drawBandData(groupFieldArray, band, layerName, reportHeight, parentBand
                 }
                 if (dynamicTable.MinimumRowCount !== undefined) { // 최소 행 개수
                     var minimumRowCount = Number(dynamicTable.MinimumRowCount._text);
-                    if ((dt.length - curDatarowInDataBand) < minimumRowCount /*&& minimumRowCount != 1*/) {
+                    if ((dt.length - curDatarowInDataBand) < minimumRowCount && minimumRowCount != 1) {
                         // numofData = minimumRowCount+1;
                         isMinimumRowCount = false;
                     }

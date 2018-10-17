@@ -118,7 +118,7 @@ function getBandDataHeight(band, dynamicTableHeight) {
     // allLabelBorderThickness = valueBorderBottomThickness * numOfData + titleBorderBottomThickness + titleBorderTopThickness;
     //ToDo 테이블 두께에 따라 1px 정도씩 오차가 생김
     if (isDynamicTable) {
-        return tableSpacing + Number(dynamicTableHeight[0]) + 1;
+        return tableSpacing + Number(dynamicTableHeight[0]) + 2;
     } else {
         return band.rectangle.height;
     }
@@ -271,7 +271,6 @@ function getNumOfDataInOnePage(tableLabel, divId) {
     }
     var firstLine = tableLabel[0].rectangle.height;
     var dataLine = Number(tableLabel[tableLabel.length - 1].rectangle.height);
-
     return Math.floor((bandDataHeight - firstLine) / dataLine);
 }
 
@@ -326,9 +325,9 @@ function getNumOfDataInOnePageNonObject(band, avaHeight, dt) {
         }
     });
 
-    var numofData = Math.ceil((avaHeight - titleHeight - tableSpacing) / valueHeight);
+    var numofData = Math.floor((avaHeight - titleHeight - tableSpacing) / valueHeight);
 
-    if (numofData > dtLength || dynamicTable.IsForceOverRow._text == 'false') {
+    if (numofData > dtLength || (dynamicTable.IsForceOverRow._text == 'false' && dynamicTable.fixRowCount > 0)) {
         return dtLength;
     } else {
         return numofData;

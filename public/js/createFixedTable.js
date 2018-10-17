@@ -277,7 +277,7 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                                     }
                                                 }
                                             } else {
-                                                console.log("그룹풋터밴드에 해당하는 총계나 그런애들에 대한 자바스크립트..? 처리가 필요함");
+                                                // console.log("그룹풋터밴드에 해당하는 총계나 그런애들에 대한 자바스크립트..? 처리가 필요함");
                                             }
                                         }
                                         if (typeof showDataLabel === 'undefined') {
