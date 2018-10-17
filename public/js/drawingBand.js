@@ -114,7 +114,7 @@ function drawBand(bands, layerName, reportHeight, parentBand) {
             }
             var div_id = 'band' + (bandNum++);
 
-            $('#' + layerName).append("<div id='" + div_id + "' class='Band " + band.attributes["xsi:type"] + "'>" + band.name + "</div>");
+            $('#' + layerName).append("<div id='" + div_id + "' class='Band " + band.attributes["xsi:type"] + "'></div>");
             if (isRegion) {
                 $('#' + div_id).addClass('regionBand');
             }

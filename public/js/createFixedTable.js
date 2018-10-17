@@ -563,7 +563,6 @@ function drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, d
     }
     var div = $('#' + divId);//divId = 밴드
     div.css('position', 'relative');
-    div.css('background-color', 'lightyellow');
 
     div.append('<div id = "Table' + tableNum + '"></div>');//무의미한 테이블 div
     var divIdTable = $('#Table' + tableNum);
@@ -839,7 +838,7 @@ function drawingFixedTableInDataBand(data, controlFixedTable, fixTableLabelList,
     }
     var fixedTableDiv = $('#' + fixedTableDivId);// 밴드
     fixedTableDiv.css('position', 'relative');
-    fixedTableDiv.css('background-color', 'lightgreen');
+    // fixedTableDiv.css('background-color', 'lightgreen');
 
     fixedTableDiv.append('<div id = "Table' + tableNum + '"></div>');//무의미한 테이블 div
     var divIdTable = $('#Table' + tableNum);
