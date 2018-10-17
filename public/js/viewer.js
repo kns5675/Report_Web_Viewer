@@ -526,6 +526,7 @@ function band_dbclick_event(data) {
                 for(var i=0; i<this_id.length; i++){
                     if(this_id[i].id){
                         this_text = $("#" + this_id[i].id)[0].innerText;
+                        this.style.zIndex = 1000;
                         var current = this.id;
                         var current_width = this.style.width;
                         var current_height = this.style.height;
@@ -534,7 +535,8 @@ function band_dbclick_event(data) {
                             if ($("#text_area")[0] === undefined) {
                                 var text_div = document.createElement("div");
                                 text_div.id = "text_div";
-
+                                console.log("test");
+                                text_div.zIndex = 1010;
                                 var text_area = document.createElement('textarea');
                                 text_area.id = "text_area";
                                 text_area.value = this_text;
@@ -549,9 +551,9 @@ function band_dbclick_event(data) {
 
                                 document.getElementById(text_area.id).focus();
 
-                                $("#"+text_area.id).on("blur", function () {
-                                    $("#text_div").remove();
-                                });
+                                // $("#"+text_area.id).on("blur", function () {
+                                //     $("#text_div").remove();
+                                // });
                             }
                         }
                     }
@@ -569,6 +571,7 @@ function band_dbclick_event(data) {
                                 editable.push(text_convert, this_id[i].real_id);
                                 label_data_update(null, editable);
                                 $("#" + this_id[i].id)[0].innerHTML = text_convert;
+                                $("#" + this_id[i].id)[0].style.zIndex = 999;
                                 $("#text_div").remove();
                             }
                         }
@@ -581,6 +584,7 @@ function band_dbclick_event(data) {
         });
         $(".DynamicTableHeader").on({
             "dblclick": function () {
+                this.style.zIndex = 1000;
                 var current = this.id;
                 var current_width = this.style.width;
                 var current_height = this.style.height;
@@ -592,7 +596,9 @@ function band_dbclick_event(data) {
                     if ($("#text_area")[0] === undefined) {
                         var text_div = document.createElement("div");
                         text_div.id = "text_div";
-
+                        if(fixedTableYN === ""){
+                            fixedTableYN = true;
+                        }
                         var text_area = document.createElement('textarea');
                         text_area.id = "text_area";
                         text_area.value = this_text;
@@ -625,6 +631,7 @@ function band_dbclick_event(data) {
                         for(var i=0; i< id.children.length; i++){
                             if(id.children[i].tagName === "P"){
                                 id.children[i].innerText = insert_text;
+                                id.children[i].style.zIndex = 999;
                                 editable.push(insert_text, id.real_id);
                                 label_data_update(null, editable);
                             }

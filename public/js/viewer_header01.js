@@ -27,19 +27,24 @@ function file_download_data_get() {
  ******************************************************************/
 function file_save() {
     var modalLayer = $("#file_download_modalLayer");
+    var file_download_Modal = $("#file_download_Modal");
     $("#saving").on("click", function () {
         modalLayer.fadeIn("slow");
+        file_download_Modal.css("display","block");
     });
     $("#file_download_button").on("click", function () {
         var test = $("#file_name")[0].value;
         //console.log("test: ",test);
         modalLayer.fadeOut("slow");
+        file_download_Modal.css("display","none");
     });
     $("#file_download_cancel").on("click", function () {
         modalLayer.fadeOut("slow");
+        file_download_Modal.css("display","none");
     });
     $(".download_cancel").on("click", function () {
         modalLayer.fadeOut("slow");
+        file_download_Modal.css("display","none");
     });
 }
 function saving_data_binding(data){
@@ -52,21 +57,26 @@ function saving_data_binding(data){
 function file_open() {
 
     var modalLayer = $("#filemodalLayer");
+    var file_Modal = $("#file_Modal");
     $("#file_opener").on("click", function () {
       //  console.log("window : ",window.reportTemplate);
-        $("#filemodalLayer").fadeIn("slow");
+        file_Modal.css("display", "block");
+        modalLayer.fadeIn("slow");
     });
 
     $("#file_upload_button").on("click", function () {
         modalLayer.fadeOut("slow");
+        file_Modal.css("display", "none");
     });
 
     $("#file_upload_cancel").on("click", function () {
         modalLayer.fadeOut("slow");
+        file_Modal.css("display", "none");
     });
 
     $(".upload_cancel").click(function(){
         modalLayer.fadeOut("slow");
+        file_Modal.css("display", "none");
     });
 }
 
@@ -76,14 +86,10 @@ function file_open_submit(file, db, param) {
     var param_ckeck_xml = param[0].value.match(/(.xml)$/);
     if(file_ckeck_xml && db_ckeck_xml && param_ckeck_xml){ //입력 파일이 .xml 파일일 때
         alert("입력한 파일을 기준으로 새로 그립니다.");
-        // console.log("file_name : ",file[0].value);
-        // console.log("db : ",db[0].value);
-        // console.log("param : ",param[0].value);
     }else{
         alert("xml 파일만 입력이 가능합니다.");
         return null;
     }
-    // alert(file_name);
 }
 
 function file_realURL(input) {
@@ -204,6 +210,8 @@ function PageValue() {
  만든이 : hagdung-i
  ******************************************************************/
 function image_upload() {
+    var Image_modal = $("#Image_Modal");
+    var image_add_butten = $("#image_add_butten");
     var modalLayer = $("#modalLayer");
     var modalCont = $(".modalContent");
     var marginLeft = modalCont.outerWidth()/2;
@@ -214,7 +222,9 @@ function image_upload() {
      ******************************************************************/
     $("#image_upload_button").on("click" ,function () {
         modalLayer.fadeIn("slow");
-        modalCont.css({"margin-top" : -marginTop, "margin-left" : -marginLeft});
+        Image_modal.css('display','block');
+
+        image_add_butten.css({"margin-top" : -marginTop, "margin-left" : -marginLeft});
         $(this).blur();
         return false;
     });
@@ -224,6 +234,7 @@ function image_upload() {
      ******************************************************************/
     $("#upload_button").click(function () {
         modalLayer.fadeOut("slow");
+        Image_modal.css('display','none');
     });
     /******************************************************************
      기능 : 이미지 추가 모달창의 취소 버튼
@@ -231,6 +242,7 @@ function image_upload() {
      ******************************************************************/
     $(".upload_cancel").click(function(){
         modalLayer.fadeOut("slow");
+        Image_modal.css('display','none');
         $("#"+imagedivid).remove();
     });
 }
@@ -345,8 +357,10 @@ async function tag_Making(scope, imgae_src, imgnum) {
  만든이 : hagdung-i
  ******************************************************************/
 function image_moal_fadeout() {
+    var Image_modal = $("#Image_Modal2");
     var modalLayer = $("#image_dialog");
     modalLayer.fadeOut("slow");
+    Image_modal.css('display','none');
 }
 /******************************************************************
  기능 : 이미지 앞으로/뒤로 기능(영역 변경이 아닌 이미지간의 순서만 변경).
@@ -418,6 +432,7 @@ async function image_setting(){
         var styles = $("#image_button"+id);
         styles[0].style.visibility = "hidden";
     });
+    var Image_modal = $("#Image_Modal2");
     var modalLayer = $("#image_dialog");
     var dialog = $("#dialog");
     var marginLeft = dialog.outerWidth()/2;
@@ -429,6 +444,7 @@ async function image_setting(){
     $(".setting_button").on("click", function () {
         modalLayer.fadeIn("slow");
         CImageNum = this.id.replace(/[^0-9]/g,'');
+        Image_modal.css('display','block');
         dialog.css({"margin-top" : -marginTop, "margin-left" : -marginLeft});
         $("#dialog_div"+CImageNum).css({"visibility": "visible"});
         $("#image_update_cancel"+CImageNum).css({"visibility": "visible"});
