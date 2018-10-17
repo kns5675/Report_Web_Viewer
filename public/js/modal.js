@@ -311,13 +311,37 @@ function extra_tail_using_check() {
 function paperDirection() {
     var temp;
     var temp2;
+    var CandR = $("#direction_vertical")[0].checked; //세로
+    console.log("CandR : ",CandR);
+    var pageforcopyratio_page_portrait01;
+    var pageforcopyratio_page_portrait02;
+    var pageforcopyratio_page_landscape01;
+    var pageforcopyratio_page_landscape02;
+
     $(".pageforcopyratio").each(function (i, e) {
+        var page_portrait = e.className.toString().split("page-portrait");
+        var page_landscape = e.className.toString().split("page-landscape");
+        pageforcopyratio_page_portrait01 = e.className.toString().split("page-portrait")[0];
+        pageforcopyratio_page_portrait02 = e.className.toString().split("page-portrait")[1];
+        pageforcopyratio_page_landscape01 = e.className.toString().split("page-landscape")[0];
+        pageforcopyratio_page_landscape02 = e.className.toString().split("page-landscape")[1];
         var width = e.style.width.replace(/[^0-9.]/g, '');
         var height = e.style.height.replace(/[^0-9.]/g, '');
         temp = width + "px";
         temp2 = height + "px";
         e.style.width = temp2;
         e.style.height = temp;
+        if(!CandR){ //page-portrait 세로
+            if(page_portrait[1] !== "" && page_portrait[1]){
+                var class_arr = pageforcopyratio_page_portrait01 + "page-landscape" + pageforcopyratio_page_portrait02;
+                e.className = class_arr;
+            }
+        }else{ //page-landscape 가로
+            if(page_landscape[1] !== "" && page_landscape[1]){
+                var class_arr = pageforcopyratio_page_landscape01 + "page-portrait" + pageforcopyratio_page_landscape02;
+                e.className = class_arr;
+            }
+        }
     });
     $(".forcopyratio").each(function (i, e) {
         var temp = e.style.width;

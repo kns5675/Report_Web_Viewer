@@ -12,7 +12,7 @@ function Lock_check(data, Label_id, div) { //라벨 데이터, 드래그 리사�
                 Label_id.draggable({
                     containment: "#" + div[0].id,
                     zIndex: 999,
-                    drag: function( event, ui ) {
+                    drag: function (event, ui) {
                         data.rectangle.x = ui.position.top;
                         data.rectangle.y = ui.position.left;
                         label_data_update(data);
@@ -36,28 +36,29 @@ function Lock_check(data, Label_id, div) { //라벨 데이터, 드래그 리사�
         Label_id.addClass('nEdit');
     }
 }
+
 /******************************************************************
  기능 : 파일 내보내기 기능 구현을 위해 수정된 라벨의 데이터를 데이터 바인딩이 되지 않은 total_data로 묶어주는 함수.
-        리전을 제외한 부분 완료.
+ 리전을 제외한 부분 완료.
  Date : 2018-10-11
  만든이 : hagdung-i
  ******************************************************************/
 function label_data_update(data, editable) {
 
-    if(total_data.ReportTemplate.ReportList){ //리포트가 있나
+    if (total_data.ReportTemplate.ReportList) { //리포트가 있나
         var unbinding_total_report = total_data.ReportTemplate.ReportList.anyType;
-        if(unbinding_total_report[1]){ //리포트가 여러갠가
+        if (unbinding_total_report[1]) { //리포트가 여러갠가
             unbinding_total_report.forEach(function (Report, Index) {
-                if(Report.Layers.anyType[1]){ //디자인레이어가 있는가
-                    if(Report.Layers.anyType[1].Bands){ //밴드가 있는가
+                if (Report.Layers.anyType[1]) { //디자인레이어가 있는가
+                    if (Report.Layers.anyType[1].Bands) { //밴드가 있는가
                         total_band = Report.Layers.anyType[1].Bands.anyType;
                         unbinding(total_band, data, editable);
                     }
-                }else{ //디자인 레이어 없을 경우
+                } else { //디자인 레이어 없을 경우
 
                 }
             });
-        }else{ //리포트가 1개일 경우 (거래명세서)
+        } else { //리포트가 1개일 경우 (거래명세서)
             total_band = total_data.ReportTemplate.ReportList.anyType.Layers.anyType[1].Bands.anyType;
             unbinding(total_band, data, editable);
         }
@@ -67,18 +68,18 @@ function label_data_update(data, editable) {
 
 /******************************************************************
  기능 : 파일 내보내기 기능의 밴드 하위 역바인딩 로직
-        ChildFooterBands ,리전을 제외한 부분 완료.
+ ChildFooterBands ,리전을 제외한 부분 완료.
  Date : 2018-10-15
  만든이 : hagdung-i
  ******************************************************************/
 function unbinding(total_band, data, editable) {
-    if(total_band[1]){ //밴드가 복수 개의 경우
-        total_band.forEach(function (TB,Ti) { //밴드의 child들의 속성이 변경될때 역바인딩하는 로직
+    if (total_band[1]) { //밴드가 복수 개의 경우
+        total_band.forEach(function (TB, Ti) { //밴드의 child들의 속성이 변경될때 역바인딩하는 로직
             ChildHeaderBands_check(data, editable, TB, Ti);
             var controlList = TB.ControlList.anyType;
             ControlList_check(controlList, TB, editable, Ti);
         });
-    }else{ //밴드가 1개일 때
+    } else { //밴드가 1개일 때
         ChildHeaderBands_check(data, editable, total_band, 0);
         var controlList = total_band.ControlList.anyType;
         ControlList_check(controlList, total_band, editable, 0);
@@ -87,43 +88,45 @@ function unbinding(total_band, data, editable) {
 
 /******************************************************************
  기능 : 파일 내보내기 기능의 ControlList(Label) 하위 역바인딩 로직
-        ChildFooterBands ,리전을 제외한 부분 완료.
+ ChildFooterBands ,리전을 제외한 부분 완료.
  Date : 2018-10-15
  만든이 : hagdung-i
  ******************************************************************/
 function ControlList_check(controlList, TB, editable, Ti) {
-    if(controlList){//controlList가 있고 (라벨리스트)
-        if(controlList[1]){//controlList가 여러개일때
+    if (controlList) {//controlList가 있고 (라벨리스트)
+        if (controlList[1]) {//controlList가 여러개일때
             controlList.forEach(function (CL, Ci) {
-                if(CL.Labels){
+                if (CL.Labels) {
                     var labels = CL.Labels.TableLabel;
-                    if(labels){
+                    if (labels) {
                         labels.forEach(function (label, Li) {
-                            if(label.Id._text === editable[1]){
-                                label.Text._text = editable[0];
-                                controlList[Ci].Labels.TableLabel[Li].Text._text = label.Text._text;
-                                total_data.ReportTemplate.ReportList.anyType.Layers.anyType[1].Bands.anyType[Ti][Ci] = controlList;
+                            if(editable){
+                                if (label.Id._text === editable[1]) {
+                                    label.Text._text = editable[0];
+                                    controlList[Ci].Labels.TableLabel[Li].Text._text = label.Text._text;
+                                    total_data.ReportTemplate.ReportList.anyType.Layers.anyType[1].Bands.anyType[Ti][Ci] = controlList;
+                                }
                             }
                         });
                     }
                 }
             });
-        }else{ //controlList가 하나일때
-            if(TB.ControlList.anyType.Labels){
+        } else { //controlList가 하나일때
+            if (TB.ControlList.anyType.Labels) {
 
             }
 
-            if(controlList.Layers){
+            if (controlList.Layers) {
                 var Layers = controlList.Layers;
-                if(Layers){
-                    if(Layers.anyType[1]){
+                if (Layers) {
+                    if (Layers.anyType[1]) {
                         Layers.forEach(function (e, i) {
                             Layers[i];
                         });
-                    }else{
+                    } else {
                         var Bands = Layers.Bands;
-                        if(Bands){
-                            if(Bands.anyType[1]){
+                        if (Bands) {
+                            if (Bands.anyType[1]) {
 
                             }
                         }
@@ -141,16 +144,16 @@ function ControlList_check(controlList, TB, editable, Ti) {
  만든이 : hagdung-i
  ******************************************************************/
 function ChildHeaderBands_check(data, editable, TB, Ti) {
-    if(TB.ChildHeaderBands){
-        if(TB.ChildHeaderBands.anyType){ //차일드헤더밴드가 있을때
+    if (TB.ChildHeaderBands) {
+        if (TB.ChildHeaderBands.anyType) { //차일드헤더밴드가 있을때
             var Header_band = TB.ChildHeaderBands.anyType;
-            if(TB.ChildHeaderBands.anyType[1]){
+            if (TB.ChildHeaderBands.anyType[1]) {
                 Header_band.forEach(function (HB, Bi) {
-                    if(HB.ControlList){
-                        var header_label =  HB.ControlList.anyType;
+                    if (HB.ControlList) {
+                        var header_label = HB.ControlList.anyType;
                         header_label.forEach(function (HL, Li) {
-                            if(HL.Id){
-                                if(HL.Id._text === data.id){
+                            if (HL.Id) {
+                                if (HL.Id._text === data.id) {
                                     HL.Rectangle.Height._text = String(data.rectangle.height);
                                     HL.Rectangle.Width._text = String(data.rectangle.width);
                                     HL.Rectangle.X._text = String(data.rectangle.x);
@@ -164,40 +167,50 @@ function ChildHeaderBands_check(data, editable, TB, Ti) {
                         });
                     }
                 });
-            }else{
-                var header_label =  Header_band.ControlList.anyType;
-                if(header_label){
-                    if(header_label[1]){ //라벨이 복수개일때
+            } else {
+                var header_label = Header_band.ControlList.anyType;
+                if (header_label) {
+                    if (header_label[1]) { //라벨이 복수개일때
                         header_label.forEach(function (HL, Li) { //반복문
-                            if(data){
-                                if(HL.Id._text === data.id){
-                                    if(HL.Rectangle.Height){
+                            if (data) {
+                                if (HL.Id._text === data.id) {
+                                    if (HL.Rectangle.Height) {
                                         HL.Rectangle.Height._text = String(data.rectangle.height);
                                     }
-                                    if(HL.Rectangle.Width){
+                                    if (HL.Rectangle.Width) {
                                         HL.Rectangle.Width._text = String(data.rectangle.width);
                                     }
-                                    if(HL.Rectangle.X){
+                                    if (HL.Rectangle.X) {
                                         HL.Rectangle.X._text = String(data.rectangle.x);
                                     }
-                                    if(HL.Rectangle.Y){
+                                    if (HL.Rectangle.Y) {
                                         HL.Rectangle.Y._text = String(data.rectangle.y);
                                     }
                                     Header_band.ControlList.anyType[Li].Rectangle = HL.Rectangle;
                                     TB.ChildHeaderBands.anyType = Header_band;
-                                    total_data.ReportTemplate.ReportList.anyType.Layers.anyType[1].Bands.anyType[Ti] = TB;
+                                    if(total_data.ReportTemplate.ReportList.anyType.Layers){
+                                        total_data.ReportTemplate.ReportList.anyType.Layers.anyType[1].Bands.anyType[Ti] = TB;
+                                    }else{ //리전일 때
+                                        console.log("total_data.ReportTemplate.ReportList.anyType.Layers.anyType[1] : ",total_data.ReportTemplate.ReportList.anyType);
+                                        // total_data.ReportTemplate.ReportList.anyType[1]
+                                    }
                                 }
-                            }else{
-                                if(HL.Id._text === editable[1]){
+                            } else {
+                                if (HL.Id._text === editable[1]) {
                                     HL.Text._text = editable[0];
                                     //total_data 생성(파일 저장시)
                                     Header_band.ControlList.anyType[Li].Text._text = HL.Text._text;
                                     TB.ChildHeaderBands.anyType = Header_band;
-                                    total_data.ReportTemplate.ReportList.anyType.Layers.anyType[1].Bands.anyType[Ti] = TB;
+                                    if(total_data.ReportTemplate.ReportList.anyType.Layers){
+                                        total_data.ReportTemplate.ReportList.anyType.Layers.anyType[1].Bands.anyType[Ti] = TB;
+                                    }else{ //리전일 때
+                                        console.log("total_data.ReportTemplate.ReportList.anyType.Layers.anyType[1] : ",total_data.ReportTemplate.ReportList.anyType[1]);
+                                        // total_data.ReportTemplate.ReportList.anyType[1]
+                                    }
                                 }
                             }
                         });
-                    }else{//라벨이 단수개일때(fixedtable)
+                    } else {//라벨이 단수개일때(fixedtable)
                     }
                 }
             }
@@ -421,7 +434,7 @@ function table_format_check(data, Label_id, key, table) { //현재 key와 table�
             } else {
                 return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             }
-        } else if(!test && format){
+        } else if (!test && format) {
             var parts;
             //도트
             var dot = format.toString().split(".");
@@ -438,72 +451,71 @@ function table_format_check(data, Label_id, key, table) { //현재 key와 table�
             //주민번호
             var Social_Security_Number = format.toString().split("-");
 
-            if(key){
-                if(dot[1]){ //도트 있을 때
+            if (key) {
+                if (dot[1]) { //도트 있을 때
                     parts = key.toString().split(".");
                     return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
                 }
-                if(comma[1]){   //콤마 있을 때
+                if (comma[1]) {   //콤마 있을 때
                     parts = key.toString().split(",");
                     return parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                 }
 
-                if(year[1]){    //년도 있을 때
-                    if(month[1]){
-                        if(day[0]){
+                if (year[1]) {    //년도 있을 때
+                    if (month[1]) {
+                        if (day[0]) {
                             parts = key.toString().split("-");
-                            if(parts[1]){
-                                return parts[0]+"년"+parts[1]+"월"+parts[2]+"일";
-                            }else{
+                            if (parts[1]) {
+                                return parts[0] + "년" + parts[1] + "월" + parts[2] + "일";
+                            } else {
                                 parts = key.replace(/\B(?=(\d{4})+(?!\d))/g, "/");
                                 var parts2 = parts.split("/");
-                                if(parts2[1]){
+                                if (parts2[1]) {
                                     var parts3 = parts2[1].replace(/\B(?=(\d{2})+(?!\d))/g, "월");
-                                    var total_date = parts2[0]+"년"+parts3+"일";
+                                    var total_date = parts2[0] + "년" + parts3 + "일";
                                     return total_date;
                                 }
                             }
-                        }else if(day[1]){
+                        } else if (day[1]) {
 
                         }
                     }
                 }
 
-                if(Endate[1]){
-                    if(Endate[2]){ // yyyy/mm/dd 형태일 경우
+                if (Endate[1]) {
+                    if (Endate[2]) { // yyyy/mm/dd 형태일 경우
                         parts = key.replace(/\B(?=(\d{4})+(?!\d))/g, "/");
                         var parts2 = parts.split("/");
-                        if(parts2[1]){
+                        if (parts2[1]) {
                             var parts3 = parts2[1].replace(/\B(?=(\d{2})+(?!\d))/g, "/");
-                            var total_date = parts2[0]+"/"+parts3;
+                            var total_date = parts2[0] + "/" + parts3;
                             return total_date;
                         }
-                    }else{ //   yyyy/mm형태가 올 수 있음.
+                    } else { //   yyyy/mm형태가 올 수 있음.
                         parts = key.replace(/\B(?=(\d{4})+(?!\d))/g, "/");
                     }
                 }
 
-                if(Social_Security_Number[1] && !Social_Security_Number[2]){
-                    parts = key.substring(0,6);
-                    var parts2 = key.substring(6,14);
-                    var return_val = parts+"-"+parts2;
+                if (Social_Security_Number[1] && !Social_Security_Number[2]) {
+                    parts = key.substring(0, 6);
+                    var parts2 = key.substring(6, 14);
+                    var return_val = parts + "-" + parts2;
                     return return_val;
                     // return parts[0].replace(/\B(?=(\d{6})+(?!\d))/g, "-");
                 }
                 return key;
-            }else{//0일때
+            } else {//0일때
                 return key;
             }
         } else {
             return key;
         }
-    }else if(format){
+    } else if (format) {
         return key;
-    }else{
+    } else {
         return key;
     }
 }
-
 
 
 function shift_table_column_controller(resize_area, Unalterable_area, table_resize_area, table_Unalterable_area) {
@@ -527,7 +539,7 @@ function shift_table_column_controller(resize_area, Unalterable_area, table_resi
                 // data.rectangle.height = ui.size.height; // 예솔 추가
             }
         });
-        if(table_resize_area){
+        if (table_resize_area) {
             table_resize_area.addClass("resizable");
             // table_resize_area.resizable({
             //     containment: "#" + table_Unalterable_area[0].id,

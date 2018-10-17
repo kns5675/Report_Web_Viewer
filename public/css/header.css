@@ -98,7 +98,7 @@ div.room{
     background-color: #fefefe;
     margin: 150px auto 0px auto;
     width: 300px;
-    height: 150px;
+    height: 200px;
     border:2px solid #313e52;
     padding: 0px;
 }
@@ -107,8 +107,8 @@ div.room{
     overflow:hidden;
     background-color: #fefefe;
     margin: 0px auto;
-    width: 290px;
-    height: 173px;
+    width: 320px;
+    height: 215px;
     margin-top:150px;
     border:2px solid #313e52;
     padding: 0px;

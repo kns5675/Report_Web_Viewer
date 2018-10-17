@@ -62,6 +62,7 @@
             image_setting();
             $('.BandPageFooter').css('position', 'absolute');
             // temp_to_reportTemplate();
+
             drawPageNumberInSystemLabel();
             $('#load').hide();
 
@@ -71,7 +72,6 @@
         * {
             letter-spacing: -1.181pt;
         }
-
     </style>
 </head>
 <body>
@@ -95,15 +95,15 @@
                 <span>이미지 추가</span>
                 <span class="upload_cancel" style="cursor:pointer;float:right;margin-right:10px;">X</span>
             </div>
-            <div>
-                <span style="font-weight: bold; font-size: 12px; margin-top: 4px; margin-left: 3px;">추가할 이미지 선택</span>
+            <div style="margin-bottom: 5px; margin-top: 25px; margin-left: 37px;">
+                <span style="font-weight: bold; font-size: 12px; margin-top: 4px; margin-left: 10px;">추가할 이미지 선택</span>
             </div>
-            <div style="margin: 10px; margin-top: 0px; background-color: #f5f5f5; border: 1px solid gray; height: auto;">
+            <div style="margin-top: 0px; margin-left: 46px; margin-right: 46px; margin-bottom: 8px; background-color: #f5f5f5; border: 1px solid gray; height: auto;">
                 <div class="image_insert_area">
                     <input id="image_insert" type="file" multiple accept="image/*"><br/>
                 </div>
             </div>
-            <div class="image_insert_button_area" style="float: right; margin-right: 10px;">
+            <div class="image_insert_button_area" style="float: right; margin-right: 44px; margin-top: 9px;">
                 <button id="upload_button" type="submit" value="">확인</button>
                 <button id="upload_cancel" class="upload_cancel" type="button">취소</button>
             </div>
@@ -113,18 +113,18 @@
 <div id="Image_Modal2" style="pointer-events: auto;"><!--이미지 추가 상세 모달창-->
     <div id="image_dialog" class="modalLayer" title="이미지 속성">
         <div id="dialog" class="modal-content">
-            <div id="image_type_add_area" class="image_add_area">
-                <span>이미지 속성 변경</span>
+            <div id="image_type_add_area" class="image_add_area" style="height: 28px;">
+                <span style="margin-left: 10px;">이미지 속성 변경</span>
                 <span class="image_update_cancel" style="cursor:pointer;float:right;margin-right:10px;">X</span>
             </div>
-            <div>
-                <span style="font-weight: bold; font-size: 12px; margin-top: 4px; margin-left: 15px;">이미지 삭제</span>
-                <span style="font-weight: bold; font-size: 12px; margin-top: 4px; margin-left: 3px; margin-right: 125px; float: right">이미지 순서</span>
+            <div style="margin-top: 20px">
+                <span style="font-weight: bold; font-size: 12px; margin-top: 4px; margin-left: 37px;">이미지 삭제</span>
+                <span style="font-weight: bold; font-size: 12px; margin-top: 4px; margin-left: 3px; margin-right: 130px; float: right">이미지 순서</span>
             </div>
-            <div id="dialog_div" style="margin-left: 27px; margin-top: 0px; background-color: #f5f5f5; border: 1px solid gray; height: 35px; width: 60px; float: left;">
+            <div id="dialog_div" style="margin-left: 38px; margin-top: 0px; background-color: #f5f5f5; border: 1px solid gray; height: 35px; width: 60px; float: left;">
                 <input id="image_dialog_delete" class="image_dialog_delete" value="삭제" type="button" style="margin-top: 5px; margin-left: 10px;">
             </div>
-            <div id="dialog_div_order" style="margin-right: 27px; margin-top: 0px; background-color: #f5f5f5; border: 1px solid gray; height: 114px; width: 141px; float: right">
+            <div id="dialog_div_order" style="margin-right: 40px; margin-top: 0px; background-color: #f5f5f5; border: 1px solid gray; height: 114px; width: 141px; float: right">
                 <input id="limit_fore_dialog" class="limit_fore_dialog" value="맨 앞으로 보내기" type="button" style="margin-top: 8px; margin-left: 10px; width: 120px;">
                 <input id="limit_back_dialog" class="limit_back_dialog" value="맨 뒤로 보내기" type="button" style="margin-left: 10px; width: 120px;">
                 <input id="fore_dialog" class="fore_dialog" value="앞으로 보내기" type="button" style="margin-left: 10px; width: 120px;">
@@ -136,21 +136,21 @@
 <div id="file_Modal" style="pointer-events: auto;"><!--파일열기 모달창-->
     <div id="filemodalLayer" class="modalLayer">
         <div class="modalContent modal-content">
-            <div id="file_add_area" class="image_add_area">
-                <span>파일 추가</span>
+            <div id="file_add_area" class="image_add_area" style="height: 28px;">
+                <span style="margin-left: 10px;">파일 추가</span>
                 <span class="upload_cancel" style="cursor:pointer;float:right;margin-right:10px;">X</span>
             </div>
-            <div>
-                <span style="font-weight: bold; font-size: 12px; margin-top: 4px; margin-left: 3px;">XML 선택</span>
-            </div>
-            <form action="/" enctype="multipart/form-data" method="post">
+            <form action="/" enctype="multipart/form-data" method="post" style="margin-left: 32px; margin-right: 32px; margin-top: 17px;">
+                <div>
+                    <span style="font-weight: bold; font-size: 12px; margin-top: 4px; margin-left: 10px;">XML 선택</span>
+                </div>
                 <div style="margin: 10px; margin-top: 0px; background-color: #f5f5f5; border: 1px solid gray; height: auto;">
                     <div class="file_insert_area">
                         <input id="file_insert" name="send_file" type="file" accept="*/xml"><br/>
                     </div>
                 </div>
                 <div>
-                    <span style="font-weight: bold; font-size: 12px; margin-top: 4px; margin-left: 3px;">DB 선택</span>
+                    <span style="font-weight: bold; font-size: 12px; margin-top: 4px; margin-left: 10px;">DB 선택</span>
                 </div>
                 <div style="margin: 10px; margin-top: 0px; background-color: #f5f5f5; border: 1px solid gray; height: auto;">
                     <div class="file_insert_area">
@@ -158,7 +158,7 @@
                     </div>
                 </div>
                 <div>
-                    <span style="font-weight: bold; font-size: 12px; margin-top: 4px; margin-left: 3px;">PARAM 선택</span>
+                    <span style="font-weight: bold; font-size: 12px; margin-top: 4px; margin-left: 10px;">PARAM 선택</span>
                 </div>
                 <div style="margin: 10px; margin-top: 0px; background-color: #f5f5f5; border: 1px solid gray; height: auto;">
                     <div class="file_insert_area">
@@ -166,7 +166,7 @@
                         <input id="file_open_click" name="file_open_click" type="hidden" value="true">
                     </div>
                 </div>
-                <div class="file_insert_button_area" style="float: right; margin-right: 10px;">
+                <div class="file_insert_button_area" style="float: right; margin-right: 8px; margin-top: 8px;">
                     <button id="file_upload_button" type="submit" value="" onclick="file_open_submit($('#file_insert'), $('#db_insert'), $('#param_insert'))">확인</button>
                     <button id="file_upload_cancel" class="upload_cancel" type="button">취소</button>
                 </div>
@@ -175,25 +175,25 @@
     </div>
 </div>
 
-<div id="file_download_Modal" style="pointer-events: auto;"><!--파일저장 모달창-->
+<div id="file_download_Modal" class="modal" style="pointer-events: auto;"><!--파일저장 모달창-->
     <div id="file_download_modalLayer" class="modalLayer">
         <div class="modalContent modal-content">
-            <div class="image_add_area">
-                <span>파일 저장</span>
+            <div class="image_add_area" style="height: 28px;">
+                <span style="margin-left: 10px;">파일 저장</span>
                 <span class="download_cancel" style="cursor:pointer;float:right;margin-right:10px;">X</span>
             </div>
-            <div>
-                <span style="font-weight: bold; font-size: 12px; margin-top: 4px; margin-left: 3px;">파일명</span>
+            <div style="margin-top: 17px">
+                <span style="font-weight: bold; font-size: 12px; margin-top: 4px; margin-left: 32px;">파일명</span>
             </div>
-            <form action="/" enctype="multipart/form-data" method="post">
-                <div style="margin: 10px; margin-top: 0px; background-color: #f5f5f5; border: 1px solid gray; height: auto;">
+            <form action="/" enctype="multipart/form-data" method="post" style="margin-top: 5px;">
+                <div style="margin-top: 0px; margin-left: 30px; margin-bottom: 6px; margin-right: 30px; background-color: #f5f5f5; border: 1px solid gray; height: auto;">
                     <div class="file_insert_area">
-                        <input style="width: 221px; margin: 1px;" id="file_name" name="send_file" type="text"><br/>
+                        <input style="width: 221px; margin: 1px; margin-bottom: 3px;" id="file_name" name="send_file" type="text"><br/>
                         <input id="file_data" name="file_data" type="hidden">
                         <!--<a href="../uploads/TestSample.xml" id="file_hidden" title="Download" name="send_file" download="TestSample.xml">Download my Guitar book</a>-->
                     </div>
                 </div>
-                <div class="file_insert_button_area" style="float: right; margin-right: 10px;">
+                <div class="file_insert_button_area" style="float: right; margin-right: 30px;">
                     <button id="file_download_button" type="submit" value="" onclick="file_download_data_get()">확인</button>
                     <button id="file_download_cancel" class="upload_cancel" type="button">취소</button>
                 </div>

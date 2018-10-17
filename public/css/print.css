@@ -12,6 +12,16 @@
         margin: 0mm;
     }
 
+    div.page-portrait {
+        size: A4 portrait;
+        margin: 0mm;
+    }
+
+    div.page-landscape {
+        size: A4 landscape;
+        margin: 0mm;
+    }
+
     div.page.paperType-A4 {
         page-break-after: always;
         page: A4;
