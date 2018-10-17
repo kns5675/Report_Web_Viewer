@@ -350,12 +350,14 @@ function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTab
     var textSize = fromData.fontSize.split('pt')[0];
     var fontWeight = fromData.fontWeight === undefined ? 'normal' : fromData.fontWeight;
     var textWithoutSpaceLength = textWithoutSpace.length;
+    var dtBackgroundColor = fromData.backGroundColor === undefined ? 'none':fromData.backGroundColor;
 
     ThisFixedTableDataP.css({
         'top': 0,
         'left': 0
     });
     ThisFixedTableData.css({
+        'background-color': dtBackgroundColor,
         'position': 'absolute',
         'left': tdLeft + 'px',
         'top': tdTop + 'px',
