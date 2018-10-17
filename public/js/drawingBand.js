@@ -833,11 +833,31 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
                         }
                     }
                 }
+
+                if (isRegion) { // 리전일 때
+                    groupFieldArrayInRegion = groupFieldArrayTemp;
+                    groupFieldNumInRegion = groupFieldNumTemp;
+                    remainDataInRegion = remainDataTemp;
+                    groupDataRowInRegion = groupDataRowTemp;
+                    curDatarowInRegion = curDataRowTemp;
+                } else {
+                    groupFieldArray = groupFieldArrayTemp;
+                    groupFieldNum = groupFieldNumTemp;
+                    remainData = remainDataTemp;
+                    groupDataRow = groupDataRowTemp;
+                    curDatarowInDataBand = curDataRowTemp;
+                }
+
                 if (curDataRowTemp < dt.length) {
                     if (band.forceNewPage === 'true') { //페이지 넘기기
-
                     } else {
-                        if (getAvaHeight(div_id, reportHeight) - footer_height > Number(parentBand.childHeaderBands[0].rectangle.height)) {
+                        var bandHeight = 0;
+                        if(parentBand.fixPriorGroupHeader == true) {
+                            bandHeight = Number(parentBand.childHeaderBands[0].rectangle.height);
+                        }else{
+                            bandHeight = Number(parentBand.rectangle.height);
+                        }
+                        if (getAvaHeight(div_id, reportHeight) > bandHeight) {
                             parentBand = (function (arg) {
                                 var band = [];
                                 band.push(arg);
@@ -847,20 +867,6 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
                         }
                     }
                 }
-            }
-
-            if (isRegion) { // 리전일 때
-                groupFieldArrayInRegion = groupFieldArrayTemp;
-                groupFieldNumInRegion = groupFieldNumTemp;
-                remainDataInRegion = remainDataTemp;
-                groupDataRowInRegion = groupDataRowTemp;
-                curDatarowInRegion = curDataRowTemp;
-            } else {
-                groupFieldArray = groupFieldArrayTemp;
-                groupFieldNum = groupFieldNumTemp;
-                remainData = remainDataTemp;
-                groupDataRow = groupDataRowTemp;
-                curDatarowInDataBand = curDataRowTemp;
             }
             break;
     }
