@@ -78,7 +78,7 @@
 <div id="load">
     <img src="image/loading.gif" alt="loading">
 </div>
-<div id="header"></div>
+<div id="header" style="/*pointer-events: auto;*/"></div>
 <div id="myModal" class="modal" style="/*pointer-events: auto;*/"></div><!-- 고급인쇄 모달창 -->
 <div id="loadingModal" class="modal" style="/*pointer-events: auto;*/"></div><!-- pdf,html등 내보내기에 필요한 로딩창 -->
 
@@ -88,11 +88,11 @@
 <div id="temp_footer" class="temp_headerNfooter"></div>
 <div id="reportTemplate"></div>
 <div id="temp_reportTemplate"></div>
-<div id="Image_Modal" style="/*pointer-events: auto;*/"><!--이미지 추가 모달창-->
-    <div id="modalLayer" class="modalLayer">
-        <div class="modalContent modal-content">
-            <div id="image_add_area" class="image_add_area">
-                <span>이미지 추가</span>
+<div id="Image_Modal" class="modal" style="/*pointer-events: auto;*/"><!--이미지 추가 모달창-->
+    <div id="modalLayer" class="modalLayer modal">
+        <div id="image_add_butten" class="modalContent modal-content">
+            <div id="image_add_area" class="image_add_area" style="height: 28px;">
+                <span style="margin-left: 10px;">이미지 추가</span>
                 <span class="upload_cancel" style="cursor:pointer;float:right;margin-right:10px;">X</span>
             </div>
             <div style="margin-bottom: 5px; margin-top: 25px; margin-left: 37px;">
@@ -110,7 +110,7 @@
         </div>
     </div>
 </div>
-<div id="Image_Modal2" style="pointer-events: auto;"><!--이미지 추가 상세 모달창-->
+<div id="Image_Modal2" class="modal" style="/*pointer-events: auto;*/"><!--이미지 추가 상세 모달창-->
     <div id="image_dialog" class="modalLayer" title="이미지 속성">
         <div id="dialog" class="modal-content">
             <div id="image_type_add_area" class="image_add_area" style="height: 28px;">
@@ -133,7 +133,7 @@
         </div>
     </div>
 </div>
-<div id="file_Modal" style="pointer-events: auto;"><!--파일열기 모달창-->
+<div id="file_Modal" class="modal" style="/*pointer-events: auto;*/"><!--파일열기 모달창-->
     <div id="filemodalLayer" class="modalLayer">
         <div class="modalContent modal-content">
             <div id="file_add_area" class="image_add_area" style="height: 28px;">
@@ -175,7 +175,7 @@
     </div>
 </div>
 
-<div id="file_download_Modal" class="modal" style="pointer-events: auto;"><!--파일저장 모달창-->
+<div id="file_download_Modal" class="modal" style="/*pointer-events: auto;*/"><!--파일저장 모달창-->
     <div id="file_download_modalLayer" class="modalLayer">
         <div class="modalContent modal-content">
             <div class="image_add_area" style="height: 28px;">

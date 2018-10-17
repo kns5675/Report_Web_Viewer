@@ -499,7 +499,7 @@ function setPage(report, width, height) {
     var paperType = report.paperType;
 
     $('#report_wrap' + reportNum).append(
-        '<div id="pageForCopyRatio' + pageNum + '" class="pageforcopyratio paperType-' + paperType + '"></div>'
+        '<div id="pageForCopyRatio' + pageNum + '" class="pageforcopyratio paperType-' + paperType + ' page-portrait"></div>'
     );//수정 - 하지연
     $('#pageForCopyRatio' + pageNum).append(
         '<div id="page' + pageNum + '" class="visiblePage page paperType-' + paperType + '"></div>'
