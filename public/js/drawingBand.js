@@ -637,30 +637,51 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
                 groupDataRowTemp = groupDataRow;
                 curDataRowTemp = curDatarowInDataBand;
             }
-            if (groupFieldArrayTemp.length > 0 && band.childHeaderBands !== null) {
+            if (checkGroupHeader(band)) {
                 if (isDynamicTable == true && dt != undefined && numofData > 0) { //그룹일 경우
                     var dataCount = groupFieldArrayTemp[groupFieldNumTemp].length;
                     var groupRemainData = (dataCount - groupDataRowTemp);
-                    if (numofData - groupDataRowTemp >= groupRemainData) { // 마지막 페이지
-                        var minRowCnt = $('#' + layerName).find('.minRow').length;
-                        curDatarow += dataCount + minRowCnt;
-                        curDataRowTemp += groupFieldArrayTemp[groupFieldNumTemp].length - 1;
-                        remainDataTemp = false;
-                        ingDataTableName = band.dataTableName;
-                    } else { //마지막 페이지가 아닌 경우
-                        if (!dynamicTableIsForceOverRow){
+                    if (groupDataRowTemp >= numofData) {
+                        if (numofData >= groupRemainData) { // 마지막 페이지
+                            var minRowCnt = $('#' + layerName).find('.minRow').length;
+                            curDatarow += dataCount + minRowCnt;
+                            curDataRowTemp += groupFieldArrayTemp[groupFieldNumTemp].length - 1;
                             remainDataTemp = false;
-                        }else{
-                            remainDataTemp = true;
+                            ingDataTableName = band.dataTableName;
+                        } else { //마지막 페이지가 아닌 경우
+                            if (!dynamicTableIsForceOverRow) {
+                                remainDataTemp = false;
+                            } else {
+                                remainDataTemp = true;
+                            }
+                            if (numofData > groupDataRowTemp) {
+                                groupDataRowTemp += (numofData - groupDataRowTemp);
+                            } else {
+                                groupDataRowTemp += numofData - 1;
+                            }
+                            ingDataTableName = band.dataTableName;
                         }
-                        if (numofData > groupDataRowTemp) {
-                            groupDataRowTemp += (numofData - groupDataRowTemp);
-                        } else {
-                            groupDataRowTemp += numofData - 1;
+                    }else {
+                        if (numofData >= dataCount) { // 마지막 페이지
+                            var minRowCnt = $('#' + layerName).find('.minRow').length;
+                            curDatarow += dataCount + minRowCnt;
+                            curDataRowTemp += groupFieldArrayTemp[groupFieldNumTemp].length - 1;
+                            remainDataTemp = false;
+                            ingDataTableName = band.dataTableName;
+                        } else { //마지막 페이지가 아닌 경우
+                            if (!dynamicTableIsForceOverRow) {
+                                remainDataTemp = false;
+                            } else {
+                                remainDataTemp = true;
+                            }
+                            if (numofData > groupDataRowTemp) {
+                                groupDataRowTemp += (numofData - groupDataRowTemp);
+                            } else {
+                                groupDataRowTemp += numofData - 1;
+                            }
+                            ingDataTableName = band.dataTableName;
                         }
-                        ingDataTableName = band.dataTableName;
                     }
-
                 } else if (isFixedTable == true && dt != undefined && numofData > 0) {
                     curDataRowTemp += numofData;
                     ingDataTableName = band.dataTableName;
@@ -765,11 +786,18 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
                                 if (groupFieldNumTemp == groupFieldArrayTemp.length) {
                                     ingDataTableName = undefined;
                                 }
+                            }else if(!dynamicTableIsForceOverRow){
+                                groupFieldNumTemp++;
+                                groupDataRowTemp = 1;
+                                isBandGroupHeader = false;
+                                if (groupFieldNumTemp == groupFieldArrayTemp.length) {
+                                    ingDataTableName = undefined;
+                                }
                             } else { //첫 페이지 or 중간 페이지
                                 ingDataTableName = band.dataTableName;
                             }
                         } else {
-                            if (numofData + groupDataRowTemp >= dataCount) { // 마지막 페이지
+                            if (numofData >= dataCount) { // 마지막 페이지
                                 groupFieldNumTemp++;
                                 groupDataRowTemp = 1;
                                 isBandGroupHeader = false;

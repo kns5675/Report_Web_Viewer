@@ -394,13 +394,12 @@ function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, nu
     if (table.minimumRowCount !== undefined && isMinimumRowCount == true) {
         var minimumCnt = Number(table.minimumRowCount);
         if (minimumCnt != 1 && (numOfData - groupDataRow) < minimumCnt) { // 최소행 개수 적용
-            numOfData = numOfData + minimumCnt - (numOfData - groupDataRow);
+            numofData = numOfData + minimumCnt - (numOfData - groupDataRow);
             minimumRow = true;
         }
     }
-
     var groupLabelNum = 1;
-    for (var j = groupDataRow; j < numOfData; j++) {
+    for (var j = groupDataRow; j < numofData; j++) {
         var temp = j;
         var rowNum = curDatarow + j;
         if (minimumRow && data[j] === undefined) {
@@ -408,7 +407,7 @@ function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, nu
             rowNum += 'min';
 
         }
-        var $trId = '#dynamicValueLabel' + rowNum;
+         var $trId = '#dynamicValueLabel' + rowNum;
         var valueTrId = $($trId);
 
         if (valueTrId.length < 1) {
