@@ -598,8 +598,6 @@ function temp_to_reportTemplate() {
                 var bandDataFooterCnt = (wrap_arr_clone[i].match(/BandDataFooter/g) || []).length;
                 var bandGroupFooterCnt = (wrap_arr_clone[i].match(/BandGroupFooter/g) || []).length;
                 bandDataCnt = bandDataCnt - bandDataFooterCnt - bandDataHeaderCnt;
-                console.log("데이터밴드 텍스트 개수 : " + bandDataCnt);
-                console.log("그룹풋터밴드 텍스트 개수 : " + bandGroupFooterCnt);
                 if (bandDataCnt === bandGroupFooterCnt) {
                     str += wrap_arr_clone[i][0];
                 }

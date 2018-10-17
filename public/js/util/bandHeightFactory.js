@@ -77,13 +77,12 @@ function getAvaHeight(div_id, reportHeight) {
             curr_height += parseInt(siblings.eq(i).css('height').substring(0, siblings.eq(i).css('height').length - 2));
         }
         if (isRegion) { // 리전일 때
-            avaHeight = reportHeight - curr_height - footerHeightInRegion;
+            avaHeight = reportHeight - Math.ceil(curr_height) - Math.ceil(footerHeightInRegion);
         } else { // 리전이 아닐 떄
-            avaHeight = reportHeight - curr_height - footer_height;
+            avaHeight = reportHeight - Math.ceil(curr_height) - Math.ceil(footer_height);
         }
     }
-
-    return avaHeight;
+    return Math.floor(avaHeight);
 }
 
 /***********************************************************
