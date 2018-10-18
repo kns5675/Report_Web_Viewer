@@ -3,7 +3,9 @@
  * 만든이 : 구영준
  * *********************************************************/
 function getFooterHeight(bands, dataBand) {
-    // footer_height = 0;
+    if(bands.length !== 1){
+        footer_height = 0;
+    }
     var bandDataIndex;
     var dt = dataTable.DataSetName[dataBand.dataTableName];
 
