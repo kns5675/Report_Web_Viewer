@@ -335,7 +335,6 @@ function getNumOfDataInOnePageNonObject(band, avaHeight, dt) {
         return numofData;
     }
 }
-
 /****************************************************************
  * 배열에 배열을 추가하는 메서드
  * 만든이 : 구영준

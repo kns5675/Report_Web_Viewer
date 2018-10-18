@@ -98,7 +98,6 @@ function makeReportTemplate(data, subReport) {
 
         if(report.annexPaper == 'true'){ //별지 출력
             annexPagerDataTableName.forEach(function(dataTableName){
-
                 if(dataBands[0].dataTableName == dataTableName){
                     makeReport(report, arrRegion);
                 }

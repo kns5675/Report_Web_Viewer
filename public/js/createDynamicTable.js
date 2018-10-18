@@ -269,14 +269,14 @@ function drawingDynamicTableTitleLabel(label, header_Name_Number, band) {
  DynamicTableValueLabel(동적 테이블 밸류 라벨)을 화면에 그려주는 함수를 만든다.
  만든이 : 구영준
  **************************************************************************************/
-function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId, numOfData, table, band) {
+function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId, numofData, table, band) {
     var tempCurDataRow = curDatarow;
     var temp = curDatarowInDataBand;
 
     if (band.masterBandName) {
         temp = 0;
     }
-    var rowLength = numOfData + temp; //한 페이지에 마지막으로 출력해야할 row
+    var rowLength = numofData + temp; //한 페이지에 마지막으로 출력해야할 row
     for (var j = temp; j < rowLength; j++) {
         var data = dt[j];
         var minimumRow = false;
@@ -286,7 +286,7 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
         }
         if ((j >= dt.length) && table.minimumRowCount !== undefined) { // 최소행 개수
             if (table.minimumRowCount != 1) { // 최소행 개수 1이 기본 값임
-                data = dt[j - table.minimumRowCount];
+                data = dt[1];
                 minimumRow = true;
             }
         }

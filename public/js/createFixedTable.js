@@ -91,12 +91,12 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                             var tdTop = fromData.rectangle.y;
                             var tdIDMaking = tdId + rC2 + '_' + labelC;
                             var tdIDwithS = $("#" + tdIDMaking);
-
                             switch (fromData.dataType) {
                                 case  "DataLabel" :
                                     if (groupFieldArray !== undefined) {
                                         if (fromData.fieldName !== undefined) {
                                             var fieldName = fromData.fieldName;
+
                                             if (fieldName == groupFieldName) {
                                                 if (groupFieldArray[groupFieldNum]) {
                                                     var showDataLabel = groupFieldArray[groupFieldNum][0];

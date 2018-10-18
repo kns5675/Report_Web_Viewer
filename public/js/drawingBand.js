@@ -395,7 +395,7 @@ function drawBandData(groupFieldArray, band, layerName, reportHeight, parentBand
             if (dynamicTable.FixRowCount !== undefined) { // 최대 행 개수
                 var maximumRowCount = Number(dynamicTable.FixRowCount._text);
                 if (maximumRowCount != 0) {
-                    if (numofData > maximumRowCount) {
+                    if (numofData >= maximumRowCount) {
                         if (dynamicTable.IsForceOverRow._text == 'true') { // 최대행 이후 데이터가 페이지 넘기기 일 때
                             numofData = maximumRowCount + 1;
                         } else { // 제거(별지출력)
@@ -408,7 +408,7 @@ function drawBandData(groupFieldArray, band, layerName, reportHeight, parentBand
                 if (dynamicTable.MinimumRowCount !== undefined) { // 최소 행 개수
                     var minimumRowCount = Number(dynamicTable.MinimumRowCount._text);
                     if ((dt.length - curDatarowInDataBand) < minimumRowCount && minimumRowCount != 1) {
-                        // numofData = minimumRowCount+1;
+                        numofData = minimumRowCount;
                         isMinimumRowCount = false;
                     }
                 }
