@@ -578,7 +578,6 @@ function drawBandDataInRegion(groupFieldArrayInRegion, band, layerName, reportHe
             avaHeight = getAvaHeight(div_id, reportHeight);
             numofData = getNumOfDataInOnePageNonObject(band, avaHeight, dt);
 
-
             if (Array.isArray(band.controlList.anyType)) {
                 band.controlList.anyType.forEach(function (controlList) {
                     if (controlList._attributes["xsi:type"] == "ControlDynamicTable") {
@@ -703,7 +702,6 @@ function afterjudgementControlListAction(band, div_id, layerName, reportHeight, 
                         curDataRowTemp += numofData;
                         ingDataTableName = band.dataTableName;
                     }
-
                     curDatarow += numofData;
 
                     if (band.controlList.anyType.MinimumRowCount !== undefined) {

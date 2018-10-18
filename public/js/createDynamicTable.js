@@ -269,14 +269,13 @@ function drawingDynamicTableTitleLabel(label, header_Name_Number, band) {
  만든이 : 구영준
  **************************************************************************************/
 function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId, numOfData, table, band) {
-    // var thCnt = tableId.find('th').length;
     var tempCurDataRow = curDatarow;
     var temp = curDatarowInDataBand;
+
     if (band.masterBandName) {
         temp = 0;
     }
-
-    var rowLength = temp + numOfData; //한 페이지에 마지막으로 출력해야할 row
+    var rowLength = numOfData + temp; //한 페이지에 마지막으로 출력해야할 row
     for (var j = temp; j < rowLength; j++) {
         var data = dt[j];
         var minimumRow = false;
@@ -390,7 +389,6 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
 function drawingDynamicTableValueLabelWithGroupFieldArray(label, dt, tableId, numOfData, table, band) {
     var minimumRow = false;
     var data = groupFieldArray[groupFieldNum];
-
     if (table.minimumRowCount !== undefined && isMinimumRowCount == true) {
         var minimumCnt = Number(table.minimumRowCount);
         if (minimumCnt != 1 && (numOfData - groupDataRow) < minimumCnt) { // 최소행 개수 적용
