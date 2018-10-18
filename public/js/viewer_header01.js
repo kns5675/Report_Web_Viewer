@@ -330,11 +330,11 @@ async function tag_Making(scope, imgae_src, imgnum) {
      만든이 : hagdung-i
      ******************************************************************/
     if(scope === "designLayer"){
-        document.getElementById("designLayer"+nowpagenum).appendChild(Packing);
+        document.getElementById("designLayer"+nowpagenum).prepend(Packing);
     }else if(scope === "backGroundLayer"){
-        document.getElementById("backGroundLayer"+nowpagenum).appendChild(Packing);
+        document.getElementById("backGroundLayer"+nowpagenum).prepend(Packing);
     }else if(scope === "foreGroundLayer"){
-        document.getElementById("foreGroundLayer"+nowpagenum).appendChild(Packing);
+        document.getElementById("foreGroundLayer"+nowpagenum).prepend(Packing);
     }
     document.getElementById(Packing.id).appendChild(imagediv);
     document.getElementById(imagediv.id).appendChild(images);
@@ -375,7 +375,7 @@ function image_level(level, ImageNum, index) {
     $(".ImageDiv").each(function (i, e) {
         if(length === 1){ //이미지 1개일 때
             if (level === "up") { //이미지 순서 앞으로/뒤로
-                $("#imagediv" + ImageNum)[0].style.zIndex = 999;
+                $("#imagediv" + ImageNum)[0].style.zIndex = 1000;
             } else if (level === "down") {
                 $("#imagediv" + ImageNum)[0].style.zIndex = -1;
             }
