@@ -230,7 +230,7 @@ function drawingDynamicTableTitleLabel(label, header_Name_Number, band) {
     var titleTrId = document.getElementById('dynamicTitleLabel' + dynamicTitleLabelNum);
     var th = document.createElement("th");
     var thId = 'DynamicTableTitleLabel' + header_Name_Number + '_View_Page_Number' + thNum;
-    var className = "DynamicTableTitleLabel"+ header_Name_Number
+    var className = "DynamicTableTitleLabel"+ header_Name_Number;
     var p = document.createElement("p");
     var pId = 'title_P_tag' + thNum;
     th.id = thId;
@@ -248,10 +248,11 @@ function drawingDynamicTableTitleLabel(label, header_Name_Number, band) {
     }
     var table_reform = table_format_check(data, thId, label.text, label);
 
-    titleTrId.appendChild(th)
+    titleTrId.appendChild(th);
 
     p.id = pId;
     p.innerHTML = table_reform;
+    p.style.margin = "0px";
     th.appendChild(p);
 
     setCssInTableDomObject(label, th);
