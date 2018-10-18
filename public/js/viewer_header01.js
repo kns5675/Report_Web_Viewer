@@ -85,7 +85,7 @@ function file_open_submit(file, db, param) {
     var db_ckeck_xml = db[0].value.match(/(.xml)$/);
     var param_ckeck_xml = param[0].value.match(/(.xml)$/);
     if(file_ckeck_xml && db_ckeck_xml && param_ckeck_xml){ //입력 파일이 .xml 파일일 때
-        alert("입력한 파일을 기준으로 새로 그립니다.");
+        // alert("입력한 파일을 기준으로 새로 그립니다.");
     }else{
         alert("xml 파일만 입력이 가능합니다.");
         return null;

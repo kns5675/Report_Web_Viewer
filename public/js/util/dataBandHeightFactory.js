@@ -327,8 +327,8 @@ function getNumOfDataInOnePageNonObject(band, avaHeight, dt) {
 
     var numofData = Math.floor((avaHeight - titleHeight - tableSpacing) / valueHeight);
 
-    if (numofData > dtLength || (dynamicTable.IsForceOverRow._text == 'false' && dynamicTable.fixRowCount > 0)) {
-        return dtLength;
+    if (numofData + curDatarowInDataBand > dtLength || (dynamicTable.IsForceOverRow._text == 'false' && dynamicTable.fixRowCount > 0)) {
+        return dtLength - curDatarowInDataBand;
     } else {
         return numofData;
     }
