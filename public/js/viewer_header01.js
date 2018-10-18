@@ -344,7 +344,7 @@ async function tag_Making(scope, imgae_src, imgnum) {
      기능 : 이미지 영역의 드래그 이동 & 크기 조정 기능.
      만든이 : hagdung-i
      ******************************************************************/
-    $("#"+imagediv.id).draggable({ containment:"#backGroundLayer"+nowpagenum, zIndex:13}); //영역 나가지 못하게 하는 설정.
+    $("#"+imagediv.id).draggable({ containment:"#backGroundLayer"+nowpagenum}); //영역 나가지 못하게 하는 설정.
     $("#"+imagediv.id).resizable({});
 
     return new Promise(function (resolve) {
