@@ -300,7 +300,8 @@ async function tag_Making(scope, imgae_src, imgnum) {
     imagediv.className = "ImageDiv";
     imagediv.style.height = "400px";
     imagediv.style.backgroundColor = "black";
-    imagediv.style.zIndex = imagezIndex+ImageNum*10-1;
+    // imagediv.style.zIndex = imagezIndex+ImageNum*10-1;
+    imagediv.style.zIndex = 1000;
 
     var images = document.createElement("img");
     imageid = "image"+ImageNum;
@@ -387,7 +388,7 @@ function image_level(level, ImageNum, index) {
                             //이미 맨 앞으로 보낸 이미지가 있는지(999보다 클때), 현재 이미지가 그보다 작거나 같은지 구분
                             $("#imagediv" + ImageNum)[0].style.zIndex = e.style.zIndex * 1 + 1;
                         } else {
-                            $("#imagediv" + ImageNum)[0].style.zIndex = 999;
+                            $("#imagediv" + ImageNum)[0].style.zIndex = 1000;
                         }
                     } else {
                         $("#imagediv" + ImageNum)[0].style.zIndex = e.style.zIndex * 1 + 1;   //큰애보다 1만 더 크게
