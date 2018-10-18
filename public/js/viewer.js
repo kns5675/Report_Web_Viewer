@@ -583,9 +583,9 @@ function band_dbclick_event(data) {
 
                                 document.getElementById(text_area.id).focus();
 
-                                // $("#"+text_area.id).on("blur", function () {
-                                //     $("#text_div").remove();
-                                // });
+                                $("#"+text_area.id).on("blur", function () {
+                                    $("#text_div").remove();
+                                });
                             }
                         }
                     }
