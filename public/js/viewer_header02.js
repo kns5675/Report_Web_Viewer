@@ -49,7 +49,7 @@ function tableChoice() {
     $("#tableChoice").on("click" ,function () {
         modalLayer.show();
 
-        var all_table = $('.table');
+        var all_table = $('.dynamicTable');
         var temp_table_arr = new Array();
         var li_list_str = "";
 
@@ -68,8 +68,19 @@ function tableChoice() {
         // 항목선택의 표 리스트 세팅
         unique_table_class_arr.forEach(function(c, index){
             li_list_str += "<li id='table_choice_li" + (index+1) + "' class='tableChoice_li'>표-" + (index+1) + "</li>";
+            // li_list_str += "<li id='table_choice_li" + (index+1) + "' class='tableChoice_li'>표-" + (index+1) + "</li>";
+            // li_list_str += "<li id='table_choice_li" + (index+1) + "' class='tableChoice_li'>표-" + (index+1) + "</li>";
+            // li_list_str += "<li id='table_choice_li" + (index+1) + "' class='tableChoice_li'>표-" + (index+1) + "</li>";
+            // li_list_str += "<li id='table_choice_li" + (index+1) + "' class='tableChoice_li'>표-" + (index+1) + "</li>";
         });
         $('#leftpart_modalTableChoice_header').html(li_list_str);
+        if(stringToNumberByPx($('#leftpart_modalTableChoice_header').css('height')) > 21){
+            $('#leftpart_modalTableChoice_header').css({
+                'height' : '44px',
+            });
+            $('#rightpart_modalTableChoice').css('margin', '78px 18px 0px 0px');
+        }
+
         // 1. 표 리스트 세팅 완료
 
         // 2.

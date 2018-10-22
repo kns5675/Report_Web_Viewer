@@ -1,15 +1,17 @@
 <!------------ 항목 선택 ------------>
-<div class="modal-content">
+<div class="modal-content" style="margin:190px auto 0px auto; height:434px;">
     <div class="upperbar" style="width:100%;">
-        <span style="width:50%; text-align:left; float:left;margin-left:10px;">항목 선택</span>
+        <span style="width:50%; text-align:left; float:left;margin-left:10px; margin-top:7px;">항목 선택</span>
         <div id="closebtn_modalTableChoice"class="pop_bt">X</div>
     </div>
-    <div class="downpart">
+    <div class="downpart" style="height:404px;">
         <div id="leftpart_modalTableChoice">
             <ul id="leftpart_modalTableChoice_header"></ul>
-            <ul id="labelListUl"></ul>
+            <div id="labelListUlWrap">
+                <ul id="labelListUl"></ul>
+            </div>
         </div>
-        <div id="rightpart_modalTableChoice" style="position:relative;">
+        <div id="rightpart_modalTableChoice">
             <button class="tableChoice_btn" id="tableChoice_up">위로</button>
             <button class="tableChoice_btn" id="tableChoice_down">아래로</button>
             <button class="tableChoice_btn" id="tableChoice_done">확인</button>
