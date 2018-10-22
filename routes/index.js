@@ -41,7 +41,6 @@ router.get('/', function (req, res) {
 
 router.post('/', upload.array('send_file', 3), function (req, res, next) {
     if(req.body.file_open_click){
-        console.log(req.body.file_open_click);
         file_name = 'uploads/'+req.files[0].filename;
         db_name = 'uploads/'+req.files[1].filename;
         param_name = 'uploads/'+req.files[2].filename;
@@ -70,7 +69,6 @@ router.post('/', upload.array('send_file', 3), function (req, res, next) {
 
         json_origin = convert.json2xml(file_data, {compact: true});
         xml = fs.writeFileSync("file_save/"+file_name+".xml", json_origin, 'utf-8');
-
     }
 });
 

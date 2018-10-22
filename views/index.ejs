@@ -62,10 +62,8 @@
             image_setting();
             $('.BandPageFooter').css('position', 'absolute');
             // temp_to_reportTemplate();
-
             drawPageNumberInSystemLabel();
             $('#load').hide();
-
         });
     </script>
     <style>
@@ -86,9 +84,12 @@
 <div id="modalReportChoice" class="modal"></div>
 <div id="temp_header" class="temp_headerNfooter"></div>
 <div id="temp_footer" class="temp_headerNfooter"></div>
+
 <div id="reportTemplate"></div>
 <div id="temp_reportTemplate"></div>
-<div id="Image_Modal" class="modal" style="/*pointer-events: auto;*/"><!--이미지 추가 모달창-->
+<div id="temp_table_div"></div>
+
+<div id="Image_Modal" class="modal" style="/pointer-events: auto;/"><!--이미지 추가 모달창-->
     <div id="modalLayer" class="modalLayer modal">
         <div id="image_add_butten" class="modalContent modal-content">
             <div id="image_add_area" class="image_add_area" style="height: 28px;">
@@ -138,7 +139,7 @@
         <div class="modalContent modal-content">
             <div id="file_add_area" class="image_add_area" style="height: 28px;">
                 <span style="margin-left: 10px;">파일 추가</span>
-                <span class="upload_cancel" style="cursor:pointer;float:right;margin-right:10px;">X</span>
+                <span class="upload_cancel" style="cursor:pointer;float:right;padding:2px 8px 3px 5px;">X</span>
             </div>
             <form action="/" enctype="multipart/form-data" method="post" style="margin-left: 32px; margin-right: 32px; margin-top: 17px;">
                 <div>
@@ -180,7 +181,7 @@
         <div class="modalContent modal-content">
             <div class="image_add_area" style="height: 28px;">
                 <span style="margin-left: 10px;">파일 저장</span>
-                <span class="download_cancel" style="cursor:pointer;float:right;margin-right:10px;">X</span>
+                <span class="download_cancel" style="cursor:pointer;float:right;padding:2px 8px 3px 5px;">X</span>
             </div>
             <div style="margin-top: 17px">
                 <span style="font-weight: bold; font-size: 12px; margin-top: 4px; margin-left: 32px;">파일명</span>
@@ -201,5 +202,6 @@
         </div>
     </div>
 </div>
+<div id="temp_table_div"></div>
 </body>
 </html>

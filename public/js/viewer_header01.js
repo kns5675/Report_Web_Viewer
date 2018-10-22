@@ -29,13 +29,11 @@ function file_save() {
     var modalLayer = $("#file_download_modalLayer");
     var file_download_Modal = $("#file_download_Modal");
     $("#saving").on("click", function () {
-        console.log("test: ");
         modalLayer.fadeIn("slow");
         file_download_Modal.css("display","block");
     });
     $("#file_download_button").on("click", function () {
         var test = $("#file_name")[0].value;
-        //console.log("test: ",test);
         modalLayer.fadeOut("slow");
         file_download_Modal.css("display","none");
     });
@@ -60,7 +58,6 @@ function file_open() {
     var modalLayer = $("#filemodalLayer");
     var file_Modal = $("#file_Modal");
     $("#file_opener").on("click", function () {
-       console.log("window : ",window.reportTemplate);
         file_Modal.css("display", "block");
         modalLayer.fadeIn("slow");
     });
@@ -387,7 +384,7 @@ function image_level(level, ImageNum, index) {
                     if (index) {  //맨 앞으로인지 그냥 앞으로 인지 구분
                         if (e.style.zIndex >= 999) {
                             //이미 맨 앞으로 보낸 이미지가 있는지(999보다 클때), 현재 이미지가 그보다 작거나 같은지 구분
-                            $("#imagediv" + ImageNum)[0].style.zIndex = e.style.zIndex * 1 + 1;
+                            $("#imagediv" + ImageNum)[0].style.zIndex = e.style.zIndex * 1 + 10;
                         } else {
                             $("#imagediv" + ImageNum)[0].style.zIndex = 1000;
                         }

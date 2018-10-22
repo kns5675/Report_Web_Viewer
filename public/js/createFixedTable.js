@@ -4,7 +4,6 @@
  ******************************************************************/
 function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, numOfData, fixTableList, band) {
     if (data.IsApprovalBox._text == "true") {
-        // console.log("결재란");//결재란일 경우 처리 여기에. 코드 정리 필요..
     }
     var div = $('#' + divId);//divId = 밴드
     div.css('position', 'relative');
@@ -113,7 +112,6 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                                         showDataLabel = ' ';
                                                     }
                                                 } else {
-                                                    // console.log("그룹풋터밴드에 해당하는 총계나 그런애들에 대한 자바스크립트..? 처리가 필요함");
                                                 }
                                             }
                                         }
@@ -277,7 +275,6 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                                     }
                                                 }
                                             } else {
-                                                // console.log("그룹풋터밴드에 해당하는 총계나 그런애들에 대한 자바스크립트..? 처리가 필요함");
                                             }
                                         }
                                         if (typeof showDataLabel === 'undefined') {
@@ -666,7 +663,6 @@ function drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, d
                                                         showDataLabel = ' ';
                                                     }
                                                 } else {
-                                                    // console.log("그룹풋터밴드에 해당하는 총계나 그런애들에 대한 자바스크립트..? 처리가 필요함");
                                                 }
                                             }
                                         }
@@ -733,29 +729,21 @@ function drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, d
                                                 summary_label_avg = summary_label_sum / dt.length;
                                             }
                                             showDataLabel = summary_label_sum;
-                                            // console.log("평균임여");
                                             break;
                                         case 'Max' :
-                                            // console.log("최대값 임여");
                                             break;
                                         case 'Min' :
-                                            // console.log("최소값 임여");
                                             break;
                                         case 'Cnt' :
-                                            // console.log("개수 임여");
                                             break;
                                         default : //none
-                                            // console.log("default 임여");
                                             break;
 
                                     }
 
                                     if (groupFieldArray !== undefined) {
-                                        // console.log("1");
                                         if (fromData.fieldName !== undefined) {
                                             var fieldName = fromData.fieldName;
-                                            //console.log("fieldName : ", fieldName);
-                                            //console.log("2");
 
                                             if (groupFieldArray[groupFieldNum]) {
                                                 if (groupFieldArray[groupFieldNum][1][fieldName]) {
@@ -768,15 +756,11 @@ function drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, d
                                                     }
                                                 }
                                             } else {
-                                                console.log("그룹풋터밴드에 해당하는 총계나 그런애들에 대한 자바스크립트..? 처리가 필요함");
                                             }
                                         }
                                         if (typeof showDataLabel === 'undefined') {
-                                            // console.log("9");
-                                            // console.log("여기");
                                             showDataLabel = ' ';
                                         }
-                                        //console.log("어떤 내용써지는지 보자 : ",showDataLabel," typeof : ",typeof showDataLabel);
                                         var table_reform = table_format_check(data.Labels, tdIDwithS, showDataLabel, fromData);
                                         ThisfixedTableRow.append
                                         ('<td class="SummaryLabel" id = "' + tdId + rC2 + '_' + labelC + '">' +
@@ -943,7 +927,6 @@ function drawingFixedTableInDataBand(data, controlFixedTable, fixTableLabelList,
                                                         showDataLabel = ' ';
                                                     }
                                                 } else {
-                                                    // console.log("그룹풋터밴드에 해당하는 총계나 그런애들에 대한 자바스크립트..? 처리가 필요함");
                                                 }
                                             }
                                         } else { /////////// 추가한 부분

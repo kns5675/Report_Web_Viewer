@@ -567,7 +567,6 @@ function band_dbclick_event(data) {
                             if ($("#text_area")[0] === undefined) {
                                 var text_div = document.createElement("div");
                                 text_div.id = "text_div";
-                                console.log("test");
                                 text_div.zIndex = 1010;
                                 var text_area = document.createElement('textarea');
                                 text_area.id = "text_area";

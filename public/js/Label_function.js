@@ -191,7 +191,6 @@ function ChildHeaderBands_check(data, editable, TB, Ti) {
                                     if(total_data.ReportTemplate.ReportList.anyType.Layers){
                                         total_data.ReportTemplate.ReportList.anyType.Layers.anyType[1].Bands.anyType[Ti] = TB;
                                     }else{ //리전일 때
-                                        console.log("total_data.ReportTemplate.ReportList.anyType.Layers.anyType[1] : ",total_data.ReportTemplate.ReportList.anyType);
                                         // total_data.ReportTemplate.ReportList.anyType[1]
                                     }
                                 }
@@ -204,7 +203,6 @@ function ChildHeaderBands_check(data, editable, TB, Ti) {
                                     if(total_data.ReportTemplate.ReportList.anyType.Layers){
                                         total_data.ReportTemplate.ReportList.anyType.Layers.anyType[1].Bands.anyType[Ti] = TB;
                                     }else{ //리전일 때
-                                        console.log("total_data.ReportTemplate.ReportList.anyType.Layers.anyType[1] : ",total_data.ReportTemplate.ReportList.anyType[1]);
                                         // total_data.ReportTemplate.ReportList.anyType[1]
                                     }
                                 }
