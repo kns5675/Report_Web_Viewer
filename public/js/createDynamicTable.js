@@ -61,7 +61,7 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData, band, dt) {
             }
         });
         tableId.css({
-            'border': '1px solid red',
+            // 'border': '1px solid red',
             'border-collapse': 'collapse',
             'text-align': 'center',
         });
