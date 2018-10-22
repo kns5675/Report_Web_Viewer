@@ -90,9 +90,7 @@ function judgementLabel(data, divId, numOfData, band, dt) {
 
         if (fixTableLabels) {
             fixTableLabels.forEach(function (label, i) {
-              //  console.log("label : ",label);
                 var fixtableLabel = new FixedTableLabel(label, i);
-              //  console.log("fixtableLabel : ", fixtableLabel);
 
                 if (fixTableLabelList.length < fixTableLabels.length) { // 수정 : 하지연
                     fixTableLabelList.push(fixtableLabel);

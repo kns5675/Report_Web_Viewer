@@ -231,7 +231,6 @@ function drawingDynamicTableTitleLabel(label, header_Name_Number, band) {
     var tr = document.createElement('tr');
     var trId = document.getElementById('dynamicTitleLabel' + dynamicTitleLabelNum);
     tr.id = "dynamicTitleLabel" + dynamicTitleLabelNum;
-    console.log(trId);
     if(trId == null){
         tableId.append(tr);
     }
@@ -258,7 +257,6 @@ function drawingDynamicTableTitleLabel(label, header_Name_Number, band) {
     }
     var table_reform = table_format_check(data, thId, label.text, label);
 
-    console.log(titleTrId);
     titleTrId.appendChild(th);
 
     p.id = pId;
