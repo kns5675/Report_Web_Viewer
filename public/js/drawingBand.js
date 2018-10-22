@@ -407,7 +407,12 @@ function drawBandData(groupFieldArray, band, layerName, reportHeight, parentBand
                 }
                 if (dynamicTable.MinimumRowCount !== undefined) { // 최소 행 개수
                     var minimumRowCount = Number(dynamicTable.MinimumRowCount._text);
-                    if ((dt.length - curDatarowInDataBand) < minimumRowCount && minimumRowCount != 1) {
+                    console.log(curDatarowInDataBand);
+                    console.log(dt.length);
+                    console.log(minimumRowCount)
+                    if ((dt.length - curDatarowInDataBand - 1) <= minimumRowCount && minimumRowCount != 1) {
+                        console.log('여길안들어온듯')
+
                         numofData = minimumRowCount;
                         isMinimumRowCount = false;
                     }
