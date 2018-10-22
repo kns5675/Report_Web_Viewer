@@ -159,13 +159,22 @@ div.room{
     readOnly : ture;
 }
 
+#leftpart_modalTableChoice{
+    float:left;
+    width:70%;
+    margin:16px;
+    /*height:362px;*/
+}
+
 /* 항목선택 CSS */
 ul#leftpart_modalTableChoice_header{
     padding : 0;
     display : block;
-    border-bottom : 1px solid black;
+    width : 465px;
     margin-top : 0px;
-    /*overflow : auto;*/
+    border : 1px solid gray;
+    background-color: #f5f5f5;
+    overflow : auto;
 }
 ul#leftpart_modalTableChoice_header > li{
     display: inline-block;
@@ -180,14 +189,18 @@ ul#leftpart_modalTableChoice_header > li.selected_table{
 }
 #rightpart_modalTableChoice{
     position : relative;
+    float:right;
+    width:20%;
+    margin : 56px 18px 0px 0px;
+    height:319px;
 }
 
 div#leftpart_modalTableChoice_main{
    overflow : auto;
 }
 
-button.tableChoice_btn  { width : 100%; }
-button#tableChoice_up   { margin : 10px 0px; }
+button.tableChoice_btn  { width : 100%; margin-bottom : 10px;}
+/*button#tableChoice_up   { margin : 10px 0px; }*/
 button#tableChoice_done { position : absolute; bottom : 0px;}
 div#closebtn_modalTableChoice {
     display : inline-block;
@@ -196,13 +209,21 @@ div#closebtn_modalTableChoice {
     padding : 6px 8px;
     font-size : 14px;
 }
+
 ul#labelListUl{
     list-style : none;
-    padding-left : 10px;
+    padding : 12px 0px;
+    height:286px;
     margin-bottom : 0px;
+    background-color: #f5f5f5;
+    border : 1px solid gray;
+    overflow-y : auto;
+    overflow-x: hidden;
+
 }
 ul#labelListUl > li{
     margin-bottom : 3px;
+    padding : 0px 12px;
 }
 ul#labelListUl > li:hover{
     background-color : #cce6ff;
@@ -226,16 +247,31 @@ span#closebtn_modalReportChoice{
     padding:5px 8px 3px 8px;
     cursor : pointer;
 }
-
+span#reportChoice_menu{
+    display: inline-block;
+    margin : 24px 24px 0px 24px;
+}
+div#reportUlWrap{
+    margin:0px 24px 14px 24px;
+    padding : 12px;
+    height : 164px;
+    overflow-x : hidden;
+    overflow-y: auto;
+    border : 1px solid gray;
+    background-color : #f5f5f5;
+}
 ul#reportListUl{
-    margin:0px;
+    margin : 0px;
+    padding : 0px;
     list-style: none;
-    padding : 10px 0px 0px 10px;
 }
 ul#reportListUl > li{
     margin-bottom : 5px;
 }
 button#reportChoice_done{
+    position: absolute;
+    right : 24px;
+    bottom : 22px;
     display : inline-block;
-    margin-left : 10px;
+    cursor : pointer;
 }

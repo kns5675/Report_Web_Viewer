@@ -215,20 +215,8 @@ span.subject{
     z-index :999;
 }
 
-#leftpart_modalTableChoice{
-    float:left;
-    width:70%;
-    background-color:lightblue;
-    margin:2% 2%;
-    height:380px;
-}
-#rightpart_modalTableChoice{
-    float:right;
-    width:20%;
-    /*background-color:lightblue;*/
-    margin-right: 2%;
-    height:380px;
-}
+
+
 .temp_headerNfooter{
     z-index : -9999;
     visibility: hidden;

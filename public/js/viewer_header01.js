@@ -29,6 +29,7 @@ function file_save() {
     var modalLayer = $("#file_download_modalLayer");
     var file_download_Modal = $("#file_download_Modal");
     $("#saving").on("click", function () {
+        console.log("test: ");
         modalLayer.fadeIn("slow");
         file_download_Modal.css("display","block");
     });
@@ -59,7 +60,7 @@ function file_open() {
     var modalLayer = $("#filemodalLayer");
     var file_Modal = $("#file_Modal");
     $("#file_opener").on("click", function () {
-      //  console.log("window : ",window.reportTemplate);
+       console.log("window : ",window.reportTemplate);
         file_Modal.css("display", "block");
         modalLayer.fadeIn("slow");
     });

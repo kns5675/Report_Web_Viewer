@@ -46,7 +46,7 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData, band, dt) {
         'height': table.rectangle.height + 'px'
     });
 
-    tableId.append('<tr id = "dynamicTitleLabel' + dynamicTitleLabelNum + '"></tr>');
+    // tableId.append('<tr id = "dynamicTitleLabel' + dynamicTitleLabelNum + '"></tr>');
     var header_Name_Number = 1;
     if (Array.isArray(tableLabel)) {
         tableLabel.forEach(function (label) {
@@ -226,6 +226,16 @@ function drawingDynamicTableValueLabelWithOutDataTable(label, tableId, band) {
  From 구영준
  *******************************************************************/
 function drawingDynamicTableTitleLabel(label, header_Name_Number, band) {
+    var tableId = $('#dynamicTable' + dynamicTableNum);
+
+    var tr = document.createElement('tr');
+    var trId = document.getElementById('dynamicTitleLabel' + dynamicTitleLabelNum);
+    tr.id = "dynamicTitleLabel" + dynamicTitleLabelNum;
+    console.log(trId);
+    if(trId == null){
+        tableId.append(tr);
+    }
+    // tableId.append('<tr id = "dynamicTitleLabel' + dynamicTitleLabelNum + '"></tr>');
 
     var titleTrId = document.getElementById('dynamicTitleLabel' + dynamicTitleLabelNum);
     var th = document.createElement("th");
@@ -248,6 +258,7 @@ function drawingDynamicTableTitleLabel(label, header_Name_Number, band) {
     }
     var table_reform = table_format_check(data, thId, label.text, label);
 
+    console.log(titleTrId);
     titleTrId.appendChild(th);
 
     p.id = pId;
@@ -327,10 +338,18 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
                     var tdId = 'tableValueLabelNum' + tableValueLabelNum++;
                     if (!minimumRow) {
                         if (label.labelTextType == 'Number' && label.format != undefined) { //td의 label 값을 p태그에 묶음.
-                            valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '"><p id="value_P_tag' + tableValueLabelNum + '" style="margin: 0px;">' + table_reform + '</p></td>');
+                            valueTrId.append(
+                                '<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + ' ' + "MoneySosu" + '">' +
+                                    '<p id="value_P_tag' + tableValueLabelNum + '" style="margin: 0px;">' + table_reform + '</p>' +
+                                '</td>'
+                            );
                             isData = true;
                         } else {
-                            valueTrId.append('<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '"><p id="value_P_tag' + tableValueLabelNum + '" style="margin: 0px;">' + table_reform + '</p></td>');
+                            valueTrId.append(
+                                '<td id = "' + tdId + '" class="' + key + ' Label ' + label._attributes + ' ' + label.dataType + '">' +
+                                    '<p id="value_P_tag' + tableValueLabelNum + '" style="margin: 0px; white-space: nowrap;">' + table_reform + '</p>' +
+                                '</td>'
+                            );
                             isData = true;
                         }
                     } else { // 최소행 개수
@@ -366,9 +385,9 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
                     }
                     var tdId = $('#' + tdId);
                     setCssInTable(label, tdId);
-                    // drd_javascript(label, tdId, label.startBindScript);
                 }
             }
+
             if(!isData){  // Label은 있지만 데이터가 없을 때
                 var tdId = 'tableValueLabelNum' + tableValueLabelNum++;
                 valueTrId.append(
@@ -377,6 +396,15 @@ function drawingDynamicTableValueLabelWithoutGroupFieldArray(label, dt, tableId,
                 var tdId = $('#' + tdId);
                 setCssInTable(label, tdId);
             }
+            // var td_inner_p_tag_width =
+            //     tdId.find('p') === "undefined" ? undefined : stringToNumberByPx(tdId.find('p').css('width'));
+            // if(td_inner_p_tag_width !== undefined && Number(label.rectangle.width)
+            //     < (td_inner_p_tag_width)
+            // ){
+            //
+            // }
+
+
             tempCurDataRow++;
         }
     }
