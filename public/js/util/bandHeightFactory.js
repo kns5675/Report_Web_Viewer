@@ -38,7 +38,9 @@ function getFooterHeight(bands, dataBand) {
  * 만든이 : 안예솔
  * *********************************************************/
 function getFooterHeightInRegion(bands, dataBand) {
-    footerHeightInRegion = 0;
+    if(bands.length !== 1){
+        footerHeightInRegion = 0;
+    }
     var bandDataIndex;
     var dt = dataTable.DataSetName[dataBand.dataTableName];
     if (dt != undefined) {

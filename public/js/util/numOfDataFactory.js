@@ -8,7 +8,6 @@ function getNumOfDataWithGroupField(band, avaHeight) {
     if(groupFieldArray.length == 0){
         return Number(band.minimumRowCount);
     }
-
     var tableSpacing = 0;
     var titleHeight = 0;
     var valueHeight = 0;

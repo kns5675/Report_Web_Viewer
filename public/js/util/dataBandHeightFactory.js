@@ -326,11 +326,17 @@ function getNumOfDataInOnePageNonObject(band, avaHeight, dt) {
     });
 
     var numofData = Math.floor((avaHeight - titleHeight - tableSpacing) / valueHeight);
-
-    var currentDataRow  = numofData + curDatarowInDataBand;
+    var currentDataRow = numofData;
+    if (!band.masterBandName) {
+        currentDataRow  = numofData + curDatarowInDataBand;
+    }
 
     if (currentDataRow > dtLength || (dynamicTable.IsForceOverRow._text == 'false' && dynamicTable.fixRowCount > 0)) {
-        return dtLength;
+        if (!band.masterBandName) {
+            return dtLength - curDatarowInDataBand;
+        } else {
+            return dtLength;
+        }
     } else {
         return numofData;
     }
