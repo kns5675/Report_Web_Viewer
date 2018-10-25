@@ -29,7 +29,7 @@ var groupFieldArray = [];
 var regionNum = 1;
 var fixTableRowCount = 0;
 var labelC = 0;
-var rC2 = 1;
+var tdCount = 1;
 var verticalPNum = 0;
 var groupFieldArrayInRegion = [];
 

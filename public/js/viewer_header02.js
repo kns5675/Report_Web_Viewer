@@ -11,12 +11,7 @@ $(document).ready(function(){
     $("#closebtn").click(function(){
         $('#modalTableChoice').hide();//고급인쇄 모달창 닫기
     });
-    $("#closebtn3").click(function(){
-        close_pop2();
-    });
-    $("#closebtn4").click(function(){
-        close_pop3();
-    });
+
     $("#sign").on('keyup',function(){
         dataValidity2();    //고급인쇄 - 결재란 칸수 지정 데이터 유효성 검증
     });
