@@ -372,6 +372,13 @@ function close_pop2() {
     $("#range1").val('');
     $("#range2").val('');
 
+    $(".modaltd").each(function (i, e) {
+        var tdid = e.id.replace(/[^0-9]/g, "");
+        $("table#modaltable tr:eq(0) td:eq(" + tdid + ")").css("background-color", "#E3E3E3");
+        $("table#modaltable tr:eq(1) td:eq(" + tdid + ")").css("background-color", "#E3E3E3");
+    });
+
+
     $('#modalcase').hide();
 }
 

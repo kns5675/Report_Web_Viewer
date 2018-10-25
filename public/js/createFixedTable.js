@@ -16,7 +16,7 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
     var temp_table_class = controlFixedTable.id.substring(0, 4); // 임시로 table을 인식하기 위한 번호 - 전형준
     divIdTable.append('<table id="fixedTable' + fixedTableNum + '" class="table table-' + temp_table_class + '"></table>');
     var fixTableId = $('#fixedTable' + fixedTableNum);//고정테이블
-    rC2 = 1;
+    tdCount = 1;
     fixTableId.css({
         'width': controlFixedTable.rectangle.width,
         'height': controlFixedTable.rectangle.height,
@@ -81,14 +81,16 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
 
                     function tdDataBinding(ThisfixedTableRow, drawingTds) {
                         var tdId = 'FixedTableLabel_';
-                        if (rC2 > drawingTds) {
+                        if (tdCount > drawingTds) {
+                            console.log("1");
                             drawingTds = labelCount;
                         }
-                        for (rC2; rC2 <= drawingTds; rC2++) {
-                            var fromData = fixTableLabelList[rC2 - 1];
+                        for (tdCount; tdCount <= drawingTds; tdCount++) {
+                            console.log("2");
+                            var fromData = fixTableLabelList[tdCount - 1];
                             var tdLeft = fromData.rectangle.x;
                             var tdTop = fromData.rectangle.y;
-                            var tdIDMaking = tdId + rC2 + '_' + labelC;
+                            var tdIDMaking = tdId + tdCount + '_' + labelC;
                             var tdIDwithS = $("#" + tdIDMaking);
                             switch (fromData.dataType) {
                                 case  "DataLabel" :
@@ -118,8 +120,8 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
 
                                         var table_reform = table_format_check(data.Labels, tdIDwithS, showDataLabel, fromData);
                                         ThisfixedTableRow.append
-                                        ('<td class="DataLabel" id = "' + tdId + rC2 + '_' + labelC + '">' +
-                                            '<p id="' + tdId + rC2 + '_p_' + labelC + '">' + table_reform + '</p>' +
+                                        ('<td class="DataLabel" id = "' + tdId + tdCount + '_' + labelC + '">' +
+                                            '<p id="' + tdId + tdCount + '_p_' + labelC + '">' + table_reform + '</p>' +
                                             '</td>');
                                         var tdId_javascript = $("#" + tdIDMaking);
                                         tdId_javascript.addClass("FixedTableLabel");
@@ -134,11 +136,11 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                         var showDataLabel;
                                         showDataLabel = fromData.text;
                                     }
-                                    ThisfixedTableRow.append('<td class="NormalLabel" id = "' + tdId + rC2 + '_' + labelC + '">' +
-                                        '<p id="' + tdId + rC2 + '_p_' + labelC + '">' + table_format_check(data.Labels, tdIDwithS, showDataLabel, fromData) + '</p></td>');
-                                    var fixedtable_tdId = $('#' + tdId + rC2 + '_' + labelC);
+                                    ThisfixedTableRow.append('<td class="NormalLabel" id = "' + tdId + tdCount + '_' + labelC + '">' +
+                                        '<p id="' + tdId + tdCount + '_p_' + labelC + '">' + table_format_check(data.Labels, tdIDwithS, showDataLabel, fromData) + '</p></td>');
+                                    var fixedtable_tdId = $('#' + tdId + tdCount + '_' + labelC);
                                     fixedtable_tdId[0].real_id = fromData.id;
-                                    settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTableHeight, tdLeft, tdTop);
+                                    settingAttribute(fromData, tdId, tdCount, fixTableId, fixTableWidth, fixTableHeight, tdLeft, tdTop);
                                     var tdId_javascript = $("#" + tdIDMaking);
                                     if (fromData.editable !== "false") {
                                         tdId_javascript.addClass("Editable");
@@ -282,10 +284,10 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                         }
                                         var table_reform = table_format_check(data.Labels, tdIDwithS, showDataLabel, fromData);
                                         ThisfixedTableRow.append
-                                        ('<td class="SummaryLabel" id = "' + tdId + rC2 + '_' + labelC + '">' +
-                                            '<p id="' + tdId + rC2 + '_p_' + labelC + '">' + table_reform + '</p>' +
+                                        ('<td class="SummaryLabel" id = "' + tdId + tdCount + '_' + labelC + '">' +
+                                            '<p id="' + tdId + tdCount + '_p_' + labelC + '">' + table_reform + '</p>' +
                                             '</td>');
-                                        var fixedtable_tdId = $('#' + tdId + rC2 + '_' + labelC);
+                                        var fixedtable_tdId = $('#' + tdId + tdCount + '_' + labelC);
                                         fixedtable_tdId[0].real_id = fromData.id;
                                         var tdId_javascript = $("#" + tdIDMaking);
                                         if (fromData.editable !== "false") {
@@ -296,7 +298,7 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                                     }
                                     break;
                             }
-                            settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTableHeight, tdLeft, tdTop);
+                            settingAttribute(fromData, tdId, tdCount, fixTableId, fixTableWidth, fixTableHeight, tdLeft, tdTop);
                         }
                     }
                 }
@@ -336,10 +338,10 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
  기능 : 고정테이블 안의 FixedTableLabel의 속성을 구현하고, 적용시킨다.
  만든이 : 하지연
  ******************************************************************/
-function settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTableHeight, tdLeft, tdTop) {
+function settingAttribute(fromData, tdId, tdCount, fixTableId, fixTableWidth, fixTableHeight, tdLeft, tdTop) {
 
-    var ThisFixedTableData = $("#" + tdId + rC2 + '_' + labelC);
-    var ThisFixedTableDataP = $("#" + tdId + rC2 + '_p_' + labelC);
+    var ThisFixedTableData = $("#" + tdId + tdCount + '_' + labelC);
+    var ThisFixedTableDataP = $("#" + tdId + tdCount + '_p_' + labelC);
 
     var thisText = fromData.text;
     var thisTextLength = String(fromData.text).length;
@@ -572,7 +574,7 @@ function drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, d
 
     divIdTable.append('<table id="fixedTable' + fixedTableNum + '" class="table table-' + temp_table_class + '"></table>');
     var fixTableId = $('#fixedTable' + fixedTableNum);//고정테이블
-    rC2 = 1;
+    tdCount = 1;
     fixTableId.css({
         'width': controlFixedTable.rectangle.width,
         'height': controlFixedTable.rectangle.height,
@@ -634,12 +636,13 @@ function drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, d
                         if (rowCount == '1') {
                             drawingTds = labelCount;
                         }
-                        for (var rC2 = 1; rC2 <= drawingTds; rC2++) {
-                            var fromData = fixTableLabelList[rC2 - 1];
+                        for (var tdCount = 1; tdCount <= drawingTds; tdCount++) {
+                            console.log("3", tdCount);
+                            var fromData = fixTableLabelList[tdCount - 1];
 
                             var tdLeft = fromData.rectangle.x;
                             var tdTop = fromData.rectangle.y;
-                            var tdIDMaking = tdId + rC2 + '_' + labelC;
+                            var tdIDMaking = tdId + tdCount + '_' + labelC;
                             var tdIDwithS = $("#" + tdIDMaking);
 
                             switch (fromData.dataType) {
@@ -668,8 +671,8 @@ function drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, d
                                         }
                                         var table_reform = table_format_check(data.Labels, tdIDwithS, showDataLabel, fromData);
                                         ThisfixedTableRow.append
-                                        ('<td class="DataLabel" id = "' + tdId + rC2 + '_' + labelC + '">' +
-                                            '<p id="' + tdId + rC2 + '_p_' + labelC + '">' + table_reform + '</p>' +
+                                        ('<td class="DataLabel" id = "' + tdId + tdCount + '_' + labelC + '">' +
+                                            '<p id="' + tdId + tdCount + '_p_' + labelC + '">' + table_reform + '</p>' +
                                             '</td>');
                                         var tdId_javascript = $("#" + tdIDMaking);
                                         tdId_javascript.addClass("FixedTableLabel");
@@ -679,8 +682,8 @@ function drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, d
                                     if (fromData.text === undefined) {
                                         fromData.text = ' ';
                                     }
-                                    ThisfixedTableRow.append('<td class="NormalLabel" id = "' + tdId + rC2 + '_' + labelC + '">' +
-                                        '<p id="' + tdId + rC2 + '_p_' + labelC + '">' + table_format_check(data.Labels, tdIDwithS, fromData.text, fromData) + '</p></td>');
+                                    ThisfixedTableRow.append('<td class="NormalLabel" id = "' + tdId + tdCount + '_' + labelC + '">' +
+                                        '<p id="' + tdId + tdCount + '_p_' + labelC + '">' + table_format_check(data.Labels, tdIDwithS, fromData.text, fromData) + '</p></td>');
                                     var tdId_javascript = $("#" + tdIDMaking);
                                     tdId_javascript.addClass("FixedTableLabel");
                                     break;
@@ -763,14 +766,14 @@ function drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, d
                                         }
                                         var table_reform = table_format_check(data.Labels, tdIDwithS, showDataLabel, fromData);
                                         ThisfixedTableRow.append
-                                        ('<td class="SummaryLabel" id = "' + tdId + rC2 + '_' + labelC + '">' +
-                                            '<p id="' + tdId + rC2 + '_p_' + labelC + '">' + table_reform + '</p>' +
+                                        ('<td class="SummaryLabel" id = "' + tdId + tdCount + '_' + labelC + '">' +
+                                            '<p id="' + tdId + tdCount + '_p_' + labelC + '">' + table_reform + '</p>' +
                                             '</td>');
                                         var tdId_javascript = $("#" + tdIDMaking);
                                     }
                                     break;
                             }
-                            settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTableHeight, tdLeft, tdTop);
+                            settingAttribute(fromData, tdId, tdCount, fixTableId, fixTableWidth, fixTableHeight, tdLeft, tdTop);
                         }
                     }
                 }
@@ -834,7 +837,7 @@ function drawingFixedTableInDataBand(data, controlFixedTable, fixTableLabelList,
 
     divIdTable.append('<table id="fixedTable' + fixedTableNum + '" class="table table-' + temp_table_class + '"></table>');
     var fixTableId = $('#fixedTable' + fixedTableNum);//고정테이블
-    rC2 = 1;
+    tdCount = 1;
     fixTableId.css({
         'width': controlFixedTable.rectangle.width,
         'height': controlFixedTable.rectangle.height,
@@ -896,13 +899,13 @@ function drawingFixedTableInDataBand(data, controlFixedTable, fixTableLabelList,
 
                     function tdDataBinding(ThisfixedTableRow, drawingTds) {
                         var tdId = 'FixedTableLabel_';
-                        if (rC2 > drawingTds) {
+                        if (tdCount > drawingTds) {
                             drawingTds = labelCount;
                         }
-                        for (rC2; rC2 <= drawingTds; rC2++) {
-                            var fromData = fixTableLabelList[rC2 - 1];
+                        for (tdCount; tdCount <= drawingTds; tdCount++) {
+                            var fromData = fixTableLabelList[tdCount - 1];
 
-                            var tdIDMaking = tdId + rC2 + '_' + labelC;
+                            var tdIDMaking = tdId + tdCount + '_' + labelC;
                             var tdIDwithS = $("#" + tdIDMaking);
 
                             switch (fromData.dataType) {
@@ -931,10 +934,10 @@ function drawingFixedTableInDataBand(data, controlFixedTable, fixTableLabelList,
                                             }
                                         } else { /////////// 추가한 부분
                                             ThisfixedTableRow.append
-                                            ('<td class="DataLabel" id = "' + tdId + rC2 + '_' + fixedTableNum + '">' +
-                                                '<p id="' + tdId + rC2 + '_p_' + fixedTableNum + '">' + dt[curDataRowInDataBand] + '</p>' +
+                                            ('<td class="DataLabel" id = "' + tdId + tdCount + '_' + fixedTableNum + '">' +
+                                                '<p id="' + tdId + tdCount + '_p_' + fixedTableNum + '">' + dt[curDataRowInDataBand] + '</p>' +
                                                 '</td>');
-                                            settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTableHeight);
+                                            settingAttribute(fromData, tdId, tdCount, fixTableId, fixTableWidth, fixTableHeight);
                                             setTable();
                                             var tdId_javascript = $("#" + tdIDMaking);
                                             tdId_javascript.addClass("FixedTableLabel");
@@ -947,19 +950,19 @@ function drawingFixedTableInDataBand(data, controlFixedTable, fixTableLabelList,
                                         }
                                         var table_reform = table_format_check(data.Labels, tdIDwithS, showDataLabel, fromData);
                                         ThisfixedTableRow.append
-                                        ('<td class="DataLabel" id = "' + tdId + rC2 + '_' + labelC + '">' +
-                                            '<p id="' + tdId + rC2 + '_p_' + labelC + '">' + table_reform + '</p>' +
+                                        ('<td class="DataLabel" id = "' + tdId + tdCount + '_' + labelC + '">' +
+                                            '<p id="' + tdId + tdCount + '_p_' + labelC + '">' + table_reform + '</p>' +
                                             '</td>');
-                                        settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTableHeight);
+                                        settingAttribute(fromData, tdId, tdCount, fixTableId, fixTableWidth, fixTableHeight);
                                         setTable();
                                         var tdId_javascript = $("#" + tdIDMaking);
                                         tdId_javascript.addClass("FixedTableLabel");
                                     }
                                     break;
                                 case  "NormalLabel" :
-                                    ThisfixedTableRow.append('<td class="NormalLabel" id = "' + tdId + rC2 + '_' + labelC + '">' +
-                                        '<p id="' + tdId + rC2 + '_p_' + labelC + '">' + table_format_check(data.Labels, tdIDwithS, fromData.text, fromData) + '</p></td>');
-                                    settingAttribute(fromData, tdId, rC2, fixTableId, fixTableWidth, fixTableHeight);
+                                    ThisfixedTableRow.append('<td class="NormalLabel" id = "' + tdId + tdCount + '_' + labelC + '">' +
+                                        '<p id="' + tdId + tdCount + '_p_' + labelC + '">' + table_format_check(data.Labels, tdIDwithS, fromData.text, fromData) + '</p></td>');
+                                    settingAttribute(fromData, tdId, tdCount, fixTableId, fixTableWidth, fixTableHeight);
                                     setTable();
                                     var tdId_javascript = $("#" + tdIDMaking);
                                     tdId_javascript.addClass("FixedTableLabel");
@@ -967,8 +970,8 @@ function drawingFixedTableInDataBand(data, controlFixedTable, fixTableLabelList,
                                 // case "SummaryLabel" :
                                 //     var label = new DataLabel(data);
                                 //     drawingSummaryLabel(label);
-                                //     ThisfixedTableRow.append('<td class="SummaryLabel" id = "' + tdId + rC2 + '_' + fixedTableNum + '">' +
-                                //         '<p id="' + tdId + rC2 + '_p_' + fixedTableNum + '">' + table_format_check(data.Labels, tdIDwithS, fromData.text, fromData) + '</p></td>');
+                                //     ThisfixedTableRow.append('<td class="SummaryLabel" id = "' + tdId + tdCount + '_' + fixedTableNum + '">' +
+                                //         '<p id="' + tdId + tdCount + '_p_' + fixedTableNum + '">' + table_format_check(data.Labels, tdIDwithS, fromData.text, fromData) + '</p></td>');
                                 //     break;
                             }
                         }

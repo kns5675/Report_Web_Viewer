@@ -117,6 +117,12 @@ function header_event_setting2() {
      기능 : 고급인쇄설정 - 결재란 설정 - 결재란 등록 모달창 닫기
      만든이 : 하지연
      ******************************************************************/
+    $("#enrollApprovalBoxXbutton").click(function(){
+        close_EnrollApprovalBoxModal();
+    });
+    $("#cancelEnrollmentApprovalBox").click(function(){
+        close_EnrollApprovalBoxModal();
+    });
     $("#mymodal2").click(function () {
         $("#modalcase").css("display", "block");
     });
@@ -128,6 +134,9 @@ function header_event_setting2() {
     });
     $("#closebtn4").click(function () {
         close_pop3();
+    });
+    $("#enrollApprovalBox").click(function(){
+        checkingApprovalBox();//결재란 등록에 필요한 데이터의 유효성 검증
     });
     /******************************************************************
      기능 : 고급인쇄설정 - 결재란 설정 - 결재란 칸수 지정 데이터 유효성 검증
@@ -682,32 +691,47 @@ function footer_location(input_value){
 }
 /******************************************************************
  기능 : 고급인쇄 -  결재란 칸수 지정 데이터 유효성 검증
+        & 결제라인 입력 css변경 로직
  만든이 : 하지연
  ******************************************************************/
 function dataValidity2(){
     try{
         var tds = $("#sign").val();
         tds = parseInt(tds);
-        if(tds>0 && tds<=8){
-            changeColor(tds);
+        console.log("tds : ",tds," typeof : ",typeof tds);
+        if(isNaN(tds)){
+            tds= Number(0);
+            $("#alertsign").text("결재란 칸 수는 1 이상 8 이하여야 합니다.");
+        } else if(tds>0 && tds<=8){
             $("#alertsign").text("");
         }else{
             $("#alertsign").text("결재란 칸 수는 1 이상 8 이하여야 합니다.");
-
             this.value="";
         }
+        changeColor(tds);
     }catch(e){
-
     }
+}
+
+/******************************************************************
+ 기능 : 고급인쇄설정 - 결재란 설정 - 결재란 등록 모달창 - 결재란 전결범위 지정
+ 결재라인 css 자동 변경 함수
+ author : 하지연
+ ******************************************************************/
+function drawingApprovalBoxLabel(range1, range2){
+    console.log("전결범위지정했당. 라벨을 그려야지?");
+    console.log("range1 : ",range1, " range2 : ",range2);
 }
 /******************************************************************
  기능 : 고급인쇄설정 - 결재란 설정 - 결재란 등록 모달창 - 결재란 칸수 지정시
-        결재라인 css 자동 변경 함수
+ 결재라인 css 자동 변경 함수
  author : 하지연
  ******************************************************************/
 function changeColor(tds){
-    tds = parseInt(tds);
-    tds = tds-1;
+        console.log("else & tds : ",tds, " typeof tds : ",typeof tds);
+        tds = parseInt(tds);
+        tds = tds-1;
+
     $(".modaltd").each(function (i, e) {
         var tdid = e.id.replace(/[^0-9]/g, "");
         if (tds >= tdid) {
@@ -717,8 +741,68 @@ function changeColor(tds){
             $("table#modaltable tr:eq(0) td:eq(" + tdid + ")").css("background-color", "#E3E3E3");
             $("table#modaltable tr:eq(1) td:eq(" + tdid + ")").css("background-color", "#E3E3E3");
         }
+        console.log("changeColor 들어와서 tds값은 : ",tds, " typeof : ",typeof tds);
     });
 }
+/******************************************************************
+ 기능 : 결재란을 그리기 이전에 결재란 등록에 필요한 데이터의 유효성 검증
+ 만든이 : 하지연
+ ******************************************************************/
+function checkingApprovalBox(){
+    dataValidity2();//결재란 칸수 지정 데이터 유효성 검증
+    var tds = $("#sign").val();
+    tds = parseInt(tds);
+
+    if(!isNaN(tds)){
+        console.log("@@ 1");
+        if($("#alertsign").val!=""){
+            console.log("@@ 2");
+            if(tds<9&&tds>0){
+                console.log("@@ 3");
+                var check_scope = $('input:checkbox[name="rangesetting"]').prop("checked");
+                if(check_scope){
+                    var range1 = parseInt($("#range1").val());
+                    var range2 = parseInt($("#range2").val());
+
+                    if(isNaN(range1)){
+                        range1 = Number(-1);
+                        console.log("range1 isNaN");
+                    }if(isNaN(range2)){
+                        range2 = Number(-1);
+                        console.log("range1 isNaN");
+
+                    }
+                    console.log("전결범위지정 체크 됐음 tds : ",tds," range1 & range2 : ",range1,typeof range1," & ",range2, typeof range2);
+                }
+                console.log("결제란을 그려라");
+                drawingApprovalBox(tds,data);    //결재란 그리고
+                $('#modalcase').hide();     //모달창 hide
+
+            }
+
+
+        }
+
+    }
+
+
+
+
+
+}
+/******************************************************************
+ 기능 : 고급인쇄 -  결재란 그리기
+ 만든이 : 하지연
+ ******************************************************************/
+function drawingApprovalBox(tds,data){
+    var classApprovalBox = $(".approvalBox");
+    // $(".approvalBox td").css('background-color','red');
+    for(i=0;i<classApprovalBox.length;i++){
+        // console.log("classApprovAlBox"+i+" : ",classApprovalBox[i].style);
+    }
+    // console.log("결재란 그리기");
+}
+
 /******************************************************************
  기능 : 모달 '확인'버튼 누르기 전 데이터 유효성 검증
  author : 하지연
