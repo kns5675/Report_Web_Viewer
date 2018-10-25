@@ -82,11 +82,9 @@ function drawingFixedTable(data, controlFixedTable, fixTableLabelList, divId, nu
                     function tdDataBinding(ThisfixedTableRow, drawingTds) {
                         var tdId = 'FixedTableLabel_';
                         if (tdCount > drawingTds) {
-                            console.log("1");
                             drawingTds = labelCount;
                         }
                         for (tdCount; tdCount <= drawingTds; tdCount++) {
-                            console.log("2");
                             var fromData = fixTableLabelList[tdCount - 1];
                             var tdLeft = fromData.rectangle.x;
                             var tdTop = fromData.rectangle.y;
@@ -637,7 +635,6 @@ function drawingFixedTableInRegion(data, controlFixedTable, fixTableLabelList, d
                             drawingTds = labelCount;
                         }
                         for (var tdCount = 1; tdCount <= drawingTds; tdCount++) {
-                            console.log("3", tdCount);
                             var fromData = fixTableLabelList[tdCount - 1];
 
                             var tdLeft = fromData.rectangle.x;

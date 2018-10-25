@@ -56,7 +56,7 @@ function tableChoice() {
                     temp_table_arr.push(element_classes[j]);
             }
          }
-        
+
          // 중복 제거
         unique_table_class_arr = temp_table_arr.reduce(function(a,b){if(a.indexOf(b)<0)a.push(b);return a;},[]);
 
@@ -121,7 +121,7 @@ function tableChoice() {
                     'checked', table_choice_bool_list[selected_table_index][i]
                 );
             }
-            
+
             // 체크박스 클릭시 table_choice_bool_list 값을 바꿔 다른 탭에 갔다와도 변경값을 유지
             $('.table_choice_th_checkBox').on('change, click', function(event){
                 var selected_chkbox = $('.table_choice_th_checkBox').index(this);

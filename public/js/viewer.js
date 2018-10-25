@@ -364,7 +364,7 @@ function close_pop1() {
     $("#copyOptions").val("--인쇄--").attr("selected", "selected");
 }
 
-function close_pop2() {
+function close_EnrollApprovalBoxModal() {
     //데이터 초기화
     $("#sign").val('');
     $("input:checkbox[name='rangesetting']").prop("checked", false);
@@ -462,7 +462,7 @@ function drawingCanvas(size, typeofimages, enumber) {
                 var variables;
                 variables=[i,typeofimages];
 
-                two(variables).then(function (variables) {
+                makingCanvasAndSave(variables).then(function (variables) {
                 });
         };
         var factors;
@@ -472,7 +472,7 @@ function drawingCanvas(size, typeofimages, enumber) {
     $("#saveAsImage").val("--이미지--").attr("selected", "selected");
 }
 
-async function two(variables) {
+async function makingCanvasAndSave(variables) {
     return new Promise(function (resolve) {
         html2canvas(document.querySelector("#pageForCopyRatio" + variables[0])).then(canvas => {
             document.body.appendChild(canvas);

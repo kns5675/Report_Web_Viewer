@@ -321,7 +321,6 @@ function paperDirection() {
     var temp;
     var temp2;
     var CandR = $("#direction_vertical")[0].checked; //세로
-    console.log("CandR : ",CandR);
     var pageforcopyratio_page_portrait01;
     var pageforcopyratio_page_portrait02;
     var pageforcopyratio_page_landscape01;
@@ -698,7 +697,6 @@ function dataValidity2(){
     try{
         var tds = $("#sign").val();
         tds = parseInt(tds);
-        console.log("tds : ",tds," typeof : ",typeof tds);
         if(isNaN(tds)){
             tds= Number(0);
             $("#alertsign").text("결재란 칸 수는 1 이상 8 이하여야 합니다.");
@@ -719,8 +717,6 @@ function dataValidity2(){
  author : 하지연
  ******************************************************************/
 function drawingApprovalBoxLabel(range1, range2){
-    console.log("전결범위지정했당. 라벨을 그려야지?");
-    console.log("range1 : ",range1, " range2 : ",range2);
 }
 /******************************************************************
  기능 : 고급인쇄설정 - 결재란 설정 - 결재란 등록 모달창 - 결재란 칸수 지정시
@@ -728,7 +724,6 @@ function drawingApprovalBoxLabel(range1, range2){
  author : 하지연
  ******************************************************************/
 function changeColor(tds){
-        console.log("else & tds : ",tds, " typeof tds : ",typeof tds);
         tds = parseInt(tds);
         tds = tds-1;
 
@@ -741,7 +736,6 @@ function changeColor(tds){
             $("table#modaltable tr:eq(0) td:eq(" + tdid + ")").css("background-color", "#E3E3E3");
             $("table#modaltable tr:eq(1) td:eq(" + tdid + ")").css("background-color", "#E3E3E3");
         }
-        console.log("changeColor 들어와서 tds값은 : ",tds, " typeof : ",typeof tds);
     });
 }
 /******************************************************************
@@ -754,11 +748,8 @@ function checkingApprovalBox(){
     tds = parseInt(tds);
 
     if(!isNaN(tds)){
-        console.log("@@ 1");
         if($("#alertsign").val!=""){
-            console.log("@@ 2");
             if(tds<9&&tds>0){
-                console.log("@@ 3");
                 var check_scope = $('input:checkbox[name="rangesetting"]').prop("checked");
                 if(check_scope){
                     var range1 = parseInt($("#range1").val());
@@ -766,15 +757,11 @@ function checkingApprovalBox(){
 
                     if(isNaN(range1)){
                         range1 = Number(-1);
-                        console.log("range1 isNaN");
                     }if(isNaN(range2)){
                         range2 = Number(-1);
-                        console.log("range1 isNaN");
 
                     }
-                    console.log("전결범위지정 체크 됐음 tds : ",tds," range1 & range2 : ",range1,typeof range1," & ",range2, typeof range2);
                 }
-                console.log("결제란을 그려라");
                 drawingApprovalBox(tds,data);    //결재란 그리고
                 $('#modalcase').hide();     //모달창 hide
 
@@ -796,11 +783,8 @@ function checkingApprovalBox(){
  ******************************************************************/
 function drawingApprovalBox(tds,data){
     var classApprovalBox = $(".approvalBox");
-    // $(".approvalBox td").css('background-color','red');
     for(i=0;i<classApprovalBox.length;i++){
-        // console.log("classApprovAlBox"+i+" : ",classApprovalBox[i].style);
     }
-    // console.log("결재란 그리기");
 }
 
 /******************************************************************
