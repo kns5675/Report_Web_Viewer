@@ -9,7 +9,7 @@
     <title>Report Web Viewer</title>
     <link rel="stylesheet" href="css/main.css"/>
     <link rel="stylesheet" href="css/index.css"/>
-    <link rel="stylesheet" href="css/print.css"/>
+    <link rel="stylesheet" type="text/css" media="all" href="css/print.css" />
     <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css"rel = "stylesheet">
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -59,7 +59,7 @@
             band_dbclick_event(data);
             file_save(data);
             saving_data_binding(data);
-            image_setting();
+            // image_setting();
             $('.BandPageFooter').css('position', 'absolute');
             // temp_to_reportTemplate();
             drawPageNumberInSystemLabel();
