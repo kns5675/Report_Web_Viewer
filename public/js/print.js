@@ -7,7 +7,7 @@ function pagePrint(){
     try{
         var temp_padding = $('#temp_reportTemplate').css('padding-top');
         $('#temp_reportTemplate').css('padding-top', '0px');
-        $('.pageforcopyratio').css('border', '3px solid black');
+        $('.pageforcopyratio').css('border', '3px solid white');
         $('.pageforcopyratio').css('margin-bottom', '0px');
 
         var flexiblecontent = document.getElementById("temp_reportTemplate");
