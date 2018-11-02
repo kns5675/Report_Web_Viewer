@@ -43,7 +43,9 @@ function drawingDynamicTable(table, tableLabel, divId, numOfData, band, dt) {
      ****************************************************************************************************************/
     tableId.css({
         'width': table.rectangle.width + 'px',
-        'height': table.rectangle.height + 'px'
+        'height': table.rectangle.height + 'px',
+        'table-layout' : 'fixed',
+        'white-space' : 'nowrap'
     });
 
     // tableId.append('<tr id = "dynamicTitleLabel' + dynamicTitleLabelNum + '"></tr>');
