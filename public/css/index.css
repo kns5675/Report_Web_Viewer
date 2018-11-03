@@ -67,7 +67,7 @@ ul#copyOptions_list{
 ul#copyOptions_list > li{
     display : block;
     padding : 4px;
-    width : 92px;
+    width : 98px;
 }
 ul#copyOptions_list > li:hover{
     background-color : #c5cedb;
